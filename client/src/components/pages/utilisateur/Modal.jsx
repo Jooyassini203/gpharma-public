@@ -117,10 +117,8 @@ const initialize = {
   //FIN Déclaration des states
   //DEBUT Déclaration des simples functions
   const onChange = (e, nameSelect = "") => {
-    if(e == "contact"){
-      
-    }
     if (e.label) {
+      console.log("event : ", e);
       setUtilisateur((prevState) => ({ ...prevState, [nameSelect]: e }));
       return;
     }
@@ -267,8 +265,9 @@ const initialize = {
                 <div className="col-6">
                   <InputForm
                     name="contact"
-                    contact
+                    tel
                     val={contact}
+                    min='0'
                     onChange={onChange}
                     obligatory={isObligatory ? "active" : "desactive"}
                   >

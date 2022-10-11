@@ -5,8 +5,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
@@ -160,8 +158,8 @@ export const InputForm = ({
   integer = null,
   text = null,
   date = null,
+  tel = null,
   obligatory = null,
-  contact,
   ...props
 }) => {
   let type = "text";
@@ -174,37 +172,26 @@ export const InputForm = ({
   } else if (password) {
     type = "password";
   } else if (integer) {
-    type = "number";
+    type = "text";
+  } else if (tel) {
+    type = "tel";
   } else if (date) {
     type = "date";
-  }
-  if (contact) {
   }
   return (
     <div className="form-group mb-3">
       <label htmlFor={getId(children)} className="mb-1">
         <strong>{children}</strong>
       </label>
-      {contact ? (
-        <PhoneInput
-          country={"madagascar"}
-          placeholder="Enter phone number"
-          value={val}
-          // className={getClass(val, obligatory)}
-          onChange={onChange}
-          {...props}
-        />
-      ) : (
-        <input
-          aria-autocomplete="none"
-          id={getId(children)}
-          type={type}
-          value={val}
-          className={getClass(val, obligatory)}
-          onChange={onChange}
-          {...props}
-        />
-      )}
+      <input
+        aria-autocomplete="none"
+        id={getId(children)}
+        type={type}
+        value={val}
+        className={getClass(val, obligatory)}
+        onChange={onChange}
+        {...props}
+      />
       {/*"Entre ton " + children.toLowerCase()*/}
       <span
         className="text-danger"
