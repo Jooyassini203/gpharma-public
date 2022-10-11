@@ -1,3 +1,6 @@
+test("should first", () => {
+  second;
+});
 // Les migrations des tables et de ses données
 export const MIGRATE = true;
 export const getDateTime = (name = "") => {
