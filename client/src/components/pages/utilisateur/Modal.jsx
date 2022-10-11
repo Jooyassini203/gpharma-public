@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useRecoilState } from "recoil";
-import { isAddState, listUtilisateurState, initialize, userSelectState, initializeState } from "../../../atoms/utilisateur.js";
+import { isAddState, listUtilisateurState, userSelectState, initializeState } from "../../../atoms/utilisateur.js";
 import { getData, addData, updateData, InputForm, SelectForm, sexeOptions } from "../../../utils/utils.js";
 
   //DEBUT Déclaration des variables
@@ -23,8 +23,14 @@ function Modal() {
 const initialize = {
   nom_utilisateur: "",
   nom_login: "",
-  sexe: [],
-  type_utilisateur: [],
+  sexe: {
+    value: "test",
+    label: "test",
+  },
+  type_utilisateur: {
+      value: "test",
+      label: "test",
+    },
   contact: "",
   email: "",
   mot_de_passe: "",
@@ -33,7 +39,7 @@ const initialize = {
   const closeRef = React.useRef();
   const inputRef = React.useRef();
   //DEBUT Déclaration des states ET ref
-  const [utilisateur, setUtilisateur] = useRecoilState(initializeState);
+  const [utilisateur, setUtilisateur] = useState(initialize);
   const {
     nom_utilisateur,
     nom_login,
@@ -43,13 +49,13 @@ const initialize = {
     email,
     mot_de_passe,
     image,
-  } = utilisateur;
+  } = utilisateur; 
   const [isObligatory, setIsObligatory] = useState(false);
   const [preview, setPreview] = useState("");
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
-
+  
   //DEBUT Déclaration des functions Modal
   const getAllUser = () => {
     closeRef.current.click();
@@ -85,7 +91,7 @@ const initialize = {
     );
     addData("utilisateur", formData, getAllUser, true);
   };
-  const updateUser = (id) => {
+  const updateUser = () => {
     if (
       !nom_utilisateur ||
       !nom_login ||
@@ -112,7 +118,7 @@ const initialize = {
         email,
       })
     );
-    updateData('utilisateur', id, formData, getAllUser, true)
+    updateData('utilisateur', userSelect.id, formData, getAllUser, true)
   };
   //FIN Déclaration des states
   //DEBUT Déclaration des simples functions
@@ -144,6 +150,8 @@ const initialize = {
   //FIN Déclaration des simples functions
   //FIN Déclaration des functions Modal
   useEffect(() => {
+    console.log('test');
+  setUtilisateur(initialize); 
     setIsObligatory(false);
     getAllUser();
   }, []);
@@ -222,7 +230,7 @@ const initialize = {
                     val={type_utilisateur}
                     value = {
                       optionsType.filter(option => 
-                         option.value === type_utilisateur)
+                         option.value === type_utilisateur.value)
                    }
                     onChange={(e) => onChange(e, "type_utilisateur")}
                     options={optionsType}
@@ -250,7 +258,7 @@ const initialize = {
                     val={sexe}
                     value = {
                      sexeOptions.filter(option => 
-                         option.value === sexe)
+                         option.value === sexe.value)
                    }
                     onChange={(e) => onChange(e, "sexe")}
                     options={sexeOptions}

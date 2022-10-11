@@ -88,6 +88,11 @@ export const updateData = (
     };
     if (!isFormData) headers = {};
     try {
+      console.log('up : ',
+        urlUpdate(tableName, id),
+        data,
+        headers
+      );
       const responseUp = await axios.put(
         urlUpdate(tableName, id),
         data,
@@ -206,7 +211,7 @@ export const InputForm = ({
 
 export const SelectForm = (props) => {
   const { children, obligatory, val, ...prop } = props;
-  console.log(children, val);
+  // console.log(children, val);
   return (
     <div className="form-group mb-3">
       <label htmlFor={getId(children)} className="mb-1">
