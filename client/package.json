@@ -31,8 +31,7 @@
     "recoil": "^0.7.5",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "s": "react-scripts start",
+  "scripts": { 
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

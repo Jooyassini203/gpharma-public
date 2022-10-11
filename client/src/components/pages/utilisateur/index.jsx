@@ -22,7 +22,9 @@ function Utilisateur() {
   };
   const deleteUser = (id) => {
     confirmDelete("Voulez-vous vraimment supprimé cet utilisateur?", () => {
-      deleteData("utilisateur", id, () => getData("utilisateurs", setListUser));
+      deleteData("utilisateur", id, () => {
+        console.log('delete ', id, 'lancement du mise à jours de la liste');
+        getData("utilisateurs", setListUser)});
     });
   };
   const viewUser = (id) => {

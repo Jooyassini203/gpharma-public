@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { confirmAlert } from "react-confirm-alert"; // Import
-// import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
@@ -110,13 +110,14 @@ export const updateData = (
   });
 };
 
-export const deleteData = (tableName, id, data, callBack) => {
+export const deleteData = (tableName, id, callBack) => {
   const del = async () => {
     try {
-      const responseUp = await axios.delete(urlDelete(tableName, id), data);
+      const responseUp = await axios.delete(urlDelete(tableName, id));
       if (responseUp) {
         toast.success(responseUp.data.message);
-        if (callBack) callBack();
+        console.log(callBack);
+        callBack();
       }
     } catch (error) {
       toast.error(JSON.parse(error.response.request.response).message);
@@ -126,7 +127,7 @@ export const deleteData = (tableName, id, data, callBack) => {
   toast.promise(del, {
     pending: `Suppression en cours ...`,
     // success: "Promise  Loaded",
-    error: `Une erreur est survenue lors du tentative de suppression!`,
+    // error: `Une erreur est survenue lors du tentative de suppression!`,
   });
 };
 
@@ -280,12 +281,12 @@ export const confirmDelete = (message, callBack) => {
     customUI: ({ onClose }) => {
        return (
         <div id="react-confirm-alert">
-          <div class="react-confirm-alert-overlay">
-            <div class="react-confirm-alert">
-              <div class="react-confirm-alert-body">
+          <div className="react-confirm-alert-overlay">
+            <div className="react-confirm-alert">
+              <div className="react-confirm-alert-body">
                 <h1>Suppression</h1>
                 <p>{message}</p>
-                <div class="">
+                <div >
                   <button
                     className="btn btn-danger mr-2"
                     onClick={() => {
