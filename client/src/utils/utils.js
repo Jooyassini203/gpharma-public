@@ -276,9 +276,9 @@ export const changeValJSON = (newData, myJson) => {
 };
 
 export const confirmDelete = (message, callBack) => {
-  confirmAlert({
+/*  confirmAlert({
     customUI: ({ onClose }) => {
-      return (
+       return (
         <div id="react-confirm-alert">
           <div class="react-confirm-alert-overlay">
             <div class="react-confirm-alert">
@@ -308,9 +308,9 @@ export const confirmDelete = (message, callBack) => {
             </div>
           </div>
         </div>
-      );
+      ); 
     },
-  });
+  });*/
   /* confirmAlert({
     title: "Suppression",
     message: message,
