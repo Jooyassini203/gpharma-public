@@ -1,41 +1,53 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { isAddState, listUtilisateurState, userSelectState, initializeState } from "../../../atoms/utilisateur.js";
-import { getData, addData, updateData, InputForm, SelectForm, sexeOptions } from "../../../utils/utils.js";
+import {
+  isAddState,
+  listUtilisateurState,
+  userSelectState,
+  initializeState,
+} from "../../../atoms/utilisateur.js";
+import {
+  getData,
+  addData,
+  updateData,
+  InputForm,
+  SelectForm,
+  sexeOptions,
+} from "../../../utils/utils.js";
 
-  //DEBUT Déclaration des variables
-  const optionsType = [
-    {
-      value: "ADMIN",
-      label: "Administrateur",
-    },
-    {
-      value: "CAISSIER",
-      label: "Caissier",
-    },
-    {
-      value: "GUICHETIER",
-      label: "Guichetier",
-    },
-  ];
-  //FIN Déclaration des variables
-function Modal() {
-const initialize = {
-  nom_utilisateur: "",
-  nom_login: "",
-  sexe: {
-    value: "test",
-    label: "test",
+//DEBUT Déclaration des variables
+const optionsType = [
+  {
+    value: "ADMIN",
+    label: "Administrateur",
   },
-  type_utilisateur: {
+  {
+    value: "CAISSIER",
+    label: "Caissier",
+  },
+  {
+    value: "GUICHETIER",
+    label: "Guichetier",
+  },
+];
+//FIN Déclaration des variables
+function Modal() {
+  const initialize = {
+    nom_utilisateur: "",
+    nom_login: "",
+    sexe: {
       value: "test",
       label: "test",
     },
-  contact: "",
-  email: "",
-  mot_de_passe: "",
-  image: null,
-}
+    type_utilisateur: {
+      value: "test",
+      label: "test",
+    },
+    contact: "",
+    email: "",
+    mot_de_passe: "",
+    image: null,
+  };
   const closeRef = React.useRef();
   const inputRef = React.useRef();
   //DEBUT Déclaration des states ET ref
@@ -49,19 +61,19 @@ const initialize = {
     email,
     mot_de_passe,
     image,
-  } = utilisateur; 
+  } = utilisateur;
   const [isObligatory, setIsObligatory] = useState(false);
   const [preview, setPreview] = useState("");
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
-  
+
   //DEBUT Déclaration des functions Modal
   const getAllUser = () => {
     closeRef.current.click();
     getData(`utilisateurs`, setListUser);
   };
-  
+
   const addUser = () => {
     if (
       !nom_utilisateur ||
@@ -118,7 +130,7 @@ const initialize = {
         email,
       })
     );
-    updateData('utilisateur', userSelect.id, formData, getAllUser, true)
+    updateData("utilisateur", userSelect.id, formData, getAllUser, true);
   };
   //FIN Déclaration des states
   //DEBUT Déclaration des simples functions
@@ -150,15 +162,24 @@ const initialize = {
   //FIN Déclaration des simples functions
   //FIN Déclaration des functions Modal
   useEffect(() => {
-    console.log('test');
-  setUtilisateur(initialize); 
+    console.log("test");
+    setUtilisateur(initialize);
     setIsObligatory(false);
     getAllUser();
   }, []);
   //DEBUT utilisation states
   useEffect(() => {
-    setUtilisateur(userSelect)  
-    setPreview(userSelect.url ? userSelect.url : "images/profile/1.jpg")
+    setUtilisateur({
+      ...userSelect,
+      ["type_utilisateur"]: optionsType.filter(
+        (option) =>  option.value === userSelect.type_utilisateur
+      )[0],
+      ["sexe"]: sexeOptions.filter(
+        (option) =>  option.value === userSelect.sexe
+      )[0],
+    });
+    console.log(utilisateur);
+    setPreview(userSelect.url ? userSelect.url : "images/profile/1.jpg");
   }, [userSelect]);
   //FIN utilisation states
 
@@ -228,10 +249,11 @@ const initialize = {
                   <SelectForm
                     name="type_utilisateur"
                     val={type_utilisateur}
-                    value = {
-                      optionsType.filter(option => 
-                         option.value === type_utilisateur.value)
-                   }
+                    value={optionsType.filter(
+                      (option) =>
+                        JSON.stringify(option) ===
+                        JSON.stringify(type_utilisateur)
+                    )}
                     onChange={(e) => onChange(e, "type_utilisateur")}
                     options={optionsType}
                     obligatory={isObligatory ? "active" : "desactive"}
@@ -256,10 +278,10 @@ const initialize = {
                   <SelectForm
                     name="sexe"
                     val={sexe}
-                    value = {
-                     sexeOptions.filter(option => 
-                         option.value === sexe.value)
-                   }
+                    value={sexeOptions.filter(
+                      (option) =>
+                        JSON.stringify(option) === JSON.stringify(sexe)
+                    )}
                     onChange={(e) => onChange(e, "sexe")}
                     options={sexeOptions}
                     obligatory={isObligatory ? "active" : "desactive"}
@@ -275,7 +297,7 @@ const initialize = {
                     name="contact"
                     tel
                     val={contact}
-                    min='0'
+                    min="0"
                     onChange={onChange}
                     obligatory={isObligatory ? "active" : "desactive"}
                   >
@@ -289,23 +311,26 @@ const initialize = {
                 </div>
               </div>
 
-              { isAdd ? <InputForm
-                name="mot_de_passe"
-                password
-                val={mot_de_passe}
-                onChange={onChange}
-                obligatory={isObligatory ? "active" : "desactive"}
-              >
-                { isAdd ? 'Mot de passe' : 'Nouveau mot de passe'}
-              </InputForm> : ''}
-              
+              {isAdd ? (
+                <InputForm
+                  name="mot_de_passe"
+                  password
+                  val={mot_de_passe}
+                  onChange={onChange}
+                  obligatory={isObligatory ? "active" : "desactive"}
+                >
+                  {isAdd ? "Mot de passe" : "Nouveau mot de passe"}
+                </InputForm>
+              ) : (
+                ""
+              )}
             </div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger light"
                 data-dismiss="modal"
-                onClick={() => { 
+                onClick={() => {
                   setUtilisateur(initialize);
                   setIsObligatory(false);
                 }}
