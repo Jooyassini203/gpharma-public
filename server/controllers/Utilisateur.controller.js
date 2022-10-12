@@ -96,9 +96,21 @@ const updateOne = async (req, res) => {
       return res
         .status(422)
         .send({ message: "Image trop lourd (Plus de 10 MB) !" });
-    file.mv(`./public/images/utilisateur/${fileName}`, async (error) => {
+    file.mv(`./public/images/utilisateur/${fileName}`, (error) => {
       if (error) return res.status(500).send({ message: error.message });
-      fs.unlink(user.url);
+      if (user.image) {
+        const filepath = `./public/images/utilisateur/${user.image}`;
+        console.log("filepath", filepath);
+        // Check if file exist
+        fs.access(filepath, fs.F_OK, (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          fs.unlinkSync(filepath);
+          //file exists
+        });
+      }
     });
   }
   try {
@@ -106,8 +118,7 @@ const updateOne = async (req, res) => {
     userData["url"] = url;
     // userData["mot_de_passe"] = userData["mot_de_passe"];
     console.log("userData", userData);
-    console.log("user", user);
-    await user.set(userData);
+    user.set(userData);
     await user.save();
     res.status(201).send({ message: "Utilisateur modifié avec succès!" });
   } catch (error) {
@@ -126,7 +137,16 @@ const deleteOne = async (req, res) => {
   try {
     if (user.image) {
       const filepath = `./public/images/utilisateur/${user.image}`;
-      fs.unlink(filepath);
+      console.log("filepath", filepath);
+      // Check if file exist
+      fs.access(filepath, fs.F_OK, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        fs.unlinkSync(filepath);
+        //file exists
+      });
     }
     await Utilisateur.destroy({
       where: {
