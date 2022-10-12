@@ -88,11 +88,10 @@ export const updateData = (
     };
     if (!isFormData) headers = {};
     try {
-      console.log('up : ',
-        urlUpdate(tableName, id),
-        data,
-        headers
-      );
+      console.log("up : ", urlUpdate(tableName, id), data.values(), headers);
+      for (var pair of data.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
       const responseUp = await axios.put(
         urlUpdate(tableName, id),
         data,
@@ -282,16 +281,16 @@ export const changeValJSON = (newData, myJson) => {
 };
 
 export const confirmDelete = (message, callBack) => {
-confirmAlert({
+  confirmAlert({
     customUI: ({ onClose }) => {
-       return (
+      return (
         <div id="react-confirm-alert">
           <div className="react-confirm-alert-overlay">
             <div className="react-confirm-alert">
               <div className="react-confirm-alert-body">
                 <h1>Suppression</h1>
                 <p>{message}</p>
-                <div >
+                <div>
                   <button
                     className="btn btn-danger mr-2"
                     onClick={() => {
@@ -314,7 +313,7 @@ confirmAlert({
             </div>
           </div>
         </div>
-      ); 
+      );
     },
   });
   /* confirmAlert({
