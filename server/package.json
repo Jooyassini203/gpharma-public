@@ -5,8 +5,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config server.js"
+    "test": "echo \"Error: no test specified\"  &&  exit 1",
+    "model::gen": " (echo import ^{ DataTypes ^} from 'sequelize';   & echo import db from '../../config/Database.js';  & echo const %npm_config_name% = db.define^( '%npm_config_name%',  & echo ^{   motif: ^{ type: DataTypes.CHAR^(1000^), allowNull: false,  ^} ,  & echo status: ^{  type: DataTypes.BOOLEAN,  defaultValue: '1',  ^} ,  & echo   ^} ,  & echo   ^{  paranoid: true,  freezeTableName: true,  ^}  ^);  &echo. &echo export default %npm_config_name%; )> database/models/%npm_config_name%.model.js | code database/models/%npm_config_name%.model.js",
+    "start": "nodemon -r dotenv/config server.js" 
   },
   "keywords": [],
   "author": "",
