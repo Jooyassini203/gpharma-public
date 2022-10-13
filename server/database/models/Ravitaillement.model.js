@@ -18,11 +18,13 @@ const Ravitaillement = db.define(
     date_saisi: {
       type: DataTypes.DATE,
       //   defaultValue: ''
+      allowNull: false,
       unique: true,
     },
     date_prev_livraison: {
       type: DataTypes.DATE,
       //   defaultValue: ''
+      allowNull: false,
       unique: true,
     },
     data_livraison: {
