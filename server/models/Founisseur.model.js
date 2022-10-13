@@ -27,33 +27,39 @@ const Fournisseur = db.define(
     image: {
       type: DataTypes.CHAR(255),
     },
-    email: {
-      type: DataTypes.CHAR(255),
+    condition_paiement: {
+      type: DataTypes.CHAR(10000),
+      allowNull: false,
+      unique: true,
+    },
+    delais_reglement: {
+      type: DataTypes.CHAR(10000),
       allowNull: false,
       unique: true,
     },
     email: {
+        type: DataTypes.CHAR(255),
+        allowNull: false,
+        unique: true,
+    },
+    address: {
+        type: DataTypes.CHAR(255),
+      allowNull: false,
+    },
+    nif: {
       type: DataTypes.CHAR(255),
       allowNull: false,
       unique: true,
     },
-    email: {
+    stat: {
       type: DataTypes.CHAR(255),
       allowNull: false,
       unique: true,
     },
-    stock_min: {
-        type: DataTypes.DOUBLE(10),
-      allowNull: false,
-    },
-    stock_max: {
-        type: DataTypes.DOUBLE(10),
-      allowNull: false,
-    },
-    date_der_ravitaillement: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
+    sigle: {
+      type: DataTypes.CHAR(100),
+      unique: true,
+    }, 
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: "1",
