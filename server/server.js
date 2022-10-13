@@ -4,7 +4,7 @@ import cors from "cors";
 import UtilisateurRouter from "./routes/Utilisateur.routes.js";
 import VoieRouter from "./routes/Voie.routes.js";
 
-import Migration from "./models/migrate/Migrate.model.js";
+import Migration from "./database/migrations/Migration.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -17,7 +17,7 @@ app.use(FileUpload());
 app.use(UtilisateurRouter);
 app.use(VoieRouter);
 
-Migration()
+Migration();
 
 app.listen(process.env.PORT, () => {
   console.log(`SERVEUR LANCE SUR LE PORT ${process.env.PORT} ...`);

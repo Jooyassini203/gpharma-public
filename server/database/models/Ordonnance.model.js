@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import db from "../config/Database.js"; 
+import db from "../../config/Database.js";
 
 const Ordonnance = db.define(
   "ordonnance",
@@ -22,17 +22,3 @@ const Ordonnance = db.define(
 );
 
 export default Ordonnance;
-
-/* (async () => {
-  await db
-    .sync({ force: MIGRATE })
-    .then(() => {
-      console.log(" ------> Table << Ordonnance >> migrée!");
-    })
-    .catch(() => {
-      console.log(" ------> Table << Ordonnance >> NON migrée!!!");
-    });
-  if (MIGRATE) {
-    await Ordonnance.bulkCreate(array);
-  }
-})(); */

@@ -1,17 +1,13 @@
 import { DataTypes } from "sequelize";
-import db from "../config/Database.js"; 
+import db from "../../config/Database.js";
 
-const Societe = db.define(
-  "societe",
+const Caisse = db.define(
+  "ordonnance",
   {
-    nom_societe: {
+    nom_caisse: {
       type: DataTypes.CHAR(255),
       allowNull: false,
       unique: true,
-    },
-    prise_en_charge: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
     },
     status: {
       type: DataTypes.BOOLEAN,
@@ -21,4 +17,4 @@ const Societe = db.define(
   { freezeTableName: true }
 );
 
-export default Societe; 
+export default Caisse;

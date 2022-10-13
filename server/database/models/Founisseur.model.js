@@ -10,13 +10,13 @@ const Fournisseur = db.define(
       unique: true,
     },
     contact_fournisseur: {
-        type: DataTypes.CHAR(100),
-        unique: true,
+      type: DataTypes.CHAR(100),
+      unique: true,
     },
     contact_secretaire: {
-        type: DataTypes.CHAR(100),
-        allowNull: false,
-        unique: true,
+      type: DataTypes.CHAR(100),
+      allowNull: false,
+      unique: true,
     },
     compte_PCG: {
       type: DataTypes.CHAR(255),
@@ -38,12 +38,12 @@ const Fournisseur = db.define(
       unique: true,
     },
     email: {
-        type: DataTypes.CHAR(255),
-        allowNull: false,
-        unique: true,
+      type: DataTypes.CHAR(255),
+      allowNull: false,
+      unique: true,
     },
     address: {
-        type: DataTypes.CHAR(255),
+      type: DataTypes.CHAR(255),
       allowNull: false,
     },
     nif: {
@@ -59,7 +59,7 @@ const Fournisseur = db.define(
     sigle: {
       type: DataTypes.CHAR(100),
       unique: true,
-    }, 
+    },
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: "1",

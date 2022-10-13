@@ -1,4 +1,4 @@
-import Utilisateur from "../models/utilisateur.model.js";
+import Utilisateur from "../database/models/utilisateur.model.js";
 import path from "path";
 import fs from "fs";
 import { getDateTime } from "../utils/utils.js";
