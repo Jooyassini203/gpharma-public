@@ -1,16 +1,25 @@
-import Vente_detail from "../models/Vente_detail.model.js";
-import Vente from "../models/Vente.model.js";
 import db from "../../config/Database.js";
 import { MIGRATE } from "../../utils/utils.js";
+
+import Famille from "../models/Famille.model.js";
+import Emplacement from "../models/Emplacement.model.js";
+import Vente_detail from "../models/Vente_detail.model.js";
+import Vente from "../models/Vente.model.js";
+import Ajustement_detail from "../models/Ajustement_detail.model.js";
+import Ajustement from "../models/Ajustement.model.js";
+import Ordonnance from "../models/Ordonnance.model.js";
+import Societe from "../models/Societe.model.js";
+import Client from "../models/Client.model.js";
+import Founisseur from "../models/Founisseur.model.js";
+import Mode_expedition from "../models/Mode_expedition.model.js";
+import Ravitaillement_detail from "../models/Ravitaillement_detail.model.js";
 
 import Caisse from "../models/Caisse.model.js";
 import Fabricant from "../models/Fabricant.model.js";
 import Forme from "../models/Forme.model.js";
-import Ordonnance from "../models/Ordonnance.model.js";
-import Societe from "../models/Societe.model.js";
 import Unite from "../models/Unite.model.js";
 import Voie from "../models/Voie.model.js";
-import Utilisateur from "../models/utilisateur.model.js";
+import Utilisateur from "../models/Utilisateur.model.js";
 
 import caisseListe from "../seeders/Caisse.seeder.js";
 import fabricantListe from "../seeders/Fabricant.seeder.js";

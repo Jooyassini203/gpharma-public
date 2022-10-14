@@ -1,14 +1,14 @@
 import { DataTypes } from "sequelize";
-import db from "../config/Database.js";
+import db from "../../config/Database.js";
 
 const Produit = db.define(
   "produit",
   {
-      code_lot_produit: {
-        type: DataTypes.CHAR(100),
-        allowNull: false,
-        unique: true,
-      },
+    code_lot_produit: {
+      type: DataTypes.CHAR(100),
+      allowNull: false,
+      unique: true,
+    },
     nom_produit: {
       type: DataTypes.CHAR(255),
       allowNull: false,
