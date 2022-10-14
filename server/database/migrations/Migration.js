@@ -1,3 +1,5 @@
+import Vente_detail from "../models/Vente_detail.model.js";
+import Vente from "../models/Vente.model.js";
 import db from "../../config/Database.js";
 import { MIGRATE } from "../../utils/utils.js";
 
