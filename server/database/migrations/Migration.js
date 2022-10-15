@@ -12,9 +12,10 @@ import Utilisateur from "../models/Utilisateur.model.js";
 import Ajustement_detail from "../models/Ajustement_detail.model.js";
 import Ajustement from "../models/Ajustement.model.js";
 import Ordonnance from "../models/Ordonnance.model.js";
+import Guichet from "../models/Guichet.model.js";
 import Societe from "../models/Societe.model.js";
 import Client from "../models/Client.model.js";
-import Founisseur from "../models/Founisseur.model.js";
+import Fournisseur from "../models/Fournisseur.model.js";
 import Mode_expedition from "../models/Mode_expedition.model.js";
 import Ravitaillement from "../models/Ravitaillement.model.js";
 import Ravitaillement_detail from "../models/Ravitaillement_detail.model.js";
@@ -31,6 +32,7 @@ import uniteListe from "../seeders/Unite.seeder.js";
 import voieListe from "../seeders/Voie.seeder.js";
 
 import utilisateurListe from "../factories/Utilisateur.factorie.js";
+import Fournisseur from "../models/Fournisseur.model.js";
 
 // Association
 Produit.belongsToMany(Ajustement, {
@@ -103,18 +105,108 @@ Ajustement.belongsTo(Emplacement, {
     allowNull: false,
   },
 });
-
+ 
 Produit.belongsToMany(Emplacement, {
-  through: "Emplacement_detail",
+  through: "Produit_emplacement",
   unique: false,
-  foreignKey: "emplacement_id",
+  foreignKey: "produit_id",
 });
 Emplacement.belongsToMany(Produit, {
-  through: "Emplacement_detail",
+  through: "Produit_emplacement",
   unique: false,
   foreignKey: "emplacement_id",
 });
 
+Fabricant.hasOne(Produit, {
+  foreignKey: {
+    name: "fabricant_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Produit.belongsTo(Fabricant, {
+  foreignKey: {
+    name: "fabricant_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+ 
+Famille.hasOne(Produit, {
+  foreignKey: {
+    name: "famille_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Produit.belongsTo(Famille, {
+  foreignKey: {
+    name: "famille_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+ 
+Fournisseur.hasOne(Ravitaillement, {
+  foreignKey: {
+    name: "fournisseur_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Ravitaillement.belongsTo(Fournisseur, {
+  foreignKey: {
+    name: "fournisseur_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+ 
+Guichet.hasOne(Vente, {
+  foreignKey: {
+    name: "guichet_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Vente.belongsTo(Guichet, {
+  foreignKey: {
+    name: "guichet_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+ 
+Ordonnance.hasOne(Vente, {
+  foreignKey: {
+    name: "ordonnance_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Vente.belongsTo(Ordonnance, {
+  foreignKey: {
+    name: "ordonnance_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+ 
+Ordonnance.hasOne(Vente, {
+  foreignKey: {
+    name: "ordonnance_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Vente.belongsTo(Ordonnance, {
+  foreignKey: {
+    name: "ordonnance_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+ 
 
 const Migration = async () => {
   //  console.log(" \n\n\n\n Migration \n\n\n ");
