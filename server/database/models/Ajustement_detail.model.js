@@ -8,6 +8,8 @@ const Ajustement_detail = db.define(
     qantite_ancien: { type: DataTypes.DOUBLE, allowNull: false },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
-  { paranoid: true, freezeTableName: true }
+  { paranoid: true, 
+    // freezeTableName: true 
+  }
 );
 export default Ajustement_detail;

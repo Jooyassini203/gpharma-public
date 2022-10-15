@@ -263,6 +263,20 @@ Produit.belongsTo(Voie, {  foreignKey:
 {  name: "voie_id", type: DataTypes.INTEGER, allowNull: false  },
 });
 
+Utilisateur.hasMany(Vente, { foreignKey: 
+  {  name: "utilisateur_id", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Vente.belongsTo(Utilisateur, {  foreignKey: 
+{  name: "utilisateur_id", type: DataTypes.INTEGER, allowNull: false  },
+});
+
+Utilisateur.hasMany(Ravitaillement, { foreignKey: 
+  {  name: "utilisateur_id", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Ravitaillement.belongsTo(Utilisateur, {  foreignKey: 
+{  name: "utilisateur_id", type: DataTypes.INTEGER, allowNull: false  },
+});
+
 const Migration = async () => {
   //  console.log(" \n\n\n\n Migration \n\n\n ");
   await db
