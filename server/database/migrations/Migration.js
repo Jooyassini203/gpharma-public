@@ -207,6 +207,16 @@ Vente.belongsTo(Ordonnance, {
   },
 });
  
+Produit.belongsToMany(Ravitaillement, {
+  through: "Ravitaillement_detail",
+  unique: false,
+  foreignKey: "produit_id",
+});
+Ravitaillement.belongsToMany(Produit, {
+  through: "Ravitaillement_detail",
+  unique: false,
+  foreignKey: "ravitaillement_id",
+});
 
 const Migration = async () => {
   //  console.log(" \n\n\n\n Migration \n\n\n ");
