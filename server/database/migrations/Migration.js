@@ -31,8 +31,7 @@ import formeListe from "../seeders/Forme.seeder.js";
 import uniteListe from "../seeders/Unite.seeder.js";
 import voieListe from "../seeders/Voie.seeder.js";
 
-import utilisateurListe from "../factories/Utilisateur.factorie.js";
-import Fournisseur from "../models/Fournisseur.model.js";
+import utilisateurListe from "../factories/Utilisateur.factorie.js"; 
 
 // Association
 Produit.belongsToMany(Ajustement, {
