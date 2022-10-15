@@ -18,21 +18,21 @@ const Produit = db.define(
       type: DataTypes.CHAR(1000),
     },
     description: {
-      type: DataTypes.CHAR(10000),
+      type: DataTypes.TEXT ,
     },
     image: {
       type: DataTypes.CHAR(255),
     },
     presentation_quantite: {
-      type: DataTypes.DOUBLE(10),
+      type: DataTypes.DOUBLE ,
       allowNull: false,
     },
     stock_min: {
-      type: DataTypes.DOUBLE(10),
+      type: DataTypes.DOUBLE ,
       allowNull: false,
     },
     stock_max: {
-      type: DataTypes.DOUBLE(10),
+      type: DataTypes.DOUBLE ,
       allowNull: false,
     },
     date_der_ravitaillement: {

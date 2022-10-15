@@ -5,9 +5,8 @@ const Ajustement = db.define(
   "ajustement",
   {
     motif: {
-      type: DataTypes.CHAR(1000),
-      allowNull: false,
-      unique: true,
+      type: DataTypes.TEXT,
+      allowNull: false, 
     },
     date_saisi: {
       type: DataTypes.DATE,

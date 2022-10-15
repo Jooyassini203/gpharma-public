@@ -9,7 +9,7 @@ const Ravitaillement = db.define(
       allowNull: false,
     },
     montant_ht: {
-      type: DataTypes.DOUBLE(10),
+      type: DataTypes.DOUBLE,
     },
     etat_ravitaillement: {
       type: DataTypes.CHAR(10),
@@ -37,7 +37,7 @@ const Ravitaillement = db.define(
       //   defaultValue: ''
     },
     tva: {
-      type: DataTypes.DOUBLE(10),
+      type: DataTypes.DOUBLE,
     },
     status: {
       type: DataTypes.BOOLEAN,

@@ -28,14 +28,12 @@ const Fournisseur = db.define(
       type: DataTypes.CHAR(255),
     },
     condition_paiement: {
-      type: DataTypes.CHAR(10000),
-      allowNull: false,
-      unique: true,
+      type: DataTypes.TEXT ,
+      allowNull: false, 
     },
     delais_reglement: {
-      type: DataTypes.CHAR(10000),
-      allowNull: false,
-      unique: true,
+      type: DataTypes.TEXT ,
+      allowNull: false, 
     },
     email: {
       type: DataTypes.CHAR(255),
