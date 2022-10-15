@@ -16,7 +16,7 @@ const Ajustement = db.define(
     },
     date_ajustement: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false, 
     },
     status: {
       type: DataTypes.BOOLEAN,
