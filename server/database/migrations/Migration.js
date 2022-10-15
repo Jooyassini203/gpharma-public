@@ -1,5 +1,6 @@
 import db from "../../config/Database.js";
 import { MIGRATE } from "../../utils/utils.js";
+import { Association, DataTypes } from "sequelize";
 
 import Caisse from "../models/Caisse.model.js";
 import Fabricant from "../models/Fabricant.model.js";
@@ -15,11 +16,13 @@ import Societe from "../models/Societe.model.js";
 import Client from "../models/Client.model.js";
 import Founisseur from "../models/Founisseur.model.js";
 import Mode_expedition from "../models/Mode_expedition.model.js";
+import Ravitaillement from "../models/Ravitaillement.model.js";
 import Ravitaillement_detail from "../models/Ravitaillement_detail.model.js";
 import Emplacement from "../models/Emplacement.model.js";
 import Vente_detail from "../models/Vente_detail.model.js";
 import Vente from "../models/Vente.model.js";
 import Famille from "../models/Famille.model.js";
+import Produit from "../models/Produit.model.js";
 
 import caisseListe from "../seeders/Caisse.seeder.js";
 import fabricantListe from "../seeders/Fabricant.seeder.js";
@@ -28,6 +31,34 @@ import uniteListe from "../seeders/Unite.seeder.js";
 import voieListe from "../seeders/Voie.seeder.js";
 
 import utilisateurListe from "../factories/Utilisateur.factorie.js";
+
+// Association
+Produit.belongsToMany(Ajustement, {
+  through: "Ajustement_detail",
+  unique: false,
+  foreignKey: "produit_id",
+});
+Ajustement.belongsToMany(Produit, {
+  through: "Ajustement_detail",
+  unique: false,
+  foreignKey: "ajustement_id",
+});
+
+Caisse.hasMany(Ravitaillement, {
+  // foreignKey: {
+  //   name: "myFooId",
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  // },
+});
+
+// Caisse.belongsTo(Ravitaillement, {
+//   foreignKey: {
+//     name: "myFooId",
+//     type: DataTypes.INTEGER,
+//     allowNull: false,
+//   },
+// });
 
 const Migration = async () => {
   //  console.log(" \n\n\n\n Migration \n\n\n ");

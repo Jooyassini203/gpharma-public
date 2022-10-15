@@ -15,24 +15,24 @@ const Produit = db.define(
       unique: true,
     },
     classification_produit: {
-      type: DataTypes.CHAR(1000),
+      type: DataTypes.TEXT,
     },
     description: {
-      type: DataTypes.TEXT ,
+      type: DataTypes.TEXT,
     },
     image: {
       type: DataTypes.CHAR(255),
     },
     presentation_quantite: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
       allowNull: false,
     },
     stock_min: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
       allowNull: false,
     },
     stock_max: {
-      type: DataTypes.DOUBLE ,
+      type: DataTypes.DOUBLE,
       allowNull: false,
     },
     date_der_ravitaillement: {

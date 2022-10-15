@@ -5,7 +5,7 @@ const Ravitaillement = db.define(
   "ravitaillement",
   {
     motif: {
-      type: DataTypes.CHAR(1000),
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     montant_ht: {
