@@ -45,20 +45,76 @@ Ajustement.belongsToMany(Produit, {
 });
 
 Caisse.hasMany(Ravitaillement, {
-  // foreignKey: {
-  //   name: "myFooId",
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  // },
+  foreignKey: {
+    name: "caisse_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Caisse.belongsTo(Ravitaillement, {
+  foreignKey: {
+    name: "caisse_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
-// Caisse.belongsTo(Ravitaillement, {
-//   foreignKey: {
-//     name: "myFooId",
-//     type: DataTypes.INTEGER,
-//     allowNull: false,
-//   },
-// });
+Client.hasOne(Vente, {
+  foreignKey: {
+    name: "client_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Vente.belongsTo(Client, {
+  foreignKey: {
+    name: "client_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+Societe.hasOne(Client, {
+  foreignKey: {
+    name: "societe_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+}); 
+Societe.belongsTo(Client, {
+  foreignKey: {
+    name: "societe_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+
+Emplacement.hasOne(Ajustement, {
+  foreignKey: {
+    name: "emplacement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Ajustement.belongsTo(Emplacement, {
+  foreignKey: {
+    name: "emplacement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+Produit.belongsToMany(Emplacement, {
+  through: "Emplacement_detail",
+  unique: false,
+  foreignKey: "emplacement_id",
+});
+Emplacement.belongsToMany(Produit, {
+  through: "Emplacement_detail",
+  unique: false,
+  foreignKey: "emplacement_id",
+});
+
 
 const Migration = async () => {
   //  console.log(" \n\n\n\n Migration \n\n\n ");
