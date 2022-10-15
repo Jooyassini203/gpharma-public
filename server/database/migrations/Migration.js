@@ -76,7 +76,7 @@ Vente.belongsTo(Client, {
   },
 });
 
-Societe.hasOne(Client, {
+Societe.hasMany(Client, {
   foreignKey: {
     name: "societe_id",
     type: DataTypes.INTEGER,
@@ -91,7 +91,7 @@ Societe.belongsTo(Client, {
   },
 });
 
-Emplacement.hasOne(Ajustement, {
+Emplacement.hasMany(Ajustement, {
   foreignKey: {
     name: "emplacement_id",
     type: DataTypes.INTEGER,
@@ -117,7 +117,7 @@ Emplacement.belongsToMany(Produit, {
   foreignKey: "emplacement_id",
 });
 
-Fabricant.hasOne(Produit, {
+Fabricant.hasMany(Produit, {
   foreignKey: {
     name: "fabricant_id",
     type: DataTypes.INTEGER,
@@ -132,7 +132,7 @@ Produit.belongsTo(Fabricant, {
   },
 });
  
-Famille.hasOne(Produit, {
+Famille.hasMany(Produit, {
   foreignKey: {
     name: "famille_id",
     type: DataTypes.INTEGER,
@@ -147,7 +147,7 @@ Produit.belongsTo(Famille, {
   },
 });
  
-Fournisseur.hasOne(Ravitaillement, {
+Fournisseur.hasMany(Ravitaillement, {
   foreignKey: {
     name: "fournisseur_id",
     type: DataTypes.INTEGER,
@@ -162,6 +162,21 @@ Ravitaillement.belongsTo(Fournisseur, {
   },
 });
  
+Mode_expedition.hasMany(Ravitaillement, {
+  foreignKey: {
+    name: "mode_expedition_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+}); 
+Ravitaillement.belongsTo(Mode_expedition, {
+  foreignKey: {
+    name: "mode_expedition_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
 Guichet.hasOne(Vente, {
   foreignKey: {
     name: "guichet_id",
@@ -192,21 +207,6 @@ Vente.belongsTo(Ordonnance, {
   },
 });
  
-Ordonnance.hasOne(Vente, {
-  foreignKey: {
-    name: "ordonnance_id",
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-}); 
-Vente.belongsTo(Ordonnance, {
-  foreignKey: {
-    name: "ordonnance_id",
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-});
- 
 Produit.belongsToMany(Ravitaillement, {
   through: "Ravitaillement_detail",
   unique: false,
@@ -216,6 +216,52 @@ Ravitaillement.belongsToMany(Produit, {
   through: "Ravitaillement_detail",
   unique: false,
   foreignKey: "ravitaillement_id",
+});
+
+Unite.hasMany(Produit, { foreignKey: 
+    {  name: "unite_presentation", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Produit.belongsTo(Unite, {  foreignKey: 
+  {  name: "unite_presentation", type: DataTypes.INTEGER, allowNull: false  },
+});
+
+Unite.hasMany(Produit, { foreignKey: 
+    {  name: "unite_achat", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Produit.belongsTo(Unite, {  foreignKey: 
+  {  name: "unite_achat", type: DataTypes.INTEGER, allowNull: false  },
+});
+
+Unite.hasMany(Produit, { foreignKey: 
+    {  name: "unite_vente", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Produit.belongsTo(Unite, {  foreignKey: 
+  {  name: "unite_vente", type: DataTypes.INTEGER, allowNull: false  },
+});
+
+Unite.hasMany(Produit, { foreignKey: 
+    {  name: "unite_stock", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Produit.belongsTo(Unite, {  foreignKey: 
+  {  name: "unite_stock", type: DataTypes.INTEGER, allowNull: false  },
+});
+
+Produit.belongsToMany(Vente, {
+  through: "vente_detail",
+  unique: false,
+  foreignKey: "produit_id",
+});
+Vente.belongsToMany(Produit, {
+  through: "vente_detail",
+  unique: false,
+  foreignKey: "vente_id",
+});
+
+Voie.hasMany(Produit, { foreignKey: 
+  {  name: "voie_id", type: DataTypes.INTEGER, allowNull: false  },
+}); 
+Produit.belongsTo(Voie, {  foreignKey: 
+{  name: "voie_id", type: DataTypes.INTEGER, allowNull: false  },
 });
 
 const Migration = async () => {
