@@ -39,30 +39,7 @@ const createOne = (req, res) => {
     console.log("sans image");
     insertDB();
   } else {
-    console.log("avec image");
-    const file = req.files.file;
-    const fileSize = req.files.lenght;
-    const fileExt = path.extname(file.name);
-    const fileName = getDateTime("USER_") + fileExt;
-    const url = `${req.protocol}://${req.get(
-      "host"
-    )}/images/utilisateur/${fileName}`;
-    const allowType = [".png", ".jpeg", ".jpg"];
-    if (!allowType.includes(fileExt.toLowerCase())) {
-      return res.status(422).send({ message: "Image invalide!" });
-    }
-    if (fileSize > 10000000) {
-      return res
-        .status(422)
-        .send({ message: "Image trop lourd (Plus de 10 MB) !" });
-    }
-    console.log("fileName:", fileName);
-    file.mv(`./public/images/utilisateur/${fileName}`, async (error) => {
-      if (error) return res.status(500).send({ message: error.message });
-      userData["image"] = fileName;
-      userData["url"] = url;
-      insertDB();
-    });
+    
   }
 };
 const createMany = () => {};
@@ -100,9 +77,10 @@ const updateOne = async (req, res) => {
       if (error) return res.status(500).send({ message: error.message });
       if (user.image) {
         const filepath = `./public/images/utilisateur/${user.image}`;
-        console.log("filepath", filepath);
+        console.log("filepath : ", filepath);
         // Check if file exist
         fs.access(filepath, fs.F_OK, (err) => {
+          console.log("fs.access : ");
           if (err) {
             console.error(err);
             return;

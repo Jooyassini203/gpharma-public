@@ -13,7 +13,7 @@ const Ravitaillement_detail = db.define(
   },
   { 
     paranoid: true, 
-    // freezeTableName: true
+    freezeTableName: true
    }
 );
 export default Ravitaillement_detail;

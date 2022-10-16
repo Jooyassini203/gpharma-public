@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../../config/Database.js";
 
 const Produit_emplacement = db.define(
-  "Produit_emplacement",
+  "produit_emplacement",
   {
     quantite_produit: { type: DataTypes.DOUBLE, allowNull: false },
     quantite_der_depot: { type: DataTypes.DOUBLE, allowNull: false },

@@ -9,7 +9,7 @@ const Ajustement_detail = db.define(
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
   { paranoid: true, 
-    // freezeTableName: true 
+    freezeTableName: true 
   }
 );
 export default Ajustement_detail;
