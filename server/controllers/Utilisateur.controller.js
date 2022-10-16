@@ -1,7 +1,7 @@
 import Utilisateur from "../database/models/utilisateur.model.js";
 import path from "path";
 import fs from "fs";
-import { getDateTime } from "../utils/utils.js";
+import { getDateTime, uploadFile } from "../utils/utils.js";
 
 const getAll = async (req, res) => {
   try {
@@ -39,7 +39,7 @@ const createOne = (req, res) => {
     console.log("sans image");
     insertDB();
   } else {
-    
+    uploadFile(req, res, 'USER_', 'images/utilisateur', userData, insertDB)
   }
 };
 const createMany = () => {};
@@ -59,41 +59,13 @@ const updateOne = async (req, res) => {
   let url = "";
   if (!req.files) {
     fileName = user.image;
-    url = user.url;
-  } else {
-    const file = req.files.file;
-    const fileSize = req.files.lenght;
-    const fileExt = path.extname(file.name);
-    fileName = getDateTime("USER_") + fileExt;
-    url = `${req.protocol}://${req.get("host")}/images/utilisateur/${fileName}`;
-    const allowType = [".png", ".jpeg", ".jpg"];
-    if (!allowType.includes(fileExt.toLowerCase()))
-      return res.status(422).send({ message: "Image invalide!" });
-    if (fileSize > 10000000)
-      return res
-        .status(422)
-        .send({ message: "Image trop lourd (Plus de 10 MB) !" });
-    file.mv(`./public/images/utilisateur/${fileName}`, (error) => {
-      if (error) return res.status(500).send({ message: error.message });
-      if (user.image) {
-        const filepath = `./public/images/utilisateur/${user.image}`;
-        console.log("filepath : ", filepath);
-        // Check if file exist
-        fs.access(filepath, fs.F_OK, (err) => {
-          console.log("fs.access : ");
-          if (err) {
-            console.error(err);
-            return;
-          }
-          fs.unlinkSync(filepath);
-          //file exists
-        });
-      }
-    });
-  }
-  try {
     userData["image"] = fileName;
     userData["url"] = url;
+    url = user.url;
+  } else {
+     uploadFile(req, res, 'USER_', 'images/utilisateur', userData, null, user)  
+  }
+  try {
     // userData["mot_de_passe"] = userData["mot_de_passe"];
     console.log("userData", userData);
     user.set(userData);
@@ -114,14 +86,14 @@ const deleteOne = async (req, res) => {
     return res.status(404).send({ message: "Utilisateur introvable!" });
   try {
     if (user.image) {
-      const filepath = `./public/images/utilisateur/${user.image}`;
-      console.log("filepath", filepath);
+      const filepath = `./public/images/utilisateur/${user.image}`; 
       // Check if file exist
       fs.access(filepath, fs.F_OK, (err) => {
         if (err) {
           console.error(err);
           return;
         }
+        console.log('\N DETETED -- ', user.url);
         fs.unlinkSync(filepath);
         //file exists
       });
