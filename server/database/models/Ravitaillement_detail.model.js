@@ -11,9 +11,10 @@ const Ravitaillement_detail = db.define(
     // unite_achat: { type: DataTypes.INTEGER(10), allowNull: false },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
-  { 
-    paranoid: true, 
-    freezeTableName: true
-   }
+  {
+    paranoid: true,
+    timestamps: false,
+    freezeTableName: true,
+  }
 );
 export default Ravitaillement_detail;

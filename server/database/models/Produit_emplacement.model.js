@@ -11,7 +11,8 @@ const Produit_emplacement = db.define(
     date_der_retrait: { type: DataTypes.DATE, allowNull: false },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
-  { paranoid: true, freezeTableName: true }
+
+  { paranoid: true, timestamps: false, freezeTableName: true }
 );
 
 export default Produit_emplacement;
