@@ -28,14 +28,14 @@ function Parametre() {
         <div className="card-body">
           <div className="email-left-box generic-width px-0 mb-5">
             <div className="mail-list mt-4">
-              <a href="email-inbox.html" className="list-group-item active">
+              <a className="list-group-item active">
                 <i className="fa fa-inbox font-18 align-middle mr-2" />{" "}
                 Paramètres
                 <span className="badge badge-primary badge-sm float-right">
                   6
                 </span>
               </a>
-              <a href="javascript:void()" className="list-group-item">
+              <a  type="button" className="list-group-item">
                 <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
                 Caisse
                 <span
@@ -46,7 +46,7 @@ function Parametre() {
                   2
                 </span>
               </a>
-              <a href="javascript:void()" className="list-group-item">
+              <a  type="button" className="list-group-item">
                 <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
                 Fabricant
                 <span
@@ -57,7 +57,7 @@ function Parametre() {
                   21
                 </span>
               </a>
-              <a href="javascript:void()" className="list-group-item">
+              <a  type="button" className="list-group-item">
                 <i className="fa fa-paper-plane font-18 align-middle mr-2" />
                 Famille
                 <span
@@ -68,7 +68,7 @@ function Parametre() {
                   6
                 </span>
               </a>
-              <a href="javascript:void()" className="list-group-item">
+              <a  type="button" className="list-group-item">
                 <i className="fa fa-star font-18 align-middle mr-2" />
                 Forme
                 <span
@@ -79,7 +79,7 @@ function Parametre() {
                   29
                 </span>
               </a>
-              <a href="javascript:void()" className="list-group-item">
+              <a  type="button" className="list-group-item">
                 <i className="fa fa-trash font-18 align-middle mr-2" />
                 Unité
                 <span
@@ -90,7 +90,7 @@ function Parametre() {
                   40
                 </span>
               </a>
-              <a href="javascript:void()" className="list-group-item">
+              <a  type="button" className="list-group-item">
                 <i className="fa fa-trash font-18 align-middle mr-2" />
                 Voie
                 <span
@@ -211,13 +211,13 @@ function Parametre() {
                       </div>
                       <div className="clearfix mb-3 btn-group">
                         <a
-                          href="javascript:void()"
+                           type="button"
                           className="btn btn-primary px-3 light"
                         >
                           <i className="fa fa-check" />{" "}
                         </a>
                         <a
-                          href="javascript:void()"
+                           type="button"
                           className="btn btn-primary px-3 light ml-2"
                         >
                           <i className="fa fa-trash" />

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function NavElement({ to, icon, title, children }) {
   const a = <a
-    href={"javascript:void()"}
+     type="button"
     className={children ? "has-arrow ai-icon" : "ai-icon"}
     aria-expanded="false"
   >
@@ -26,7 +26,7 @@ function NavElement({ to, icon, title, children }) {
           </Link> 
           : 
           <a
-            href={"javascript:void()"}
+             type="button"
             className={children ? "has-arrow ai-icon" : "ai-icon"}
             aria-expanded="false"
           >

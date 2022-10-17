@@ -14,7 +14,7 @@ function NotFound() {
                                 <p>Vous avez peut-être mal tapé l'adresse ou la page a peut-être été déplacée.</p>
                                 <div>
                                     <Link to="/">
-                                      <a className="btn btn-primary" href="javascript:void()">Back to Home</a>
+                                      <a className="btn btn-primary"  type="button">Back to Home</a>
                                     </Link>
                                 </div>
                             </div>
