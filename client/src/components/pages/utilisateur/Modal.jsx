@@ -4,7 +4,7 @@ import {
   isAddState,
   listUtilisateurState,
   userSelectState,
-  initializeState,
+  previewImage,
 } from "../../../atoms/utilisateur.js";
 import {
   getData,
@@ -63,14 +63,15 @@ function Modal() {
     image,
   } = utilisateur;
   const [isObligatory, setIsObligatory] = useState(false);
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useRecoilState(previewImage);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
 
   //DEBUT Déclaration des functions Modal
   const getAllUser = () => {
-    closeRef.current.click();
+    closeRef.current.click(); 
+    setPreview("images/profile/1.jpg")
     getData(`utilisateurs`, setListUser);
   };
 
@@ -206,6 +207,7 @@ function Modal() {
                 data-dismiss="modal"
                 onClick={() => {
                   setUtilisateur(initialize);
+                  setPreview("images/profile/1.jpg")
                   setIsObligatory(false);
                 }}
               >
@@ -331,6 +333,7 @@ function Modal() {
                 data-dismiss="modal"
                 onClick={() => {
                   setUtilisateur(initialize);
+                  setPreview("images/profile/1.jpg") 
                   setIsObligatory(false);
                 }}
               >

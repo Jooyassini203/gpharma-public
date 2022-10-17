@@ -5,6 +5,10 @@ export const isAddState = atom({
   default: true,
 });
 
+export const previewImage = atom({
+  key: "preview-image-utilisateur",
+  default: "images/profile/1.jpg",
+});
 export const initializeState = atom({
   key: "initialize-utilisateur",
   default: {
