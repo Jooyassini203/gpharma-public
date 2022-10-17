@@ -4,6 +4,7 @@ import Login from "../pages/login";
 import Accueil from "../pages/accueil";
 import Utilisateur from "../pages/utilisateur";
 import NotFound from "../pages/notFound";
+import Parametre from "../pages/parametre";
 
 function MyRoute() { 
   return (
@@ -15,6 +16,7 @@ function MyRoute() {
         } */}
         <Route exact path="/" element={<Accueil/>} />
         <Route exact path="/utilisateur" element={<Utilisateur/>} />
+        <Route exact path="/parametre" element={<Parametre/>} />
         
         <Route path="*" element={<NotFound/>} />
       </Routes> 
