@@ -1,6 +1,6 @@
-import { faker } from "@faker-js/faker"; 
+import { faker } from "@faker-js/faker";
 let utilisateurListe = [];
-for (let index = 0; index < 15; index++) {
+for (let index = 0; index < 6; index++) {
   utilisateurListe.push({
     nom_utilisateur: faker.name.fullName(),
     nom_login: faker.name.firstName(),

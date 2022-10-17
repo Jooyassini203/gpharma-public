@@ -9,8 +9,7 @@ function Viewer({ data }) {
         style={{ display: "none" }}
         aria-modal="true"
         data-backdrop="static"
-        data-keyboard="true"
-        tabindex="-1"
+        data-keyboard="true" 
       >
         <div className="modal-dialog modal-lg modal-dialog-centered">
           <div className="modal-content">

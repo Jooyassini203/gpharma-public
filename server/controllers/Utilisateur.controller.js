@@ -1,7 +1,6 @@
 import Utilisateur from "../database/models/utilisateur.model.js";
-import path from "path";
 import fs from "fs";
-import { getDateTime, uploadFile } from "../utils/utils.js";
+import { uploadFile } from "../utils/utils.js";
 
 const getAll = async (req, res) => {
   try {
@@ -39,7 +38,7 @@ const createOne = (req, res) => {
     console.log("sans image");
     insertDB();
   } else {
-    uploadFile(req, res, 'USER_', 'images/utilisateur', userData, insertDB)
+    uploadFile(req, res, "USER_", "images/utilisateur", userData, insertDB);
   }
 };
 const createMany = () => {};
@@ -63,7 +62,15 @@ const updateOne = async (req, res) => {
     userData["url"] = url;
     url = user.url;
   } else {
-     uploadFile(req, res, 'USER_', 'images/utilisateur', userData, null, user)  
+    uploadFile(
+      req,
+      res,
+      "USER_",
+      "images/utilisateur",
+      userData,
+      null,
+      user.image
+    );
   }
   try {
     // userData["mot_de_passe"] = userData["mot_de_passe"];
@@ -86,14 +93,14 @@ const deleteOne = async (req, res) => {
     return res.status(404).send({ message: "Utilisateur introvable!" });
   try {
     if (user.image) {
-      const filepath = `./public/images/utilisateur/${user.image}`; 
+      const filepath = `./public/images/utilisateur/${user.image}`;
       // Check if file exist
       fs.access(filepath, fs.F_OK, (err) => {
         if (err) {
           console.error(err);
           return;
         }
-        console.log('\N DETETED -- ', user.url);
+        console.log("N DETETED -- ", user.url);
         fs.unlinkSync(filepath);
         //file exists
       });
