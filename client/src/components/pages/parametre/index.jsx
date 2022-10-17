@@ -1,12 +1,17 @@
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
-import { ButtonTable, InputForm } from "../../../utils/utils";
+import { ButtonTable, getData, InputForm } from "../../../utils/utils";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import Table from "../utilisateur/Table";
 
-function Parametre() {
+const ItemParametre = ({ table, children }) => {
+  const [count, setCount] = useState([]);
+useEffect(()=> {
+  console.log('count', count);
+  getData("count/"+table, setCount);},[])
   const getClassBagde = (nbr) => {
     let classText = "primary";
     if (nbr <= 4) classText = "dark";
@@ -17,6 +22,23 @@ function Parametre() {
     else if (nbr > 30) classText = "danger";
     return classText;
   };
+  return (
+    <>
+      <a type="button" className="list-group-item">
+        <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
+        {children}
+        <span
+          className={`badge badge-${getClassBagde(count[0].count
+          )} badge-sm text-white float-right`}
+        >
+          {count[0].count}
+        </span>
+      </a>
+    </>
+  );
+};
+
+function Parametre() {
   return (
     <>
       <Nav />
@@ -32,75 +54,16 @@ function Parametre() {
                 <i className="fa fa-inbox font-18 align-middle mr-2" />{" "}
                 Paramètres
                 <span className="badge badge-primary badge-sm float-right">
-                  6
+                  7
                 </span>
-              </a>
-              <a  type="button" className="list-group-item">
-                <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
-                Caisse
-                <span
-                  className={`badge badge-${getClassBagde(
-                    2
-                  )} badge-sm text-white float-right`}
-                >
-                  2
-                </span>
-              </a>
-              <a  type="button" className="list-group-item">
-                <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
-                Fabricant
-                <span
-                  className={`badge badge-${getClassBagde(
-                    21
-                  )} badge-sm text-white float-right`}
-                >
-                  21
-                </span>
-              </a>
-              <a  type="button" className="list-group-item">
-                <i className="fa fa-paper-plane font-18 align-middle mr-2" />
-                Famille
-                <span
-                  className={`badge badge-${getClassBagde(
-                    6
-                  )} badge-sm text-white float-right`}
-                >
-                  6
-                </span>
-              </a>
-              <a  type="button" className="list-group-item">
-                <i className="fa fa-star font-18 align-middle mr-2" />
-                Forme
-                <span
-                  className={`badge badge-${getClassBagde(
-                    29
-                  )} badge-sm text-white float-right`}
-                >
-                  29
-                </span>
-              </a>
-              <a  type="button" className="list-group-item">
-                <i className="fa fa-trash font-18 align-middle mr-2" />
-                Unité
-                <span
-                  className={`badge badge-${getClassBagde(
-                    40
-                  )} badge-sm text-white float-right`}
-                >
-                  40
-                </span>
-              </a>
-              <a  type="button" className="list-group-item">
-                <i className="fa fa-trash font-18 align-middle mr-2" />
-                Voie
-                <span
-                  className={`badge badge-${getClassBagde(
-                    6
-                  )} badge-sm text-white float-right`}
-                >
-                  6
-                </span>
-              </a>
+              </a> 
+              <ItemParametre table="caisse" >Caisse</ItemParametre>
+              <ItemParametre table="fabricant" >Fabricant</ItemParametre>
+              <ItemParametre table="famille" >Famille</ItemParametre>
+              <ItemParametre table="forme" >Forme</ItemParametre>
+              <ItemParametre table="mode_expredition" >Mode expredition</ItemParametre> 
+              <ItemParametre table="unite" >Unité</ItemParametre>
+              <ItemParametre table="voie" >Voie</ItemParametre>
             </div>
           </div>
           <div className="email-right-box ml-0 ml-sm-4 ml-sm-0">
@@ -210,14 +173,11 @@ function Parametre() {
                         />
                       </div>
                       <div className="clearfix mb-3 btn-group">
-                        <a
-                           type="button"
-                          className="btn btn-primary px-3 light"
-                        >
+                        <a type="button" className="btn btn-primary px-3 light">
                           <i className="fa fa-check" />{" "}
                         </a>
                         <a
-                           type="button"
+                          type="button"
                           className="btn btn-primary px-3 light ml-2"
                         >
                           <i className="fa fa-trash" />
@@ -248,7 +208,7 @@ function Parametre() {
                               importance="danger ml-2"
                               icon={faTrash}
                               handleClick={() => {}}
-                              />
+                            />
                           </td>
                         </tr>
                       </tbody>

@@ -3,6 +3,7 @@ import FileUpload from "express-fileupload";
 import cors from "cors";
 import UtilisateurRouter from "./routes/Utilisateur.routes.js";
 import VoieRouter from "./routes/Voie.routes.js";
+import ParametreRouter from "./routes/Parametre.routes.js";
 
 import Migration from "./database/migrations/Migration.js";
 
@@ -16,6 +17,7 @@ app.use(FileUpload());
 
 app.use(UtilisateurRouter);
 app.use(VoieRouter);
+app.use(ParametreRouter);
 
 Migration();
 
