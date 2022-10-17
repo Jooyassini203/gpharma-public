@@ -7,9 +7,9 @@ function HeadNav() {
  
         <div className="nav-header">
         <a href="index.html" className="brand-logo">
-          <img className="logo-abbr" src="./images/logo.png" alt />
-          <img className="logo-compact" src="./images/logo-text.png" alt />
-          <img className="brand-title" src="./images/logo-text.png" alt />
+          <img className="logo-abbr" src="./images/logo.png" alt = "Image" />
+          <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
+          <img className="brand-title" src="./images/logo-text.png" alt = "Image" />
         </a>
         <div className="nav-control">
           <div className="hamburger">
@@ -31,7 +31,7 @@ function HeadNav() {
                 <li className="nav-item dropdown notification_dropdown">
                   <a
                     className="nav-link  ai-icon"
-                    href="javascript:void(0)"
+                    type="button"
                     role="button"
                     data-toggle="dropdown"
                   >
@@ -151,7 +151,7 @@ function HeadNav() {
                         </li>
                       </ul>
                     </div>
-                    <a className="all-notification" href="javascript:void(0)">
+                    <a className="all-notification" type="button">
                       Voir tout <i className="ti-arrow-right" />
                     </a>
                   </div>
@@ -159,7 +159,7 @@ function HeadNav() {
                 <li className="nav-item dropdown header-profile">
                   <a
                     className="nav-link"
-                    href="javascript:void(0)"
+                    type="button"
                     role="button"
                     data-toggle="dropdown"
                   >
@@ -169,7 +169,7 @@ function HeadNav() {
                       </span>
                       <p className="fs-12 mb-0">Administrateur</p>
                     </div>
-                    <img src="images/profile/17.jpg" width={20} alt />
+                    <img src="images/profile/17.jpg" width={20} alt = "Image" />
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
                     <a
@@ -195,8 +195,8 @@ function HeadNav() {
                       <span className="ml-2">Profile </span>
                     </a>
                     
-                    <a
-                      href="./page-login.html"
+                    <button
+                      type="button"
                       className="dropdown-item ai-icon"
                     >
                       <svg
@@ -217,7 +217,7 @@ function HeadNav() {
                         <line x1={21} y1={12} x2={9} y2={12} />
                       </svg>
                       <span className="ml-2"><Link to='/connexion' >Déconnection</Link> </span>
-                    </a>
+                    </button>
                   </div>
                 </li>
               </ul>

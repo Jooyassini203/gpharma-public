@@ -18,7 +18,7 @@ function Login() {
                   <div className="auth-form">
                     <div className="text-center mb-3">
                       {/* <a href="index.html"> */}
-                      <img src="images/logo-full.png" alt />
+                      <img src="images/logo-full.png" alt = "Image" />
                       {/* </a> */}
                     </div>
                     <h4 className="text-center mb-4 text-white">
