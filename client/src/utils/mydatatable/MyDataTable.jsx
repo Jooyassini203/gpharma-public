@@ -1,35 +1,53 @@
-import React, { useEffect, useState } from 'react'
-import DataTable from 'react-data-table-component' 
+import React, { useMemo } from "react";
+import DataTable from "react-data-table-component";
 
-export default function MyDataTable({data, columns, actions}) {
+export default function MyDataTable({ data, columns, actions }) {
+  const [filterText, setFilterText] = React.useState("");
+  const [resetPaginationToggle, setResetPaginationToggle] =
+    React.useState(false);
+  // const filteredItems = data.filter(
+  //   item => item.name && item.name.includes(filterText)
+  // );
+  const filteredItems = data.filter(
+    (item) =>
+      JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !==
+      -1
+  );
 
-  const [search, setSearch] = useState("")
-  const [mydata, setMydata] = useState(data)
-  const [searchList, setSearchList] = useState(data)
-  
-  useEffect(() =>{
-    console.log("data : ", data);
-    setSearchList(data)
-  }, [data])
+  const subHeaderComponent = useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
+      }
+    };
 
-  useEffect(() => {  
-    // console.log(Object.values(data));
-    const result = mydata.filter( dat => {
-      return dat.nom_uilisateur.toLowerCase().match(search.toLowerCase())}
-      )
-    setSearchList(result) 
-  }, [search])
+    return (
+      <input
+        type="text"
+        className="w-25 form-control form-control-sm"
+        value={filterText}
+        onChange={(e) => setFilterText(e.target.value)}
+        placeholder="Filtre ... "
+      />
+    );
+  }, [filterText, resetPaginationToggle]);
 
-  return <DataTable 
-    title="Liste des utilisateurs" 
-    columns={columns} data={searchList} 
-    pagination
-    fixedHeader
-    fixedHeaderScrollHeight='80vh'
-    highlightOnHover
-    subHeader
-    subHeaderComponent={<input type='text' className='w-25 form-control form-control-sm' value={search} onChange={(event) => setSearch(event.target.value)} placeholder='Filtre ... '/>}
-    actions={actions}
-  /> 
+  // -------------------------
+  return (
+    <DataTable
+      title="Liste des utilisateurs"
+      columns={columns}
+      data={filteredItems}
+      defaultSortField="name"
+      striped
+      pagination
+      subHeader
+      subHeaderComponent={subHeaderComponent}
+      fixedHeader
+      fixedHeaderScrollHeight="80vh"
+      highlightOnHover
+      actions={actions}
+    />
+  );
 }
-
