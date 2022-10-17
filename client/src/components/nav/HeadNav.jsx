@@ -6,10 +6,10 @@ function HeadNav() {
     <>
  
         <div className="nav-header">
-        <a href="index.html" className="brand-logo">
+        <a type="button" className="brand-logo">
           <img className="logo-abbr" src="./images/logo.png" alt = "Image" />
-          <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
-          <img className="brand-title" src="./images/logo-text.png" alt = "Image" />
+          {/* <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
+          <img className="brand-title" src="./images/logo-text.png" alt = "Image" /> */}
         </a>
         <div className="nav-control">
           <div className="hamburger">

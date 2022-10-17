@@ -10,24 +10,25 @@ function Accueil() {
           <div className="card">
             <div className="card-body">
               <div className="row">
-              <div className="col w-100">
-              <p className="text-justify">
-              Bienvenue sur GPHARMA Chez vous, en déplacement, depuis votre
-              tablette, smartphone ou ordinateur personnel, votre officine reste
-              toujours accessible et connectée. Vérifiez l’état de vos stocks,
-              suivez l’évolution de vos ventes, communiquez avec vos
-              collaborateurs, surveillez que tout se passe bien.
-              </p>
-              </div>
-              <div className="col-1">
-                <div className="mt-2">
-                  <img src="./images/logo.png" alt="logo" />
+                <div className="col w-100">
+                  <p className="text-justify">
+                    Bienvenue sur GPHARMA Chez vous, en déplacement, depuis
+                    votre tablette, smartphone ou ordinateur personnel, votre
+                    officine reste toujours accessible et connectée. Vérifiez
+                    l’état de vos stocks, suivez l’évolution de vos ventes,
+                    communiquez avec vos collaborateurs, surveillez que tout se
+                    passe bien.
+                  </p>
+                </div> 
+                <div className="col-3">
+                  <div className="mt-2">
+                    <img src="./images/logo.png" style={{width:"100%"}} alt="logo" />
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
-          <div className="row">
+          {/* <div className="row">
             <div className="col-xl-3 col-sm-6">
               <div className="card">
                 <div className="card-body">
@@ -179,7 +180,7 @@ function Accueil() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

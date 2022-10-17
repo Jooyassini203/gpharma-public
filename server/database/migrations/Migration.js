@@ -61,6 +61,21 @@ Ravitaillement.belongsTo(Caisse, {
   },
 });
 
+Caisse.hasMany(Vente, {
+  foreignKey: {
+    name: "caisse_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+Vente.belongsTo(Caisse, {
+  foreignKey: {
+    name: "caisse_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+
 Client.hasOne(Vente, {
   foreignKey: {
     name: "client_id",
@@ -127,6 +142,21 @@ Fabricant.hasMany(Produit, {
 Produit.belongsTo(Fabricant, {
   foreignKey: {
     name: "fabricant_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+Forme.hasMany(Produit, {
+  foreignKey: {
+    name: "forme_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+Produit.belongsTo(Forme, {
+  foreignKey: {
+    name: "forme_id",
     type: DataTypes.INTEGER,
     allowNull: false,
   },

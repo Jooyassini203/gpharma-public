@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../../config/Database.js";
 
 const Caisse = db.define(
-  "cdaisse",
+  "caisse",
   {
     nom_caisse: {
       type: DataTypes.CHAR(255),
