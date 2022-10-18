@@ -83,12 +83,13 @@ function Table() {
 
   const add = () => {
     if (new_name != "") {
-      let data = JSON.parse(`{"nom_${tb_name}":"${new_name}"}`);
-      console.log("data", data);
-      addData(tb_name, data, () => {
+      const formData = new FormData()
+      formData.append(`nom_${tb_name}`,new_name) 
+      console.log("data", formData);
+      addData(tb_name, formData, () => {
         setTb_name(table_name);
         getData(tb_name, setListBefore);
-      });
+      }, true);
     }
   };
 
