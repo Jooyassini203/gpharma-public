@@ -7,7 +7,7 @@ function HeadNav() {
  
         <div className="nav-header">
         <a type="button" className="brand-logo">
-          <img className="logo-abbr" src="./images/logo.png" alt = "Image" />
+          <img className="w-100" src="./images/logo.png" alt = "Image" />
           {/* <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
           <img className="brand-title" src="./images/logo-text.png" alt = "Image" /> */}
         </a>
