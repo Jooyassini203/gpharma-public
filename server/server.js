@@ -6,6 +6,12 @@ import VoieRouter from "./routes/Voie.routes.js";
 import ParametreRouter from "./routes/Parametre.routes.js";
 
 import Migration from "./database/migrations/Migration.js";
+import CaisseRouter from "./routes/Caisse.routes.js";
+import FormeRouter from "./routes/Forme.routes.js";
+import FabricantRouter from "./routes/Fabricant.routes.js";
+import FamilleRouter from "./routes/Famille.routes.js";
+import UniteRouter from "./routes/Unite.routes.js";
+import Mode_expeditionRouter from "./routes/Mode_expedition.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -17,6 +23,12 @@ app.use(FileUpload());
 
 app.use(UtilisateurRouter);
 app.use(VoieRouter);
+app.use(CaisseRouter);
+app.use(FormeRouter);
+app.use(FamilleRouter);
+app.use(FabricantRouter);
+app.use(Mode_expeditionRouter);
+app.use(UniteRouter);
 app.use(ParametreRouter);
 
 Migration();

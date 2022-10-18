@@ -5,8 +5,11 @@ import { getData } from "../../../utils/utils";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import Table from "./Table";
+import { useRecoilState } from "recoil";
+import {table_name} from '../../../atoms/parametre' 
 
 const ItemParametre = ({ array, table, children }) => {
+  const [tb_name, setTb_name] = useRecoilState(table_name);
   const [number, setNumber] = useState(0)
 
   const getClassBagde = (nbr) => {
@@ -19,14 +22,14 @@ const ItemParametre = ({ array, table, children }) => {
     else if (nbr > 30) classText = "danger";
     return classText;
   };
-  useEffect(()=>{
+  useEffect(()=>{ 
     if (array.length > 0) { 
       setNumber(array[0]["count_"+table]) 
     }
   },[array])
   return (
     <> 
-      <a type="button" className="list-group-item">
+      <a type="button" className="list-group-item" onClick={()=> setTb_name(table)}>
         <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
         {children}
         <span
@@ -76,11 +79,10 @@ function Parametre() {
             </div>
           </div>
           <div className="email-right-box ml-0 ml-sm-4 ml-sm-0">
-            
+      <Table/> 
           </div>
         </div>
       </div>
-      <Table/>
       <FooterNav />
     </>
   );

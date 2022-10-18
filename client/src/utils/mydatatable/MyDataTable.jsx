@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import DataTable from "react-data-table-component";
 
-export default function MyDataTable({ data, columns, actions }) {
+export default function MyDataTable({ data, columns, actions, title, filterClass }) {
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] =
     React.useState(false);
@@ -25,7 +25,7 @@ export default function MyDataTable({ data, columns, actions }) {
     return (
       <input
         type="text"
-        className="w-25 form-control form-control-sm"
+        className={filterClass?filterClass:"w-25 form-control form-control-sm"}
         value={filterText}
         onChange={(e) => setFilterText(e.target.value)}
         placeholder="Filtre ... "
@@ -36,7 +36,7 @@ export default function MyDataTable({ data, columns, actions }) {
   // -------------------------
   return (
     <DataTable
-      title="Liste des utilisateurs"
+      title={title}
       columns={columns}
       data={filteredItems}
       defaultSortField="name"

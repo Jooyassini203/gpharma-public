@@ -28,6 +28,7 @@ import Ravitaillement from "../models/Ravitaillement.model.js";
 
 import caisseListe from "../seeders/Caisse.seeder.js";
 import fabricantListe from "../seeders/Fabricant.seeder.js";
+import familleListe from "../seeders/Famille.seeder.js";
 import formeListe from "../seeders/Forme.seeder.js";
 import uniteListe from "../seeders/Unite.seeder.js";
 import voieListe from "../seeders/Voie.seeder.js";
@@ -390,6 +391,11 @@ const Migration = async () => {
         await Forme.bulkCreate(formeListe)
           .then(() => console.log(" ------> Table << Forme >> migrée!"))
           .catch(() => console.log(" ------> Table << Forme >> NON migrée!!!"));
+        await Famille.bulkCreate(familleListe)
+          .then(() => console.log(" ------> Table << Famille >> migrée!"))
+          .catch(() =>
+            console.log(" ------> Table << Famille >> NON migrée!!!")
+          );
         await Voie.bulkCreate(voieListe)
           .then(() => console.log(" ------> Table << Voie >> migrée!"))
           .catch(() => console.log(" ------> Table << Voie >> NON migrée!!!"));
