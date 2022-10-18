@@ -8,31 +8,30 @@ import { table_name } from "../../../atoms/parametre";
 
 function Table() {
   const [tb_name, setTb_name] = useRecoilState(table_name);
-  const [new_name, setNew_name] = useState("")
+  const [new_name, setNew_name] = useState("");
   const [listBefore, setListBefore] = useState([]);
-  const [list, setList] = useState([]); 
+  const [list, setList] = useState([]);
+  let style = [];
   useEffect(() => {
     getData(tb_name, setListBefore);
   }, [tb_name]);
-  useEffect(() => { 
-      let i = 0;
-      let tempFull = [];
-      Object.entries(listBefore).forEach(([key, value]) => {
-        let temp = [];
-        Object.entries(value).forEach(([k, val]) => {
-          if (k == "id") {
-            temp["id"] = val;
-            temp["rang"] = ++i;
-          }
-          else if (k.indexOf("nom") > -1) {
-            temp["nom"] = val;
-          }
-         
-        });  
-        tempFull.push(temp)
+  useEffect(() => {
+    let i = 0;
+    let tempFull = [];
+    Object.entries(listBefore).forEach(([key, value]) => {
+      let temp = [];
+      Object.entries(value).forEach(([k, val]) => {
+        if (k == "id") {
+          temp["id"] = val;
+          temp["rang"] = ++i;
+        } else if (k.indexOf("nom") > -1) {
+          temp["nom"] = val;
+        }
       });
-      setList(tempFull)
-      console.log("list ;", list); 
+      tempFull.push(temp);
+    });
+    setList(tempFull);
+    console.log("list ;", list);
   }, [listBefore]);
   const columns = [
     {
@@ -43,7 +42,17 @@ function Table() {
     },
     {
       name: "Nom",
-      selector: (row) => row.nom,
+      selector: (row) => {
+        
+        return (
+          <>
+            <input
+              className="form-control" 
+              value={row.nom}
+            />
+          </>
+        );
+      },
       sortable: true,
     },
     {
@@ -67,21 +76,22 @@ function Table() {
       ),
     },
   ];
-  const formatName = (name) =>{
-    if(name == "mode_expedition")
-    return "mode d'expedition"
-    return name
-  }
-  
-  const add = () =>{
-    if(new_name != "") { 
-      addData(tb_name,  JSON.stringify(`{nom_${tb_name}:${new_name}}`), ()=>{
+  const formatName = (name) => {
+    if (name == "mode_expedition") return "mode d'expedition";
+    return name;
+  };
+
+  const add = () => {
+    if (new_name != "") {
+      let data = JSON.parse(`{"nom_${tb_name}":"${new_name}"}`);
+      console.log("data", data);
+      addData(tb_name, data, () => {
         setTb_name(table_name);
         getData(tb_name, setListBefore);
-      })
+      });
     }
-  }
-  
+  };
+
   return (
     <>
       <div className="row">
@@ -94,22 +104,33 @@ function Table() {
                     type="text"
                     className="form-control"
                     value={new_name}
-                    onChange={(e)=>setNew_name(e.target.value)}
+                    onChange={(e) => setNew_name(e.target.value)}
                     placeholder={"Ajout d'un nouveau " + formatName(tb_name)}
                   />
                 </div>
                 <div className="clearfix mb-3 btn-group">
-                  <a type="button" className="btn btn-primary px-3 light" onClick={add}>
+                  <a
+                    type="button"
+                    className="btn btn-primary px-3 light"
+                    onClick={add}
+                  >
                     <i className="fa fa-check" />{" "}
                   </a>
-                  <a type="button" className="btn btn-primary px-3 light ml-2" 
-                    onClick={()=>setNew_name('')}>
+                  <a
+                    type="button"
+                    className="btn btn-primary px-3 light ml-2"
+                    onClick={() => setNew_name("")}
+                  >
                     <i className="fa fa-trash" />
                   </a>
                 </div>
               </div>
               <hr />
-              <MyDataTable data={list} columns={columns} filterClass="form-control form-control-sm" />
+              <MyDataTable
+                data={list}
+                columns={columns}
+                filterClass="form-control form-control-sm"
+              />
             </div>
           </div>
         </div>

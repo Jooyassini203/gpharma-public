@@ -154,8 +154,8 @@ export const ButtonTable = ({
 };
 
 export const InputForm = ({
-  children,
-  val,
+  children = "",
+  val = "",
   onChange,
   password = null,
   email = null,
