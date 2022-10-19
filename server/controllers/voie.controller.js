@@ -23,9 +23,8 @@ const getSpecific = async (req, res) => {
 
 const createOne = async (req, res) => {
   try {
-    let data = JSON.parse(req.body.data);
-    await Caisse.create(data);
-    res.status(200).send({ message: "Caisse ajouté avec succès!" });
+    await Voie.create(req.body);
+    res.status(200).send({ message: "Voie ajoutée avec succès!" });
   } catch (error) {
     res.status(422).send({ message: error.message });
     console.log(error.message);

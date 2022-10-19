@@ -114,8 +114,7 @@ function Table() {
         () => {
           setTb_name(table_name);
           getData(tb_name, setListBefore);
-        },
-        true
+        } , true
       );
     }
   };
