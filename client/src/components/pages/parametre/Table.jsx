@@ -1,7 +1,7 @@
 import React from "react";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import { addData, ButtonTable, getData, InputForm } from "../../../utils/utils";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { table_name } from "../../../atoms/parametre";
@@ -9,8 +9,10 @@ import { table_name } from "../../../atoms/parametre";
 function Table() {
   const [tb_name, setTb_name] = useRecoilState(table_name);
   const [new_name, setNew_name] = useState("");
+  const [edit_name, setEdit_name] = useState("");
   const [listBefore, setListBefore] = useState([]);
   const [list, setList] = useState([]);
+  const [toggleEdit, setToggleEdit] = useState(false);
   let style = [];
   useEffect(() => {
     getData(tb_name, setListBefore);
@@ -43,14 +45,24 @@ function Table() {
     {
       name: "Nom",
       selector: (row) => {
-        
+        setEdit_name(row.nom);
         return (
-          <>
-            <input
-              className="form-control" 
-              value={row.nom}
-            />
-          </>
+          <span
+            key={row.id}
+            onDoubleClick={() => {
+              setToggleEdit(!toggleEdit);
+            }}
+          >
+            {toggleEdit ? (
+              <input
+                className="form-control"
+                value={edit_name}
+                onChange={(e) => setEdit_name(e.target.value)}
+              />
+            ) : (
+              row.nom
+            )}
+          </span>
         );
       },
       sortable: true,
@@ -58,22 +70,32 @@ function Table() {
     {
       name: "Action",
       width: "25%",
-      selector: (row) => (
-        <div className="btn-group">
-          <ButtonTable
-            importance="warning ml-2"
-            icon={faEdit}
-            data-toggle="modal"
-            data-target="#modalUtilisateur"
-            handleClick={() => {}}
-          />
-          <ButtonTable
-            importance="danger ml-2"
-            icon={faTrash}
-            handleClick={() => {}}
-          />
-        </div>
-      ),
+      selector: (row) => {
+        let iconEdit = faEdit;
+        let importance = "warning ml-2";
+        if (toggleEdit) {
+          importance = "success ml-2";
+          iconEdit = faCheck;
+        }
+        return (
+          <div className="btn-group">
+            <ButtonTable
+              importance={importance}
+              icon={iconEdit}
+              data-toggle="modal"
+              data-target="#modalUtilisateur"
+              handleClick={() => {
+                setToggleEdit(!toggleEdit)
+              }}
+            />
+            <ButtonTable
+              importance="danger ml-2"
+              icon={faTrash}
+              handleClick={() => {}}
+            />
+          </div>
+        );
+      },
     },
   ];
   const formatName = (name) => {
@@ -83,13 +105,18 @@ function Table() {
 
   const add = () => {
     if (new_name != "") {
-      const formData = new FormData()
-      formData.append(`nom_${tb_name}`,new_name) 
+      const formData = new FormData();
+      formData.append(`nom_${tb_name}`, new_name);
       console.log("data", formData);
-      addData(tb_name, formData, () => {
-        setTb_name(table_name);
-        getData(tb_name, setListBefore);
-      }, true);
+      addData(
+        tb_name,
+        formData,
+        () => {
+          setTb_name(table_name);
+          getData(tb_name, setListBefore);
+        },
+        true
+      );
     }
   };
 
