@@ -112,7 +112,7 @@ function Table() {
         tb_name,
         formData,
         () => {
-          setTb_name(table_name);
+          setTb_name("");
           getData(tb_name, setListBefore);
         } , true
       );
