@@ -29,7 +29,8 @@ const ItemParametre = ({ array, table, children }) => {
   },[array])
   return (
     <> 
-      <a type="button" className="list-group-item" onClick={()=> setTb_name(table)}>
+      <a type="button" className={table == tb_name ? "list-group-item text-" +
+      getClassBagde(number) : "list-group-item" }onClick={()=> setTb_name(table)}>
         <i className="mdi mdi-file-document-box font-18 align-middle mr-2" />
         {children}
         <span

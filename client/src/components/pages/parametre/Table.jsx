@@ -1,6 +1,13 @@
 import React from "react";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
-import { addData, ButtonTable, getData, InputForm } from "../../../utils/utils";
+import {
+  addData,
+  ButtonTable,
+  deleteData,
+  getData,
+  InputForm,
+  updateData,
+} from "../../../utils/utils";
 import { faCheck, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -15,6 +22,7 @@ function Table() {
   const [toggleEdit, setToggleEdit] = useState(false);
   let style = [];
   useEffect(() => {
+    setToggleEdit(false);
     getData(tb_name, setListBefore);
   }, [tb_name]);
   useEffect(() => {
@@ -35,6 +43,25 @@ function Table() {
     setList(tempFull);
     console.log("list ;", list);
   }, [listBefore]);
+
+  const printRow = (row, n) => {
+    for (let index = 0; index < list.length; index++) {
+      if (list[index].id === row.id) {
+        if (list[index]["isEdit"] && !edit_name) {
+          return (
+            <input
+              key={row.id}
+              className="form-control"
+              value={edit_name}
+              onChange={(e) => setEdit_name(e.target.value)}
+            />
+          );
+        }
+      }
+    }
+    return row.nom;
+  };
+
   const columns = [
     {
       name: "#",
@@ -45,23 +72,33 @@ function Table() {
     {
       name: "Nom",
       selector: (row) => {
-        setEdit_name(row.nom);
         return (
           <span
             key={row.id}
             onDoubleClick={() => {
+              if (toggleEdit) {
+                updateData(
+                  tb_name,
+                  row.id,
+                  JSON.parse(`{nom_${tb_name}:'${edit_name}'}`),
+                  () => {
+                    setToggleEdit(false);
+                    setEdit_name("");
+                    getData(tb_name, setListBefore);
+                  }
+                );
+              }
+              for (let index = 0; index < list.length; index++) {
+                if (list[index].id === row.id) {
+                  list[index]["isEdit"] = true;
+                  setEdit_name(list[index].nom);
+                  console.log(edit_name);
+                }
+              }
               setToggleEdit(!toggleEdit);
             }}
           >
-            {toggleEdit ? (
-              <input
-                className="form-control"
-                value={edit_name}
-                onChange={(e) => setEdit_name(e.target.value)}
-              />
-            ) : (
-              row.nom
-            )}
+            {printRow(row, edit_name)}
           </span>
         );
       },
@@ -85,13 +122,31 @@ function Table() {
               data-toggle="modal"
               data-target="#modalUtilisateur"
               handleClick={() => {
-                setToggleEdit(!toggleEdit)
+                setToggleEdit(!toggleEdit);
+                if (iconEdit == faCheck) {
+                  updateData(
+                    tb_name,
+                    row.id,
+                    JSON.parse(`{nom_${tb_name}:'${edit_name}'}`),
+                    () => {
+                      setEdit_name("");
+                      setToggleEdit(false);
+                      getData(tb_name, setListBefore);
+                    }
+                  );
+                }
               }}
             />
             <ButtonTable
               importance="danger ml-2"
               icon={faTrash}
-              handleClick={() => {}}
+              handleClick={() => {
+                console.log(tb_name);
+                deleteData(tb_name, row.id, () => {
+                  setToggleEdit(false);
+                  getData(tb_name, setListBefore);
+                });
+              }}
             />
           </div>
         );
@@ -114,7 +169,8 @@ function Table() {
         () => {
           setTb_name("");
           getData(tb_name, setListBefore);
-        } , true
+        },
+        true
       );
     }
   };

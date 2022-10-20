@@ -25,10 +25,21 @@ const createOne = async (req, res) => {
     console.log(error.message);
   }
 };
-const updateOne = async (req, res) => {};
+const updateOne = async (req, res) => {
+  const famille = Famille.findOne({ where: { id: req.params.id } });
+  if (!famille) return res.status(404).json({ message: "Famille introvable!" });
+  try { 
+    famille.set(req.body);
+    await famille.save();
+    res.status(201).send({ message: "Famille modifié avec succès!" });
+  } catch (error) {
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
+  }
+};
 const deleteOne = async (req, res) => {
-  const user = Famille.findOne({ where: { id: req.params.id } });
-  if (!user) return res.status(404).json({ message: "Famille introvable!" });
+  const famille = Famille.findOne({ where: { id: req.params.id } });
+  if (!famille) return res.status(404).json({ message: "Famille introvable!" });
   try {
     await Famille.destroy({ where: { id: req.params.id } });
     return res.status(200).json({ message: "Famille supprimé avec succès!" });
