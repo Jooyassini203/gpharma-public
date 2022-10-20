@@ -58,9 +58,9 @@ const updateOne = async (req, res) => {
   let url = "";
   if (!req.files) {
     fileName = user.image;
+    url = user.url;
     userData["image"] = fileName;
     userData["url"] = url;
-    url = user.url;
   } else {
     uploadFile(
       req,

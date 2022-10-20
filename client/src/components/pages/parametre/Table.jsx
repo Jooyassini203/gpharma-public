@@ -18,9 +18,10 @@ function Table() {
   const [new_name, setNew_name] = useState("");
   const [edit_item, setEdit_item] = useState({});
   const [listBefore, setListBefore] = useState([]);
-  const [list, setList] = useState([]); 
+  const [list, setList] = useState([]);
   let style = [];
-  useEffect(() => { 
+  useEffect(() => {
+    setEdit_item({});
     getData(tb_name, setListBefore);
   }, [tb_name]);
   useEffect(() => {
@@ -43,9 +44,16 @@ function Table() {
   }, [listBefore]);
 
   const update = (row) => {
-    updateData(tb_name, row.id, JSON.parse(`{"nom_${tb_name}": "${edit_item.nom}"}`), () => { 
-      getData(tb_name, setListBefore);
-    });
+    console.log('update', row);
+    updateData(
+      tb_name,
+      row.id,
+      JSON.parse(`{"nom_${tb_name}": "${edit_item.nom}"}`),
+      () => {
+        setEdit_item({})
+        getData(tb_name, setListBefore);
+      }
+    );
   };
 
   const columns = [
@@ -60,7 +68,7 @@ function Table() {
       selector: (row) => {
         return (
           <span
-            key={row.id}
+            key={row.id} 
             onDoubleClick={() => {
               setEdit_item(row);
             }}
@@ -71,11 +79,10 @@ function Table() {
                 className="form-control"
                 value={edit_item.nom}
                 onChange={(e) => {
-                  setEdit_item({ id: edit_item.id, nom: e.target.value }); 
+                  setEdit_item({ id: edit_item.id, nom: e.target.value });
                 }}
-                onKeyPress={(e) => { 
-                  console.log("e.key", e.key);
-                  if (e.key == "Enter" && edit_item) update(row)
+                onKeyPress={(e) => {
+                  if (e.key == "Enter" && edit_item) update(row);
                 }}
                 // onBlur={update(row)}
               />
@@ -104,9 +111,9 @@ function Table() {
               icon={iconEdit}
               data-toggle="modal"
               data-target="#modalUtilisateur"
-              handleClick={() => { 
+              handleClick={() => {
                 if (iconEdit == faEdit) setEdit_item(row);
-                if (iconEdit == faCheck) update(row)
+                if (iconEdit == faCheck) update(row);
               }}
             />
             <ButtonTable
@@ -114,7 +121,7 @@ function Table() {
               icon={faTrash}
               handleClick={() => {
                 console.log(tb_name);
-                deleteData(tb_name, row.id, () => { 
+                deleteData(tb_name, row.id, () => {
                   getData(tb_name, setListBefore);
                 });
               }}
@@ -152,23 +159,26 @@ function Table() {
                     value={new_name}
                     onChange={(e) => setNew_name(e.target.value)}
                     placeholder={"Ajout d'un nouveau " + formatName(tb_name)}
+                    onKeyPress={(e) => {
+                      if (e.key == "Enter") add();
+                    }}
                   />
                 </div>
                 <div className="clearfix mb-3 btn-group">
-                  <a
+                  <button
                     type="button"
                     className="btn btn-primary px-3 light"
                     onClick={add}
                   >
                     <i className="fa fa-check" />{" "}
-                  </a>
-                  <a
+                  </button>
+                  <button
                     type="button"
                     className="btn btn-primary px-3 light ml-2"
                     onClick={() => setNew_name("")}
                   >
                     <i className="fa fa-trash" />
-                  </a>
+                  </button>
                 </div>
               </div>
               <hr />

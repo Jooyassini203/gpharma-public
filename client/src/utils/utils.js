@@ -88,10 +88,7 @@ export const updateData = (
     };
     if (!isFormData) headers = {};
     try {
-      console.log("up : ", urlUpdate(tableName, id), data.values(), headers);
-      for (var pair of data.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+      console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
         urlUpdate(tableName, id),
         data,

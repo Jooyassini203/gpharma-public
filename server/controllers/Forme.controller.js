@@ -25,7 +25,18 @@ const createOne = async (req, res) => {
     console.log(error.message);
   }
 };
-const updateOne = async (req, res) => {};
+const updateOne = async (req, res) => {
+  const item = await Forme.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).send({ message: "Forme introvable!" });
+  try {
+    item.set(req.body);
+    await item.save();
+    res.status(201).send({ message: "Forme modifié avec succès!" });
+  } catch (error) {
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
+  }
+};
 const deleteOne = async (req, res) => {
   const user = Forme.findOne({ where: { id: req.params.id } });
   if (!user) return res.status(404).json({ message: "Forme introvable!" });

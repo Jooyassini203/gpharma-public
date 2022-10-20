@@ -27,9 +27,10 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {
-  const item = Famille.findOne({ where: { id: req.params.id } });
-  if (!item) return res.status(404).json({ message: "Caisse introvable!" });
+  const item = await Caisse.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).send({ message: "Caisse introvable!" });
   try {
+    console.log("item", item);
     item.set(req.body);
     await item.save();
     res.status(201).send({ message: "Caisse modifié avec succès!" });

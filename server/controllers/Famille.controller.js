@@ -26,8 +26,8 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {
-  const item = Famille.findOne({ where: { id: req.params.id } });
-  if (!item) return res.status(404).json({ message: "Famille introvable!" });
+  const item = await Famille.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).send({ message: "Famille introvable!" });
   try {
     item.set(req.body);
     await item.save();

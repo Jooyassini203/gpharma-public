@@ -26,7 +26,7 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {
-  const item = Famille.findOne({ where: { id: req.params.id } });
+  const item = await Unite.findOne({ where: { id: req.params.id } });
   if (!item) return res.status(404).json({ message: "Unite introvable!" });
   try {
     item.set(req.body);
