@@ -26,7 +26,18 @@ const createOne = async (req, res) => {
     console.log(error.message);
   }
 };
-const updateOne = async (req, res) => {};
+const updateOne = async (req, res) => {
+  const item = Famille.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).json({ message: "Caisse introvable!" });
+  try {
+    item.set(req.body);
+    await item.save();
+    res.status(201).send({ message: "Caisse modifié avec succès!" });
+  } catch (error) {
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
+  }
+};
 const deleteOne = async (req, res) => {
   const user = Caisse.findOne({ where: { id: req.params.id } });
   if (!user) return res.status(404).json({ message: "Caisse introvable!" });

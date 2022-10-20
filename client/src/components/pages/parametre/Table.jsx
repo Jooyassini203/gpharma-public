@@ -16,13 +16,11 @@ import { table_name } from "../../../atoms/parametre";
 function Table() {
   const [tb_name, setTb_name] = useRecoilState(table_name);
   const [new_name, setNew_name] = useState("");
-  const [edit_name, setEdit_name] = useState("");
+  const [edit_item, setEdit_item] = useState({});
   const [listBefore, setListBefore] = useState([]);
-  const [list, setList] = useState([]);
-  const [toggleEdit, setToggleEdit] = useState(false);
+  const [list, setList] = useState([]); 
   let style = [];
-  useEffect(() => {
-    setToggleEdit(false);
+  useEffect(() => { 
     getData(tb_name, setListBefore);
   }, [tb_name]);
   useEffect(() => {
@@ -44,22 +42,10 @@ function Table() {
     console.log("list ;", list);
   }, [listBefore]);
 
-  const printRow = (row, n) => {
-    for (let index = 0; index < list.length; index++) {
-      if (list[index].id === row.id) {
-        if (list[index]["isEdit"] && !edit_name) {
-          return (
-            <input
-              key={row.id}
-              className="form-control"
-              value={edit_name}
-              onChange={(e) => setEdit_name(e.target.value)}
-            />
-          );
-        }
-      }
-    }
-    return row.nom;
+  const update = (row) => {
+    updateData(tb_name, row.id, JSON.parse(`{"nom_${tb_name}": "${edit_item.nom}"}`), () => { 
+      getData(tb_name, setListBefore);
+    });
   };
 
   const columns = [
@@ -76,29 +62,26 @@ function Table() {
           <span
             key={row.id}
             onDoubleClick={() => {
-              if (toggleEdit) {
-                updateData(
-                  tb_name,
-                  row.id,
-                  JSON.parse(`{nom_${tb_name}:'${edit_name}'}`),
-                  () => {
-                    setToggleEdit(false);
-                    setEdit_name("");
-                    getData(tb_name, setListBefore);
-                  }
-                );
-              }
-              for (let index = 0; index < list.length; index++) {
-                if (list[index].id === row.id) {
-                  list[index]["isEdit"] = true;
-                  setEdit_name(list[index].nom);
-                  console.log(edit_name);
-                }
-              }
-              setToggleEdit(!toggleEdit);
+              setEdit_item(row);
             }}
           >
-            {printRow(row, edit_name)}
+            {row.id === edit_item.id ? (
+              <input
+                key={row.id}
+                className="form-control"
+                value={edit_item.nom}
+                onChange={(e) => {
+                  setEdit_item({ id: edit_item.id, nom: e.target.value }); 
+                }}
+                onKeyPress={(e) => { 
+                  console.log("e.key", e.key);
+                  if (e.key == "Enter" && edit_item) update(row)
+                }}
+                // onBlur={update(row)}
+              />
+            ) : (
+              row.nom
+            )}
           </span>
         );
       },
@@ -110,7 +93,7 @@ function Table() {
       selector: (row) => {
         let iconEdit = faEdit;
         let importance = "warning ml-2";
-        if (toggleEdit) {
+        if (row.id === edit_item.id) {
           importance = "success ml-2";
           iconEdit = faCheck;
         }
@@ -121,20 +104,9 @@ function Table() {
               icon={iconEdit}
               data-toggle="modal"
               data-target="#modalUtilisateur"
-              handleClick={() => {
-                setToggleEdit(!toggleEdit);
-                if (iconEdit == faCheck) {
-                  updateData(
-                    tb_name,
-                    row.id,
-                    JSON.parse(`{nom_${tb_name}:'${edit_name}'}`),
-                    () => {
-                      setEdit_name("");
-                      setToggleEdit(false);
-                      getData(tb_name, setListBefore);
-                    }
-                  );
-                }
+              handleClick={() => { 
+                if (iconEdit == faEdit) setEdit_item(row);
+                if (iconEdit == faCheck) update(row)
               }}
             />
             <ButtonTable
@@ -142,8 +114,7 @@ function Table() {
               icon={faTrash}
               handleClick={() => {
                 console.log(tb_name);
-                deleteData(tb_name, row.id, () => {
-                  setToggleEdit(false);
+                deleteData(tb_name, row.id, () => { 
                   getData(tb_name, setListBefore);
                 });
               }}
@@ -160,18 +131,10 @@ function Table() {
 
   const add = () => {
     if (new_name != "") {
-      const formData = new FormData();
-      formData.append(`nom_${tb_name}`, new_name);
-      console.log("data", formData);
-      addData(
-        tb_name,
-        formData,
-        () => {
-          setTb_name("");
-          getData(tb_name, setListBefore);
-        },
-        true
-      );
+      addData(tb_name, JSON.parse(`{"nom_${tb_name}": "${new_name}"}`), () => {
+        setNew_name("");
+        getData(tb_name, setListBefore);
+      });
     }
   };
 

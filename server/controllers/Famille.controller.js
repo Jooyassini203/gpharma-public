@@ -26,11 +26,11 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {
-  const famille = Famille.findOne({ where: { id: req.params.id } });
-  if (!famille) return res.status(404).json({ message: "Famille introvable!" });
-  try { 
-    famille.set(req.body);
-    await famille.save();
+  const item = Famille.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).json({ message: "Famille introvable!" });
+  try {
+    item.set(req.body);
+    await item.save();
     res.status(201).send({ message: "Famille modifié avec succès!" });
   } catch (error) {
     res.status(422).send({ message: error.message });

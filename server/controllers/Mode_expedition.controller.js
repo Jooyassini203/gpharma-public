@@ -27,16 +27,28 @@ const createOne = async (req, res) => {
     console.log(error.message);
   }
 };
-const updateOne = async (req, res) => {};
+const updateOne = async (req, res) => {
+  const item = Famille.findOne({ where: { id: req.params.id } });
+  if (!item)
+    return res.status(404).json({ message: "Mode d'expédition introvable!" });
+  try {
+    item.set(req.body);
+    await item.save();
+    res.status(201).send({ message: "Mode d'expédition modifié avec succès!" });
+  } catch (error) {
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
+  }
+};
 const deleteOne = async (req, res) => {
   const user = Mode_expedition.findOne({ where: { id: req.params.id } });
   if (!user)
-    return res.status(404).json({ message: "Mode_expedition introvable!" });
+    return res.status(404).json({ message: "Mode d'expédition introvable!" });
   try {
     await Mode_expedition.destroy({ where: { id: req.params.id } });
     return res
       .status(200)
-      .json({ message: "Mode_expedition supprimé avec succès!" });
+      .json({ message: "Mode d'expédition supprimé avec succès!" });
   } catch (error) {
     console.log(error);
   }
