@@ -7,36 +7,44 @@ function Table({ showAdd, showEdit }) {
   const columns = [
     {
       name: "Logo",
-      selector: (row) => {},
+      selector: (row) => (
+        <img
+          style={{ height: "5vh", verticalAlign: "middle" }}
+          className="img-fluid"
+          styles={{ borderRadius: "5%" }}
+          src={row.logo ? row.logo : `images/users/1.jpg`}
+          alt={`image de ${row.nom_utilisateur}`}
+        />
+       ),
       sortable: true,
       width: "5%",
     },
     {
       name: "Sigle",
-      selector: (row) => {},
+      selector: (row) => (row.sigle),
       sortable: true,
       width: "5%",
     },
     {
       name: "Nom",
-      selector: (row) => {},
+      selector: (row) => (row.nom_fournisseur),
       sortable: true,
     },
     {
       name: "Cont. Sécret.",
-      selector: (row) => {},
+      selector: (row) => (row.contact_secretaire),
       sortable: true,
       width: "20%",
     },
     {
       name: "Email",
-      selector: (row) => {},
+      selector: (row) => (row.email),
       sortable: true,
       width: "8%",
     },
     {
       name: "Adresse",
-      selector: (row) => {},
+      selector: (row) => (row.adtesse),
       sortable: true,
       width: "8%",
     },
