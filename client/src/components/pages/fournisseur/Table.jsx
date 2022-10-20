@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import { ButtonTable, confirmDelete, getData } from "../../../utils/utils";
 
-function Table({showAdd, showEdit}) {
-    const columns = [
+function Table({ showAdd, showEdit }) {
+  const columns = [
     {
       name: "Logo",
       selector: (row) => {},
@@ -19,7 +19,7 @@ function Table({showAdd, showEdit}) {
     },
     {
       name: "Nom",
-      selector: (row) => { },
+      selector: (row) => {},
       sortable: true,
     },
     {
@@ -43,9 +43,18 @@ function Table({showAdd, showEdit}) {
     {
       name: "Action",
       width: "15%",
-      selector: (row) => { 
+      selector: (row) => {
         return (
-          <div className="btn-group">
+          <div class="dropdown">
+            <button
+              class="btn btn-primary tp-btn-light sharp"
+              type="button"
+              data-toggle="dropdown"
+            >
+             <i className="fa fa-plus"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right border py-0">
+              <div class="py-2"> 
           <ButtonTable
             importance="info ml-2"
             icon={faEye}
@@ -69,33 +78,37 @@ function Table({showAdd, showEdit}) {
                   () => { }
                 );
               }}
-            />
+            /> 
+              </div>
+            </div>
           </div>
         );
       },
     },
   ];
-  
-  const [list, setList] = useState([])
-    useEffect(()=>{
-        getData('fournisseur', setList)
-    },[])
-  
+
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    getData("fournisseur", setList);
+  }, []);
+
   return (
-    <div className="card-body"> 
-        <MyDataTable
-            title='Liste des fournisseurs'
-            data={list}
-            columns={columns}
-            actions={<div className="btn-group float-right">
+    <div className="card-body">
+      <MyDataTable
+        title="Liste des fournisseurs"
+        data={list}
+        columns={columns}
+        actions={
+          <div className="btn-group float-right">
             <button className="btn btn-primary mr-3" onClick={showAdd}>
               Ajout d'un founrisseur
             </button>
             <button className="btn btn-outline-primary">
               <i className="fa fa-list-alt mr-3"></i>Activités
             </button>
-          </div> }
-        />
+          </div>
+        }
+      />
     </div>
   );
 }

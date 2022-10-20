@@ -184,8 +184,7 @@ function Modal() {
   }, [userSelect]);
   //FIN utilisation states
 
-  return (
-    <>
+  return ( 
       <div
         className="modal fade"
         id="modalUtilisateur"
@@ -352,8 +351,7 @@ function Modal() {
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </div>  
   );
 }
 
