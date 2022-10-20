@@ -35,7 +35,7 @@ const ItemParametre = ({ array, table, icon, children }) => {
       getClassBagde(number) : "list-group-item" }onClick={()=> setTb_name(table)}>
         <FontAwesomeIcon
         icon={icon}
-        className="font-18 align-middle mr-2"
+        className={"font-18 align-middle mr-2 text"+getClassBagde(number)}
       /> 
         {children}
         <span

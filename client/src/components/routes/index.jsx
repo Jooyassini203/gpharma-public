@@ -13,10 +13,7 @@ function MyRoute() {
   return (
     <> 
       <Routes>
-        <Route path="/connexion" element={<Login/>} />
-        {/* {
-          (sessionStorage.getItem('gpharma@2.0.0'))
-        } */}
+        <Route path="/connexion" element={<Login/>} /> 
         <Route exact path="/" element={Middleware(Accueil)} />
         <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
         <Route exact path="/fournisseur" element={Middleware(Fournisseur)} />

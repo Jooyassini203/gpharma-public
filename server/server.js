@@ -13,6 +13,7 @@ import FamilleRouter from "./routes/Famille.routes.js";
 import UniteRouter from "./routes/Unite.routes.js";
 import Mode_expeditionRouter from "./routes/Mode_expedition.routes.js";
 import EmplacementRouter from "./routes/Emplacement.routes.js";
+import FournisseurRouter from "./routes/Fournisseur.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -32,6 +33,7 @@ app.use(FabricantRouter);
 app.use(Mode_expeditionRouter);
 app.use(UniteRouter);
 app.use(ParametreRouter);
+app.use(FournisseurRouter);
 
 Migration();
 
