@@ -4,7 +4,10 @@ import Login from "../pages/login";
 import Accueil from "../pages/accueil";
 import Utilisateur from "../pages/utilisateur";
 import NotFound from "../pages/notFound";
+import Fournisseur from "../pages/fournisseur";
+import Ravitaillement from "../pages/ravitaillement";
 import Parametre from "../pages/parametre";
+import Middleware from "../middlewares";
 
 function MyRoute() { 
   return (
@@ -14,9 +17,11 @@ function MyRoute() {
         {/* {
           (sessionStorage.getItem('gpharma@2.0.0'))
         } */}
-        <Route exact path="/" element={<Accueil/>} />
-        <Route exact path="/utilisateur" element={<Utilisateur/>} />
-        <Route exact path="/parametre" element={<Parametre/>} />
+        <Route exact path="/" element={Middleware(Accueil)} />
+        <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
+        <Route exact path="/fournisseur" element={Middleware(Fournisseur)} />
+        <Route exact path="/utilisateur" element={Middleware(Utilisateur)} />
+        <Route exact path="/parametre" element={Middleware(Parametre)} />
         
         <Route path="*" element={<NotFound/>} />
       </Routes> 

@@ -32,19 +32,19 @@ function Nav() {
           {/* <NavElementChildren to="/depot" icon="fas fa-warehouse" title="Dépôt" />  */}
           <NavElementChildren
             to="/fournisseur"
-            icon="fas fa-shipping-fast"
+            icon="fas fa-industry"
             title="Fournisseur"
+          />
+          <NavElementChildren
+            to="/ravitaillement"
+            icon="fas fa-shipping-fast"
+            title="Ravitaillement"
           />
           <NavElementChildren
             to="/produit"
             icon="fas fa-dolly-flatbed"
             title="Produit"
           />
-          {/* <NavElementChildren
-            to="/transfere"
-            icon="fas fa-exchange-alt"
-            title="Transfère"
-          /> */}
           <NavElementChildren
             to="/parametre"
             icon="fas fa-cog"

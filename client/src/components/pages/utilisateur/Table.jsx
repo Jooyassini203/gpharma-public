@@ -8,8 +8,15 @@ function Table({ update, del, view, list, isAdd }) {
   const columns = [
     {
       name: "",
-      selector: (row) => (<img style={{ height: "5vh", verticalAlign: "middle" }} className="img-fluid" styles={{ borderRadius: "5%" }}
-        src={row.url ? row.url : `images/users/1.jpg`} alt={`image de ${row.nom_utilisateur}`} />),
+      selector: (row) => (
+        <img
+          style={{ height: "5vh", verticalAlign: "middle" }}
+          className="img-fluid"
+          styles={{ borderRadius: "5%" }}
+          src={row.url ? row.url : `images/users/1.jpg`}
+          alt={`image de ${row.nom_utilisateur}`}
+        />
+      ),
       sortable: true,
       width: "10%",
     },
@@ -59,9 +66,10 @@ function Table({ update, del, view, list, isAdd }) {
             icon={faEdit}
             data-toggle="modal"
             data-target="#modalUtilisateur"
-            handleClick={() =>{ 
-              isAdd(false)
-              update(row.id)}}
+            handleClick={() => {
+              isAdd(false);
+              update(row.id);
+            }}
           />
           <ButtonTable
             importance="danger ml-2"
@@ -74,8 +82,9 @@ function Table({ update, del, view, list, isAdd }) {
   ];
 
   return (
-    <div >
+    <div>
       <MyDataTable
+        title="Listes des utilisateurs"
         data={list}
         columns={columns}
         actions={
@@ -86,8 +95,7 @@ function Table({ update, del, view, list, isAdd }) {
             data-target="#modalUtilisateur"
             onClick={() => {
               isAdd(true);
-            }
-            }
+            }}
           >
             Ajouter un utilisateur
           </button>
