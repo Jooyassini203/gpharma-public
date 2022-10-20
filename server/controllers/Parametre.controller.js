@@ -6,6 +6,7 @@ const getCount = async (req, res) => {
     const count = await db.query(
       `SELECT  (    SELECT COUNT(*)    FROM   forme) AS count_forme
       ,(    SELECT COUNT(*)    FROM   caisse) AS count_caisse
+      ,(    SELECT COUNT(*)    FROM   emplacement) AS count_emplacement
       ,(    SELECT COUNT(*)  FROM   fabricant ) AS count_fabricant
       ,(    SELECT COUNT(*)  FROM   famille ) AS count_famille
       ,(    SELECT COUNT(*)  FROM   mode_expedition ) AS count_mode_expedition

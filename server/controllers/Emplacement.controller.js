@@ -1,8 +1,7 @@
-import Caisse from "../database/models/Caisse.model.js";
-
+import Emplacement from "../database/models/Emplacement.model.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Caisse.findAll();
+    const response = await Emplacement.findAll();
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -10,7 +9,9 @@ const getAll = async (req, res) => {
 };
 const getSpecific = async (req, res) => {
   try {
-    const response = await Caisse.findOne({ where: { id: req.params.id } });
+    const response = await Emplacement.findOne({
+      where: { id: req.params.id },
+    });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -26,24 +27,27 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {
-  const item = await Caisse.findOne({ where: { id: req.params.id } });
-  if (!item) return res.status(404).send({ message: "Caisse introvable!" });
+  const item = await Emplacement.findOne({ where: { id: req.params.id } });
+  if (!item)
+    return res.status(404).json({ message: "Emplacement introvable!" });
   try {
-    console.log("item", item);
     item.set(req.body);
     await item.save();
-    res.status(201).send({ message: "Caisse modifié avec succès!" });
+    res.status(201).send({ message: "Emplacement modifié avec succès!" });
   } catch (error) {
     res.status(422).send({ message: error.message });
     console.log(error.message);
   }
 };
 const deleteOne = async (req, res) => {
-  const user = Caisse.findOne({ where: { id: req.params.id } });
-  if (!user) return res.status(404).json({ message: "Caisse introvable!" });
+  const user = Emplacement.findOne({ where: { id: req.params.id } });
+  if (!user)
+    return res.status(404).json({ message: "Emplacement introvable!" });
   try {
-    await Caisse.destroy({ where: { id: req.params.id } });
-    return res.status(200).json({ message: "Caisse supprimé avec succès!" });
+    await Emplacement.destroy({ where: { id: req.params.id } });
+    return res
+      .status(200)
+      .json({ message: "Emplacement supprimé avec succès!" });
   } catch (error) {
     console.log(error);
   }
