@@ -8,7 +8,7 @@ import Table from "./Table";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {table_name} from '../../../atoms/parametre' 
-import { faList } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faCashRegister, faHammer, faList, faRecycle, faRoute, faRuler, faUsers, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 
 const ItemParametre = ({ array, table, icon, children }) => {
   const [tb_name, setTb_name] = useRecoilState(table_name);
@@ -73,16 +73,16 @@ function Parametre() {
                   7
                 </span>
               </a>
-              <ItemParametre icon={faList} array={countArray} table="caisse">Caisse</ItemParametre>
-              <ItemParametre icon={faList}  array={countArray} table="emplacement">Emplacement</ItemParametre>
-              <ItemParametre icon={faList}  array={countArray} table="fabricant">Fabricant</ItemParametre>
-              <ItemParametre icon={faList} array={countArray} table="famille">Famille</ItemParametre>
-              <ItemParametre icon={faList} array={countArray} table="forme">Forme</ItemParametre>
-              <ItemParametre icon={faList} array={countArray} table="mode_expedition">
+              <ItemParametre icon={faCashRegister} array={countArray} table="caisse">Caisse</ItemParametre>
+              <ItemParametre icon={faWarehouse}  array={countArray} table="emplacement">Emplacement</ItemParametre>
+              <ItemParametre icon={faHammer}  array={countArray} table="fabricant">Fabricant</ItemParametre>
+              <ItemParametre icon={faUsers} array={countArray} table="famille">Famille</ItemParametre>
+              <ItemParametre icon={faBox} array={countArray} table="forme">Forme</ItemParametre>
+              <ItemParametre icon={faRoute} array={countArray} table="mode_expedition">
                 Mode expredition
               </ItemParametre>
-              <ItemParametre icon={faList} array={countArray} table="unite">Unité</ItemParametre>
-              <ItemParametre icon={faList} array={countArray} table="voie">Voie</ItemParametre>
+              <ItemParametre icon={faRuler} array={countArray} table="unite">Unité</ItemParametre>
+              <ItemParametre icon={faRecycle} array={countArray} table="voie">Voie</ItemParametre>
             </div>
           </div>
           <div className="email-right-box ml-0 ml-sm-4 ml-sm-0">

@@ -3,6 +3,7 @@ import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   addData,
   ButtonTable,
+  confirmDelete,
   deleteData,
   getData,
   InputForm,
@@ -44,13 +45,13 @@ function Table() {
   }, [listBefore]);
 
   const update = (row) => {
-    console.log('update', row);
+    console.log("update", row);
     updateData(
       tb_name,
       row.id,
       JSON.parse(`{"nom_${tb_name}": "${edit_item.nom}"}`),
       () => {
-        setEdit_item({})
+        setEdit_item({});
         getData(tb_name, setListBefore);
       }
     );
@@ -68,7 +69,7 @@ function Table() {
       selector: (row) => {
         return (
           <span
-            key={row.id} 
+            key={row.id}
             onDoubleClick={() => {
               setEdit_item(row);
             }}
@@ -121,9 +122,14 @@ function Table() {
               icon={faTrash}
               handleClick={() => {
                 console.log(tb_name);
-                deleteData(tb_name, row.id, () => {
-                  getData(tb_name, setListBefore);
-                });
+                confirmDelete(
+                  "Voulez-vous vraimment supprimé cet " + tb_name + "?",
+                  () => {
+                    deleteData(tb_name, row.id, () => {
+                      getData(tb_name, setListBefore);
+                    });
+                  }
+                );
               }}
             />
           </div>

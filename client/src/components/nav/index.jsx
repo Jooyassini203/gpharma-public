@@ -29,7 +29,7 @@ function Nav() {
             icon="fas fa-balance-scale"
             title="Ajustement"
           />
-          <NavElementChildren to="/depot" icon="fas fa-warehouse" title="Dépôt" /> 
+          {/* <NavElementChildren to="/depot" icon="fas fa-warehouse" title="Dépôt" />  */}
           <NavElementChildren
             to="/fournisseur"
             icon="fas fa-shipping-fast"
