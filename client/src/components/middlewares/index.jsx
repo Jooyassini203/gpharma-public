@@ -1,6 +1,6 @@
 import authentification from "./Authentification";
 
 const Middleware = (Page) => {
-  return authentification(Page);
+  authentification(Page);
 };
 export default Middleware;

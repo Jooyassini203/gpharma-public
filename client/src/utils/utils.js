@@ -162,6 +162,8 @@ export const InputForm = ({
   date = null,
   tel = null,
   obligatory = null,
+  classLabel = "",
+  classSpan = "",
   ...props
 }) => {
   let type = "text";
@@ -182,7 +184,7 @@ export const InputForm = ({
   }
   return (
     <div className="form-group mb-3">
-      <label htmlFor={getId(children)} className="mb-1">
+      <label className={classLabel + " mb-1"} htmlFor={getId(children)}>
         <strong>{children}</strong>
       </label>
       <input
@@ -196,7 +198,7 @@ export const InputForm = ({
       />
       {/*"Entre ton " + children.toLowerCase()*/}
       <span
-        className="text-danger"
+        className={classSpan ? classSpan : "text-danger"}
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
       >
         {getSpan(val, obligatory)}

@@ -10,8 +10,17 @@ for (let index = 0; index < 6; index++) {
     sexe: "HOMME",
     email: faker.internet.email(),
     mot_de_passe: bcryptData("password"),
-    date_der_log: faker.date.future(),
+    date_der_log: faker.date.recent(),
   });
 }
+utilisateurListe.push({
+  nom_utilisateur: "Administrateur",
+  nom_login: "YASS",
+  type_utilisateur: "ADMIN",
+  contact: "0325526802",
+  sexe: "HOMME",
+  email: "jooyassini@gmail.com",
+  mot_de_passe: bcryptData("password"),
+});
 
 export default utilisateurListe;

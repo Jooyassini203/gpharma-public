@@ -14,6 +14,7 @@ import UniteRouter from "./routes/Unite.routes.js";
 import Mode_expeditionRouter from "./routes/Mode_expedition.routes.js";
 import EmplacementRouter from "./routes/Emplacement.routes.js";
 import FournisseurRouter from "./routes/Fournisseur.routes.js";
+import LoginRouter from "./routes/Login.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -22,6 +23,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 app.use(FileUpload());
+
+app.use(LoginRouter);
 
 app.use(UtilisateurRouter);
 app.use(VoieRouter);

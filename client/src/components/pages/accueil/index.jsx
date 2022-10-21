@@ -1,7 +1,9 @@
 import React from "react";
+import { redirect } from "react-router-dom";
 import Nav from "../../nav";
 
 function Accueil() {
+  redirect("/connexion")
   return (
     <div id="main-wrapper" className="show">
       <Nav />

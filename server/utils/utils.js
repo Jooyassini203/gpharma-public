@@ -10,6 +10,12 @@ export const getDateTime = (name = "") => {
   return name;
 };
 
+export const getDateNow = (name = "") => {
+  const date = new Date();
+  name += `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} }`;
+  return name;
+};
+
 export const bcryptData = (data, salt = 10) => {
   let dataCrypted = bcrypt.hashSync(data, salt);
   console.log("\n\n", dataCrypted, "\n\n");
