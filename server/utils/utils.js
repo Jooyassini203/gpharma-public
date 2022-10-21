@@ -1,12 +1,21 @@
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 
 export const MIGRATE = true;
+
 export const getDateTime = (name = "") => {
   const date = new Date();
   name += `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}_${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}_${date.getMilliseconds()}`;
   return name;
 };
+
+export const bcryptData = (data, salt = 10) => {
+  let dataCrypted = bcrypt.hashSync(data, salt);
+  console.log("\n\n", dataCrypted, "\n\n");
+  return dataCrypted;
+};
+
 export const uploadFile = (
   req,
   res,

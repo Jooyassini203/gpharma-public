@@ -1,6 +1,6 @@
 import Utilisateur from "../database/models/utilisateur.model.js";
 import fs from "fs";
-import { uploadFile } from "../utils/utils.js";
+import { bcryptData, uploadFile } from "../utils/utils.js";
 
 const getAll = async (req, res) => {
   try {
@@ -26,6 +26,7 @@ const createOne = (req, res) => {
   let userData = JSON.parse(req.body.data);
   const insertDB = async () => {
     try {
+      userData["mot_de_passe"] = bcryptData(userData["mot_de_passe"]);
       await Utilisateur.create(userData);
       res.status(201).send({ message: "Utilisateur ajouté avec succès!" });
     } catch (error) {
@@ -73,8 +74,7 @@ const updateOne = async (req, res) => {
     );
   }
   try {
-    // userData["mot_de_passe"] = userData["mot_de_passe"];
-    console.log("userData", userData);
+    userData["mot_de_passe"] = bcryptData(userData["mot_de_passe"]);
     user.set(userData);
     await user.save();
     res.status(201).send({ message: "Utilisateur modifié avec succès!" });

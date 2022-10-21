@@ -309,9 +309,7 @@ function Modal() {
                     Email
                   </InputForm>
                 </div>
-              </div>
-
-              {isAdd ? (
+              </div> 
                 <InputForm
                   name="mot_de_passe"
                   password
@@ -320,10 +318,7 @@ function Modal() {
                   obligatory={isObligatory ? "active" : "desactive"}
                 >
                   {isAdd ? "Mot de passe" : "Nouveau mot de passe"}
-                </InputForm>
-              ) : (
-                ""
-              )}
+                </InputForm> 
             </div>
             <div className="modal-footer">
               <button

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { bcryptData } from "../../utils/utils.js";
 let utilisateurListe = [];
 for (let index = 0; index < 6; index++) {
   utilisateurListe.push({
@@ -8,7 +9,7 @@ for (let index = 0; index < 6; index++) {
     contact: faker.phone.number(),
     sexe: "HOMME",
     email: faker.internet.email(),
-    mot_de_passe: faker.internet.password(),
+    mot_de_passe: bcryptData("password"),
     date_der_log: faker.date.future(),
   });
 }
