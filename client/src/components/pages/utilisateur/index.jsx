@@ -18,13 +18,20 @@ function Utilisateur() {
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
 
   const showModalUpdateUser = (id) => {
-    getData("utilisateur", setUserSelect, id);
+    getData(
+      "utilisateur",
+      (user) => {
+        setUserSelect({...user, mot_de_passe: ""}); 
+      },
+      id
+    );
   };
   const deleteUser = (id) => {
     confirmDelete("Voulez-vous vraimment supprimé cet utilisateur?", () => {
       deleteData("utilisateur", id, () => {
-        console.log('delete ', id, 'lancement du mise à jours de la liste');
-        getData("utilisateurs", setListUser)});
+        console.log("delete ", id, "lancement du mise à jours de la liste");
+        getData("utilisateurs", setListUser);
+      });
     });
   };
   const viewUser = (id) => {
