@@ -18,8 +18,8 @@ function HeadNav() {
                     <button
                       className="btn btn-danger mr-2"
                       onClick={() => {
-                        redirect("/connexion")
                         sessionStorage.removeItem("gpharma@2.0.0")
+                        redirect("/connexion")
                         onClose();
                       }}
                     >

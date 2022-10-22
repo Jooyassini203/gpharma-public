@@ -11,6 +11,7 @@ const getCount = async (req, res) => {
       ,(    SELECT COUNT(*)  FROM   famille ) AS count_famille
       ,(    SELECT COUNT(*)  FROM   mode_expedition ) AS count_mode_expedition
       ,(    SELECT COUNT(*)  FROM   unite ) AS count_unite
+      ,(    SELECT COUNT(*)  FROM   societe ) AS count_societe
       ,(    SELECT COUNT(*)  FROM   voie ) AS count_voie`,
       { type: QueryTypes.SELECT }
     );

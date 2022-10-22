@@ -23,14 +23,22 @@ const login = async (req, res) => {
         nom_utilisateur: user.nom_utilisateur,
       };
       let dataSessionCrypted = JSON.stringify(dataSession);
+
       dataSessionCrypted = cryptojs.AES.encrypt(
         dataSessionCrypted,
         process.env.KEY_SESSION
       ).toString();
       console.log("dataSessionCrypted", dataSessionCrypted);
+
+      const userJson = cryptojs.AES.decrypt(
+        dataSessionCrypted,
+        process.env.KEY_SESSION
+      ).toString(cryptojs.enc.Utf8);
+
+      console.log("before parse ", userJson);
       return res
         .status(200)
-        .send({ message: "Vous êtes connecté", dataUser: dataSessionCrypted });
+        .send({ message: "Vous êtes connecté", dataUser: userJson });
     } else
       return res
         .status(404)

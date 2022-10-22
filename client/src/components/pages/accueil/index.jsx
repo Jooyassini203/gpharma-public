@@ -10,17 +10,14 @@ function Accueil() {
 
   useEffect(() => {
     if (!userConnect) {
-      console.log("pure ", sessionStorage.getItem("gpharma@2.0.0")); 
-        try { 
-            const userJson = cryptojs.AES.decrypt(
-              sessionStorage.getItem("gpharma@2.0.0"),
-              process.env.REACT_APP_KEY_SESSION
-            ).toString(cryptojs.enc.Utf8);
-            console.log("before parse ", userJson);
-            setUserConnect(JSON.parse(userJson)); 
-        } catch (error) {
-          console.log(error);
-        } 
+      const datdCrypted =  sessionStorage.getItem("gpharma@2.0.0")
+      // console.log("pure ", datdCrypted);
+      // const userJson = cryptojs.AES.decrypt(
+      //   datdCrypted,
+      //   process.env.REACT_APP_KEY_SESSION
+      // ).toString(cryptojs.enc.Utf8);
+      console.log("\n\nbefore parse ", datdCrypted);
+      setUserConnect(JSON.parse(datdCrypted));
     }
   }, []);
   return (
@@ -52,7 +49,7 @@ function Accueil() {
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </div>

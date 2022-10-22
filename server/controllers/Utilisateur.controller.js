@@ -1,10 +1,15 @@
 import Utilisateur from "../database/models/utilisateur.model.js";
 import fs from "fs";
 import { bcryptData, uploadFile } from "../utils/utils.js";
+import { Op } from "sequelize";
 
 const getAll = async (req, res) => {
   try {
-    const response = await Utilisateur.findAll();
+    const response = await Utilisateur.findAll({
+      where: {
+        [Op.not]: [{ nom_utilisateur: "Administrateur" }],
+      },
+    });
     res.json(response);
   } catch (error) {
     console.log(error.message);

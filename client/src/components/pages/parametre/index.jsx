@@ -1,18 +1,28 @@
-
 import React, { useState } from "react";
-import { useEffect } from "react"; 
+import { useEffect } from "react";
 import { getData } from "../../../utils/utils";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import Table from "./Table";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {table_name} from '../../../atoms/parametre' 
-import { faBox, faCashRegister, faHammer, faList, faRecycle, faRoute, faRuler, faUsers, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { table_name } from "../../../atoms/parametre";
+import {
+  faBox,
+  faBuilding,
+  faCashRegister,
+  faHammer,
+  faList,
+  faRecycle,
+  faRoute,
+  faRuler,
+  faUsers,
+  faWarehouse,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ItemParametre = ({ array, table, icon, children }) => {
   const [tb_name, setTb_name] = useRecoilState(table_name);
-  const [number, setNumber] = useState(0)
+  const [number, setNumber] = useState(0);
 
   const getClassBagde = (nbr) => {
     let classText = "primary";
@@ -24,22 +34,31 @@ const ItemParametre = ({ array, table, icon, children }) => {
     else if (nbr > 30) classText = "danger";
     return classText;
   };
-  useEffect(()=>{ 
-    if (array.length > 0) { 
-      setNumber(array[0]["count_"+table]) 
+  useEffect(() => {
+    if (array.length > 0) {
+      setNumber(array[0]["count_" + table]);
     }
-  },[array])
+  }, [array]);
   return (
-    <> 
-      <a type="button" className={table == tb_name ? "list-group-item text-" +
-      getClassBagde(number) : "list-group-item" }onClick={()=> setTb_name(table)}>
+    <>
+      <a
+        type="button"
+        className={
+          table == tb_name
+            ? "list-group-item text-" + getClassBagde(number)
+            : "list-group-item"
+        }
+        onClick={() => setTb_name(table)}
+      >
         <FontAwesomeIcon
-        icon={icon}
-        className={"font-18 align-middle mr-2 text"+getClassBagde(number)}
-      /> 
+          icon={icon}
+          className={"font-18 align-middle mr-2 text" + getClassBagde(number)}
+        />
         {children}
         <span
-          className={`badge badge-${ getClassBagde(number) } badge-sm text-white float-right`}
+          className={`badge badge-${getClassBagde(
+            number
+          )} badge-sm text-white float-right`}
         >
           {number}
         </span>
@@ -50,15 +69,14 @@ const ItemParametre = ({ array, table, icon, children }) => {
 
 function Parametre() {
   const [countArray, setCountArray] = useState([]);
-  
-  useEffect(() => { 
+
+  useEffect(() => {
     getData("parametre/count", setCountArray);
   }, []);
 
   return (
     <>
       <Nav />
-
       <div
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
@@ -70,23 +88,54 @@ function Parametre() {
                 <i className="fa fa-inbox font-18 align-middle mr-2" />{" "}
                 Paramètres
                 <span className="badge badge-primary badge-sm float-right">
-                  7
+                  8
                 </span>
               </a>
-              <ItemParametre icon={faCashRegister} array={countArray} table="caisse">Caisse</ItemParametre>
-              <ItemParametre icon={faWarehouse}  array={countArray} table="emplacement">Emplacement</ItemParametre>
-              <ItemParametre icon={faHammer}  array={countArray} table="fabricant">Fabricant</ItemParametre>
-              <ItemParametre icon={faUsers} array={countArray} table="famille">Famille</ItemParametre>
-              <ItemParametre icon={faBox} array={countArray} table="forme">Forme</ItemParametre>
-              <ItemParametre icon={faRoute} array={countArray} table="mode_expedition">
+              <ItemParametre
+                icon={faCashRegister}
+                array={countArray}
+                table="caisse"
+              >
+                Caisse
+              </ItemParametre>
+              <ItemParametre
+                icon={faWarehouse}
+                array={countArray}
+                table="emplacement"
+              >
+                Emplacement
+              </ItemParametre>
+              <ItemParametre
+                icon={faHammer}
+                array={countArray}
+                table="fabricant"
+              >
+                Fabricant
+              </ItemParametre>
+              <ItemParametre icon={faUsers} array={countArray} table="famille">
+                Famille
+              </ItemParametre>
+              <ItemParametre icon={faBox} array={countArray} table="forme">
+                Forme
+              </ItemParametre>
+              <ItemParametre
+                icon={faRoute}
+                array={countArray}
+                table="mode_expedition"
+              >
                 Mode expredition
               </ItemParametre>
-              <ItemParametre icon={faRuler} array={countArray} table="unite">Unité</ItemParametre>
-              <ItemParametre icon={faRecycle} array={countArray} table="voie">Voie</ItemParametre>
+              <ItemParametre icon={faRuler} array={countArray} table="unite">
+                Unité
+              </ItemParametre>
+              {/* <ItemParametre icon={faBuilding} array={countArray} table="societe">Société</ItemParametre> */}
+              <ItemParametre icon={faRecycle} array={countArray} table="voie">
+                Voie
+              </ItemParametre>
             </div>
           </div>
           <div className="email-right-box ml-0 ml-sm-4 ml-sm-0">
-      <Table/> 
+            <Table />
           </div>
         </div>
       </div>

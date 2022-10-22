@@ -62,7 +62,7 @@ function Table() {
       name: "#",
       selector: (row) => row.rang,
       sortable: true,
-      width: "8%",
+      width: "10%",
     },
     {
       name: "Nom",

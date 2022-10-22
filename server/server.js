@@ -15,6 +15,7 @@ import Mode_expeditionRouter from "./routes/Mode_expedition.routes.js";
 import EmplacementRouter from "./routes/Emplacement.routes.js";
 import FournisseurRouter from "./routes/Fournisseur.routes.js";
 import LoginRouter from "./routes/Login.routes.js";
+import SocieteRouter from "./routes/Societe.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -37,6 +38,7 @@ app.use(Mode_expeditionRouter);
 app.use(UniteRouter);
 app.use(ParametreRouter);
 app.use(FournisseurRouter);
+app.use(SocieteRouter);
 
 Migration();
 
