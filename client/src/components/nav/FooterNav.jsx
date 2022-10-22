@@ -1,22 +1,9 @@
 import React from "react";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
 
-function FooterNav() {
+function FooterNav({...props}) {
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <div className="footer">
+      <div className="footer"{...props}>
         <div className="copyright">
           <p>
             Copyright © Developed by{" "}

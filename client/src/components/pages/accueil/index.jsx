@@ -1,11 +1,13 @@
 import React from "react";  
 import Nav from "../../nav";
+import FooterNav from "../../nav/FooterNav";
 
 function Accueil() { 
   return (
     <div id="main-wrapper" className="show">
       <Nav />
-      <div className="content-body" style={{ minHeight: "930px" }}>
+      <div className="content-body"
+        style={{ minHeight: "90vh", marginTop: " 8vh" }}>
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">
@@ -34,6 +36,7 @@ function Accueil() {
           </div>
         </div>
       </div>
+      <FooterNav/>
     </div>
   );
 }
