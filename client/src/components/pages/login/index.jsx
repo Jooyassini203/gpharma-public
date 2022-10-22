@@ -97,7 +97,8 @@ function Login() {
                             login()
                         }}
                       >
-                        Nom d'utilisateur
+                        Identifiant
+                        {/* Nom d'utilisateur */}
                       </InputForm>
                       <InputForm
                         classLabel="text-white"

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { showRightNav } from "../../atoms/nav";
+import { InputForm } from "../../utils/utils";
 import FooterNav from "./FooterNav";
 
 function RightNav() {
@@ -18,106 +19,37 @@ function RightNav() {
           <div className="card-body">
             <div className="">
               <div className="profile-blog mb-3">
-                <h5 className="text-primary d-inline">Information</h5>
+                {/* <h5 className="text-primary d-inline">Information</h5> */}
                 <img
                   src="images/profile/1.jpg"
                   alt="Image"
-                  className="img-fluid mt-4 mb-4 w-100"
+                  className="img-fluid mt-2 mb-4 w-100"
                 />
               </div>
               <div className="profile-statistics mb-3">
-                <div className="modal fade" id="sendMessageModal">
-                  <div
-                    className="modal-dialog modal-dialog-centered"
-                    role="document"
-                  >
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title">Send Message</h5>
-                        <button
-                          type="button"
-                          className="close"
-                          data-dismiss="modal"
-                        >
-                          <span>×</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        <form className="comment-form">
-                          <div className="row">
-                            <div className="col-lg-6">
-                              <div className="form-group">
-                                <label className="text-black font-w600">
-                                  Name <span className="required">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  defaultValue="Author"
-                                  name="Author"
-                                  placeholder="Author"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-lg-6">
-                              <div className="form-group">
-                                <label className="text-black font-w600">
-                                  Email <span className="required">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  defaultValue="Email"
-                                  placeholder="Email"
-                                  name="Email"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-lg-12">
-                              <div className="form-group">
-                                <label className="text-black font-w600">
-                                  Comment
-                                </label>
-                                <textarea
-                                  rows={8}
-                                  className="form-control"
-                                  name="comment"
-                                  placeholder="Comment"
-                                  defaultValue={""}
-                                />
-                              </div>
-                            </div>
-                            <div className="col-lg-12">
-                              <div className="form-group">
-                                <input
-                                  type="submit"
-                                  defaultValue="Post Comment"
-                                  className="submit btn btn-primary"
-                                  name="submit"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div className="text-center">
                   <div className="row">
                     <div className="col">
-                      <h3 className="m-b-0">Josoa Yassini Jacquerel</h3>
+                      <h3 className="m-b-0">Josoa Yassini Jacquerel (YASS)</h3>
                       <span>Administrateur</span>
                     </div>
                   </div>
                   <div className="mt-4">
                     <a
                       type="button"
-                      className="btn btn-primary mb-1"
+                      className="btn btn-primary btn-sm mb-1 mr-1"
                       data-toggle="modal"
-                      data-target="#sendMessageModal"
+                      data-target="#profilModal"
                     >
-                      Modifier
+                      <i className="fa fa-edit"></i>
+                    </a>
+                    <a
+                      type="button"
+                      className="btn btn-primary btn-sm mb-1"
+                      data-toggle="modal"
+                      data-target="#profilModalPwd"
+                    >
+                      Changer le mot de passe
                     </a>
                   </div>
                 </div>
@@ -125,8 +57,7 @@ function RightNav() {
             </div>
           </div>
         </div>
-        <div className="m-4 mt-3"
-        style={{ minHeight: "26vh" }}>
+        <div className="m-4 mt-3" style={{ minHeight: "26vh" }}>
           <h4>
             <a href="post-details.html" className="text-black">
               Administrateur de GPharma
@@ -139,10 +70,14 @@ function RightNav() {
             logiciel.
           </p>
         </div>
-        <div className="bg-light pt-2 w-100 " style={{top:"0vh !important"}} >
-        <p className="text-center">
+        <div className="bg-light pt-2 w-100 " style={{ top: "0vh !important" }}>
+          <p className="text-center">
             Copyright © Developed by{" "}
-            <a href="https://www.mada-digital.net/" className="text-primary" target="_blank">
+            <a
+              href="https://www.mada-digital.net/"
+              className="text-primary"
+              target="_blank"
+            >
               MADA-DIGITAL
             </a>
             {"  "}
@@ -150,6 +85,104 @@ function RightNav() {
           </p>
         </div>
       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      <div className="modal fade" id="profilModal">
+                  <div
+                    className="modal-dialog modal-dialog-centered"
+                    role="document"
+                  >
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">
+                          Modification des imforimations
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                        >
+                          <span>×</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        <InputForm>Identifiant</InputForm>
+                        <InputForm>Nom d'utilisateur</InputForm>
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-danger light"
+                          data-dismiss="modal"
+                          onClick={() => {}}
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={(id) => {}}
+                        >
+                          Modifier
+                        </button>
+                      </div>
+                    </div> 
+                  </div>
+                </div>
+                <div className="modal fade" id="profilModalPwd">
+                  <div
+                    className="modal-dialog modal-dialog-centered"
+                    role="document"
+                  > 
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">
+                          Modification le mot de passe
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                        >
+                          <span>×</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        <InputForm>Nouveau mot de passe</InputForm>
+                        <InputForm>Resaisiez le mot de passe</InputForm>
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-danger light"
+                          data-dismiss="modal"
+                          onClick={() => {}}
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={(id) => {}}
+                        >
+                          Modifier
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
     </>
   );
 }

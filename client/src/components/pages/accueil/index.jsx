@@ -7,7 +7,7 @@ function Accueil() {
     <div id="main-wrapper" className="show">
       <Nav />
       <div className="content-body"
-        style={{ minHeight: "90vh", marginTop: " 8vh" }}>
+        style={{ minHeight: "80vh" }}>
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">
