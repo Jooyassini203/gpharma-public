@@ -1,13 +1,52 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import { redirect } from "react-router-dom";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 function HeadNav() {
+  const logOut = () => {
+    confirmAlert({
+      customUI: ({onClose}) => {
+        return (
+          <div id="react-confirm-alert">
+            <div className="react-confirm-alert-overlay">
+              <div className="react-confirm-alert">
+                <div className="react-confirm-alert-body">
+                  <h1>Déconnection</h1>
+                  <p>Voulez-vous vraiment vous déconnecté de GPharama ?</p>
+                  <div>
+                    <button
+                      className="btn btn-danger mr-2"
+                      onClick={() => {
+                        redirect("/connexion")
+                        sessionStorage.removeItem("gpharma@2.0.0")
+                        onClose();
+                      }}
+                    >
+                      Supprimer
+                    </button>
+                    <button
+                      className="btn btn-dark"
+                      onClick={() => {
+                        onClose();
+                      }}
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      },
+    });
+  };
   return (
     <>
- 
-        <div className="nav-header">
+      <div className="nav-header">
         <a type="button" className="brand-logo">
-          <img className="w-100" src="./images/logo.png" alt = "Image" />
+          <img className="w-100" src="./images/logo.png" alt="Image" />
           {/* <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
           <img className="brand-title" src="./images/logo-text.png" alt = "Image" /> */}
         </a>
@@ -18,15 +57,13 @@ function HeadNav() {
             <span className="line" />
           </div>
         </div>
-      </div> 
+      </div>
 
       <div className="header">
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
-              <div className="header-left">
-                 
-              </div>
+              <div className="header-left"></div>
               <ul className="navbar-nav header-right">
                 <li className="nav-item dropdown notification_dropdown">
                   <a
@@ -155,7 +192,7 @@ function HeadNav() {
                       Voir tout <i className="ti-arrow-right" />
                     </a>
                   </div>
-                </li> 
+                </li>
                 <li className="nav-item dropdown header-profile">
                   <a
                     className="nav-link"
@@ -169,7 +206,7 @@ function HeadNav() {
                       </span>
                       <p className="fs-12 mb-0">Administrateur</p>
                     </div>
-                    <img src="images/profile/17.jpg" width={20} alt = "Image" />
+                    <img src="images/profile/17.jpg" width={20} alt="Image" />
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
                     <a
@@ -194,11 +231,8 @@ function HeadNav() {
                       </svg>
                       <span className="ml-2">Profile </span>
                     </a>
-                    
-                    <button
-                      type="button"
-                      className="dropdown-item ai-icon"
-                    >
+
+                    <button type="button" className="dropdown-item ai-icon">
                       <svg
                         id="icon-logout"
                         xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +250,11 @@ function HeadNav() {
                         <polyline points="16 17 21 12 16 7" />
                         <line x1={21} y1={12} x2={9} y2={12} />
                       </svg>
-                      <span className="ml-2"><Link to='/connexion' >Déconnection</Link> </span>
+                      <span className="ml-2">
+                        <a type="button" onClick={logOut}>
+                          Déconnection
+                        </a>{" "}
+                      </span>
                     </button>
                   </div>
                 </li>

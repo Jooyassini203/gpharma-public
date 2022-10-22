@@ -23,14 +23,11 @@ const login = async (req, res) => {
         nom_utilisateur: user.nom_utilisateur,
       };
       let dataSessionCrypted = JSON.stringify(dataSession);
-      dataSessionCrypted = cryptojs
-        .HmacSHA256(dataSessionCrypted, process.env.KEY_SESSION)
-        .toString();
+      dataSessionCrypted = cryptojs.AES.encrypt(
+        dataSessionCrypted,
+        process.env.KEY_SESSION
+      ).toString();
       console.log("dataSessionCrypted", dataSessionCrypted);
-      if (typeof window !== "undefined") {
-        // do your stuff with sessionStorage
-      }
-
       return res
         .status(200)
         .send({ message: "Vous êtes connecté", dataUser: dataSessionCrypted });

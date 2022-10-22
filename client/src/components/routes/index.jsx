@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom"; 
+import { Navigate, Route, Routes } from "react-router-dom"; 
 import Login from "../pages/login";
 import Accueil from "../pages/accueil";
 import Utilisateur from "../pages/utilisateur";
@@ -9,11 +9,17 @@ import Ravitaillement from "../pages/ravitaillement";
 import Parametre from "../pages/parametre";
 import Middleware from "../middlewares";
 
-function MyRoute() { 
+function MyRoute() {  
+  const getLogin = () => {
+    if (sessionStorage.getItem('gpharma@2.0.0')) {
+      return <Navigate to="/" />
+    }
+    return <Login/>
+  }
   return (
     <> 
       <Routes>
-        <Route exact path="/connexion" element={<Login/>} /> 
+        <Route exact path="/connexion" element={getLogin()} /> 
         <Route exact path="/" element={Middleware(Accueil)} />
         <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
         <Route exact path="/fournisseur" element={Middleware(Fournisseur)} />

@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { InputForm, urlInsert } from "../../../utils/utils";
 
 function Login() {
@@ -23,8 +23,10 @@ function Login() {
           mot_de_passe,
         });
         if (response) {
+          redirect('/')
           toast.success(response.data.message); 
           window.sessionStorage.setItem("gpharma@2.0.0", response.data.dataUser);
+          console.log(window.sessionStorage.getItem("gpharma@2.0.0"));
         }
       } catch (error) {
         toast.error(JSON.parse(error.response.request.response).message); 
@@ -71,6 +73,7 @@ function Login() {
                         val={nom_login}
                         onChange={(e) => setNom_login(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
+                        onKeyPress={(e)=>{if(e.key === "Enter") login()}}
                       >
                         Nom d'utilisateur
                       </InputForm>
@@ -81,6 +84,7 @@ function Login() {
                         val={mot_de_passe}
                         onChange={(e) => setMot_de_passe(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
+                        onKeyPress={(e)=>{if(e.key === "Enter") login()}}
                       >
                         Mot de passe
                       </InputForm>
@@ -115,8 +119,8 @@ function Login() {
                         </div>
                       </div>
                       <div className="text-center">
-                        <Link to="/">
-                          {" "}
+                        {/* <Link to="/">
+                          {" "} */}
                         <button
                           type="button"
                           className="btn bg-white text-primary btn-block"
@@ -128,7 +132,7 @@ function Login() {
                             </font>
                           </font>
                         </button>
-                        </Link>
+                        {/* </Link> */}
                       </div>
                     </form>
                     {/* <div className="new-account mt-3">
