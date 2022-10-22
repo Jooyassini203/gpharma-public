@@ -11,13 +11,13 @@ function Accueil() {
   useEffect(() => {
     if (!userConnect) {
       const datdCrypted =  sessionStorage.getItem("gpharma@2.0.0")
-      // console.log("pure ", datdCrypted);
-      // const userJson = cryptojs.AES.decrypt(
-      //   datdCrypted,
-      //   process.env.REACT_APP_KEY_SESSION
-      // ).toString(cryptojs.enc.Utf8);
-      console.log("\n\nbefore parse ", datdCrypted);
-      setUserConnect(JSON.parse(datdCrypted));
+      console.log("pure ", datdCrypted); 
+      const userJson = cryptojs.AES.decrypt(
+        datdCrypted, 
+        process.env.REACT_APP_KEY_SESSION 
+      ).toString(cryptojs.enc.Utf8);
+      console.log("\n\nbefore parse ", userJson);
+      setUserConnect(JSON.parse(userJson));
     }
   }, []);
   return (

@@ -1,9 +1,11 @@
 import React from "react";
-import { confirmAlert } from "react-confirm-alert";
-import { redirect } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert"; 
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { useRecoilState } from "recoil";
+import { userConnected } from "../../atoms/authentication";
 
 function HeadNav() {
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const logOut = () => {
     confirmAlert({
       customUI: ({onClose}) => {
@@ -15,16 +17,17 @@ function HeadNav() {
                   <h1>Déconnection</h1>
                   <p>Voulez-vous vraiment vous déconnecté de GPharama ?</p>
                   <div>
-                    <button
+                    <a
+                    href="/connexion"
                       className="btn btn-danger mr-2"
                       onClick={() => {
-                        sessionStorage.removeItem("gpharma@2.0.0")
-                        redirect("/connexion")
+                        sessionStorage.removeItem("gpharma@2.0.0") 
+
                         onClose();
                       }}
                     >
                       Supprimer
-                    </button>
+                    </a>
                     <button
                       className="btn btn-dark"
                       onClick={() => {

@@ -8,9 +8,10 @@ const login = async (req, res) => {
   const mot_de_passe = req.body.mot_de_passe;
   const user = await Utilisateur.findOne({ where: { nom_login } });
   if (!user)
-    return res
-      .status(404)
-      .json({ message: "Nom d'utilisateur ou mot de passe incorrect!" });
+  return res
+  .status(404)
+  .json({ message: "Nom d'utilisateur ou mot de passe incorrect!" });
+  console.log("\n\nSTART COMPARE AND CRYPTE\n\n");
   bcrypt.compare(mot_de_passe, user.mot_de_passe, async (erreur, result) => {
     if (result) {
       user.set({ date_der_log: getDateNow() });
@@ -38,7 +39,7 @@ const login = async (req, res) => {
       console.log("before parse ", userJson);
       return res
         .status(200)
-        .send({ message: "Vous êtes connecté", dataUser: userJson });
+        .send({ message: "Vous êtes connecté", dataUser: dataSessionCrypted });
     } else
       return res
         .status(404)

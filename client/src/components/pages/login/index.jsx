@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { Link, redirect } from "react-router-dom";
+import { Link, Navigate, redirect } from "react-router-dom";
 import { InputForm, urlInsert } from "../../../utils/utils";
 
 function Login() {
@@ -11,30 +11,35 @@ function Login() {
   const [nom_login, setNom_login] = useState("");
   const [mot_de_passe, setMot_de_passe] = useState("");
 
-  const login = () => {
+  const login = () => { 
     setIsObligatory(true);
     if (!nom_login || !mot_de_passe) {
       return;
-    } 
-    toast.promise(async ()=>{
-      try {
-        const response = await axios.post(urlInsert("login"), {
-          nom_login,
-          mot_de_passe,
-        });
-        if (response) {
-          redirect('/')
-          toast.success(response.data.message); 
-          window.sessionStorage.setItem("gpharma@2.0.0", response.data.dataUser);
-          console.log(window.sessionStorage.getItem("gpharma@2.0.0"));
+    }
+    toast.promise(
+      async () => {
+        try {
+          const response = await axios.post(urlInsert("login"), {
+            nom_login,
+            mot_de_passe,
+          });
+          if (response) { 
+            toast.success(response.data.message);
+            window.sessionStorage.setItem(
+              "gpharma@2.0.0",
+              response.data.dataUser
+            );
+            console.log(window.sessionStorage.getItem("gpharma@2.0.0")); 
+          }
+        } catch (error) {
+          toast.error(JSON.parse(error.response.request.response).message);
         }
-      } catch (error) {
-        toast.error(JSON.parse(error.response.request.response).message); 
+      },
+      {
+        pending: `Authentification en cours ...`,
+        error: `Une erreur est survenue lors du tentative d'authentification!`,
       }
-    }, {
-      pending: `Authentification en cours ...`,
-      error: `Une erreur est survenue lors du tentative d'authentification!`,
-    });
+    );
   };
 
   return (
@@ -73,7 +78,9 @@ function Login() {
                         val={nom_login}
                         onChange={(e) => setNom_login(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
-                        onKeyPress={(e)=>{if(e.key === "Enter") login()}}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") login();
+                        }}
                       >
                         Nom d'utilisateur
                       </InputForm>
@@ -84,7 +91,12 @@ function Login() {
                         val={mot_de_passe}
                         onChange={(e) => setMot_de_passe(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
-                        onKeyPress={(e)=>{if(e.key === "Enter") login()}}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            document.getElementById("btn-login").click();
+                            // login();
+                          }
+                        }}
                       >
                         Mot de passe
                       </InputForm>
@@ -119,20 +131,22 @@ function Login() {
                         </div>
                       </div>
                       <div className="text-center">
-                        {/* <Link to="/">
-                          {" "} */}
-                        <button
+                        <a
+                          href="/"
+                          id="btn-login"
                           type="button"
                           className="btn bg-white text-primary btn-block"
                           onClick={login}
                         >
+                          {/* <button
+                        > */}
                           <font style={{ verticalAlign: "inherit" }}>
                             <font style={{ verticalAlign: "inherit" }}>
                               Se connecter
                             </font>
                           </font>
-                        </button>
-                        {/* </Link> */}
+                          {/* </button> */}
+                        </a>
                       </div>
                     </form>
                     {/* <div className="new-account mt-3">
