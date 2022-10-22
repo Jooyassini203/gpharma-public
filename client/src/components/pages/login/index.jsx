@@ -1,17 +1,22 @@
-import axios from "axios";
 import React from "react";
+import axios from "axios";
+import cryptojs from "crypto-js";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { Link, Navigate, redirect } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { userConnected } from "../../../atoms/authentication";
 import { InputForm, urlInsert } from "../../../utils/utils";
+import { Link } from "react-router-dom";
 
 function Login() {
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [showPswd, setShowPswd] = useState(false);
   const [isObligatory, setIsObligatory] = useState(false);
+  const [isLoged, setIsLoged] = useState(false);
   const [nom_login, setNom_login] = useState("");
   const [mot_de_passe, setMot_de_passe] = useState("");
 
-  const login = () => { 
+  const login = () => {
     setIsObligatory(true);
     if (!nom_login || !mot_de_passe) {
       return;
@@ -23,13 +28,21 @@ function Login() {
             nom_login,
             mot_de_passe,
           });
-          if (response) { 
+          if (response.status == 200) {
             toast.success(response.data.message);
             window.sessionStorage.setItem(
               "gpharma@2.0.0",
               response.data.dataUser
             );
-            console.log(window.sessionStorage.getItem("gpharma@2.0.0")); 
+            console.log(window.sessionStorage.getItem("gpharma@2.0.0"));
+            const userJson = cryptojs.AES.decrypt(
+              response.data.dataUser,
+              process.env.REACT_APP_KEY_SESSION
+            ).toString(cryptojs.enc.Utf8);
+            setUserConnect(JSON.parse(userJson));
+            console.log("\n\User connected ", userConnected);
+            setIsLoged(true);
+            document.getElementById("btn-login").click();
           }
         } catch (error) {
           toast.error(JSON.parse(error.response.request.response).message);
@@ -42,11 +55,14 @@ function Login() {
     );
   };
 
+  // if(isLoged) {console.log("test"); return <Navigate to="/"/>}
+  // else
   return (
     <div
       className="authincation h-100 align-middle"
       style={{ marginTop: "8vh" }}
     >
+      <a href="/" className="d-none" id="btn-login"></a>
       <div className="container h-100">
         <div className="row justify-content-center h-100 align-items-center">
           <div className="col-md-6">
@@ -55,13 +71,11 @@ function Login() {
                 <div className="col-xl-12">
                   <div className="auth-form">
                     <div className="text-center mb-3">
-                      {/* <a href="index.html"> */}
                       <img
                         src="images/logo.png"
                         style={{ width: "40%" }}
                         alt="Image"
                       />
-                      {/* </a> */}
                     </div>
                     <h4 className="text-center mb-4 text-white">
                       <font style={{ verticalAlign: "inherit" }}>
@@ -79,7 +93,8 @@ function Login() {
                         onChange={(e) => setNom_login(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
                         onKeyPress={(e) => {
-                          if (e.key === "Enter") login();
+                          if (e.key === "Enter")
+                            login()
                         }}
                       >
                         Nom d'utilisateur
@@ -92,32 +107,15 @@ function Login() {
                         onChange={(e) => setMot_de_passe(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
                         onKeyPress={(e) => {
-                          if (e.key === "Enter") {
-                            document.getElementById("btn-login").click();
-                            // login();
-                          }
+                          if (e.key === "Enter")
+                          login()
                         }}
                       >
                         Mot de passe
                       </InputForm>
                       <div className="form-row d-flex justify-content-between mt-4 mb-2">
-                        <div className="form-group">
-                          <div className="custom-control custom-checkbox ml-1 text-white">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="basic_checkbox_1"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="basic_checkbox_1"
-                            >
-                              Souvenez-vous de moi
-                            </label>
-                          </div>
-                        </div>
                         <div
-                          className="form-group  text-white ml-2"
+                          className="form-group  text-white "
                           onClick={() => setShowPswd(!showPswd)}
                         >
                           <font
@@ -132,32 +130,19 @@ function Login() {
                       </div>
                       <div className="text-center">
                         <a
-                          href="/"
-                          id="btn-login"
+                          // href="/" 
                           type="button"
                           className="btn bg-white text-primary btn-block"
                           onClick={login}
                         >
-                          {/* <button
-                        > */}
                           <font style={{ verticalAlign: "inherit" }}>
                             <font style={{ verticalAlign: "inherit" }}>
                               Se connecter
                             </font>
                           </font>
-                          {/* </button> */}
                         </a>
                       </div>
                     </form>
-                    {/* <div className="new-account mt-3">
-                      <p className="text-white"> 
-                        <a className="text-white" href="">
-                          <font style={{ verticalAlign: "inherit" }}>  
-                            Mot de passe oublié? 
-                          </font>
-                        </a>
-                      </p>
-                    </div> */}
                   </div>
                 </div>
               </div>

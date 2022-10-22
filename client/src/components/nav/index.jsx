@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import NavElement, { NavElementChildren } from "./NavElement";
 import HeadNav from "./HeadNav";
-import RightNav from "./RightNav";
+import LeftNav from "./LeftNav";
 import FooterNav from "./FooterNav";
+import RightNav from "./RightNav";
 
 function Nav() {
   return (
     <>
       <HeadNav />
-      <RightNav>
+      <RightNav />
+      <LeftNav>
         <NavElement to="/" icon="fas fa-television" title="Accueil" />
         <NavElement icon="fas fa-shopping-cart" title="Vente">
           <NavElementChildren
@@ -57,7 +59,7 @@ function Nav() {
           icon="fas fa-user-cog"
           title="Utilisateur"
         />
-      </RightNav>
+      </LeftNav>
       <FooterNav/>
     </>
   );

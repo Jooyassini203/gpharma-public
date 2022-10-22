@@ -22,6 +22,7 @@ const login = async (req, res) => {
         type_utilisateur: user.type_utilisateur,
         nom_login: user.nom_login,
         nom_utilisateur: user.nom_utilisateur,
+        url: user.url,
       };
       let dataSessionCrypted = JSON.stringify(dataSession);
 

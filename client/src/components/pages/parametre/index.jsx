@@ -23,7 +23,7 @@ import {
 const ItemParametre = ({ array, table, icon, children }) => {
   const [tb_name, setTb_name] = useRecoilState(table_name);
   const [number, setNumber] = useState(0);
-
+ 
   const getClassBagde = (nbr) => {
     let classText = "primary";
     if (nbr <= 4) classText = "dark";

@@ -1,11 +1,21 @@
-import React from "react";
+import React from "react"; 
+import { useRecoilState } from "recoil";
 import { confirmAlert } from "react-confirm-alert"; 
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import { useRecoilState } from "recoil";
-import { userConnected } from "../../atoms/authentication";
+import { userConnected } from "../../atoms/authentication"; 
+import { showRightNav } from '../../atoms/nav'
 
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
+  const [show, setShow] = useRecoilState(showRightNav)
+
+  const getRule= (rule) => { 
+    console.log(userConnect);
+    let text = "Administrateur"; 
+      if (rule === "CAISSIER") text = "Caissier";
+    else if (rule === "GUICHETIER") text = "Guichetier";
+    return text
+  }
   const logOut = () => {
     confirmAlert({
       customUI: ({onClose}) => {
@@ -205,16 +215,17 @@ function HeadNav() {
                   >
                     <div className="header-info">
                       <span className="text-black">
-                        Bonjour,<strong>&nbsp;Josoa Yassini Jacquerel</strong>
+                        Bonjour,<strong>&nbsp;{userConnect.nom_utilisateur}</strong>
                       </span>
-                      <p className="fs-12 mb-0">Administrateur</p>
+                      <p className="fs-12 mb-0">{getRule(userConnect.type_utilisateur)}</p>
                     </div>
-                    <img src="images/profile/17.jpg" width={20} alt="Image" />
+                    <img src={userConnect.url?userConnect.url:"images/profile/17.jpg"} width={20} alt="Image" />
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
                     <a
-                      href="./app-profile.html"
+                      type="button"
                       className="dropdown-item ai-icon"
+                      onClick={()=>setShow(!show)}
                     >
                       <svg
                         id="icon-user1"
