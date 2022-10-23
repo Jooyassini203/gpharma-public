@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import cryptojs from "crypto-js";
 import { useRecoilState } from "recoil";
 import { showRightNav } from "../../atoms/nav";
-import { getRule, InputForm, updateData } from "../../utils/utils";
+import { getRule, InputForm, updateData, urlRead } from "../../utils/utils";
 import { userConnected } from "../../atoms/authentication";
 import "./RightNav.css";
 import { toast } from "react-toastify";
 import cryptoJs from "crypto-js";
+import axios from "axios";
 
 function RightNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -65,19 +66,29 @@ function RightNav() {
       userConnect.id,
       formData,
       () => {
-        let dataCrypted = cryptojs.AES.encrypt(
-          JSON.stringify({ ...userConnect, nom_login, nom_utilisateur }),
-          process.env.REACT_APP_KEY_SESSION
-        ).toString();
-        console.log("before change", sessionStorage.getItem("gpharma@2.0.0"));
-        sessionStorage.setItem("gpharma@2.0.0", dataCrypted);
-        console.log("after change", sessionStorage.getItem("gpharma@2.0.0"));
-        setUserConnect({ ...userConnect, nom_login, nom_utilisateur });
+        reloadDataUser(setUserConnect)
         document.getElementById("close").click();
       },
       true
     );
   };
+
+  const reloadDataUser = (setUserConnect) => {
+    axios.get(urlRead('reloadDataUser', userConnect.id)).then((response)=>{
+      sessionStorage.setItem(
+        "gpharma@2.0.0",
+        response.data.dataUser
+      );
+      console.log(window.sessionStorage.getItem("gpharma@2.0.0")); 
+      const userJson = cryptojs.AES.decrypt(
+        sessionStorage.getItem("gpharma@2.0.0"),
+        process.env.REACT_APP_KEY_SESSION
+      ).toString(cryptojs.enc.Utf8);
+      setUserConnect(JSON.parse(userJson));
+    }).catch(()=>{
+      toast.warning('Une erreur est survenue lors du mise à jours des données!')
+    })
+  }
 
   const changeImage = () => {
     if (!nom_login || !nom_utilisateur) {
@@ -91,14 +102,7 @@ function RightNav() {
       userConnect.id,
       formData,
       () => {
-        // let dataCrypted = cryptojs.AES.encrypt(
-        //   JSON.stringify({ ...userConnect, url }),
-        //   process.env.REACT_APP_KEY_SESSION
-        // ).toString();
-        // console.log("before change", sessionStorage.getItem("gpharma@2.0.0"));
-        // sessionStorage.setItem("gpharma@2.0.0", dataCrypted);
-        // console.log("after change", sessionStorage.getItem("gpharma@2.0.0"));
-        // setUserConnect({ ...userConnect, nom_login, nom_utilisateur });
+        reloadDataUser(setUserConnect)
         setPreview(""); 
       },
       true
@@ -164,6 +168,10 @@ function RightNav() {
                         className="btn btn-primary btn-sm mb-1 mr-1"
                         data-toggle="modal"
                         data-target="#profilModal"
+                        onClick={()=>{
+                          setNom_login(userConnect.nom_login);
+                          setNom_utilisateur(userConnect.nom_utilisateur);
+                        }}
                       >
                         <i className="fa fa-edit"></i>
                       </a>
@@ -225,8 +233,8 @@ function RightNav() {
                 id="close"
                 data-dismiss="modal"
                 onClick={() => {
-                  setNom_login("");
-                  setNom_utilisateur("");
+                  setNom_login(userConnect.nom_login);
+                  setNom_utilisateur(userConnect.nom_utilisateur);
                   setIsOb(false);
                 }}
               >
@@ -255,8 +263,8 @@ function RightNav() {
                 className="btn btn-danger light"
                 data-dismiss="modal"
                 onClick={() => {
-                  setNom_login("");
-                  setNom_utilisateur("");
+                  setNom_login(userConnect.nom_login);
+                  setNom_utilisateur(userConnect.nom_utilisateur);
                   setIsOb(false);
                 }}
               >

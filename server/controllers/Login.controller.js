@@ -42,6 +42,33 @@ const login = async (req, res) => {
   });
 };
 
+const reloadDataUser = async (req, res) => { 
+  const user = await Utilisateur.findOne({ where: { id: req.params.id } });
+  if (!user)
+  return res
+  .status(404)
+  .json({ message: "Utilisateur introuvable!" }); 
+  
+  const dataSession = {
+    id: user.id,
+    type_utilisateur: user.type_utilisateur,
+    nom_login: user.nom_login,
+    nom_utilisateur: user.nom_utilisateur,
+    url: user.url,
+    mot_de_passe: user.mot_de_passe,
+  };
+  let dataSessionCrypted = JSON.stringify(dataSession);
+
+  dataSessionCrypted = cryptojs.AES.encrypt(
+    dataSessionCrypted,
+    process.env.KEY_SESSION
+  ).toString();
+  console.log("dataSessionCrypted", dataSessionCrypted); 
+  return res
+    .status(200)
+    .send({ dataUser: dataSessionCrypted });
+};
+
 const logout = async (req, res) => { 
   const user = await Utilisateur.findOne({ 
     where: { id: req.params.id }, });
@@ -61,4 +88,4 @@ const logout = async (req, res) => {
     .json({ message: error.message });    
   }
 };
-export { login, logout };
+export { login, logout, reloadDataUser };
