@@ -122,4 +122,25 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, createMany, updateOne, deleteOne };
+const changePwd = async (req, res) => {
+  const user = await Utilisateur.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (!user)
+  return res.status(404).send({ message: "Utilisateur introvable!" });
+  
+  let data = req.body  
+  try {
+    data.mot_de_passe = bcryptData(data.mot_de_passe);
+    user.set(data);
+    console.log("data", data);
+    await user.save();
+    res.status(201).send({ message: "Utilisateur modifié avec succès!" });
+  } catch (error) {
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
+  }
+};
+export { getAll, getSpecific, createOne, createMany, updateOne, deleteOne, changePwd };

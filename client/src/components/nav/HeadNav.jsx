@@ -4,19 +4,12 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../../atoms/authentication";
 import { showRightNav } from "../../atoms/nav";
-import { getData } from "../../utils/utils";
+import { getData, getRule } from "../../utils/utils";
 
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
 
-  const getRule = (rule) => {
-    console.log("userConnect", userConnect);
-    let text = "Administrateur";
-    if (rule === "CAISSIER") text = "Caissier";
-    else if (rule === "GUICHETIER") text = "Guichetier";
-    return text;
-  };
   const logOut = () => {
     confirmAlert({
       customUI: ({ onClose }) => {

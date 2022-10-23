@@ -279,6 +279,12 @@ export const changeValJSON = (newData, myJson) => {
   });
 };
 
+export const getRule = (rule) => { 
+  let text = "Administrateur";
+  if (rule === "CAISSIER") text = "Caissier";
+  else if (rule === "GUICHETIER") text = "Guichetier";
+  return text;
+};
 export const confirmDelete = (message, callBack) => {
   confirmAlert({
     customUI: ({ onClose }) => {
