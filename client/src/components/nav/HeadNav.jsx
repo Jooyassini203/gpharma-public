@@ -237,7 +237,7 @@ function HeadNav() {
                     />
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
-                    <a
+                    <button
                       type="button"
                       className="dropdown-item ai-icon"
                       onClick={() => setShow(!show)}
@@ -259,9 +259,9 @@ function HeadNav() {
                         <circle cx={12} cy={7} r={4} />
                       </svg>
                       <span className="ml-2">Profile </span>
-                    </a>
+                    </button>
 
-                    <button type="button" className="dropdown-item ai-icon">
+                    <button type="button" className="dropdown-item ai-icon" onClick={logOut}>
                       <svg
                         id="icon-logout"
                         xmlns="http://www.w3.org/2000/svg"
@@ -280,9 +280,9 @@ function HeadNav() {
                         <line x1={21} y1={12} x2={9} y2={12} />
                       </svg>
                       <span className="ml-2">
-                        <a type="button" onClick={logOut}>
+                        <a type="button">
                           Déconnection
-                        </a>{" "}
+                        </a> 
                       </span>
                     </button>
                   </div>

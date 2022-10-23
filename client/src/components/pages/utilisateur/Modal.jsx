@@ -70,8 +70,8 @@ function Modal() {
 
   //DEBUT Déclaration des functions Modal
   const getAllUser = () => {
-    closeRef.current.click(); 
-    setPreview("images/profile/1.jpg")
+    closeRef.current.click();
+    setPreview("images/profile/1.jpg");
     getData(`utilisateurs`, setListUser);
   };
 
@@ -111,26 +111,23 @@ function Modal() {
       !type_utilisateur ||
       !sexe ||
       !nom_login ||
-      !mot_de_passe ||
       !contact
     )
       return;
+    let json = {
+      nom_utilisateur,
+      nom_login,
+      type_utilisateur: type_utilisateur.value,
+      sexe: sexe.value,
+      nom_login,
+      contact,
+      email,
+    };
+    if (mot_de_passe) json["mot_de_passe"] = mot_de_passe;
     let formData = new FormData();
     console.log("file", image);
     formData.append("file", image);
-    formData.append(
-      "data",
-      JSON.stringify({
-        nom_utilisateur,
-        nom_login,
-        type_utilisateur: type_utilisateur.value,
-        sexe: sexe.value,
-        nom_login,
-        mot_de_passe,
-        contact,
-        email,
-      })
-    );
+    formData.append("data", JSON.stringify(json));
     updateData("utilisateur", userSelect.id, formData, getAllUser, true);
   };
   //FIN Déclaration des states
@@ -173,10 +170,10 @@ function Modal() {
     setUtilisateur({
       ...userSelect,
       ["type_utilisateur"]: optionsType.filter(
-        (option) =>  option.value === userSelect.type_utilisateur
+        (option) => option.value === userSelect.type_utilisateur
       )[0],
       ["sexe"]: sexeOptions.filter(
-        (option) =>  option.value === userSelect.sexe
+        (option) => option.value === userSelect.sexe
       )[0],
     });
     console.log(utilisateur);
@@ -184,169 +181,168 @@ function Modal() {
   }, [userSelect]);
   //FIN utilisation states
 
-  return ( 
-      <div
-        className="modal fade"
-        id="modalUtilisateur"
-        style={{ display: "none" }}
-        aria-modal="true"
-        data-backdrop="static"
-        data-keyboard="true" 
-      >
-        <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">
-                {isAdd ? "Ajouter" : "Modifier"} un utilsateur
-              </h5>
-              <button
-                ref={closeRef}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                onClick={() => {
-                  setUtilisateur(initialize);
-                  setPreview("images/profile/1.jpg")
-                  setIsObligatory(false);
-                }}
-              >
-                <span>×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="text-center mb-3">
-                <img
-                  style={{ width: "auto", height: "15vh", borderRadius: "2%" }}
-                  src={preview ? preview : "images/profile/1.jpg"}
-                  alt="Image"
-                  className="img-fluid shadow-sm"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title="Cliqué ici pour changer l'image"
-                  onClick={handleClickInput}
-                />
-              </div>
-              <input
-                name="image"
-                type="file"
-                accept=".jpg,.png,.jpeg"
-                className="d-none"
-                ref={inputRef}
-                onChange={onChange}
+  return (
+    <div
+      className="modal fade"
+      id="modalUtilisateur"
+      style={{ display: "none" }}
+      aria-modal="true"
+      data-backdrop="static"
+      data-keyboard="true"
+    >
+      <div className="modal-dialog modal-lg modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">
+              {isAdd ? "Ajouter" : "Modifier"} un utilsateur
+            </h5>
+            <button
+              ref={closeRef}
+              type="button"
+              className="close"
+              data-dismiss="modal"
+              onClick={() => {
+                setUtilisateur(initialize);
+                setPreview("images/profile/1.jpg");
+                setIsObligatory(false);
+              }}
+            >
+              <span>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="text-center mb-3">
+              <img
+                style={{ width: "auto", height: "15vh", borderRadius: "2%" }}
+                src={preview ? preview : "images/profile/1.jpg"}
+                alt="Image"
+                className="img-fluid shadow-sm"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Cliqué ici pour changer l'image"
+                onClick={handleClickInput}
               />
-              <div className="row">
-                <div className="col-6">
-                  <InputForm
-                    name="nom_login"
-                    val={nom_login}
-                    onChange={onChange}
-                    obligatory={isObligatory ? "active" : "desactive"}
-                  >
-                    Identifiant
-                  </InputForm>
-                </div>
-                <div className="col-6">
-                  <SelectForm
-                    name="type_utilisateur"
-                    val={type_utilisateur}
-                    value={optionsType.filter(
-                      (option) =>
-                        JSON.stringify(option) ===
-                        JSON.stringify(type_utilisateur)
-                    )}
-                    onChange={(e) => onChange(e, "type_utilisateur")}
-                    options={optionsType}
-                    obligatory={isObligatory ? "active" : "desactive"}
-                  >
-                    Type utilisateur
-                  </SelectForm>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-6">
-                  <InputForm
-                    name="nom_utilisateur"
-                    val={nom_utilisateur}
-                    onChange={onChange}
-                    obligatory={isObligatory ? "active" : "desactive"}
-                  >
-                    Nom et prénom
-                  </InputForm>
-                </div>
-                <div className="col-6">
-                  <SelectForm
-                    name="sexe"
-                    val={sexe}
-                    value={sexeOptions.filter(
-                      (option) =>
-                        JSON.stringify(option) === JSON.stringify(sexe)
-                    )}
-                    onChange={(e) => onChange(e, "sexe")}
-                    options={sexeOptions}
-                    obligatory={isObligatory ? "active" : "desactive"}
-                  >
-                    Sexe
-                  </SelectForm>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-6">
-                  <InputForm
-                    name="contact"
-                    tel
-                    val={contact}
-                    min="0"
-                    onChange={onChange}
-                    obligatory={isObligatory ? "active" : "desactive"}
-                  >
-                    Contact
-                  </InputForm>
-                </div>
-                <div className="col-6">
-                  <InputForm name="email" email val={email} onChange={onChange}>
-                    Email
-                  </InputForm>
-                </div>
-              </div> 
+            </div>
+            <input
+              name="image"
+              type="file"
+              accept=".jpg,.png,.jpeg"
+              className="d-none"
+              ref={inputRef}
+              onChange={onChange}
+            />
+            <div className="row">
+              <div className="col-6">
                 <InputForm
-                  name="mot_de_passe"
-                  password
-                  val={mot_de_passe}
+                  name="nom_login"
+                  val={nom_login}
                   onChange={onChange}
                   obligatory={isObligatory ? "active" : "desactive"}
                 >
-                  {isAdd ? "Mot de passe" : "Nouveau mot de passe"}
-                </InputForm> 
+                  Identifiant
+                </InputForm>
+              </div>
+              <div className="col-6">
+                <SelectForm
+                  name="type_utilisateur"
+                  val={type_utilisateur}
+                  value={optionsType.filter(
+                    (option) =>
+                      JSON.stringify(option) ===
+                      JSON.stringify(type_utilisateur)
+                  )}
+                  onChange={(e) => onChange(e, "type_utilisateur")}
+                  options={optionsType}
+                  obligatory={isObligatory ? "active" : "desactive"}
+                >
+                  Type utilisateur
+                </SelectForm>
+              </div>
             </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger light"
-                data-dismiss="modal"
-                onClick={() => {
-                  setUtilisateur(initialize);
-                  setPreview("images/profile/1.jpg") 
-                  setIsObligatory(false);
-                }}
-              >
-                Annuler
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={(id) => {
-                  isAdd ? addUser() : updateUser(id);
-                  setIsObligatory(true);
-                }}
-              >
-                {isAdd ? "Ajouter" : "Modifier"}
-              </button>
+
+            <div className="row">
+              <div className="col-6">
+                <InputForm
+                  name="nom_utilisateur"
+                  val={nom_utilisateur}
+                  onChange={onChange}
+                  obligatory={isObligatory ? "active" : "desactive"}
+                >
+                  Nom et prénom
+                </InputForm>
+              </div>
+              <div className="col-6">
+                <SelectForm
+                  name="sexe"
+                  val={sexe}
+                  value={sexeOptions.filter(
+                    (option) => JSON.stringify(option) === JSON.stringify(sexe)
+                  )}
+                  onChange={(e) => onChange(e, "sexe")}
+                  options={sexeOptions}
+                  obligatory={isObligatory ? "active" : "desactive"}
+                >
+                  Sexe
+                </SelectForm>
+              </div>
             </div>
+
+            <div className="row">
+              <div className="col-6">
+                <InputForm
+                  name="contact"
+                  tel
+                  val={contact}
+                  min="0"
+                  onChange={onChange}
+                  obligatory={isObligatory ? "active" : "desactive"}
+                >
+                  Contact
+                </InputForm>
+              </div>
+              <div className="col-6">
+                <InputForm name="email" email val={email} onChange={onChange}>
+                  Email
+                </InputForm>
+              </div>
+            </div>
+            <InputForm
+              name="mot_de_passe"
+              password
+              val={mot_de_passe}
+              onChange={onChange}
+              obligatory={isObligatory && isAdd ? "active" : "desactive"}
+            >
+              {isAdd ? "Mot de passe" : "Nouveau mot de passe"}
+            </InputForm>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-danger light"
+              data-dismiss="modal"
+              onClick={() => {
+                setUtilisateur(initialize);
+                setPreview("images/profile/1.jpg");
+                setIsObligatory(false);
+              }}
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={(id) => {
+                isAdd ? addUser() : updateUser(id);
+                setIsObligatory(true);
+              }}
+            >
+              {isAdd ? "Ajouter" : "Modifier"}
+            </button>
           </div>
         </div>
-      </div>  
+      </div>
+    </div>
   );
 }
 

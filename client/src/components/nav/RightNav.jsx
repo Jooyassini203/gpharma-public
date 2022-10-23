@@ -6,7 +6,7 @@ import { getRule, InputForm, updateData } from "../../utils/utils";
 import { userConnected } from "../../atoms/authentication";
 import "./RightNav.css";
 import { toast } from "react-toastify";
- 
+
 function RightNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
@@ -17,22 +17,25 @@ function RightNav() {
 
   const changePwd = () => {
     if (!mot_de_passe || !confirme_mot_de_passe) {
-      setIsOb(true)
-      return
-    } 
-    // bcrypt.compare(mot_de_passe, userConnect.mot_de_passe, async (erreur, result) => { 
-    //   if(!result){
-    //     toast.warning('L\'ancien mot de passe est incorrect!')
-    //     return
-    //   }
-    // })
-    if(mot_de_passe !== confirme_mot_de_passe){
-      toast.warning('Les deux mots de passes ne sont pas indentique!')
-      return
+      setIsOb(true);
+      return;
     }
-      updateData('changePwd', userConnect.id, {mot_de_passe}, ()=>{
-      document.getElementById("btn-close").click()
-    })
+    if (mot_de_passe !== confirme_mot_de_passe) {
+      toast.warning("Le mot de passe de confirmation n'est pas indentique!");
+      return;
+    }
+    if (mot_de_passe === last_mot_de_passe) {
+      toast.warning("Le nouveau mot de passe est indentique à l'ancien!");
+      return;
+    }
+    updateData(
+      "changePwd",
+      userConnect.id,
+      { last_mot_de_passe, mot_de_passe },
+      () => {
+        document.getElementById("close").click();
+      }
+    );
   };
   return (
     <>
@@ -74,7 +77,6 @@ function RightNav() {
                     <div className="mt-4">
                       <a
                         type="button"
-                        id="btn-close"
                         className="btn btn-primary btn-sm mb-1 mr-1"
                         data-toggle="modal"
                         data-target="#profilModal"
@@ -166,9 +168,17 @@ function RightNav() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Modification le mot de passe</h5>
-              <button type="button" className="close" data-dismiss="modal" onClick={()=>{
-                  setMot_de_passe('')
-                  setConfirme_Mot_de_passe('')}}>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                onClick={() => {
+                  setMot_de_passe("");
+                  setLast_mot_de_passe("");
+                  setIsOb(false);
+                  setConfirme_Mot_de_passe("");
+                }}
+              >
                 <span>×</span>
               </button>
             </div>
@@ -176,15 +186,15 @@ function RightNav() {
               <InputForm
                 password
                 val={last_mot_de_passe}
-                onChange={(e)=>setLast_mot_de_passe(e.target.value)}
+                onChange={(e) => setLast_mot_de_passe(e.target.value)}
                 obligatory={isOb ? "active" : ""}
               >
                 Ancien mot de passe
-              </InputForm> 
+              </InputForm>
               <InputForm
                 password
                 val={mot_de_passe}
-                onChange={(e)=>setMot_de_passe(e.target.value)}
+                onChange={(e) => setMot_de_passe(e.target.value)}
                 obligatory={isOb ? "active" : ""}
               >
                 Nouveau mot de passe
@@ -192,7 +202,7 @@ function RightNav() {
               <InputForm
                 password
                 val={confirme_mot_de_passe}
-                onChange={(e)=>setConfirme_Mot_de_passe(e.target.value)}
+                onChange={(e) => setConfirme_Mot_de_passe(e.target.value)}
                 obligatory={isOb ? "active" : ""}
               >
                 Confirmer le mot de passe
@@ -200,13 +210,15 @@ function RightNav() {
             </div>
             <div className="modal-footer">
               <button
+                id="close" 
                 type="button"
-                className="btn btn-danger light btn-close"
+                className="btn btn-danger light"
                 data-dismiss="modal"
-                id="btn-close"
                 onClick={() => {
-                  setMot_de_passe('')
-                  setConfirme_Mot_de_passe('')
+                  setMot_de_passe("");
+                  setLast_mot_de_passe("");
+                  setIsOb(false);
+                  setConfirme_Mot_de_passe("");
                 }}
               >
                 Annuler
@@ -214,7 +226,9 @@ function RightNav() {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => {changePwd()}}
+                onClick={() => {
+                  changePwd();
+                }}
               >
                 Modifier
               </button>

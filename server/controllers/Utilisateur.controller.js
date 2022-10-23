@@ -1,5 +1,6 @@
 import Utilisateur from "../database/models/utilisateur.model.js";
 import fs from "fs";
+import bcrypt from "bcrypt";
 import { bcryptData, uploadFile } from "../utils/utils.js";
 import { Op } from "sequelize";
 
@@ -79,7 +80,8 @@ const updateOne = async (req, res) => {
     );
   }
   try {
-    userData["mot_de_passe"] = bcryptData(userData["mot_de_passe"]);
+    if (userData["mot_de_passe"])
+      userData["mot_de_passe"] = bcryptData(userData["mot_de_passe"]);
     user.set(userData);
     await user.save();
     res.status(201).send({ message: "Utilisateur modifié avec succès!" });
@@ -129,18 +131,28 @@ const changePwd = async (req, res) => {
     },
   });
   if (!user)
-  return res.status(404).send({ message: "Utilisateur introvable!" });
-  
-  let data = req.body  
+    return res.status(404).send({ message: "Utilisateur introvable!" });
+  let data = req.body;
+  bcrypt.compare(data.last_mot_de_passe, user.mot_de_passe, (err, result) => {
+    if (!result)
+      res.status(422).send({ message: "Ancien mot de passe incorrect!" });
+  });
   try {
     data.mot_de_passe = bcryptData(data.mot_de_passe);
-    user.set(data);
-    console.log("data", data);
+    user.set({ mot_de_passe: data.mot_de_passe });
     await user.save();
-    res.status(201).send({ message: "Utilisateur modifié avec succès!" });
+    res.status(201).send({ message: "Mot de passe mise à jour!" });
   } catch (error) {
     res.status(422).send({ message: error.message });
     console.log(error.message);
   }
 };
-export { getAll, getSpecific, createOne, createMany, updateOne, deleteOne, changePwd };
+export {
+  getAll,
+  getSpecific,
+  createOne,
+  createMany,
+  updateOne,
+  deleteOne,
+  changePwd,
+};
