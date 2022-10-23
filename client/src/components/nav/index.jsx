@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import cryptojs from "crypto-js";
+import React, { useEffect, useState } from "react";
 import NavElement, { NavElementChildren } from "./NavElement";
 import HeadNav from "./HeadNav";
 import LeftNav from "./LeftNav";
 import FooterNav from "./FooterNav";
 import RightNav from "./RightNav";
+import { useRecoilState } from "recoil";
+import { userConnected } from "../../atoms/authentication";
 
 function Nav() {
+  
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
+  useEffect(()=>{
+    const userJson = cryptojs.AES.decrypt(
+      window.sessionStorage.getItem("gpharma@2.0.0"),
+      process.env.REACT_APP_KEY_SESSION
+    ).toString(cryptojs.enc.Utf8);
+    setUserConnect(JSON.parse(userJson));
+    console.log("\n\User connected ", userConnect); 
+  }, [])
   return (
     <>
       <HeadNav />

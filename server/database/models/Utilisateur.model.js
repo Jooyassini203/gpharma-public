@@ -44,6 +44,10 @@ const Utilisateur = db.define(
       type: DataTypes.BOOLEAN,
       defaultValue: "1",
     },
+    isOnline: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: "0",
+    },
   },
   {
     paranoid: true,

@@ -23,13 +23,13 @@ export const urlDelete = (tableName, id) => {
 
 export const getData = (tableName, setList, id = "") => {
   const get = async () => {
-    console.log("Url Read", urlRead(tableName));
     try {
       const response = await axios.get(urlRead(tableName, id));
-      if (response.status === 200) {
+      if (response.status === 200 && setList) {
         setList(response.data);
       }
     } catch (error) {
+      console.log("Url Read", urlRead(tableName, id));
       toast.error("Une erreur est survenue !");
       console.log(error);
     }

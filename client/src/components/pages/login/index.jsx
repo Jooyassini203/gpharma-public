@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
 import { InputForm, urlInsert } from "../../../utils/utils";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 function Login() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -34,14 +34,7 @@ function Login() {
               "gpharma@2.0.0",
               response.data.dataUser
             );
-            console.log(window.sessionStorage.getItem("gpharma@2.0.0"));
-            const userJson = cryptojs.AES.decrypt(
-              response.data.dataUser,
-              process.env.REACT_APP_KEY_SESSION
-            ).toString(cryptojs.enc.Utf8);
-            setUserConnect(JSON.parse(userJson));
-            console.log("\n\User connected ", userConnected);
-            setIsLoged(true);
+            console.log(window.sessionStorage.getItem("gpharma@2.0.0")); 
             document.getElementById("btn-login").click();
           }
         } catch (error) {
@@ -54,9 +47,7 @@ function Login() {
       }
     );
   };
-
-  // if(isLoged) {console.log("test"); return <Navigate to="/"/>}
-  // else
+ 
   return (
     <div
       className="authincation h-100 align-middle"
@@ -115,8 +106,9 @@ function Login() {
                         Mot de passe
                       </InputForm>
                       <div className="form-row d-flex justify-content-between mt-4 mb-2">
-                        <div
-                          className="form-group  text-white "
+                        <button
+                          type="button"
+                          className="btn btn-sm bg-transparent  text-white "
                           onClick={() => setShowPswd(!showPswd)}
                         >
                           <font
@@ -127,11 +119,10 @@ function Login() {
                           >
                             {!showPswd ? "Afficher" : "Cacher"} le mot de passe
                           </font>
-                        </div>
+                        </button>
                       </div>
                       <div className="text-center">
-                        <a
-                          // href="/" 
+                        <button  
                           type="button"
                           className="btn bg-white text-primary btn-block"
                           onClick={login}
@@ -141,7 +132,7 @@ function Login() {
                               Se connecter
                             </font>
                           </font>
-                        </a>
+                        </button>
                       </div>
                     </form>
                   </div>

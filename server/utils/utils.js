@@ -6,14 +6,15 @@ export const MIGRATE = false;
 
 export const getDateTime = (name = "") => {
   const date = new Date();
-  name += `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}_${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}_${date.getMilliseconds()}`;
+  name += `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}_${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}_${date.getMilliseconds()}`;
   return name;
 };
 
 export const getDateNow = (name = "") => {
-  const date = new Date();
-  name += `${date.getFullYear()}-${date.getMonth()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} }`;
-  return name;
+  const date = new Date();//2022-10-22 17:41:30
+  let dateString  =  `${name}${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  console.log("dateString : ", dateString);
+  return dateString;
 };
 
 export const bcryptData = (data, salt = 10) => {

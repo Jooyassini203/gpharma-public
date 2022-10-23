@@ -14,7 +14,7 @@ const login = async (req, res) => {
   console.log("\n\nSTART COMPARE AND CRYPTE\n\n");
   bcrypt.compare(mot_de_passe, user.mot_de_passe, async (erreur, result) => {
     if (result) {
-      user.set({ date_der_log: getDateNow() });
+      user.set({ date_der_log: getDateNow(), isOnline: '1' });
       await user.save();
 
       const dataSession = {
@@ -30,14 +30,7 @@ const login = async (req, res) => {
         dataSessionCrypted,
         process.env.KEY_SESSION
       ).toString();
-      console.log("dataSessionCrypted", dataSessionCrypted);
-
-      const userJson = cryptojs.AES.decrypt(
-        dataSessionCrypted,
-        process.env.KEY_SESSION
-      ).toString(cryptojs.enc.Utf8);
-
-      console.log("before parse ", userJson);
+      console.log("dataSessionCrypted", dataSessionCrypted); 
       return res
         .status(200)
         .send({ message: "Vous êtes connecté", dataUser: dataSessionCrypted });
@@ -47,4 +40,24 @@ const login = async (req, res) => {
         .send({ message: "Nom d'utilisateur ou mot de passe incorrect!" });
   });
 };
-export { login };
+
+const logout = async (req, res) => { 
+  const user = await Utilisateur.findOne({ 
+    where: { id: req.params.id }, });
+  if (!user)
+    return res
+    .status(404)
+    .json({ message: "Utilisateur introvable!" });  
+  try {
+    user.set({ date_der_log: getDateNow(), isOnline: '0' });
+    await user.save();
+    return res
+    .status(200)
+    .send({ message: "Vous êtes déconnecté"}); 
+  } catch (error) {
+    return res
+    .status(404)
+    .json({ message: error.message });    
+  }
+};
+export { login, logout };

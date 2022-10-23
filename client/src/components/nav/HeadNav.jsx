@@ -1,24 +1,25 @@
-import React from "react"; 
+import React from "react";
 import { useRecoilState } from "recoil";
-import { confirmAlert } from "react-confirm-alert"; 
+import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import { userConnected } from "../../atoms/authentication"; 
-import { showRightNav } from '../../atoms/nav'
+import { userConnected } from "../../atoms/authentication";
+import { showRightNav } from "../../atoms/nav";
+import { getData } from "../../utils/utils";
 
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
-  const [show, setShow] = useRecoilState(showRightNav)
+  const [show, setShow] = useRecoilState(showRightNav);
 
-  const getRule= (rule) => { 
-    console.log(userConnect);
-    let text = "Administrateur"; 
-      if (rule === "CAISSIER") text = "Caissier";
+  const getRule = (rule) => {
+    console.log("userConnect", userConnect);
+    let text = "Administrateur";
+    if (rule === "CAISSIER") text = "Caissier";
     else if (rule === "GUICHETIER") text = "Guichetier";
-    return text
-  }
+    return text;
+  };
   const logOut = () => {
     confirmAlert({
-      customUI: ({onClose}) => {
+      customUI: ({ onClose }) => {
         return (
           <div id="react-confirm-alert">
             <div className="react-confirm-alert-overlay">
@@ -27,17 +28,26 @@ function HeadNav() {
                   <h1>Déconnection</h1>
                   <p>Voulez-vous vraiment vous déconnecté de GPharama ?</p>
                   <div>
-                    <a
-                    href="/connexion"
+                    <button  
                       className="btn btn-danger mr-2"
                       onClick={() => {
-                        sessionStorage.removeItem("gpharma@2.0.0") 
-
+                        console.log(
+                          "userConnect.id",
+                          userConnect.id
+                        );
+                        getData(
+                          "logout",
+                          (data) => {
+                            document.getElementById('btn-logout').click()
+                            sessionStorage.removeItem("gpharma@2.0.0");
+                          },
+                          userConnect.id
+                        );
                         onClose();
                       }}
                     >
-                      Supprimer
-                    </a>
+                      Se déconnecter
+                    </button>
                     <button
                       className="btn btn-dark"
                       onClick={() => {
@@ -72,6 +82,7 @@ function HeadNav() {
         </div>
       </div>
 
+      <a href="/connexion" className="d-none" id="btn-logout"></a>
       <div className="header">
         <div className="header-content">
           <nav className="navbar navbar-expand">
@@ -215,17 +226,28 @@ function HeadNav() {
                   >
                     <div className="header-info">
                       <span className="text-black">
-                        Bonjour,<strong>&nbsp;{userConnect.nom_utilisateur}</strong>
+                        Bonjour,
+                        <strong>&nbsp;{userConnect.nom_utilisateur}</strong>
                       </span>
-                      <p className="fs-12 mb-0">{getRule(userConnect.type_utilisateur)}</p>
+                      <p className="fs-12 mb-0">
+                        {getRule(userConnect.type_utilisateur)}
+                      </p>
                     </div>
-                    <img src={userConnect.url?userConnect.url:"images/profile/17.jpg"} width={20} alt="Image" />
+                    <img
+                      src={
+                        userConnect.url
+                          ? userConnect.url
+                          : "images/profile/17.jpg"
+                      }
+                      width={20}
+                      alt="Image"
+                    />
                   </a>
                   <div className="dropdown-menu dropdown-menu-right">
                     <a
                       type="button"
                       className="dropdown-item ai-icon"
-                      onClick={()=>setShow(!show)}
+                      onClick={() => setShow(!show)}
                     >
                       <svg
                         id="icon-user1"
