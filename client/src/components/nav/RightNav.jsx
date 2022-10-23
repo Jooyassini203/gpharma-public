@@ -19,7 +19,17 @@ function RightNav() {
   const [nom_utilisateur, setNom_utilisateur] = useState(
     userConnect.nom_utilisateur
   );
-
+  const inputRef = React.useRef();
+  const [preview, setPreview] = useState("");
+  const [imageProfile, setImageProfile] = useState(null);
+  const loadImage = (event) => {
+    const img = event.target.files[0];
+    console.log(img, "url", URL.createObjectURL(img));
+    setPreview(URL.createObjectURL(img));
+  };
+  const handleClickInput = () => {
+    inputRef.current.click();
+  };
   const changePwd = () => {
     if (!mot_de_passe || !confirme_mot_de_passe) {
       setIsOb(true);
@@ -68,6 +78,32 @@ function RightNav() {
       true
     );
   };
+
+  const changeImage = () => {
+    if (!nom_login || !nom_utilisateur) {
+      setIsOb(true);
+      return;
+    }
+    let formData = new FormData();
+    formData.append("file", imageProfile);
+    updateData(
+      "utilisateur",
+      userConnect.id,
+      formData,
+      () => {
+        // let dataCrypted = cryptojs.AES.encrypt(
+        //   JSON.stringify({ ...userConnect, url }),
+        //   process.env.REACT_APP_KEY_SESSION
+        // ).toString();
+        // console.log("before change", sessionStorage.getItem("gpharma@2.0.0"));
+        // sessionStorage.setItem("gpharma@2.0.0", dataCrypted);
+        // console.log("after change", sessionStorage.getItem("gpharma@2.0.0"));
+        // setUserConnect({ ...userConnect, nom_login, nom_utilisateur });
+        setPreview(""); 
+      },
+      true
+    );
+  };
   return (
     <>
       <div className={show ? "chatbox active " : "chatbox"}>
@@ -88,14 +124,31 @@ function RightNav() {
                   {/* <h5 className="text-primary d-inline">Information</h5> */}
                   <img
                     src={
-                      userConnect.url
+                      preview
+                        ? preview
+                        : userConnect.url
                         ? userConnect.url
-                        : "images/profile/17.jpg"
+                        : "images/profile/1.jpg"
                     }
                     width={"40vh"}
                     alt="Image"
+                    accept=".jpg,.png,.jpeg"
                     className="img-fluid mt-2 mb-4 w-100"
+                    onClick={handleClickInput}
                   />
+
+                  <input
+                    name="image"
+                    type="file"
+                    accept=".jpg,.png,.jpeg"
+                    className="d-none"
+                    ref={inputRef}
+                    onChange={(e) => {  
+                      setImageProfile(e.target.files[0]); 
+                      setPreview(URL.createObjectURL(imageProfile)); 
+                    }}
+                  />
+                  <button className={preview?"btn btn-warning btn-sm light":"d-none"} onClick={changeImage}>Valider le changement</button>
                 </div>
                 <div className="profile-statistics mb-3">
                   <div className="text-center">

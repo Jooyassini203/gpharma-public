@@ -59,8 +59,8 @@ const updateOne = async (req, res) => {
   });
   if (!user)
     return res.status(404).send({ message: "Utilisateur introvable!" });
-
-  let userData = JSON.parse(req.body.data);
+  let userData = {};
+  if (req.body.data) userData = JSON.parse(req.body.data);
   let fileName = "";
   let url = "";
   if (!req.files) {
@@ -76,7 +76,7 @@ const updateOne = async (req, res) => {
       "images/utilisateur",
       userData,
       null,
-      user.image
+      user.image ? user.image : ""
     );
   }
   try {
