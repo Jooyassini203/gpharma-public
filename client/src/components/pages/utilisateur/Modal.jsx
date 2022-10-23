@@ -159,8 +159,7 @@ function Modal() {
   };
   //FIN Déclaration des simples functions
   //FIN Déclaration des functions Modal
-  useEffect(() => {
-    console.log("test");
+  useEffect(() => { 
     setUtilisateur(initialize);
     setIsObligatory(false);
     getAllUser();
@@ -175,8 +174,7 @@ function Modal() {
       ["sexe"]: sexeOptions.filter(
         (option) => option.value === userSelect.sexe
       )[0],
-    });
-    console.log(utilisateur);
+    }); 
     setPreview(userSelect.url ? userSelect.url : "images/profile/1.jpg");
   }, [userSelect]);
   //FIN utilisation states

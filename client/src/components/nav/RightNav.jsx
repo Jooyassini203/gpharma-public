@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-// import bcrypt from "bcrypt";
+import cryptojs from "crypto-js";
 import { useRecoilState } from "recoil";
 import { showRightNav } from "../../atoms/nav";
 import { getRule, InputForm, updateData } from "../../utils/utils";
 import { userConnected } from "../../atoms/authentication";
 import "./RightNav.css";
 import { toast } from "react-toastify";
+import cryptoJs from "crypto-js";
 
 function RightNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -14,6 +15,10 @@ function RightNav() {
   const [mot_de_passe, setMot_de_passe] = useState("");
   const [confirme_mot_de_passe, setConfirme_Mot_de_passe] = useState("");
   const [isOb, setIsOb] = useState(false);
+  const [nom_login, setNom_login] = useState(userConnect.nom_login);
+  const [nom_utilisateur, setNom_utilisateur] = useState(
+    userConnect.nom_utilisateur
+  );
 
   const changePwd = () => {
     if (!mot_de_passe || !confirme_mot_de_passe) {
@@ -35,6 +40,32 @@ function RightNav() {
       () => {
         document.getElementById("close").click();
       }
+    );
+  };
+
+  const changeName = () => {
+    if (!nom_login || !nom_utilisateur) {
+      setIsOb(true);
+      return;
+    }
+    let formData = new FormData();
+    formData.append("data", JSON.stringify({ nom_login, nom_utilisateur }));
+    updateData(
+      "utilisateur",
+      userConnect.id,
+      formData,
+      () => {
+        let dataCrypted = cryptojs.AES.encrypt(
+          JSON.stringify({ ...userConnect, nom_login, nom_utilisateur }),
+          process.env.REACT_APP_KEY_SESSION
+        ).toString();
+        console.log("before change", sessionStorage.getItem("gpharma@2.0.0"));
+        sessionStorage.setItem("gpharma@2.0.0", dataCrypted);
+        console.log("after change", sessionStorage.getItem("gpharma@2.0.0"));
+        setUserConnect({ ...userConnect, nom_login, nom_utilisateur });
+        document.getElementById("close").click();
+      },
+      true
     );
   };
   return (
@@ -135,27 +166,55 @@ function RightNav() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Modification des imforimations</h5>
-              <button type="button" className="close" data-dismiss="modal">
+              <button
+                type="button"
+                className="close"
+                id="close"
+                data-dismiss="modal"
+                onClick={() => {
+                  setNom_login("");
+                  setNom_utilisateur("");
+                  setIsOb(false);
+                }}
+              >
                 <span>×</span>
               </button>
             </div>
             <div className="modal-body">
-              <InputForm>Identifiant</InputForm>
-              <InputForm>Nom d'utilisateur</InputForm>
+              <InputForm
+                val={nom_login}
+                onChange={(e) => setNom_login(e.target.value)}
+                obligatory={isOb ? "active" : ""}
+              >
+                Identifiant
+              </InputForm>
+              <InputForm
+                val={nom_utilisateur}
+                onChange={(e) => setNom_utilisateur(e.target.value)}
+                obligatory={isOb ? "active" : ""}
+              >
+                Nom d'utilisateur
+              </InputForm>
             </div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-danger light"
                 data-dismiss="modal"
-                onClick={() => {}}
+                onClick={() => {
+                  setNom_login("");
+                  setNom_utilisateur("");
+                  setIsOb(false);
+                }}
               >
                 Annuler
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={(id) => {}}
+                onClick={() => {
+                  changeName();
+                }}
               >
                 Modifier
               </button>
@@ -210,7 +269,7 @@ function RightNav() {
             </div>
             <div className="modal-footer">
               <button
-                id="close" 
+                id="close"
                 type="button"
                 className="btn btn-danger light"
                 data-dismiss="modal"
