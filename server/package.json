@@ -26,7 +26,8 @@
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.20",
     "react-confirm-alert": "^3.0.6",
-    "sequelize": "^6.23.1"
+    "sequelize": "^6.23.1",
+    "sessionstorage-for-nodejs": "^1.0.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.5.0"

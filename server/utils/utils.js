@@ -30,7 +30,8 @@ export const uploadFile = (
   dir,
   itemData,
   callBack = null,
-  lastImage = ""
+  lastImage = "",
+  nameColImage = "image"
 ) => {
   console.log("avec fil");
   const file = req.files.file;
@@ -48,8 +49,12 @@ export const uploadFile = (
       .send({ message: "Fichier trop lourd (Plus de 10 MB) !" });
   }
 
-  itemData["image"] = fileName;
-  console.log("\n\n itemData['image'] : ", itemData["image"], "\n\n");
+  itemData[nameColImage] = fileName;
+  console.log(
+    "\n\n itemData['nameColImage'] : ",
+    itemData[nameColImage],
+    "\n\n"
+  );
   if (itemData["url"]) {
     itemData["url"] = url;
     console.log("\n\n itemData['url'] : ", itemData["url"], "\n\n");
