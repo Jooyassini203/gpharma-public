@@ -143,10 +143,18 @@ export const ButtonTable = ({
   ...props
 }) => {
   return (
-    <button className="btn btn-sm btn-default" onClick={handleClick} {...props}>
+    <button
+      className={
+        !importance
+          ? "btn btn-sm btn-default light"
+          : "btn btn-sm btn-" + importance + " light"
+      }
+      onClick={handleClick}
+      {...props}
+    >
       <FontAwesomeIcon
         icon={icon}
-        className={!importance ? "text-warning" : "text-" + importance}
+        // className={!importance ? "text-warning" : "text-" + importance}
       />
       {children}
     </button>
@@ -165,6 +173,7 @@ export const InputForm = ({
   date = null,
   tel = null,
   obligatory = null,
+  textarea = null,
   classLabel = "",
   classSpan = "",
   ...props
@@ -184,6 +193,30 @@ export const InputForm = ({
     type = "tel";
   } else if (date) {
     type = "date";
+  }
+  if (textarea) {
+    return (
+      <div className="form-group mb-3">
+        <label className={classLabel + " mb-1"} htmlFor={getId(children)}>
+          <strong>{children}</strong>
+        </label>
+        <textarea
+          aria-autocomplete="none"
+          id={getId(children)}
+          value={val}
+          className={getClass(val, obligatory)}
+          onChange={onChange}
+          {...props}
+        />
+        {/*"Entre ton " + children.toLowerCase()*/}
+        <span
+          className={classSpan ? classSpan : "text-danger"}
+          style={{ fontSize: "12px", marginTop: "0.5vh" }}
+        >
+          {getSpan(val, obligatory)}
+        </span>
+      </div>
+    );
   }
   return (
     <div className="form-group mb-3">
@@ -246,10 +279,10 @@ const getId = (test) => {
 
 const getClass = (cond, obligatory) => {
   if (obligatory === "active") {
-    if (cond) return "form-control form-control-sm";
-    else return "form-control form-control-sm "; //is-invalid
+    if (cond) return "form-control"; // form-control-sm
+    else return "form-control"; //is-invalid form-control-sm
   } else {
-    return "form-control form-control-sm";
+    return "form-control"; // form-control-sm
   }
 };
 const getSpan = (cond, obligatory) => {

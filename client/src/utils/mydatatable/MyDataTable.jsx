@@ -25,7 +25,7 @@ export default function MyDataTable({ data, columns, actions, title, filterClass
     return (
       <input
         type="text"
-        className={filterClass?filterClass:"w-25 form-control form-control-sm"}
+        className={filterClass?filterClass:"w-25 form-control"}
         value={filterText}
         onChange={(e) => setFilterText(e.target.value)}
         placeholder="Filtre ... "

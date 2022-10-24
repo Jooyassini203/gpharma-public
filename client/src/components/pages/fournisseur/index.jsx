@@ -2,8 +2,10 @@ import React from "react";
 import Nav from "../../nav";
 import FouterNav from "../../nav/FooterNav";
 import Table from "./Table";
+import Modal from "./Modal";
+import View from "./View";
 
-function Founrisseur() {
+function Founrisseur() { 
   return (
     <>
       <Nav />
@@ -12,6 +14,8 @@ function Founrisseur() {
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
       >
         <Table />
+        <Modal/>
+        <View/>
       </div>
       <FouterNav />
     </>

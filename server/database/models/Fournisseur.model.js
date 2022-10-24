@@ -24,23 +24,23 @@ const Fournisseur = db.define(
     logo: {
       type: DataTypes.CHAR(100),
     },
-    image: {
-      type: DataTypes.CHAR(255),
-    },
+    // image: {
+    //   type: DataTypes.CHAR(255),
+    // },
     condition_paiement: {
-      type: DataTypes.TEXT ,
-      allowNull: false, 
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     delais_reglement: {
-      type: DataTypes.TEXT ,
-      allowNull: false, 
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     email: {
       type: DataTypes.CHAR(255),
       allowNull: false,
       unique: true,
     },
-    address: {
+    adresse: {
       type: DataTypes.CHAR(255),
       allowNull: false,
     },

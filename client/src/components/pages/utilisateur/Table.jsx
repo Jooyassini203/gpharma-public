@@ -62,7 +62,7 @@ function Table({ update, del, view, list, isAdd }) {
             handleClick={() => view(row.id)}
           />
           <ButtonTable
-            importance="warning ml-2"
+            importance="warning "
             icon={faEdit}
             data-toggle="modal"
             data-target="#modalUtilisateur"
@@ -72,7 +72,7 @@ function Table({ update, del, view, list, isAdd }) {
             }}
           />
           <ButtonTable
-            importance="danger ml-2"
+            importance="danger "
             icon={faTrash}
             handleClick={() => del(row.id)}
           />

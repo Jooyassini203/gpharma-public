@@ -1,12 +1,16 @@
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
-import { ButtonTable, confirmDelete, getData } from "../../../utils/utils";
+import { ButtonTable, confirmDelete, deleteData, getData } from "../../../utils/utils";
+import { isAddState, listFournisseur, fournisseurSelect } from "../../../atoms/fournisseur";
 
-function Table({ showAdd, showEdit }) {
+function Table() {
+  const [isAdd, setIsAdd] = useRecoilState(isAddState);
+  const [fournisseur, setFournisseur] = useRecoilState(fournisseurSelect);
   const columns = [
     {
-      name: "Logo",
+      name: "",
       selector: (row) => (
         <img
           style={{ height: "5vh", verticalAlign: "middle" }}
@@ -15,87 +19,82 @@ function Table({ showAdd, showEdit }) {
           src={row.logo ? row.logo : `images/users/1.jpg`}
           alt={`image de ${row.nom_utilisateur}`}
         />
-       ),
+      ),
       sortable: true,
-      width: "5%",
+      width: "10%",
     },
     {
       name: "Sigle",
-      selector: (row) => (row.sigle),
+      selector: (row) => row.sigle,
       sortable: true,
-      width: "5%",
+      width: "10%",
     },
     {
       name: "Nom",
-      selector: (row) => (row.nom_fournisseur),
+      selector: (row) => row.nom_fournisseur,
       sortable: true,
     },
     {
       name: "Cont. Sécret.",
-      selector: (row) => (row.contact_secretaire),
+      selector: (row) => row.contact_secretaire,
       sortable: true,
-      width: "20%",
+      width: "18%",
     },
-    {
+    /* {
       name: "Email",
       selector: (row) => (row.email),
       sortable: true,
       width: "8%",
-    },
+    }, */
     {
       name: "Adresse",
-      selector: (row) => (row.adtesse),
+      selector: (row) => row.adresse,
       sortable: true,
-      width: "8%",
+      width: "18%",
     },
     {
       name: "Action",
-      width: "15%",
+      width: "200px",
       selector: (row) => {
         return (
-          <div class="dropdown">
-            <button
-              class="btn btn-primary tp-btn-light sharp"
-              type="button"
-              data-toggle="dropdown"
-            >
-             <i className="fa fa-plus"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right border py-0">
-              <div class="py-2"> 
-          <ButtonTable
-            importance="info ml-2"
-            icon={faEye}
-            data-toggle="modal"
-            data-target="#modalUtilisateur"
-            handleClick={() => { }}
-          />
-          <ButtonTable
-            importance="warning ml-2"
-            icon={faEdit}
-            data-toggle="modal"
-            data-target="#modalUtilisateur"
-            handleClick={() => { }}
-          />
+          <>
             <ButtonTable
-              importance="danger ml-2"
+              importance="secondary"
+              icon={faEye}
+              data-toggle="modal"
+              data-target="#modalViewFournisseur"
+              handleClick={() => {
+                getData("fournisseur", setFournisseur, row.id);
+              }}
+            />
+            <ButtonTable
+              importance="warning"
+              icon={faEdit}
+              data-toggle="modal"
+              data-target="#modalUtilisateur"
+              handleClick={() => {
+                setIsAdd(false)
+                getData("fournisseur", setFournisseur, row.id);
+              }}
+            />
+            <ButtonTable
+              importance="danger"
               icon={faTrash}
-              handleClick={() => { 
+              handleClick={() => {
                 confirmDelete(
                   "Voulez-vous vraimment supprimé cet fournisseur ?",
-                  () => { }
+                  () => {
+                    deleteData('fournisseur', row.id, setList)
+                  }
                 );
               }}
-            /> 
-              </div>
-            </div>
-          </div>
+            />
+          </>
         );
       },
     },
   ];
-
-  const [list, setList] = useState([]);
+  const [list, setList] = useRecoilState(listFournisseur);
   useEffect(() => {
     getData("fournisseur", setList);
   }, []);
@@ -108,10 +107,10 @@ function Table({ showAdd, showEdit }) {
         columns={columns}
         actions={
           <div className="btn-group float-right">
-            <button className="btn btn-primary mr-3" onClick={showAdd}>
+            <button className="btn btn-primary btn-sm mr-3" onClick={setIsAdd(true)}>
               Ajout d'un founrisseur
             </button>
-            <button className="btn btn-outline-primary">
+            <button className="btn btn-outline-primary btn-sm">
               <i className="fa fa-list-alt mr-3"></i>Activités
             </button>
           </div>
