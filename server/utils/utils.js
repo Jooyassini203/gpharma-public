@@ -28,7 +28,7 @@ export const uploadFile = (
   res,
   sigle,
   dir,
-  userData,
+  itemData,
   callBack = null,
   lastImage = ""
 ) => {
@@ -48,10 +48,12 @@ export const uploadFile = (
       .send({ message: "Fichier trop lourd (Plus de 10 MB) !" });
   }
 
-  userData["image"] = fileName;
-  userData["url"] = url;
-  console.log("\n\n userData['image'] : ", userData["image"], "\n\n");
-  console.log("\n\n userData['url'] : ", userData["url"], "\n\n");
+  itemData["image"] = fileName;
+  console.log("\n\n itemData['image'] : ", itemData["image"], "\n\n");
+  if (itemData["url"]) {
+    itemData["url"] = url;
+    console.log("\n\n itemData['url'] : ", itemData["url"], "\n\n");
+  }
   file.mv(`./public/${dir}/${fileName}`, async (error) => {
     if (error) return res.status(500).send({ message: error.message });
     if (callBack) {

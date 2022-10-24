@@ -20,6 +20,9 @@ export const urlUpdate = (tableName, id) => {
 export const urlDelete = (tableName, id) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}/${id}`;
 };
+export const getUrl = (dir, name) => {
+  return `http://localhost:${process.env.REACT_APP_PORT}/${dir}/${name}`;
+};
 
 export const getData = (tableName, setList, id = "") => {
   const get = async () => {
@@ -164,6 +167,7 @@ export const ButtonTable = ({
 export const InputForm = ({
   children = "",
   val = "",
+  name = "",
   onChange,
   password = null,
   email = null,
@@ -201,10 +205,11 @@ export const InputForm = ({
           <strong>{children}</strong>
         </label>
         <textarea
+          name={name}
           aria-autocomplete="none"
           id={getId(children)}
           value={val}
-          className={getClass(val, obligatory)}
+          className={getClass(val, obligatory) + " w-100"}
           onChange={onChange}
           {...props}
         />
@@ -224,6 +229,7 @@ export const InputForm = ({
         <strong>{children}</strong>
       </label>
       <input
+        name={name}
         aria-autocomplete="none"
         id={getId(children)}
         type={type}

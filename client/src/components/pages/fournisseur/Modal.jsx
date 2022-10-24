@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { InputForm, updateData } from "../../../utils/utils";
+import { addData, getData, InputForm, updateData } from "../../../utils/utils";
 import { isAddState, listFournisseur, fournisseurSelect, initialize } from "../../../atoms/fournisseur";
 
 function Modal() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
+  const [list, setList] = useRecoilState(listFournisseur);
   const [fournisseurSelected, setFournisseurSelected] = useRecoilState(fournisseurSelect);
-  const [fournisseur, setFournisseur] = React.useState(initialize)
+  const [fournisseur, setFournisseur] = useState(initialize)
   const [isOb, setIsOb] = React.useState(false)
   const [preview, setPreview] = React.useState("");
   const closeRef = React.useRef();
@@ -16,8 +17,7 @@ function Modal() {
     contact_fournisseur,
     contact_secretaire,
     compte_PCG,
-    logo,
-    // image,
+    logo, 
     condition_paiement,
     delais_reglement,
     email,
@@ -25,12 +25,7 @@ function Modal() {
     nif,
     stat,
   } = fournisseur
-  const onChange = (e, nameSelect = "") => {
-    if (e.label) {
-      console.log("event : ", e);
-      setFournisseur((prevState) => ({ ...prevState, [nameSelect]: e }));
-      return;
-    }
+  const onChange = (e) => { 
     if (e.target.files) {
       setPreview(URL.createObjectURL(e.target.files[0]))
       setFournisseur((prevState) => ({
@@ -40,17 +35,68 @@ function Modal() {
       return;
     }
     const { name, value } = e.target;
-    setFournisseur((prevState) => ({ ...prevState, [name]: value }));
+    console.log(e.target);
+    setFournisseur( { ...fournisseur, [name]: value } );
   };
-  const handleClickInput = () => {
+  const getAll = () => {
+    setIsOb(false)
+    setFournisseur(initialize)
+    closeRef.current.click();
+    getData('fournisseur', setList)
+  };
+  const handleClickInput = () => { 
+      setIsOb(false)
     inputRef.current.click();
   };
-  const add = () => {
-    closeRef.current.click();
+  const add = () => {  
+    if (!nom_fournisseur || !contact_fournisseur|| !contact_secretaire|| !compte_PCG|| !condition_paiement|| !delais_reglement|| !email|| !adresse|| !nif|| !stat) {
+      return
+    }
+    let formData = new FormData()
+    formData.append('file', logo)
+    formData.append('data', JSON.stringify({
+      nom_fournisseur,
+      contact_fournisseur,
+      contact_secretaire,
+      compte_PCG,
+      logo, 
+      condition_paiement,
+      delais_reglement,
+      email,
+      adresse,
+      nif,
+      stat,
+    }))
+    addData('fournisseur', formData, getAll, true)
   };
-  const update = () => {
-    closeRef.current.click();
+  const update = () => { 
+    if (!nom_fournisseur || !contact_fournisseur|| !contact_secretaire|| !compte_PCG|| !condition_paiement|| !delais_reglement|| !email|| !adresse|| !nif|| !stat) {
+      return
+    }
+    let formData = new FormData()
+    formData.append('file', logo)
+    formData.append('data', JSON.stringify({
+      nom_fournisseur,
+      contact_fournisseur,
+      contact_secretaire,
+      compte_PCG,
+      logo, 
+      condition_paiement,
+      delais_reglement,
+      email,
+      adresse,
+      nif,
+      stat,
+    }))
+    updateData('fournisseur', fournisseurSelected.id, formData, getAll, true)
   };
+  useEffect(() => { 
+       setFournisseur(fournisseurSelected) 
+  },[fournisseurSelected] )
+  useEffect(() => { 
+      if(isAdd.status)
+      setFournisseur(initialize)  
+  },[isAdd] )
   return (
     <div
       className="modal fade"
@@ -64,25 +110,27 @@ function Modal() {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">
-              {isAdd ? "Ajouter" : "Modifier"} un utilsateur
+              {isAdd.status ? "Ajouter" : "Modifier"} un utilsateur
             </h5>
             <button
               ref={closeRef}
               type="button"
               className="close"
               data-dismiss="modal"
-              onClick={() => {}}
+              onClick={() => {
+                setIsOb(false)
+              }}
             >
               <span>×</span>
             </button>
           </div>
           <div className="modal-body">
-            <div className="row"> 
+            <div className="row text-center"> 
               <img
                   style={{ width: "auto", height: "15vh", borderRadius: "2%" }}
                   src={preview ? preview : "images/profile/1.jpg"}
                   alt="Image"
-                  className="img-fluid shadow-sm"
+                  className="rounded mx-auto d-block shadow-sm"
                   data-toggle="tooltip"
                   data-placement="bottom"
                   title="Cliqué ici pour changer l'image"
@@ -96,59 +144,54 @@ function Modal() {
                 ref={inputRef}
                 onChange={onChange}
               />
-            </div>
-            <div className="row">
-              <InputForm name="nom_fournisseur" val={nom_fournisseur} onchange={onChange} obligatory={isOb?"active":""}>Nom fournisseur</InputForm>
-            </div>
+            </div>  
+              <InputForm name="nom_fournisseur" val={nom_fournisseur} onChange={onChange} obligatory={isOb?"active":""}>Nom fournisseur</InputForm>
             <div className="row">
               <div className="col-6">
-              <InputForm name="contact_fournisseur" val={contact_fournisseur} onchange={onChange} obligatory={isOb?"active":""}>Contact fournisseur</InputForm>
+              <InputForm name="contact_fournisseur" val={contact_fournisseur} onChange={onChange} obligatory={isOb?"active":""}>Contact fournisseur</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="contact_secretaire" val={contact_secretaire} onchange={onChange} obligatory={isOb?"active":""}>Contact secretaire</InputForm>
+              <InputForm name="contact_secretaire" val={contact_secretaire} onChange={onChange} obligatory={isOb?"active":""}>Contact secretaire</InputForm>
               </div>
             </div>
-            <div className="row">
-              <InputForm name="compte_PCG" val={compte_PCG} onchange={onChange} obligatory={isOb?"active":""}>compte Plan Comptable Général</InputForm>
-            </div>
-            <div className="row">
-              <InputForm name="delais_reglement" val={delais_reglement} onchange={onChange} obligatory={isOb?"active":""}>Délais de reèglement</InputForm>
-            </div>
+              <InputForm name="compte_PCG" val={compte_PCG} onChange={onChange} obligatory={isOb?"active":""}>Compte Plan Comptable Général</InputForm>
+              <InputForm name="delais_reglement" val={delais_reglement} onChange={onChange} obligatory={isOb?"active":""}>Délais de reèglement</InputForm>
             <div className="row">
               <div className="col-6">
-              <InputForm email name="email" val={email} onchange={onChange} obligatory={isOb?"active":""}>Email</InputForm>
+              <InputForm email name="email" val={email} onChange={onChange} obligatory={isOb?"active":""}>Email</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="adresse" val={adresse} onchange={onChange} obligatory={isOb?"active":""}>Adresse</InputForm>
+              <InputForm name="adresse" val={adresse} onChange={onChange} obligatory={isOb?"active":""}>Adresse</InputForm>
               </div>
             </div>
             <div className="row">
               <div className="col-6">
-              <InputForm name="nif" val={nif} onchange={onChange} obligatory={isOb?"active":""}>Nif</InputForm>
+              <InputForm name="nif" val={nif} onChange={onChange} obligatory={isOb?"active":""}>Nif</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="stat" val={stat} onchange={onChange} obligatory={isOb?"active":""}>Status</InputForm>
+              <InputForm name="stat" val={stat} onChange={onChange} obligatory={isOb?"active":""}>Status</InputForm>
               </div>
             </div>
-            <div className="row">
-              <InputForm textarea row="3" name="condition_paiement" val={condition_paiement} onchange={onChange} obligatory={isOb?"active":""}>Condition de paiement</InputForm>
-            </div>
+              <InputForm textarea rows="3" name="condition_paiement" val={condition_paiement} onChange={onChange} obligatory={isOb?"active":""}>Condition de paiement</InputForm>
           </div>
           <div className="modal-footer">
             <button
               type="button"
               className="btn btn-danger light"
               data-dismiss="modal"
-              onClick={() => {}}
+              onClick={() => {
+                setIsOb(false)
+                setFournisseur(initialize)
+              }}
             >
               Annuler
             </button>
             <button
               type="button"
-              className="btn btn-primary"
-              onClick={() =>  {isAdd ? add() : update()}}
+              className="btn btn-primary" 
+              onClick={() =>  { setIsOb(true);(isAdd.status ? add() : update())}}
             >
-              {isAdd ? "Ajouter" : "Modifier"}
+              {isAdd.status ? "Ajouter" : "Modifier"}
             </button>
           </div>
         </div>

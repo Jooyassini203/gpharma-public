@@ -214,7 +214,7 @@ function Modal() {
                 style={{ width: "auto", height: "15vh", borderRadius: "2%" }}
                 src={preview ? preview : "images/profile/1.jpg"}
                 alt="Image"
-                className="img-fluid shadow-sm"
+                className="rounded mx-auto d-block shadow-sm"
                 data-toggle="tooltip"
                 data-placement="bottom"
                 title="Cliqué ici pour changer l'image"

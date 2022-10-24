@@ -4,6 +4,7 @@ import FouterNav from "../../nav/FooterNav";
 import Table from "./Table";
 import Modal from "./Modal";
 import View from "./View";
+import Activity from "./Activity";
 
 function Founrisseur() { 
   return (
@@ -16,6 +17,7 @@ function Founrisseur() {
         <Table />
         <Modal/>
         <View/>
+        <Activity/>
       </div>
       <FouterNav />
     </>

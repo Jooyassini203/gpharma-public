@@ -9,7 +9,7 @@ for (let index = 0; index < 6; index++) {
     condition_paiement: "FACKERS",
     delais_reglement: "FACKERS",
     email: faker.internet.email(),
-    address: faker.address.city(),
+    adresse: faker.address.city(),
     nif: faker.internet.password(),
     stat: faker.internet.password(),
     sigle: faker.name.firstName(),

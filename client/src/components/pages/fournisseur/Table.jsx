@@ -1,8 +1,8 @@
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
-import { ButtonTable, confirmDelete, deleteData, getData } from "../../../utils/utils";
+import { ButtonTable, confirmDelete, deleteData, getData, getUrl } from "../../../utils/utils";
 import { isAddState, listFournisseur, fournisseurSelect } from "../../../atoms/fournisseur";
 
 function Table() {
@@ -16,8 +16,8 @@ function Table() {
           style={{ height: "5vh", verticalAlign: "middle" }}
           className="img-fluid"
           styles={{ borderRadius: "5%" }}
-          src={row.logo ? row.logo : `images/users/1.jpg`}
-          alt={`image de ${row.nom_utilisateur}`}
+          src={row.logo ? getUrl("images/fournisseur", row.logo) : `images/users/1.jpg`}
+          alt={`image de ${row.nom_fournisseur}`}
         />
       ),
       sortable: true,
@@ -71,10 +71,10 @@ function Table() {
               importance="warning"
               icon={faEdit}
               data-toggle="modal"
-              data-target="#modalUtilisateur"
+              data-target="#modalFournisseur"
               handleClick={() => {
-                setIsAdd(false)
-                getData("fournisseur", setFournisseur, row.id);
+                setIsAdd({status:false})
+                getData("fournisseur", setFournisseur, row.id); 
               }}
             />
             <ButtonTable
@@ -107,10 +107,17 @@ function Table() {
         columns={columns}
         actions={
           <div className="btn-group float-right">
-            <button className="btn btn-primary btn-sm mr-3" onClick={setIsAdd(true)}>
+            <button 
+              className="btn btn-primary btn-sm mr-3" 
+              data-toggle="modal"
+              data-target="#modalFournisseur"
+              onClick={()=>setIsAdd({status:true})}
+              >
               Ajout d'un founrisseur
             </button>
-            <button className="btn btn-outline-primary btn-sm">
+            <button className="btn btn-outline-primary btn-sm"
+              data-toggle="modal"
+              data-target="#modalActivityFournisseur">
               <i className="fa fa-list-alt mr-3"></i>Activités
             </button>
           </div>

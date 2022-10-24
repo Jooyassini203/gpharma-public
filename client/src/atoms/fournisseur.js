@@ -1,8 +1,8 @@
-import { atom } from "recoil";
+import { atom, RecoilState } from "recoil";
 
 export const isAddState = atom({
   key: "is-add-fournisseur",
-  default: true,
+  default: { status: true },
 });
 
 export const listFournisseur = atom({
@@ -11,8 +11,8 @@ export const listFournisseur = atom({
 });
 
 export const fournisseurSelect = atom({
-  key: "list-fournisseur",
-  default: null,
+  key: "select-fournisseur",
+  default: {},
 });
 
 export const initialize = {
@@ -21,7 +21,6 @@ export const initialize = {
   contact_secretaire: "",
   compte_PCG: "",
   logo: "",
-  // image : "",
   condition_paiement: "",
   delais_reglement: "",
   email: "",
