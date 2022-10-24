@@ -11,8 +11,8 @@ export const getDateTime = (name = "") => {
 };
 
 export const getDateNow = (name = "") => {
-  const date = new Date();//2022-10-22 17:41:30
-  let dateString  =  `${name}${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  const date = new Date(); //2022-10-22 17:41:30
+  let dateString = `${name}${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   console.log("dateString : ", dateString);
   return dateString;
 };

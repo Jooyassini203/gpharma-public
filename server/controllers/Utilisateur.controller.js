@@ -143,7 +143,7 @@ const changePwd = async (req, res) => {
     await user.save();
     res.status(201).send({ message: "Mot de passe mise à jour!" });
   } catch (error) {
-    res.status(422).send({ message: error.message });
+    // res.status(422).send({ message: error.message });
     console.log(error.message);
   }
 };

@@ -96,7 +96,10 @@ export const updateData = (
       );
       if (responseUp) {
         toast.success(responseUp.data.message);
-        if (callBack) callBack();
+        console.log("callback", callBack);
+        if (callBack) {
+          callBack();
+        }
       }
     } catch (error) {
       toast.error(JSON.parse(error.response.request.response).message);
@@ -279,7 +282,7 @@ export const changeValJSON = (newData, myJson) => {
   });
 };
 
-export const getRule = (rule) => { 
+export const getRule = (rule) => {
   let text = "Administrateur";
   if (rule === "CAISSIER") text = "Caissier";
   else if (rule === "GUICHETIER") text = "Guichetier";

@@ -49,7 +49,8 @@ function RightNav() {
       userConnect.id,
       { last_mot_de_passe, mot_de_passe },
       () => {
-        document.getElementById("close").click();
+        reloadDataUser(setUserConnect)
+        document.getElementById("closePwd").click(); 
       }
     );
   };
@@ -149,7 +150,7 @@ function RightNav() {
                     ref={inputRef}
                     onChange={(e) => {  
                       setImageProfile(e.target.files[0]); 
-                      setPreview(URL.createObjectURL(imageProfile)); 
+                      setPreview(URL.createObjectURL(e.target.files[0])); 
                     }}
                   />
                   <button className={preview?"btn btn-warning btn-sm light":"d-none"} onClick={changeImage}>Valider le changement</button>
@@ -222,7 +223,10 @@ function RightNav() {
         </div>
       </div>
 
-      <div className="modal fade" id="profilModal">
+      <div className="modal fade" id="profilModal"
+      data-backdrop="static"
+      data-keyboard="true"
+      aria-modal="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -283,7 +287,10 @@ function RightNav() {
           </div>
         </div>
       </div>
-      <div className="modal fade" id="profilModalPwd">
+      <div className="modal fade" id="profilModalPwd"
+      data-backdrop="static"
+      data-keyboard="true"
+      aria-modal="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -330,7 +337,7 @@ function RightNav() {
             </div>
             <div className="modal-footer">
               <button
-                id="close"
+                id="closePwd"
                 type="button"
                 className="btn btn-danger light"
                 data-dismiss="modal"
