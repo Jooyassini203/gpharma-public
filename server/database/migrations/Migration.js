@@ -36,6 +36,7 @@ import voieListe from "../seeders/Voie.seeder.js";
 
 import utilisateurListe from "../factories/Utilisateur.factorie.js";
 import fournisseurListe from "../factories/Fournisseur.factorie.js";
+import produitListe from "../factories/Produit.factorie.js";
 
 // Association
 Produit.belongsToMany(Ajustement, {
@@ -421,6 +422,11 @@ const Migration = async () => {
         await Unite.bulkCreate(uniteListe)
           .then(() => console.log(" ------> Table << Unite >> migrée!"))
           .catch(() => console.log(" ------> Table << Unite >> NON migrée!!!"));
+        await Produit.bulkCreate(produitListe)
+          .then(() => console.log(" ------> Table << Produit >> migrée!"))
+          .catch(() =>
+            console.log(" ------> Table << Produit >> NON migrée!!!")
+          );
       }
     })
     .catch(() => console.log(" \n\n\n\n ERROR \n\n\n "));

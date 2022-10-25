@@ -8,6 +8,7 @@ import Fournisseur from "../pages/fournisseur";
 import Ravitaillement from "../pages/ravitaillement";
 import Parametre from "../pages/parametre";
 import Middleware from "../middlewares";
+import Produit from "../pages/produit";
 
 function MyRoute() {  
   const getLogin = () => {
@@ -20,7 +21,9 @@ function MyRoute() {
     <> 
       <Routes>
         <Route exact path="/connexion" element={getLogin()} /> 
+        
         <Route exact path="/" element={Middleware(Accueil)} />
+        <Route exact path="/produit" element={Middleware(Produit)} />
         <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
         <Route exact path="/fournisseur" element={Middleware(Fournisseur)} />
         <Route exact path="/utilisateur" element={Middleware(Utilisateur)} />

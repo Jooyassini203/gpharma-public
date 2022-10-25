@@ -16,6 +16,7 @@ import EmplacementRouter from "./routes/Emplacement.routes.js";
 import FournisseurRouter from "./routes/Fournisseur.routes.js";
 import LoginRouter from "./routes/Login.routes.js";
 import SocieteRouter from "./routes/Societe.routes.js";
+import ProduitRouter from "./routes/Produit.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -39,6 +40,7 @@ app.use(UniteRouter);
 app.use(ParametreRouter);
 app.use(FournisseurRouter);
 app.use(SocieteRouter);
+app.use(ProduitRouter);
 
 Migration();
 

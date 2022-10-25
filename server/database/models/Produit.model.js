@@ -5,12 +5,12 @@ const Produit = db.define(
   "produit",
   {
     code_lot_produit: {
-      type: DataTypes.CHAR(100),
+      type: DataTypes.CHAR(255),
       allowNull: false,
       unique: true,
     },
     nom_produit: {
-      type: DataTypes.CHAR(255),
+      type: DataTypes.TEXT,
       allowNull: false,
       unique: true,
     },
