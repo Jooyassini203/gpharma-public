@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { addData, getData, InputForm, updateData } from "../../../utils/utils";
+import { addData, getData, getUrl, InputForm, updateData } from "../../../utils/utils";
 import { isAddState, listFournisseur, fournisseurSelect, initialize } from "../../../atoms/fournisseur";
 
 function Modal() {
@@ -24,6 +24,7 @@ function Modal() {
     adresse,
     nif,
     stat,
+    sigle,
   } = fournisseur
   const onChange = (e) => { 
     if (e.target.files) {
@@ -40,6 +41,7 @@ function Modal() {
   };
   const getAll = () => {
     setIsOb(false)
+    setPreview('')
     setFournisseur(initialize)
     closeRef.current.click();
     getData('fournisseur', setList)
@@ -49,7 +51,7 @@ function Modal() {
     inputRef.current.click();
   };
   const add = () => {  
-    if (!nom_fournisseur || !contact_fournisseur|| !contact_secretaire|| !compte_PCG|| !condition_paiement|| !delais_reglement|| !email|| !adresse|| !nif|| !stat) {
+    if (!nom_fournisseur || !contact_fournisseur|| !contact_secretaire|| !compte_PCG|| !condition_paiement|| !delais_reglement|| !email|| !adresse|| !nif|| !stat || !sigle) {
       return
     }
     let formData = new FormData()
@@ -66,11 +68,12 @@ function Modal() {
       adresse,
       nif,
       stat,
+      sigle,
     }))
     addData('fournisseur', formData, getAll, true)
   };
   const update = () => { 
-    if (!nom_fournisseur || !contact_fournisseur|| !contact_secretaire|| !compte_PCG|| !condition_paiement|| !delais_reglement|| !email|| !adresse|| !nif|| !stat) {
+    if (!nom_fournisseur || !contact_fournisseur|| !contact_secretaire|| !compte_PCG|| !condition_paiement|| !delais_reglement|| !email|| !adresse|| !nif|| !stat || !sigle) {
       return
     }
     let formData = new FormData()
@@ -87,15 +90,22 @@ function Modal() {
       adresse,
       nif,
       stat,
+      sigle,
     }))
     updateData('fournisseur', fournisseurSelected.id, formData, getAll, true)
   };
   useEffect(() => { 
-       setFournisseur(fournisseurSelected) 
+    setFournisseur(fournisseurSelected) 
+    if (fournisseurSelected.logo)
+      setPreview(getUrl("images/fournisseur", fournisseurSelected.logo))
+    else
+      setPreview('')
   },[fournisseurSelected] )
   useEffect(() => { 
-      if(isAdd.status)
-      setFournisseur(initialize)  
+      if(isAdd.status){
+        setPreview('')
+        setFournisseur(initialize)  
+      }
   },[isAdd] )
   return (
     <div
@@ -155,7 +165,14 @@ function Modal() {
               </div>
             </div>
               <InputForm name="compte_PCG" val={compte_PCG} onChange={onChange} obligatory={isOb?"active":""}>Compte Plan Comptable Général</InputForm>
-              <InputForm name="delais_reglement" val={delais_reglement} onChange={onChange} obligatory={isOb?"active":""}>Délais de reèglement</InputForm>
+            <div className="row">
+              <div className="col-6">
+              <InputForm number min="0" name="delais_reglement" val={delais_reglement} onChange={onChange} postIcon={{"text":"En jours"}} obligatory={isOb?"active":""}>Delais règlement</InputForm>
+              </div>
+              <div className="col-6">
+              <InputForm name="sigle" val={sigle} onChange={onChange} obligatory={isOb?"active":""} maxLength="5">Sigle</InputForm>
+              </div>
+            </div>
             <div className="row">
               <div className="col-6">
               <InputForm email name="email" val={email} onChange={onChange} obligatory={isOb?"active":""}>Email</InputForm>
@@ -169,7 +186,7 @@ function Modal() {
               <InputForm name="nif" val={nif} onChange={onChange} obligatory={isOb?"active":""}>Nif</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="stat" val={stat} onChange={onChange} obligatory={isOb?"active":""}>Status</InputForm>
+              <InputForm name="stat" val={stat} onChange={onChange} obligatory={isOb?"active":""}>Stat</InputForm>
               </div>
             </div>
               <InputForm textarea rows="3" name="condition_paiement" val={condition_paiement} onChange={onChange} obligatory={isOb?"active":""}>Condition de paiement</InputForm>
@@ -181,6 +198,7 @@ function Modal() {
               data-dismiss="modal"
               onClick={() => {
                 setIsOb(false)
+                setPreview('')
                 setFournisseur(initialize)
               }}
             >

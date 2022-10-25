@@ -27,4 +27,5 @@ export const initialize = {
   adresse: "",
   nif: "",
   stat: "",
+  sigle: "",
 };

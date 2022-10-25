@@ -12,10 +12,11 @@ import {
 import { faCheck, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { table_name } from "../../../atoms/parametre";
+import { countArr, table_name } from "../../../atoms/parametre";
 
 function Table() {
   const [tb_name, setTb_name] = useRecoilState(table_name);
+  const [countArray, setCountArray] = useRecoilState(countArr);
   const [new_name, setNew_name] = useState("");
   const [edit_item, setEdit_item] = useState({});
   const [listBefore, setListBefore] = useState([]);
@@ -23,6 +24,7 @@ function Table() {
   let style = [];
   useEffect(() => {
     setEdit_item({});
+    // getData("parametre/count", setCountArray);
     getData(tb_name, setListBefore);
   }, [tb_name]);
   useEffect(() => {
@@ -53,6 +55,7 @@ function Table() {
       () => {
         setEdit_item({});
         getData(tb_name, setListBefore);
+        getData("parametre/count", setCountArray);
       }
     );
   };
@@ -126,6 +129,7 @@ function Table() {
                   "Voulez-vous vraimment supprimé cet " + tb_name + "?",
                   () => {
                     deleteData(tb_name, row.id, () => {
+                      getData("parametre/count", setCountArray);
                       getData(tb_name, setListBefore);
                     });
                   }
@@ -146,6 +150,7 @@ function Table() {
     if (new_name != "") {
       addData(tb_name, JSON.parse(`{"nom_${tb_name}": "${new_name}"}`), () => {
         setNew_name("");
+        getData("parametre/count", setCountArray);
         getData(tb_name, setListBefore);
       });
     }

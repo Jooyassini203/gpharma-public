@@ -10,8 +10,7 @@ export default function MyDataTable({ data, columns, actions, title, filterClass
   // );
   const filteredItems = data.filter(
     (item) =>
-      JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !==
-      -1
+      JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !== -1
   );
 
   const subHeaderComponent = useMemo(() => {

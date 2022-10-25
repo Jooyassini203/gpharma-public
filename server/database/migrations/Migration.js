@@ -31,6 +31,7 @@ import fabricantListe from "../seeders/Fabricant.seeder.js";
 import familleListe from "../seeders/Famille.seeder.js";
 import formeListe from "../seeders/Forme.seeder.js";
 import uniteListe from "../seeders/Unite.seeder.js";
+import mode_expeditionListe from "../seeders/Mode_expedition.seeder.js";
 import voieListe from "../seeders/Voie.seeder.js";
 
 import utilisateurListe from "../factories/Utilisateur.factorie.js";
@@ -409,6 +410,13 @@ const Migration = async () => {
           .then(() => console.log(" ------> Table << Fournisseur >> migrée!"))
           .catch(() =>
             console.log(" ------> Table << Fournisseur >> NON migrée!!!")
+          );
+        await Mode_expedition.bulkCreate(mode_expeditionListe)
+          .then(() =>
+            console.log(" ------> Table << Mode_expedition >> migrée!")
+          )
+          .catch(() =>
+            console.log(" ------> Table << Mode_expedition >> NON migrée!!!")
           );
         await Unite.bulkCreate(uniteListe)
           .then(() => console.log(" ------> Table << Unite >> migrée!"))

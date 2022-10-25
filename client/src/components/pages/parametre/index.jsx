@@ -6,7 +6,7 @@ import FooterNav from "../../nav/FooterNav";
 import Table from "./Table";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { table_name } from "../../../atoms/parametre";
+import { countArr, table_name } from "../../../atoms/parametre";
 import {
   faBox,
   faBuilding,
@@ -68,7 +68,7 @@ const ItemParametre = ({ array, table, icon, children }) => {
 };
 
 function Parametre() {
-  const [countArray, setCountArray] = useState([]);
+  const [countArray, setCountArray] = useRecoilState(countArr);
 
   useEffect(() => {
     getData("parametre/count", setCountArray);

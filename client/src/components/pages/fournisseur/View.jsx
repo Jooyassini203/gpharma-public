@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { fournisseurSelect } from "../../../atoms/fournisseur";
-import { getData } from "../../../utils/utils";
+import { getData, getUrl } from "../../../utils/utils";
 
 function View({ id }) {
   const [fournisseur, setFournisseur] = useRecoilState(fournisseurSelect);
@@ -37,7 +37,7 @@ function View({ id }) {
                 <div className="col-5">
                   <div className="">
                     <img
-                      src={"images/profile/1.jpg"}
+                      src={fournisseur.logo ? getUrl("images/fournisseur", fournisseur.logo) : `images/users/1.jpg`}
                       width={"40vh"}
                       alt="Image"
                       className="img-fluid mt-2 mb-4 w-100"
@@ -64,46 +64,62 @@ function View({ id }) {
                       </span>
                       {fournisseur.nom_fournisseur}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">
                         Contact fournisseur :{" "}
                       </span>
                       {fournisseur.contact_fournisseur}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">
                         Contact secrétaire :{" "}
                       </span>
                       {fournisseur.contact_secretaire}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">
                         Plan comptable général :{" "}
                       </span>
                       {fournisseur.compte__PCG}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">Email : </span>
                       {fournisseur.email}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">Adresse : </span>
                       {fournisseur.adresse}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">Nif : </span>
                       {fournisseur.nif}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">Stat : </span>
                       {fournisseur.stat}
                     </p>
+                  </div>
+                  <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">
                         Délais de paiement :{" "}
                       </span>
                       {fournisseur.delais_paiement}
-                    </p>
+                    </p> 
                   </div>
                 </div>
               </div>

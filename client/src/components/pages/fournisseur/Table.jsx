@@ -7,6 +7,7 @@ import { isAddState, listFournisseur, fournisseurSelect } from "../../../atoms/f
 
 function Table() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
+  const [list, setList] = useRecoilState(listFournisseur);
   const [fournisseur, setFournisseur] = useRecoilState(fournisseurSelect);
   const columns = [
     {
@@ -84,7 +85,9 @@ function Table() {
                 confirmDelete(
                   "Voulez-vous vraimment supprimé cet fournisseur ?",
                   () => {
-                    deleteData('fournisseur', row.id, setList)
+                    deleteData('fournisseur', row.id, ()=>{
+                      getData('fournisseur', setList)
+                    })
                   }
                 );
               }}
@@ -94,7 +97,6 @@ function Table() {
       },
     },
   ];
-  const [list, setList] = useRecoilState(listFournisseur);
   useEffect(() => {
     getData("fournisseur", setList);
   }, []);

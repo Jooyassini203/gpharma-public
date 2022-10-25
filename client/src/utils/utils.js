@@ -120,10 +120,9 @@ export const updateData = (
 export const deleteData = (tableName, id, callBack) => {
   const del = async () => {
     try {
-      const responseUp = await axios.delete(urlDelete(tableName, id));
-      if (responseUp) {
-        toast.success(responseUp.data.message);
-        console.log(callBack);
+      const response = await axios.delete(urlDelete(tableName, id));
+      if (response) {
+        toast.success(response.data.message);
         callBack();
       }
     } catch (error) {
@@ -180,6 +179,8 @@ export const InputForm = ({
   textarea = null,
   classLabel = "",
   classSpan = "",
+  preIcon = null,
+  postIcon = null,
   ...props
 }) => {
   let type = "text";
@@ -228,17 +229,36 @@ export const InputForm = ({
       <label className={classLabel + " mb-1"} htmlFor={getId(children)}>
         <strong>{children}</strong>
       </label>
-      <input
-        name={name}
-        aria-autocomplete="none"
-        id={getId(children)}
-        type={type}
-        value={val}
-        className={getClass(val, obligatory)}
-        onChange={onChange}
-        {...props}
-      />
-      {/*"Entre ton " + children.toLowerCase()*/}
+      <div className="input-group transparent-append">
+        {preIcon ? (
+          <div className="input-group-prepend">
+            <span className="input-group-text">
+              {preIcon.icon ? <i className={preIcon.icon} /> : preIcon.text}
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
+        <input
+          name={name}
+          aria-autocomplete="none"
+          id={getId(children)}
+          type={type}
+          value={val}
+          className={getClass(val, obligatory)}
+          onChange={onChange}
+          {...props}
+        />
+        {postIcon ? (
+          <div className="input-group-append show-pass">
+            <span className="input-group-text">
+              {postIcon.icon ? <i className={postIcon.icon} /> : postIcon.text}
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       <span
         className={classSpan ? classSpan : "text-danger"}
         style={{ fontSize: "12px", marginTop: "0.5vh" }}

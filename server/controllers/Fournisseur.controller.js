@@ -1,4 +1,5 @@
 import Fournisseur from "../database/models/Fournisseur.model.js";
+import fs from "fs";
 import { uploadFile } from "../utils/utils.js";
 const getAll = async (req, res) => {
   try {
@@ -31,7 +32,17 @@ const createOne = async (req, res) => {
   };
   if (!req.files) {
     insertDB();
-  } else uploadFile(req, res, "FRNS_", "images/fournisseur", data, insertDB);
+  } else
+    uploadFile(
+      req,
+      res,
+      "FRNS_",
+      "images/fournisseur",
+      data,
+      insertDB,
+      "",
+      "logo"
+    );
 };
 const updateOne = async (req, res) => {
   console.log("files", req.files);
@@ -57,7 +68,8 @@ const updateOne = async (req, res) => {
       "images/fournisseur",
       itemData,
       null,
-      item.logo ? item.logo : ""
+      item.logo ? item.logo : "",
+      "logo"
     );
   }
   try {
@@ -70,11 +82,30 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  const item = Fournisseur.findOne({ where: { id: req.params.id } });
+  console.log("\n\n\nDELETE FOURNISSEUR", req.params.id, "\n\n\n");
+  const item = await Fournisseur.findOne({ where: { id: req.params.id } });
   if (!item)
     return res.status(404).json({ message: "Fournisseur introvable!" });
+
+  console.log("\n\n\nDELETE item.logo", item.logo, "\n\n\n");
+  if (item.logo) {
+    const filepath = `./public/images/fournisseur/${item.logo}`;
+    // Check if file exist
+    fs.access(filepath, fs.F_OK, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("\n\n\nDELETE LOGO", filepath, "\n\n\n");
+      fs.unlinkSync(filepath);
+      //file exists
+    });
+  }
+
+  console.log("\n\n\nBEFORE DELETE", item, "\n\n\n");
   try {
     await Fournisseur.destroy({ where: { id: req.params.id } });
+    console.log("\n\nDELETE", "Fournisseur supprimé avec succès!", "\n\n\n");
     return res
       .status(200)
       .json({ message: "Fournisseur supprimé avec succès!" });
