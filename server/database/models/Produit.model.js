@@ -27,6 +27,10 @@ const Produit = db.define(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
+    prix_vente: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
+    },
     stock_min: {
       type: DataTypes.DOUBLE,
       allowNull: false,

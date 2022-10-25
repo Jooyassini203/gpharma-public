@@ -14,7 +14,7 @@ const Fabricant = db.define(
       defaultValue: "1",
     },
   },
-  { freezeTableName: true }
+  { paranoid: true, freezeTableName: true }
 );
 
 export default Fabricant;

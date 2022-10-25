@@ -10,6 +10,7 @@ for (let index = 0; index < 6; index++) {
     classification_produit: faker.commerce.productDescription(),
     description: faker.commerce.productDescription(),
     // image: faker.image.imageUrl(),
+    prix_vente: faker.commerce.price(),
     presentation_quantite: getNumberRadom(1, 20),
     stock_min: getNumberRadom(5, 20),
     stock_max: getNumberRadom(200, 500),

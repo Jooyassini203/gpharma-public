@@ -1,6 +1,6 @@
 import React from "react";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { listProduit } from "../../../atoms/produit";
+import { listProduit, produitSelect } from "../../../atoms/produit";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   ButtonTable,
@@ -8,11 +8,15 @@ import {
   deleteData,
   getData,
   getUrl,
+  updateData,
 } from "../../../utils/utils";
 import { useRecoilState } from "recoil";
+import { useState } from "react";
 
 function Table() {
-  const [list, setList] = useRecoilState(listProduit);
+  const [list, setList] = useRecoilState(listProduit); 
+  const [produit, setProduit] = useRecoilState(produitSelect);
+
   const columns = [
     {
       name: "",
@@ -30,29 +34,26 @@ function Table() {
         />
       ),
       sortable: true,
-      width: "8%",
+      width: "15%",
     },
     {
       name: "Produit",
       selector: (row) => (
-        <div className="d-flex align-items-center mr-auto ">
-          {/* <span className="num mr-sm-4 mr-3">#{row.code_lot_produit}</span>
-          <img src="images/users/3.jpg" className="img-1 mr-sm-4 mr-3" alt={`Image de ${row.designation}`} /> */}
-          <div className="w-100">
-            <h4 className="mb-sm-2 mb-1 text-black">{row.nom_produit}</h4>
-            <p className="fs-14 text-primary font-w600">
-              #{row.code_lot_produit}
-            </p>
-            <p className="fs-14 text-secondary font-w600 text-justify">
+        <div className=" align-items-center  ">
+          <h4 className="text-black">{row.nom_produit}</h4>
+          <p className="fs-14 text-primary font-w600">
+            #{row.code_lot_produit}
+          </p>
+          <span className="fs-14 text-warning font-w600">#{"Etalé"}</span>
+          {/* <span className="fs-14 text-secondary font-w600 text-justify">
               {row.classification_produit}
-            </p>
-          </div>
+            </span>  */}
         </div>
       ),
       sortable: true,
-      width: "20%",
+      width: "222px",
     },
-    {
+    /*   {
       name: "Détails",
       selector: (row) => (
         <div className="d-flex align-items-center mr-auto pr-2">
@@ -81,10 +82,10 @@ function Table() {
           </div>
         </div>
       ),
-      width: "10%",
-    },
+      width: "18%",
+    }, */
     {
-      name: "Unité",
+      name: "Unités",
       selector: (row) => (
         <div className="d-flex align-items-center mr-auto pr-2">
           <div>
@@ -110,7 +111,7 @@ function Table() {
               .
             </p>
             <p className="mb-sm-2 mb-1 text-black">
-              Unité de presentation :{" "}
+              Presentation :{" "}
               <span className="fs-14 text-primary font-w600">
                 {row.nom_presentation}
               </span>
@@ -119,31 +120,47 @@ function Table() {
           </div>
         </div>
       ),
-      width: "10%",
+      width: "25%",
     },
     {
-      name: "Status",
+      name: "Statut",
       selector: (row) => (
-        <span
-          style={{ cursor: "pointer" }}
-          className={
-            row.status == "1"
-              ? "badge light badge-success"
-              : "badge light badge-danger"
-          }
-        >
-          <i
+        <div className="text-center">
+          <span
+            style={{ cursor: "pointer" }}
             className={
               row.status == "1"
-                ? "fa fa-circle text-success mr-1"
-                : "fa fa-circle text-danger mr-1"
+                ? "badge light badge-success"
+                : "badge light badge-danger"
             }
-          />
-          {row.status == "1" ? "Activé" : "Désactivé"}
-        </span>
+            onClick={() => {
+              const getStatus = (status) => {
+                if (status == "1") return "0";
+                else if (status == "0") return "1";
+              };
+              updateData(
+                "produit/status",
+                row.id,
+                { status: getStatus(row.status) },
+                () => {
+                  getData("produit", setList);
+                }
+              );
+            }}
+          >
+            <i
+              className={
+                row.status == "1"
+                  ? "fa fa-circle text-success mr-1"
+                  : "fa fa-circle text-danger mr-1"
+              }
+            />
+            {row.status == "1" ? "Activé" : "Désactivé"}
+          </span>
+        </div>
       ),
       sortable: true,
-      width: "10%",
+      width: "15%",
     },
     {
       name: "Action",
@@ -155,9 +172,9 @@ function Table() {
               importance="secondary"
               icon={faEye}
               data-toggle="modal"
-              data-target="#modalViewFournisseur"
+              data-target="#modalViewProduit"
               handleClick={() => {
-                //   getData("fournisseur", setFournisseur, row.id);
+                getData("produit", setProduit, row.id);
               }}
             />
             <ButtonTable
@@ -167,7 +184,7 @@ function Table() {
               data-target="#modalFournisseur"
               handleClick={() => {
                 // setIsAdd({ status: false });
-                //   getData("fournisseur", setFournisseur, row.id);
+                getData("produit", setProduit, row.id);
               }}
             />
             <ButtonTable

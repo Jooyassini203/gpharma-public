@@ -9,3 +9,8 @@ export const listProduit = atom({
   key: "list-produit",
   default: [],
 });
+
+export const produitSelect = atom({
+  key: "produitSelect-produit",
+  default: {},
+});

@@ -44,7 +44,7 @@ export default function MyDataTable({ data, columns, actions, title, filterClass
       subHeader
       subHeaderComponent={subHeaderComponent}
       fixedHeader
-      fixedHeaderScrollHeight="80vh"
+      fixedHeaderScrollHeight="800vh"
       highlightOnHover
       actions={actions}
     />
