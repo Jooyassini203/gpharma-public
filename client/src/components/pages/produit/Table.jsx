@@ -174,7 +174,7 @@ function Table() {
               data-toggle="modal"
               data-target="#modalViewProduit"
               handleClick={() => {
-                getData("produit", setProduit, row.id);
+                getData("produit",  (data) => setProduit(data[0]), row.id);
               }}
             />
             <ButtonTable
@@ -184,7 +184,7 @@ function Table() {
               data-target="#modalFournisseur"
               handleClick={() => {
                 // setIsAdd({ status: false });
-                getData("produit", setProduit, row.id);
+                getData("produit", (data) => setProduit(data[0]), row.id);
               }}
             />
             <ButtonTable

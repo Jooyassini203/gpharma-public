@@ -6,9 +6,11 @@ import { getData, getUrl } from "../../../utils/utils";
 
 function View({ id }) {
   const [produit, setProduit] = useRecoilState(produitSelect);
+  useEffect(() => { 
+       console.log("produit", produit)
+  },[produit] )
   return (
-    <>
-      {" "}
+    <> 
       <div
         className="modal fade"
         id="modalViewProduit"
@@ -47,8 +49,12 @@ function View({ id }) {
                         <img
                           className="img-fluid"
                           src="images/product/1.jpg"
-                          alt
+                          alt={"Image du produit " + produit.nom_produit}
                         />
+                        
+                        <p className="text-content mt-3">
+                          {produit.description}
+                        </p>
                         
                         <p className="text-content mt-3">
                           {produit.classification_produit}
@@ -82,8 +88,7 @@ function View({ id }) {
                           </ul>
                           <span className="review-text">(34 vente(s)) / </span>
                           <a
-                            className="product-review"
-                            href
+                            className="product-review" 
                             data-toggle="modal"
                             data-target="#reviewModal"
                           >
@@ -97,27 +102,27 @@ function View({ id }) {
                         </div>
                         <p>
                           Code lot produit:
-                          <span className="item">
+                          <span className=" ml-2 text-success font-w600">
                             {produit.code_lot_produit}
-                          </span>{" "}
+                          </span> 
                         </p>
                         <p>
                           Dernière date de ravitaillement:
-                          <span className="item">
+                          <span className="ml-2 text-black font-w400">
                             {produit.date_der_ravitaillement}
-                          </span>{" "}
+                          </span> 
                         </p>
                         <p>
                           Etaté :
-                          <span className="item">
-                            Oui{" "}
+                          <span className="ml-2 item">
+                            Oui 
                             <span className="badge badge-success light">
                               15
                             </span>
                           </span>
                         </p>
                         <p>
-                          Paramete produit:&nbsp;&nbsp;
+                          Stock :&nbsp;&nbsp;
                           <span className="badge badge-danger light">
                             Stock min : {produit.stock_min}
                           </span>
@@ -126,7 +131,7 @@ function View({ id }) {
                           </span>
                         </p>
                         <p>
-                          Statut:&nbsp;&nbsp;
+                          Statut :&nbsp;&nbsp;
                           <span
                             className={
                               produit.status == "1"
@@ -150,22 +155,22 @@ function View({ id }) {
                             <h5 className="tex-dark mb-3">Détails</h5>
                             <div className="d-flex align-items-center mr-auto pr-2">
                               <div>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Fabricant{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Fabricant :
                                   <span className="fs-14 text-primary font-w600">
                                     {produit.nom_fabricant}
                                   </span>
                                   ,
                                 </p>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Famille{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Famille :
                                   <span className="fs-14 text-secondary font-w600">
                                     {produit.nom_famille}
                                   </span>
                                   ,
                                 </p>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Forme{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Forme :
                                   <span className="fs-14 text-warning font-w600">
                                     {produit.nom_forme}
                                   </span>
@@ -178,29 +183,29 @@ function View({ id }) {
                             <h5 className="tex-dark mb-3">Unités</h5>
                             <div className="d-flex align-items-center mr-auto pr-2">
                               <div>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Unité d'achat :{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Achat :{" "}
                                   <span className="fs-14 text-primary font-w600">
                                     {produit.nom_achat}
                                   </span>
                                   ,
                                 </p>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Unité de vente :{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Vente :{" "}
                                   <span className="fs-14 text-secondary font-w600">
                                     {produit.nom_vente}
                                   </span>
                                   ,
                                 </p>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Unité de stock :{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Stock :{" "}
                                   <span className="fs-14 text-warning font-w600">
                                     {produit.nom_stock}
                                   </span>
                                   .
                                 </p>
-                                <p className="mb-sm-2 mb-1 text-black">
-                                  Presentation :{" "}
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Présentation :{" "}
                                   <span className="fs-14 text-primary font-w600">
                                     {produit.nom_presentation}
                                   </span>
