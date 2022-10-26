@@ -184,6 +184,7 @@ export const InputForm = ({
   ...props
 }) => {
   let type = "text";
+  let onKeyPress = (e) => {};
   if (text) {
     type = "text";
   } else if (number) {
@@ -194,6 +195,11 @@ export const InputForm = ({
     type = "password";
   } else if (integer) {
     type = "text";
+    onKeyPress = (e) => {
+      if (!/[0-9]/.test(e.key)) {
+        e.preventDefault();
+      }
+    };
   } else if (tel) {
     type = "tel";
   } else if (date) {
@@ -244,6 +250,7 @@ export const InputForm = ({
           aria-autocomplete="none"
           id={getId(children)}
           type={type}
+          onKeyPress={onKeyPress}
           value={val}
           className={getClass(val, obligatory)}
           onChange={onChange}
@@ -445,16 +452,16 @@ export const onChange = (e, setItem, nameSelect = "") => {
     console.log("event : ", e);
     setItem((prevState) => ({ ...prevState, [nameSelect]: e }));
     return;
-  }
-  if (e.target.files) {
+  } else if (e.target.files) {
     setItem((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.files[0],
     }));
     return;
+  } else {
+    const { name, value } = e.target;
+    setItem((prevState) => ({ ...prevState, [name]: value }));
   }
-  const { name, value } = e.target;
-  setItem((prevState) => ({ ...prevState, [name]: value }));
 };
 
 export const getClassByNumber = (nbr) => {
@@ -483,4 +490,26 @@ export const convertToOption = (data, setOptions) => {
   });
   console.log("setOptions ", tempFull);
   setOptions(tempFull);
+};
+
+export const verifObligatory = (data, exception = []) => {
+  let verif = true;
+  Object.entries(data).forEach(([key, value]) => {
+    for (let i = 0; i < exception.length; i++) {
+      if (key !== exception[i]) {
+        if (value) verif = false;
+      }
+    }
+    tempFull.push(temp);
+  });
+};
+
+export const JsonToFormData = (data, file = "") => {
+  let formData = new FormData();
+  if (file) {
+    formData.append("file", data[file]);
+    delete data[file];
+  }
+  formData.append("data", JSON.stringify(data));
+  return formData;
 };
