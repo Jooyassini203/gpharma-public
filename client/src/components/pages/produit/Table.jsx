@@ -141,7 +141,7 @@ function Table() {
               };
               updateData(
                 "produit/status",
-                row.id,
+                row.code_lot_produit,
                 { status: getStatus(row.status) },
                 () => {
                   getData("produit", setList);

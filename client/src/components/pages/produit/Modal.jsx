@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilState } from "recoil";
 import { isAddState, listProduit, produitSelect, initialize } from '../../../atoms/produit';
-import { addData, getData, getUrl, InputForm, updateData, onChange, SelectForm, convertToOption, verifObligatory } from "../../../utils/utils";
+import { addData, getData, getUrl, InputForm, updateData, onChange, SelectForm, convertToOption, verifObligatory, JsonToFormData } from "../../../utils/utils";
 
 function Modal() {
     const [isAdd, setIsAdd] = useRecoilState(isAddState);
@@ -83,6 +83,19 @@ function Modal() {
         if(image)
             setPreview(URL.createObjectURL(image));
     }, [image])
+
+    // -----------------------------------------EN COURS--------------------------------------------------
+
+    React.useEffect(()=>{
+        let qtt_stock = quantite_stock
+        if(presentation_quantite && quantite_stock){
+            if (unite_achat === unite_stock) { 
+                qtt_stock = quantite_stock * presentation_quantite
+                setProduit((prevState) => ({ ...prevState, ["quantite_stock"]: qtt_stock}))
+                setProduit((prevState) => ({ ...prevState, ["quantite_stock"]: qtt_stock}))
+            }
+        }
+    }, [presentation_quantite, quantite_stock, unite_presentation])
       
   return (
     <>
@@ -151,7 +164,10 @@ function Modal() {
                   onChange={(e) => onChange(e, setProduit, "unite_presentation")}
                   options={OptionsUnite}  obligatory={isOb?"active":""} >Unité de présentation</SelectForm>
               </div>
-              <div className="col-5"> 
+              <div className="col-2"> 
+              <InputForm integer postIcon={{"text": "Quantité"}} name="quantite_stock" val={quantite_stock} onChange={(e) => onChange(e, setProduit) } obligatory={isOb?"active":""}>Stock</InputForm>
+              </div>
+              <div className="col-3"> 
               <InputForm integer postIcon={{"text": "Ar"}} name="prix_vente" val={prix_vente} onChange={(e) => onChange(e, setProduit) } obligatory={isOb?"active":""}>Prix de vente</InputForm>
               </div>
             </div> 

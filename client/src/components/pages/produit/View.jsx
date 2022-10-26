@@ -88,6 +88,7 @@ function View({ id }) {
                           </ul>
                           <span className="review-text">(34 vente(s)) / </span>
                           <a
+                            type="button"
                             className="product-review"
                             data-toggle="modal"
                             data-target="#reviewModal"
@@ -168,28 +169,28 @@ function View({ id }) {
                             <div className="d-flex align-items-center mr-auto pr-2">
                               <div>
                                 <p className="mb-sm-2 mb-1 text-dark">
-                                  Fabricant :
+                                  Fabricant :{" "}
                                   <span className="fs-14 text-primary font-w600">
                                     {produit.nom_fabricant}
                                   </span>
                                   ,
                                 </p>
                                 <p className="mb-sm-2 mb-1 text-dark">
-                                  Famille :
+                                  Famille :{" "}
                                   <span className="fs-14 text-secondary font-w600">
                                     {produit.nom_famille}
                                   </span>
                                   ,
                                 </p>
                                 <p className="mb-sm-2 mb-1 text-dark">
-                                  Forme :
+                                  Forme :{" "}
                                   <span className="fs-14 text-warning font-w600">
                                     {produit.nom_forme}
                                   </span>
                                   .
                                 </p>
                                 <p className="mb-sm-2 mb-1 text-dark">
-                                  Quantité de présentation :
+                                  Quantité de présentation :{" "}
                                   <span
                                     className={
                                       "fs-14 text-" +

@@ -17,7 +17,10 @@ const getAll = async (req, res) => {
 const getSpecific = async (req, res) => {
   try {
     const response = await db.query(
-      queryGet + ' AND `produit`.code_lot_produit = "' + req.params.id + '" ',
+      queryGet +
+        ' AND `produit`.code_lot_produit = "' +
+        req.params.code_lot_produit +
+        '" ',
       { type: QueryTypes.SELECT }
     );
     res.json(response);
@@ -85,7 +88,7 @@ const deleteOne = async (req, res) => {
   });
   if (!item) return res.status(404).json({ message: "Produit introvable!" });
   try {
-    await Produit.destroy({ where: { id: req.params.id } });
+    await Produit.destroy({ where: { id: req.params.code_lot_produit } });
     return res.status(200).json({ message: "Produit supprimé avec succès!" });
   } catch (error) {
     console.log(error);
@@ -93,7 +96,9 @@ const deleteOne = async (req, res) => {
 };
 
 const updateStatus = async (req, res) => {
-  const item = await Produit.findOne({ where: { id: req.params.id } });
+  const item = await Produit.findOne({
+    where: { code_lot_produit: req.params.code_lot_produit },
+  });
   if (!item) return res.status(404).json({ message: "Produit introvable!" });
   console.log("\n\n\n\n\nreq.body", req.body);
   try {

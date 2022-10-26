@@ -99,7 +99,6 @@ export const updateData = (
       );
       if (responseUp) {
         toast.success(responseUp.data.message);
-        console.log("callback", callBack);
         if (callBack) {
           callBack();
         }
@@ -500,8 +499,8 @@ export const verifObligatory = (data, exception = []) => {
         if (value) verif = false;
       }
     }
-    tempFull.push(temp);
   });
+  return verif;
 };
 
 export const JsonToFormData = (data, file = "") => {
