@@ -1,6 +1,6 @@
 import React from "react";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { listProduit, produitSelect } from "../../../atoms/produit";
+import { isAddState, listProduit, produitSelect } from "../../../atoms/produit";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   ButtonTable,
@@ -16,6 +16,7 @@ import { useState } from "react";
 function Table() {
   const [list, setList] = useRecoilState(listProduit);
   const [produit, setProduit] = useRecoilState(produitSelect);
+  const [isAdd, setIsAdd] = useRecoilState(isAddState);
 
   const columns = [
     {
@@ -223,7 +224,7 @@ function Table() {
               data-toggle="modal"
               data-target="#modalProduit"
               onClick={() => {
-                /* setIsAdd({ status: true }) */
+                setIsAdd({ status: true }) 
               }}
             >
               <i className="fa fa-plus mr-3" />

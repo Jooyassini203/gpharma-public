@@ -270,14 +270,55 @@ export const InputForm = ({
 };
 
 export const SelectForm = (props) => {
-  const { children, obligatory, val, ...prop } = props;
-  // console.log(children, val);
+  const {
+    preIcon = null,
+    postIcon = null,
+    children,
+    obligatory,
+    val,
+    placeholder = "tse",
+    ...prop
+  } = props;
   return (
     <div className="form-group mb-3">
-      <label htmlFor={getId(children)} className="mb-1">
+      <label className="mb-1">
         <strong>{children}</strong>
       </label>
-      <Select styles={{ height: "90%" }} {...prop} />
+      {postIcon || preIcon ? (
+        <div className="input-group transparent-append">
+          {" "}
+          {preIcon ? (
+            <div className="input-group-prepend">
+              <span className="input-group-text">
+                {preIcon.icon ? <i className={preIcon.icon} /> : preIcon.text}
+              </span>
+            </div>
+          ) : (
+            ""
+          )}
+          <Select
+            placeholder={placeholder}
+            styles={{ height: "90%" }}
+            {...prop}
+          />
+          {postIcon ? (
+            <div className="input-group-append show-pass ml-2">
+              <span className="input-group-text">
+                {postIcon.icon ? (
+                  <i className={postIcon.icon} />
+                ) : (
+                  postIcon.text
+                )}
+              </span>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        <Select styles={{ height: "90%" }} {...prop} />
+      )}
+
       <span
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
@@ -402,11 +443,10 @@ export const confirmDelete = (message, callBack) => {
 export const onChange = (e, setItem, nameSelect = "") => {
   if (e.label) {
     console.log("event : ", e);
-    setUtilisateur((prevState) => ({ ...prevState, [nameSelect]: e }));
+    setItem((prevState) => ({ ...prevState, [nameSelect]: e }));
     return;
   }
   if (e.target.files) {
-    setPreview(URL.createObjectURL(e.target.files[0]));
     setItem((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.files[0],
@@ -414,8 +454,7 @@ export const onChange = (e, setItem, nameSelect = "") => {
     return;
   }
   const { name, value } = e.target;
-  console.log(e.target);
-  setItem({ ...fournisseur, [name]: value });
+  setItem((prevState) => ({ ...prevState, [name]: value }));
 };
 
 export const getClassByNumber = (nbr) => {
@@ -427,4 +466,21 @@ export const getClassByNumber = (nbr) => {
   else if (nbr <= 30) classText = "warning";
   else if (nbr > 30) classText = "danger";
   return classText;
+};
+
+export const convertToOption = (data, setOptions) => {
+  let tempFull = [];
+  Object.entries(data).forEach(([key, value]) => {
+    let temp = { label: "", value: "" };
+    Object.entries(value).forEach(([k, val]) => {
+      if (k === "id") {
+        temp.value = val;
+      } else if (k.indexOf("nom") > -1) {
+        temp.label = val;
+      }
+    });
+    tempFull.push(temp);
+  });
+  console.log("setOptions ", tempFull);
+  setOptions(tempFull);
 };

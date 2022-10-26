@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from "../../nav";
 import FouterNav from "../../nav/FooterNav";
+import Modal from "./Modal";
 import Table from "./Table";
 import View from "./View";
 
@@ -12,7 +13,8 @@ function Produit() {
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
       > 
-        <Table />
+        <Modal/>
+        <Table/>
         <View />
       </div>
       <FouterNav />

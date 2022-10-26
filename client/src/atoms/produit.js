@@ -20,7 +20,7 @@ export const initialize = {
   nom_produit: "",
   classification_produit: "",
   description: "",
-  image: "",
+  image: null,
   presentation_quantite: "",
   prix_vente: "",
   stock_min: "",
