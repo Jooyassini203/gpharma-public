@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilState } from "recoil";
 import { isAddState, listProduit, produitSelect, initialize } from '../../../atoms/produit';
-import { addData, getData, getUrl, InputForm, updateData, onChange, SelectForm, convertToOption } from "../../../utils/utils";
+import { addData, getData, getUrl, InputForm, updateData, onChange, SelectForm, convertToOption, verifObligatory } from "../../../utils/utils";
 
 function Modal() {
     const [isAdd, setIsAdd] = useRecoilState(isAddState);
@@ -46,15 +46,29 @@ function Modal() {
 
     const handleClickInput = () => { 
         setIsOb(false)
-      inputRef.current.click();
+        inputRef.current.click();
     };
 
+    const getAll = () => { 
+        getData("produit", setList)
+        closeModal()
+    };
+
+    const closeModal = () => {  
+        setIsOb(false)
+        setPreview('')
+        setProduit(initialize)
+        closeRef.current.click()
+    };
+    
     const add = () => { 
-       
+        if(verifObligatory(produit, ["image", "description", "classification_produit"]))  return; 
+        addData('produit', JsonToFormData(produit, "image"), getAll, true )  
     };
 
     const update = () => { 
-       
+        if(verifObligatory(produit, ["image", "description", "classification_produit"])) return; 
+        updateData('produit', produitSelect.code_lot_produit, JsonToFormData(produit, "image"), getAll, true )   
     };
  
     React.useEffect(()=>{ 
@@ -91,15 +105,13 @@ function Modal() {
               type="button"
               className="close"
               data-dismiss="modal"
-              onClick={() => {
-                setIsOb(false)
-              }}
+              onClick={closeModal}
             >
               <span>×</span>
             </button>
           </div>
           <div className="modal-body">
-            <div className="row text-center"> 
+            <div className="row text-center mb-3"> 
               <img
                   style={{ width: "auto", height: "15vh", borderRadius: "2%" }}
                   src={preview ? preview : "images/product/1.jpg"}
@@ -111,12 +123,12 @@ function Modal() {
                   onClick={handleClickInput}
                 /> 
               <input
-                name="logo"
+                name="image"
                 type="file"
                 accept=".jpg,.png,.jpeg"
                 className="d-none"
                 ref={inputRef}
-                onChange={onChange}
+                onChange={(e) => onChange(e, setProduit)}
               />
             </div>  
             <div className="row">
@@ -129,60 +141,90 @@ function Modal() {
             </div> 
             <div className="row">
               <div className="col-3">
-              <InputForm postIcon={{"text": "Quatité"}} name="presentation_quantite" val={presentation_quantite} onChange={(e) => onChange(e, setProduit)} obligatory={isOb?"active":""}>Présentation</InputForm>
+              <InputForm integer postIcon={{"text": "Quatité"}} name="presentation_quantite" val={presentation_quantite} onChange={(e) => onChange(e, setProduit)} obligatory={isOb?"active":""}>Présentation</InputForm>
               </div>
               <div className="col-4">
                 <SelectForm
-                //   postIcon={{"text": "Unité"}}
-                  name="unite_presentation"
+                //   postIcon={{"text": "Unité"}} 
                   val={unite_presentation}
                   value={OptionsUnite.filter((option)=>filterOption (option, unite_achat))}
                   onChange={(e) => onChange(e, setProduit, "unite_presentation")}
                   options={OptionsUnite}  obligatory={isOb?"active":""} >Unité de présentation</SelectForm>
               </div>
               <div className="col-5"> 
-              <InputForm postIcon={{"text": "Ar"}} name="prix_vente" val={prix_vente} onChange={(e) => onChange(e, setProduit)} obligatory={isOb?"active":""}>Prix de vente</InputForm>
+              <InputForm integer postIcon={{"text": "Ar"}} name="prix_vente" val={prix_vente} onChange={(e) => onChange(e, setProduit) } obligatory={isOb?"active":""}>Prix de vente</InputForm>
               </div>
             </div> 
             <div className="row">
               <div className="col-4">
-                <SelectForm 
-                  name="unite_achat"
+                <SelectForm  
                   val={unite_achat}
                   value={OptionsUnite.filter((option)=>filterOption (option, unite_achat))}
                   onChange={(e) => onChange(e, setProduit, "unite_achat")}
                   options={OptionsUnite}  obligatory={isOb?"active":""} >Unité d'achat'</SelectForm>
               </div>
               <div className="col-4">
-                <SelectForm 
-                  name="unite_vente"
+                <SelectForm  
                   val={unite_vente}
                   value={OptionsUnite.filter((option)=>filterOption (option, unite_vente))}
                   onChange={(e) => onChange(e, setProduit, "unite_vente")}
                   options={OptionsUnite}  obligatory={isOb?"active":""} >Unité de vente</SelectForm>
               </div>
               <div className="col-4">
-                <SelectForm 
-                  name="unite_stock"
+                <SelectForm  
                   val={unite_stock}
                   value={OptionsUnite.filter((option)=>filterOption (option, unite_stock))}
                   onChange={(e) => onChange(e, setProduit, "unite_stock")}
                   options={OptionsUnite}  obligatory={isOb?"active":""} >Unité de stock</SelectForm>
               </div>
             </div> 
-              <InputForm textarea rows="3" name="description" val={description} onChange={(e) => onChange(e, setProduit)} >Description</InputForm>
-              <InputForm textarea rows="3" name="classification_produit" val={classification_produit} onChange={(e) => onChange(e, setProduit)} >Classification produit</InputForm>
+            <div className="row">
+              <div className="col-4">
+                <SelectForm  
+                  val={fabricant_id}
+                  value={OptionsFabricant.filter((option)=>filterOption (option, fabricant_id))}
+                  onChange={(e) => onChange(e, setProduit, "fabricant_id")}
+                  options={OptionsUnite}  obligatory={isOb?"active":""} >Fabricant</SelectForm>
+              </div> 
+              <div className="col-4">
+                <SelectForm  
+                  val={famille_id}
+                  value={OptionsFamille.filter((option)=>filterOption (option, famille_id))}
+                  onChange={(e) => onChange(e, setProduit, "famille_id")}
+                  options={OptionsUnite}  obligatory={isOb?"active":""} >Famille</SelectForm>
+              </div>
+              <div className="col-4">
+                <SelectForm  
+                  val={forme_id}
+                  value={OptionsForme.filter((option)=>filterOption (option, forme_id))}
+                  onChange={(e) => onChange(e, setProduit, "forme_id")}
+                  options={OptionsUnite}  obligatory={isOb?"active":""} >Forme</SelectForm>
+              </div> 
+            </div> 
+            <div className="row"> 
+              <div className="col-4">
+                <SelectForm  
+                  val={voie_id}
+                  value={OptionsVoie.filter((option)=>filterOption (option, voie_id))}
+                  onChange={(e) => onChange(e, setProduit, "voie_id")}
+                  options={OptionsUnite}  obligatory={isOb?"active":""} >Voie</SelectForm>
+              </div> 
+              <div className="col-4"> 
+              <InputForm integer name="stock_min" val={stock_min} onChange={(e) => onChange(e, setProduit)} obligatory={isOb?"active":""} >Stock minimun</InputForm>
+              </div> 
+              <div className="col-4"> 
+              <InputForm integer name="stock_max" val={stock_max} onChange={(e) => onChange(e, setProduit)} obligatory={isOb?"active":""} >Stock maximun</InputForm>
+              </div>
+            </div> 
+              <InputForm textarea rows="3" name="description" val={description} onChange={(e) => onChange(e, setProduit)} >Description du produit</InputForm>
+              <InputForm textarea rows="3" name="classification_produit" val={classification_produit} onChange={(e) => onChange(e, setProduit)} >Classification du produit</InputForm>
           </div>
           <div className="modal-footer">
             <button
               type="button"
               className="btn btn-danger light"
               data-dismiss="modal"
-              onClick={() => {
-                setIsOb(false)
-                setPreview('')
-                setProduit(initialize)
-              }}
+              onClick={closeModal}
             >
               Annuler
             </button>

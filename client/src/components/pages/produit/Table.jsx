@@ -175,7 +175,7 @@ function Table() {
               data-toggle="modal"
               data-target="#modalViewProduit"
               handleClick={() => {
-                getData("produit", (data) => setProduit(data[0]), row.id);
+                getData("produit", (data) => setProduit(data[0]), row.code_lot_produit);
               }}
             />
             <ButtonTable
@@ -185,7 +185,7 @@ function Table() {
               data-target="#modalFournisseur"
               handleClick={() => {
                 // setIsAdd({ status: false });
-                getData("produit", (data) => setProduit(data[0]), row.id);
+                getData("produit", (data) => setProduit(data[0]), row.code_lot_produit);
               }}
             />
             <ButtonTable
@@ -195,7 +195,7 @@ function Table() {
                 confirmDelete(
                   "Voulez-vous vraimment supprimé cet produit ?",
                   () => {
-                    deleteData("produit", row.id, () => {
+                    deleteData("produit", row.code_lot_produit, () => {
                       getData("produit", setList);
                     });
                   }
