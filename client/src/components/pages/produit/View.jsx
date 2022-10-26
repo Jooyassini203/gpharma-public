@@ -2,15 +2,15 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { produitSelect } from "../../../atoms/produit";
-import { getData, getUrl } from "../../../utils/utils";
+import { getClassByNumber, getData, getUrl } from "../../../utils/utils";
 
 function View({ id }) {
   const [produit, setProduit] = useRecoilState(produitSelect);
-  useEffect(() => { 
-       console.log("produit", produit)
-  },[produit] )
+  useEffect(() => {
+    console.log("produit", produit);
+  }, [produit]);
   return (
-    <> 
+    <>
       <div
         className="modal fade"
         id="modalViewProduit"
@@ -23,7 +23,7 @@ function View({ id }) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                Information sur { produit.nom_produit }
+                Information sur {produit.nom_produit}
               </h5>
               <button
                 // ref={closeRef}
@@ -51,16 +51,16 @@ function View({ id }) {
                           src="images/product/1.jpg"
                           alt={"Image du produit " + produit.nom_produit}
                         />
-                        
+
                         <p className="text-content mt-3">
                           {produit.description}
                         </p>
-                        
+
                         <p className="text-content mt-3">
                           {produit.classification_produit}
                         </p>
-                      </div> 
-                    </div> 
+                      </div>
+                    </div>
                   </div>
                   {/*Tab slider End*/}
                   <div className="col-xl-9 col-lg-6  col-md-6 col-xxl-7 col-sm-12">
@@ -88,7 +88,7 @@ function View({ id }) {
                           </ul>
                           <span className="review-text">(34 vente(s)) / </span>
                           <a
-                            className="product-review" 
+                            className="product-review"
                             data-toggle="modal"
                             data-target="#reviewModal"
                           >
@@ -104,18 +104,18 @@ function View({ id }) {
                           Code lot produit:
                           <span className=" ml-2 text-success font-w600">
                             {produit.code_lot_produit}
-                          </span> 
+                          </span>
                         </p>
                         <p>
                           Dernière date de ravitaillement:
                           <span className="ml-2 text-black font-w400">
                             {produit.date_der_ravitaillement}
-                          </span> 
+                          </span>
                         </p>
                         <p>
                           Etaté :
                           <span className="ml-2 item">
-                            Oui 
+                            Oui
                             <span className="badge badge-success light">
                               15
                             </span>
@@ -123,6 +123,18 @@ function View({ id }) {
                         </p>
                         <p>
                           Stock :&nbsp;&nbsp;
+                          <span
+                            className={
+                              "badge badge-" +
+                              getClassByNumber(produit.quantite_stock) +
+                              " light"
+                            }
+                          >
+                            Quatité : {produit.quantite_stock}
+                          </span>
+                        </p>
+                        <p>
+                          Seuil :&nbsp;&nbsp;
                           <span className="badge badge-danger light">
                             Stock min : {produit.stock_min}
                           </span>
@@ -173,6 +185,21 @@ function View({ id }) {
                                   Forme :
                                   <span className="fs-14 text-warning font-w600">
                                     {produit.nom_forme}
+                                  </span>
+                                  .
+                                </p>
+                                <p className="mb-sm-2 mb-1 text-dark">
+                                  Quantité de présentation :
+                                  <span
+                                    className={
+                                      "fs-14 text-" +
+                                      getClassByNumber(
+                                        produit.presentation_quantite
+                                      ) +
+                                      " font-w600"
+                                    }
+                                  >
+                                    {produit.presentation_quantite}
                                   </span>
                                   .
                                 </p>

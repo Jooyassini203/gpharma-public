@@ -11,9 +11,9 @@ function Produit() {
       <div
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
-      >
-        <Table/>
-        <View/>
+      > 
+        <Table />
+        <View />
       </div>
       <FouterNav />
     </>

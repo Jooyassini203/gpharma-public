@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { getData } from "../../../utils/utils";
+import { getData, getClassByNumber } from "../../../utils/utils";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import Table from "./Table";
@@ -24,16 +24,6 @@ const ItemParametre = ({ array, table, icon, children }) => {
   const [tb_name, setTb_name] = useRecoilState(table_name);
   const [number, setNumber] = useState(0);
  
-  const getClassBagde = (nbr) => {
-    let classText = "primary";
-    if (nbr <= 4) classText = "dark";
-    else if (nbr <= 12) classText = "success";
-    else if (nbr <= 15) classText = "secondary";
-    else if (nbr <= 20) classText = "info";
-    else if (nbr <= 30) classText = "warning";
-    else if (nbr > 30) classText = "danger";
-    return classText;
-  };
   useEffect(() => {
     if (array.length > 0) {
       setNumber(array[0]["count_" + table]);
@@ -45,18 +35,18 @@ const ItemParametre = ({ array, table, icon, children }) => {
         type="button"
         className={
           table == tb_name
-            ? "list-group-item text-" + getClassBagde(number)
+            ? "list-group-item text-" + getClassByNumber(number)
             : "list-group-item"
         }
         onClick={() => setTb_name(table)}
       >
         <FontAwesomeIcon
           icon={icon}
-          className={"font-18 align-middle mr-2 text" + getClassBagde(number)}
+          className={"font-18 align-middle mr-2 text" + getClassByNumber(number)}
         />
         {children}
         <span
-          className={`badge badge-${getClassBagde(
+          className={`badge badge-${getClassByNumber(
             number
           )} badge-sm text-white float-right`}
         >

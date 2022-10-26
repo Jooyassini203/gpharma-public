@@ -14,6 +14,7 @@ for (let index = 0; index < 6; index++) {
     presentation_quantite: getNumberRadom(1, 20),
     stock_min: getNumberRadom(5, 20),
     stock_max: getNumberRadom(200, 500),
+    quantite_stock: getNumberRadom(20, 200),
     date_der_ravitaillement: faker.date.recent(),
     fabricant_id: getNumberRadom(1, 32),
     famille_id: getNumberRadom(1, 5),

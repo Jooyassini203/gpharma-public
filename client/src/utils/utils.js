@@ -398,3 +398,33 @@ export const confirmDelete = (message, callBack) => {
     ],
   }); */
 };
+
+export const onChange = (e, setItem, nameSelect = "") => {
+  if (e.label) {
+    console.log("event : ", e);
+    setUtilisateur((prevState) => ({ ...prevState, [nameSelect]: e }));
+    return;
+  }
+  if (e.target.files) {
+    setPreview(URL.createObjectURL(e.target.files[0]));
+    setItem((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.files[0],
+    }));
+    return;
+  }
+  const { name, value } = e.target;
+  console.log(e.target);
+  setItem({ ...fournisseur, [name]: value });
+};
+
+export const getClassByNumber = (nbr) => {
+  let classText = "primary";
+  if (nbr <= 4) classText = "dark";
+  else if (nbr <= 12) classText = "success";
+  else if (nbr <= 15) classText = "secondary";
+  else if (nbr <= 20) classText = "info";
+  else if (nbr <= 30) classText = "warning";
+  else if (nbr > 30) classText = "danger";
+  return classText;
+};

@@ -14,7 +14,7 @@ import { useRecoilState } from "recoil";
 import { useState } from "react";
 
 function Table() {
-  const [list, setList] = useRecoilState(listProduit); 
+  const [list, setList] = useRecoilState(listProduit);
   const [produit, setProduit] = useRecoilState(produitSelect);
 
   const columns = [
@@ -174,7 +174,7 @@ function Table() {
               data-toggle="modal"
               data-target="#modalViewProduit"
               handleClick={() => {
-                getData("produit",  (data) => setProduit(data[0]), row.id);
+                getData("produit", (data) => setProduit(data[0]), row.id);
               }}
             />
             <ButtonTable
@@ -229,11 +229,13 @@ function Table() {
               <i className="fa fa-plus mr-3" />
               Ajout d'un produit
             </button>
-            {/* <button className="btn btn-outline-primary btn-sm"
-          data-toggle="modal"
-          data-target="#modalActivityFournisseur">
-          <i className="fa fa-list-alt mr-3"></i>Activités
-        </button> */}
+            <button
+              className="btn btn-outline-warning btn-sm"
+              // data-toggle="modal"
+              // data-target="#modalActivityFournisseur"
+            >
+              <i className="fa fa-list-alt mr-3"></i>Etalage
+            </button>
           </div>
         }
       />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { addData, getData, getUrl, InputForm, updateData } from "../../../utils/utils";
+import { addData, getData, getUrl, InputForm, updateData, onChange } from "../../../utils/utils";
 import { isAddState, listFournisseur, fournisseurSelect, initialize } from "../../../atoms/fournisseur";
 
 function Modal() {
@@ -26,19 +26,7 @@ function Modal() {
     stat,
     sigle,
   } = fournisseur
-  const onChange = (e) => { 
-    if (e.target.files) {
-      setPreview(URL.createObjectURL(e.target.files[0]))
-      setFournisseur((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.files[0],
-      }));
-      return;
-    }
-    const { name, value } = e.target;
-    console.log(e.target);
-    setFournisseur( { ...fournisseur, [name]: value } );
-  };
+  
   const getAll = () => {
     setIsOb(false)
     setPreview('')
@@ -120,7 +108,7 @@ function Modal() {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">
-              {isAdd.status ? "Ajouter" : "Modifier"} un utilsateur
+              {isAdd.status ? "Ajouter" : "Modifier"} un fournisseur
             </h5>
             <button
               ref={closeRef}
@@ -152,44 +140,44 @@ function Modal() {
                 accept=".jpg,.png,.jpeg"
                 className="d-none"
                 ref={inputRef}
-                onChange={onChange}
+                onChange={(e) => onChange(e, setFournisseur)}
               />
             </div>  
-              <InputForm name="nom_fournisseur" val={nom_fournisseur} onChange={onChange} obligatory={isOb?"active":""}>Nom fournisseur</InputForm>
+              <InputForm name="nom_fournisseur" val={nom_fournisseur} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Nom fournisseur</InputForm>
             <div className="row">
               <div className="col-6">
-              <InputForm name="contact_fournisseur" val={contact_fournisseur} onChange={onChange} obligatory={isOb?"active":""}>Contact fournisseur</InputForm>
+              <InputForm name="contact_fournisseur" val={contact_fournisseur} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Contact fournisseur</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="contact_secretaire" val={contact_secretaire} onChange={onChange} obligatory={isOb?"active":""}>Contact secretaire</InputForm>
+              <InputForm name="contact_secretaire" val={contact_secretaire} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Contact secretaire</InputForm>
               </div>
             </div>
-              <InputForm name="compte_PCG" val={compte_PCG} onChange={onChange} obligatory={isOb?"active":""}>Compte Plan Comptable Général</InputForm>
+              <InputForm name="compte_PCG" val={compte_PCG} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Compte Plan Comptable Général</InputForm>
             <div className="row">
               <div className="col-6">
-              <InputForm number min="0" name="delais_reglement" val={delais_reglement} onChange={onChange} postIcon={{"text":"En jours"}} obligatory={isOb?"active":""}>Delais règlement</InputForm>
+              <InputForm number min="0" name="delais_reglement" val={delais_reglement} onChange={(e) => onChange(e, setFournisseur)} postIcon={{"text":"En jours"}} obligatory={isOb?"active":""}>Delais règlement</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="sigle" val={sigle} onChange={onChange} obligatory={isOb?"active":""} maxLength="5">Sigle</InputForm>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-6">
-              <InputForm email name="email" val={email} onChange={onChange} obligatory={isOb?"active":""}>Email</InputForm>
-              </div>
-              <div className="col-6">
-              <InputForm name="adresse" val={adresse} onChange={onChange} obligatory={isOb?"active":""}>Adresse</InputForm>
+              <InputForm name="sigle" val={sigle} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""} maxLength="5">Sigle</InputForm>
               </div>
             </div>
             <div className="row">
               <div className="col-6">
-              <InputForm name="nif" val={nif} onChange={onChange} obligatory={isOb?"active":""}>Nif</InputForm>
+              <InputForm email name="email" val={email} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Email</InputForm>
               </div>
               <div className="col-6">
-              <InputForm name="stat" val={stat} onChange={onChange} obligatory={isOb?"active":""}>Stat</InputForm>
+              <InputForm name="adresse" val={adresse} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Adresse</InputForm>
               </div>
             </div>
-              <InputForm textarea rows="3" name="condition_paiement" val={condition_paiement} onChange={onChange} obligatory={isOb?"active":""}>Condition de paiement</InputForm>
+            <div className="row">
+              <div className="col-6">
+              <InputForm name="nif" val={nif} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Nif</InputForm>
+              </div>
+              <div className="col-6">
+              <InputForm name="stat" val={stat} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Stat</InputForm>
+              </div>
+            </div>
+              <InputForm textarea rows="3" name="condition_paiement" val={condition_paiement} onChange={(e) => onChange(e, setFournisseur)} obligatory={isOb?"active":""}>Condition de paiement</InputForm>
           </div>
           <div className="modal-footer">
             <button
