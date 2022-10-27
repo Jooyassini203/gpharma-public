@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import cryptojs from "crypto-js";
 import { useRecoilState } from "recoil";
 import { showRightNav } from "../../atoms/nav";
-import { getRule, InputForm, updateData, urlRead } from "../../utils/utils";
+import { getRule, getUrl, InputForm, updateData, urlRead } from "../../utils/utils";
 import { userConnected } from "../../atoms/authentication";
 import "./RightNav.css";
 import { toast } from "react-toastify";
@@ -91,11 +91,7 @@ function RightNav() {
     })
   }
 
-  const changeImage = () => {
-    if (!nom_login || !nom_utilisateur) {
-      setIsOb(true);
-      return;
-    }
+  const changeImage = () => { 
     let formData = new FormData();
     formData.append("file", imageProfile);
     updateData(
@@ -109,6 +105,9 @@ function RightNav() {
       true
     );
   };
+  useEffect(() => {  
+      console.log("UserConnect", userConnect); 
+  },[] )
   return (
     <>
       <div className={show ? "chatbox active " : "chatbox"}>
@@ -131,8 +130,8 @@ function RightNav() {
                     src={
                       preview
                         ? preview
-                        : userConnect.url
-                        ? userConnect.url
+                        : userConnect.image
+                        ? getUrl("images/utilisateur", userConnect.image)
                         : "images/profile/1.jpg"
                     }
                     width={"40vh"}

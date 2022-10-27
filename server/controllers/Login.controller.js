@@ -8,13 +8,13 @@ const login = async (req, res) => {
   const mot_de_passe = req.body.mot_de_passe;
   const user = await Utilisateur.findOne({ where: { nom_login } });
   if (!user)
-  return res
-  .status(404)
-  .json({ message: "Nom d'utilisateur ou mot de passe incorrect!" });
+    return res
+      .status(404)
+      .json({ message: "Nom d'utilisateur ou mot de passe incorrect!" });
   console.log("\n\nSTART COMPARE AND CRYPTE\n\n");
   bcrypt.compare(mot_de_passe, user.mot_de_passe, async (erreur, result) => {
     if (result) {
-      user.set({ date_der_log: getDateNow(), isOnline: '1' });
+      user.set({ date_der_log: getDateNow(), isOnline: "1" });
       await user.save();
 
       const dataSession = {
@@ -31,7 +31,7 @@ const login = async (req, res) => {
         dataSessionCrypted,
         process.env.KEY_SESSION
       ).toString();
-      console.log("dataSessionCrypted", dataSessionCrypted); 
+      console.log("dataSessionCrypted", dataSessionCrypted);
       return res
         .status(200)
         .send({ message: "Vous êtes connecté", dataUser: dataSessionCrypted });
@@ -42,19 +42,18 @@ const login = async (req, res) => {
   });
 };
 
-const reloadDataUser = async (req, res) => { 
+const reloadDataUser = async (req, res) => {
   const user = await Utilisateur.findOne({ where: { id: req.params.id } });
   if (!user)
-  return res
-  .status(404)
-  .json({ message: "Utilisateur introuvable!" }); 
-  
+    return res.status(404).json({ message: "Utilisateur introuvable!" });
+
   const dataSession = {
     id: user.id,
     type_utilisateur: user.type_utilisateur,
     nom_login: user.nom_login,
     nom_utilisateur: user.nom_utilisateur,
     url: user.url,
+    image: user.image,
     mot_de_passe: user.mot_de_passe,
   };
   let dataSessionCrypted = JSON.stringify(dataSession);
@@ -63,29 +62,22 @@ const reloadDataUser = async (req, res) => {
     dataSessionCrypted,
     process.env.KEY_SESSION
   ).toString();
-  console.log("dataSessionCrypted", dataSessionCrypted); 
-  return res
-    .status(200)
-    .send({ dataUser: dataSessionCrypted });
+  console.log("dataSessionCrypted", dataSessionCrypted);
+  return res.status(200).send({ dataUser: dataSessionCrypted });
 };
 
-const logout = async (req, res) => { 
-  const user = await Utilisateur.findOne({ 
-    where: { id: req.params.id }, });
+const logout = async (req, res) => {
+  const user = await Utilisateur.findOne({
+    where: { id: req.params.id },
+  });
   if (!user)
-    return res
-    .status(404)
-    .json({ message: "Utilisateur introvable!" });  
+    return res.status(404).json({ message: "Utilisateur introvable!" });
   try {
-    user.set({ date_der_log: getDateNow(), isOnline: '0' });
+    user.set({ date_der_log: getDateNow(), isOnline: "0" });
     await user.save();
-    return res
-    .status(200)
-    .send({ message: "Vous êtes déconnecté"}); 
+    return res.status(200).send({ message: "Vous êtes déconnecté" });
   } catch (error) {
-    return res
-    .status(404)
-    .json({ message: error.message });    
+    return res.status(404).json({ message: error.message });
   }
 };
 export { login, logout, reloadDataUser };

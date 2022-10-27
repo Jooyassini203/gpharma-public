@@ -4,7 +4,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../../atoms/authentication";
 import { showRightNav } from "../../atoms/nav";
-import { getData, getRule } from "../../utils/utils";
+import { getData, getRule, getUrl } from "../../utils/utils";
 
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -21,17 +21,14 @@ function HeadNav() {
                   <h1>Déconnection</h1>
                   <p>Voulez-vous vraiment vous déconnecté de GPharama ?</p>
                   <div>
-                    <button  
+                    <button
                       className="btn btn-danger mr-2"
                       onClick={() => {
-                        console.log(
-                          "userConnect.id",
-                          userConnect.id
-                        );
+                        console.log("userConnect.id", userConnect.id);
                         getData(
                           "logout",
                           (data) => {
-                            document.getElementById('btn-logout').click()
+                            document.getElementById("btn-logout").click();
                             sessionStorage.removeItem("gpharma@2.0.0");
                           },
                           userConnect.id
@@ -228,8 +225,8 @@ function HeadNav() {
                     </div>
                     <img
                       src={
-                        userConnect.url
-                          ? userConnect.url
+                        userConnect.image
+                          ? getUrl("images/utilisateur", userConnect.image)
                           : "images/profile/17.jpg"
                       }
                       width={20}
@@ -261,7 +258,11 @@ function HeadNav() {
                       <span className="ml-2">Profile </span>
                     </button>
 
-                    <button type="button" className="dropdown-item ai-icon" onClick={logOut}>
+                    <button
+                      type="button"
+                      className="dropdown-item ai-icon"
+                      onClick={logOut}
+                    >
                       <svg
                         id="icon-logout"
                         xmlns="http://www.w3.org/2000/svg"
@@ -280,9 +281,7 @@ function HeadNav() {
                         <line x1={21} y1={12} x2={9} y2={12} />
                       </svg>
                       <span className="ml-2">
-                        <a type="button">
-                          Déconnection
-                        </a> 
+                        <a type="button">Déconnection</a>
                       </span>
                     </button>
                   </div>

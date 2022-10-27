@@ -339,10 +339,10 @@ Vente.belongsToMany(Produit, {
 });
 
 Voie.hasMany(Produit, {
-  foreignKey: { name: "voie_id", type: DataTypes.INTEGER, allowNull: false },
+  foreignKey: { name: "voie_id", type: DataTypes.INTEGER, allowNull: true },
 });
 Produit.belongsTo(Voie, {
-  foreignKey: { name: "voie_id", type: DataTypes.INTEGER, allowNull: false },
+  foreignKey: { name: "voie_id", type: DataTypes.INTEGER, allowNull: true },
 });
 
 Utilisateur.hasMany(Vente, {

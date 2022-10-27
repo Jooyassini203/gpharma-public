@@ -5,7 +5,7 @@ const getNumberRadom = (min, max) => {
 };
 for (let index = 0; index < 6; index++) {
   produitListe.push({
-    code_lot_produit: faker.commerce.productAdjective(),
+    code_lot_produit: faker.commerce.productAdjective() + getNumberRadom(1, 20),
     nom_produit: faker.commerce.productName(),
     classification_produit: faker.commerce.productDescription(),
     description: faker.commerce.productDescription(),

@@ -26,7 +26,7 @@ export const initialize = {
   stock_min: "",
   stock_max: "",
   quantite_stock: "",
-  date_der_ravitaillement: "",
+  // date_der_ravitaillement: "",
   fabricant_id: {
     value: "",
     label: "",

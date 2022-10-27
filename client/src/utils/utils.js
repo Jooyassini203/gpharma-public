@@ -476,6 +476,7 @@ export const getClassByNumber = (nbr) => {
 
 export const convertToOption = (data, setOptions) => {
   let tempFull = [];
+  let name = "";
   Object.entries(data).forEach(([key, value]) => {
     let temp = { label: "", value: "" };
     Object.entries(value).forEach(([k, val]) => {
@@ -483,21 +484,26 @@ export const convertToOption = (data, setOptions) => {
         temp.value = val;
       } else if (k.indexOf("nom") > -1) {
         temp.label = val;
+        name = k;
       }
     });
     tempFull.push(temp);
   });
-  console.log("setOptions ", tempFull);
+  console.log("setOptions " + name + " :", tempFull);
   setOptions(tempFull);
 };
 
 export const verifObligatory = (data, exception = []) => {
-  let verif = true;
+  console.log(
+    "-------------------------------------------------------------------------------------------------------------------------------------------"
+  );
+  let verif = false;
   Object.entries(data).forEach(([key, value]) => {
-    for (let i = 0; i < exception.length; i++) {
-      if (key !== exception[i]) {
-        if (value) verif = false;
-      }
+    if (!exception.includes(key)) {
+      if (value == "" || value == null) {
+        console.log("exception[i]", key, value);
+        verif = true;
+      } else console.log();
     }
   });
   return verif;
@@ -505,10 +511,11 @@ export const verifObligatory = (data, exception = []) => {
 
 export const JsonToFormData = (data, file = "") => {
   let formData = new FormData();
-  if (file) {
-    formData.append("file", data[file]);
-    delete data[file];
-  }
+  if (data[file])
+    if (file) {
+      formData.append("file", data[file]);
+      delete data[file];
+    }
   formData.append("data", JSON.stringify(data));
   return formData;
 };

@@ -175,16 +175,20 @@ function Table() {
               data-toggle="modal"
               data-target="#modalViewProduit"
               handleClick={() => {
-                getData("produit", (data) => setProduit(data[0]), row.code_lot_produit);
+                getData(
+                  "produit",
+                  (data) => setProduit(data[0]),
+                  row.code_lot_produit
+                );
               }}
             />
             <ButtonTable
               importance="warning"
               icon={faEdit}
               data-toggle="modal"
-              data-target="#modalFournisseur"
+              data-target="#modalProduit"
               handleClick={() => {
-                // setIsAdd({ status: false });
+                setIsAdd({ status: false });
                 getData("produit", (data) => setProduit(data[0]), row.code_lot_produit);
               }}
             />
@@ -208,7 +212,8 @@ function Table() {
     },
   ];
   React.useEffect(() => {
-    getData("produit", setList);
+    getData("produit", (data)=>{setList(data)
+    console.log("-------------------------list-------------------------", list);});
   }, []);
   return (
     <div className="card-body">
@@ -224,7 +229,7 @@ function Table() {
               data-toggle="modal"
               data-target="#modalProduit"
               onClick={() => {
-                setIsAdd({ status: true }) 
+                setIsAdd({ status: true });
               }}
             >
               <i className="fa fa-plus mr-3" />
