@@ -197,7 +197,7 @@ function Table() {
               icon={faTrash}
               handleClick={() => {
                 confirmDelete(
-                  "Voulez-vous vraimment supprimé cet produit ?",
+                  (<>Voulez-vous vraimment supprimé le produit <strong>{row.nom_produit}</strong> ?</>),
                   () => {
                     deleteData("produit", row.code_lot_produit, () => {
                       getData("produit", setList);

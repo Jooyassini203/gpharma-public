@@ -72,7 +72,7 @@ function View({ id }) {
                     <div className="product-detail-content">
                       {/*Product details*/}
                       <div className="new-arrival-content pr">
-                        <h4>{produit.nom_produit}</h4>
+                        <h4>{produit.nom_produit} (Voie <b>{produit.nom_voie}</b>)</h4>
                         <div className="comment-review star-rating">
                           <ul>
                             <li>

@@ -1,6 +1,11 @@
 import { QueryTypes } from "sequelize";
 import db from "../config/Database.js";
+import Fabricant from "../database/models/Fabricant.model.js";
+import Famille from "../database/models/Famille.model.js";
+import Forme from "../database/models/Forme.model.js";
 import Produit from "../database/models/Produit.model.js";
+import Unite from "../database/models/Unite.model.js";
+import Voie from "../database/models/Voie.model.js";
 import { uploadFile } from "../utils/utils.js";
 
 const queryGet =
@@ -98,8 +103,32 @@ const deleteOne = async (req, res) => {
     where: { code_lot_produit: req.params.code_lot_produit },
   });
   if (!item) return res.status(404).json({ message: "Produit introvable!" });
+  const verif = await Produit.findOne(
+    {
+      where: { code_lot_produit: req.params.code_lot_produit },
+    },
+    {
+      include: [
+        {
+          model: Voie,
+          required: true,
+        },
+        { model: Unite },
+        { model: Fabricant },
+        { model: Famille },
+        { model: Forme },
+      ],
+    }
+  );
+  if (!verif) {
+    let message = "";
+    Object.entries(verif).forEach(([key, value]) => {
+      console.log("value", key, value);
+    });
+    return res.status(404).json({ message: message });
+  }
   try {
-    await Produit.destroy({ where: { id: req.params.code_lot_produit } });
+    await item.destroy();
     return res.status(200).json({ message: "Produit supprimé avec succès!" });
   } catch (error) {
     console.log(error);
