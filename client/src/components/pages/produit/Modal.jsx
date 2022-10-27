@@ -31,6 +31,7 @@ function Modal() {
   const [OptionsFamille, setOptionsFamille] = React.useState([]);
   const [OptionsVoie, setOptionsVoie] = React.useState([]);
   const [preview, setPreview] = React.useState("");
+  const [img, setImg] = React.useState(null);
   const closeRef = React.useRef();
   const inputRef = React.useRef();
   const filterOption = (option, optionSelect) =>
@@ -86,7 +87,7 @@ function Modal() {
       ["unite_presentation"]: unite_presentation.value,
       ["unite_stock"]: unite_stock.value,
       ["unite_vente"]: unite_vente.value,
-    }; 
+    };
     console.log(
       "dataSend",
       dataSend,
@@ -108,11 +109,11 @@ function Modal() {
       ])
     )
       return;
-    addData("produit", JsonToFormData(dataSend, "image"), getAll, true);
+    addData("produit", JsonToFormData(dataSend, img, "image"), getAll, true);
   };
   const update = () => {
     let dataSend = {
-      ...produitSelected,
+      ...produit,
       ["fabricant_id"]: fabricant_id.value,
       ["famille_id"]: famille_id.value,
       ["forme_id"]: forme_id.value,
@@ -136,7 +137,7 @@ function Modal() {
     updateData(
       "produit",
       produitSelected.code_lot_produit,
-      JsonToFormData(dataSend, "image"),
+      JsonToFormData(dataSend, img, "image"),
       getAll,
       true
     );
@@ -243,8 +244,8 @@ function Modal() {
   }, []);
 
   React.useEffect(() => {
-    if (image) setPreview(URL.createObjectURL(image));
-  }, [image]);
+    if (img) setPreview(URL.createObjectURL(img));
+  }, [img]);
 
   const dbToEditProduit = (produitSelected) => {
     const idToOption = (value, label) => {
@@ -292,10 +293,12 @@ function Modal() {
     if (produitSelected) {
       setProduit(dbToEditProduit(produitSelected));
       console.log("produit select", produit);
+      if (produitSelected.image)
+        setPreview(getUrl("images/produit", produitSelected.image));
     }
   }, [produitSelected]);
 
-  // React.useEffect(() => { 
+  // React.useEffect(() => {
   //   setProduit(dbToEditProduit({
   //     code_lot_produit: "PRODUIT",
   //     nom_produit: "PARACETAMOLE",
@@ -380,12 +383,11 @@ function Modal() {
                   onClick={handleClickInput}
                 />
                 <input
-                  name="image"
                   type="file"
                   accept=".jpg,.png,.jpeg"
                   className="d-none"
                   ref={inputRef}
-                  onChange={(e) => onChange(e, setProduit)}
+                  onChange={(e) => setImg(e.target.files[0])}
                 />
               </div>
               <div className="row">
@@ -411,101 +413,107 @@ function Modal() {
                   </InputForm>
                 </div>
               </div>
-              <div className="row">
-                <div className="col-3">
-                  <InputForm
-                    integer
-                    postIcon={{ text: "Quantité" }}
-                    name="quantite_stock"
-                    val={quantite_stock}
-                    onChange={(e) => onChange(e, setProduit)}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Stock
-                  </InputForm>
-                </div>
-                <div className="col-3">
-                  <SelectForm
-                    val={unite_stock}
-                    value={OptionsUnite.filter((option) =>
-                      filterOption(option, unite_stock)
-                    )}
-                    onChange={(e) => onChange(e, setProduit, "unite_stock")}
-                    options={OptionsUnite}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Unité de stock
-                  </SelectForm>
-                </div>
-                <div className="col-3">
-                  <InputForm
-                    integer
-                    postIcon={{ text: "Quatité" }}
-                    name="presentation_quantite"
-                    val={presentation_quantite}
-                    onChange={(e) => onChange(e, setProduit)}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Présentation
-                  </InputForm>
-                </div>
-                <div className="col-3">
-                  <SelectForm
-                    //   postIcon={{"text": "Unité"}}
-                    val={unite_presentation}
-                    value={OptionsUnite.filter((option) =>
-                      filterOption(option, unite_presentation)
-                    )}
-                    onChange={(e) =>
-                      onChange(e, setProduit, "unite_presentation")
-                    }
-                    options={OptionsUnite}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Unité de présentation
-                  </SelectForm>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <SelectForm
-                    val={unite_vente}
-                    value={OptionsUnite.filter((option) =>
-                      filterOption(option, unite_vente)
-                    )}
-                    onChange={(e) => onChange(e, setProduit, "unite_vente")}
-                    options={OptionsUnite}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Unité de vente
-                  </SelectForm>
-                </div>
-                <div className="col-4">
-                  <InputForm
-                    integer
-                    postIcon={{ text: "Ar" }}
-                    name="prix_vente"
-                    val={prix_vente}
-                    onChange={(e) => onChange(e, setProduit)}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Prix de vente
-                  </InputForm>
-                </div>
-                <div className="col-4">
-                  <SelectForm
-                    val={unite_achat}
-                    value={OptionsUnite.filter((option) =>
-                      filterOption(option, unite_achat)
-                    )}
-                    onChange={(e) => onChange(e, setProduit, "unite_achat")}
-                    options={OptionsUnite}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Unité d'achat
-                  </SelectForm>
-                </div>
-              </div>
+              {isAdd.status ? (
+                <>
+                  <div className="row">
+                    <div className="col-3">
+                      <InputForm
+                        integer
+                        postIcon={{ text: "Quantité" }}
+                        name="quantite_stock"
+                        val={quantite_stock}
+                        onChange={(e) => onChange(e, setProduit)}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Stock
+                      </InputForm>
+                    </div>
+                    <div className="col-3">
+                      <SelectForm
+                        val={unite_stock}
+                        value={OptionsUnite.filter((option) =>
+                          filterOption(option, unite_stock)
+                        )}
+                        onChange={(e) => onChange(e, setProduit, "unite_stock")}
+                        options={OptionsUnite}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Unité de stock
+                      </SelectForm>
+                    </div>
+                    <div className="col-3">
+                      <InputForm
+                        integer
+                        postIcon={{ text: "Quatité" }}
+                        name="presentation_quantite"
+                        val={presentation_quantite}
+                        onChange={(e) => onChange(e, setProduit)}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Présentation
+                      </InputForm>
+                    </div>
+                    <div className="col-3">
+                      <SelectForm
+                        //   postIcon={{"text": "Unité"}}
+                        val={unite_presentation}
+                        value={OptionsUnite.filter((option) =>
+                          filterOption(option, unite_presentation)
+                        )}
+                        onChange={(e) =>
+                          onChange(e, setProduit, "unite_presentation")
+                        }
+                        options={OptionsUnite}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Unité de présentation
+                      </SelectForm>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <SelectForm
+                        val={unite_vente}
+                        value={OptionsUnite.filter((option) =>
+                          filterOption(option, unite_vente)
+                        )}
+                        onChange={(e) => onChange(e, setProduit, "unite_vente")}
+                        options={OptionsUnite}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Unité de vente
+                      </SelectForm>
+                    </div>
+                    <div className="col-4">
+                      <InputForm
+                        integer
+                        postIcon={{ text: "Ar" }}
+                        name="prix_vente"
+                        val={prix_vente}
+                        onChange={(e) => onChange(e, setProduit)}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Prix de vente
+                      </InputForm>
+                    </div>
+                    <div className="col-4">
+                      <SelectForm
+                        val={unite_achat}
+                        value={OptionsUnite.filter((option) =>
+                          filterOption(option, unite_achat)
+                        )}
+                        onChange={(e) => onChange(e, setProduit, "unite_achat")}
+                        options={OptionsUnite}
+                        obligatory={isOb ? "active" : ""}
+                      >
+                        Unité d'achat
+                      </SelectForm>
+                    </div>
+                  </div>{" "}
+                </>
+              ) : (
+                ""
+              )}
               <div className="row">
                 <div className="col-4">
                   <SelectForm

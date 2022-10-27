@@ -45,7 +45,7 @@ const Produit = db.define(
     },
     date_der_ravitaillement: {
       type: DataTypes.DATE,
-      allowNull: false,
+      // allowNull: false,
     },
     status: {
       type: DataTypes.BOOLEAN,

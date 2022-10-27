@@ -23,15 +23,15 @@ function Table() {
       name: "",
       selector: (row) => (
         <img
-          style={{ verticalAlign: "middle" }}
-          className="img-1 mr-sm-4 mr-3"
+          style={{ height: "15vh", verticalAlign: "middle" }}
+          className="img-fluid "
           styles={{ borderRadius: "5%" }}
           src={
             row.image
-              ? getUrl("images/fournisseur", row.image)
+              ? getUrl("images/produit", row.image)
               : `images/users/3.jpg`
           }
-          alt={`image de ${row.nom_fournisseur}`}
+          alt={`image de ${row.nom_produit}`}
         />
       ),
       sortable: true,

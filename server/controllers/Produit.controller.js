@@ -45,16 +45,28 @@ const createOne = async (req, res) => {
   if (!req.files) {
     insertDB();
   } else {
-    uploadFile(req, res, "PRODUIT_", "images/produit", insertDB);
+    delete item["image"];
+    uploadFile(
+      req,
+      res,
+      "PRODUIT_",
+      "images/produit",
+      item,
+      insertDB,
+      "",
+      "image"
+    );
   }
 };
 
 const updateOne = async (req, res) => {
   let data = JSON.parse(req.body.data);
+  console.log("\n\nitem produit", data, "\n\n");
   const item = await Produit.findOne({
     where: { code_lot_produit: req.params.code_lot_produit },
   });
   if (!item) return res.status(404).json({ message: "Produit introvable!" });
+  console.log("\n\nitem produit", item, "\n\n");
   if (!req.files) {
     data.image = item.image;
   } else {
@@ -63,15 +75,15 @@ const updateOne = async (req, res) => {
       res,
       "PRODUIT_",
       "images/produit",
+      data,
       null,
       item.image,
       "image"
     );
   }
-
   try {
     item.set(data);
-    await item.set(data);
+    await item.save();
     return res
       .status(200)
       .json({ message: data.nom_produit + " modifié(e) avec succès!" });

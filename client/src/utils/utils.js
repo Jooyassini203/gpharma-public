@@ -509,13 +509,12 @@ export const verifObligatory = (data, exception = []) => {
   return verif;
 };
 
-export const JsonToFormData = (data, file = "") => {
+export const JsonToFormData = (data, file = null, nameColFile = "") => {
   let formData = new FormData();
-  if (data[file])
-    if (file) {
-      formData.append("file", data[file]);
-      delete data[file];
-    }
+  if (file) {
+    formData.append("file", file);
+    delete data[nameColFile];
+  }
   formData.append("data", JSON.stringify(data));
   return formData;
 };

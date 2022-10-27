@@ -33,7 +33,7 @@ export const uploadFile = (
   lastImage = "",
   nameColImage = "image"
 ) => {
-  console.log("avec fil");
+  console.log("\n\n\n\n\navec file\n\n\n\n");
   const file = req.files.file;
   const fileSize = req.files.lenght;
   const fileExt = path.extname(file.name);

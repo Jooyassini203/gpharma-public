@@ -36,10 +36,9 @@ function View({ id }) {
               </button>
             </div>
             <div className="modal-body">
-              <div className="card-body">
+              <div className="card-body" style={{margin:"-4vh"}}>
                 <div className="row">
-                  <div className="col-xl-3 col-lg-6  col-md-6 col-xxl-5 ">
-                    {/* Tab panes */}
+                  <div className="col-xl-3 col-lg-6  col-md-6 col-xxl-5 "> 
                     <div className="tab-content">
                       <div
                         role="tabpanel"
@@ -47,9 +46,15 @@ function View({ id }) {
                         id="first"
                       >
                         <img
+                          style={produit.image?{ width: "25vw"  }:{}}
                           className="img-fluid"
-                          src="images/product/1.jpg"
-                          alt={"Image du produit " + produit.nom_produit}
+                          styles={{ borderRadius: "5%" }}
+                          src={
+                            produit.image
+                              ? getUrl("images/produit", produit.image)
+                              : `images/product/1.jpg`
+                          }
+                          alt={`image de ${produit.nom_produit}`}
                         />
 
                         <p className="text-content mt-3">
