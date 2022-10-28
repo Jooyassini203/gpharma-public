@@ -200,19 +200,24 @@ function Modal() {
         {_produit.unite_presentation["label"] ? (
           <>
             {" "}
-            <strong>{_produit.unite_presentation["label"]}</strong>{" "}
+            <strong>{_produit.unite_presentation["label"]}</strong>.
           </>
         ) : (
           ""
         )}
 
         {_produit.presentation_quantite &&
-        _produit["quantite_stock"] &&
-        _produit["unite_stock"] &&
-        _produit["unite_presentation"] ? (
+        // _produit["quantite_stock"].value &&
+        // _produit["unite_stock"].value &&
+        // _produit.unite_vente.value &&
+        _produit["unite_presentation"].value ? (
           <>
+          <br/>
             Quantité dispo pour le vente sera{" "}
-            <strong>{getQteVente(_produit)}</strong>.
+            <strong>
+              {getQteVente(_produit) + " " + _produit.unite_vente.label}
+            </strong>
+            .
           </>
         ) : (
           ""
@@ -222,14 +227,18 @@ function Modal() {
   };
 
   const getQteVente = (_produit) => {
-    let qt_vente = 0;
+    let qt_vente = _produit.quantite_stock;
     if (
       _produit.presentation_quantite &&
-      _produit["quantite_stock"] &&
-      _produit["unite_stock"] &&
-      _produit["unite_presentation"]
+      // _produit["quantite_stock"].value &&
+      // _produit["unite_stock"].value &&
+      // _produit.unite_vente.value &&
+      _produit["unite_presentation"].value
     ) {
-      if (_produit.unite === _produit.unite_presentation) {
+      if (_produit.unite_vente.value === _produit.unite_presentation.value) {
+        qt_vente = _produit.quantite_stock * _produit.presentation_quantite;
+      } else if (_produit.unite_vente.value === _produit.unite_stock.value) {
+        qt_vente = _produit.quantite_stock;
       }
     }
     return qt_vente;
@@ -289,7 +298,7 @@ function Modal() {
   };
 
   React.useEffect(() => {
-    console.log("produitSelected", produitSelected);
+    // console.log("produitSelected", produitSelected);
     if (produitSelected) {
       setProduit(dbToEditProduit(produitSelected));
       console.log("produit select", produit);
@@ -369,7 +378,7 @@ function Modal() {
             </div>
             <div className="modal-body">
               <div className="row mb-3">
-                <span className="float-left w-25 ml-4">
+                <span className="float-left w-50 ml-4">
                   {getDetailsQte(produit)}
                 </span>
                 <img

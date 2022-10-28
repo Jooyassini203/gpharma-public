@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { userConnected } from "../atoms/authentication";
 
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
@@ -56,7 +57,12 @@ export const addData = (
         "content-type": "multipart/form-data",
       },
     };
-    if (!isFormData) headers = {};
+    if (!isFormData) {
+      headers = {};
+      data["utilisateur_id"] = userConnected.id;
+    } else {
+      data.append("utilisateur_id", userConnected.id);
+    }
     try {
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
@@ -89,7 +95,12 @@ export const updateData = (
         "content-type": "multipart/form-data",
       },
     };
-    if (!isFormData) headers = {};
+    if (!isFormData) {
+      headers = {};
+      data["utilisateur_id"] = userConnected.id;
+    } else {
+      data.append("utilisateur_id", userConnected.id);
+    }
     try {
       console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
@@ -119,7 +130,9 @@ export const updateData = (
 export const deleteData = (tableName, id, callBack) => {
   const del = async () => {
     try {
-      const response = await axios.delete(urlDelete(tableName, id));
+      const response = await axios.delete(urlDelete(tableName, id), {
+        utilisateur_id: userConnected.id,
+      });
       if (response) {
         toast.success(response.data.message);
         callBack();

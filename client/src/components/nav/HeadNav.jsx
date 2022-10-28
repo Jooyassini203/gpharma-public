@@ -29,7 +29,7 @@ function HeadNav() {
                           "logout",
                           (data) => {
                             document.getElementById("btn-logout").click();
-                            sessionStorage.removeItem("gpharma@2.0.0");
+                            localStorage.removeItem("gpharma@2.0.0");
                           },
                           userConnect.id
                         );

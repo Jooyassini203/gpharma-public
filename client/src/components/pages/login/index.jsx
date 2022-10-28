@@ -30,11 +30,11 @@ function Login() {
           });
           if (response.status == 200) {
             toast.success(response.data.message);
-            window.sessionStorage.setItem(
+            window.localStorage.setItem(
               "gpharma@2.0.0",
               response.data.dataUser
             );
-            console.log(window.sessionStorage.getItem("gpharma@2.0.0")); 
+            console.log(window.localStorage.getItem("gpharma@2.0.0")); 
             document.getElementById("btn-login").click();
           }
         } catch (error) {

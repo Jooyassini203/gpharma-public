@@ -12,7 +12,7 @@ function Nav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   useEffect(() => {
     const userJson = cryptojs.AES.decrypt(
-      sessionStorage.getItem("gpharma@2.0.0"),
+      localStorage.getItem("gpharma@2.0.0"),
       process.env.REACT_APP_KEY_SESSION
     ).toString(cryptojs.enc.Utf8);
     setUserConnect(JSON.parse(userJson));

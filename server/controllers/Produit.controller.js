@@ -103,30 +103,30 @@ const deleteOne = async (req, res) => {
     where: { code_lot_produit: req.params.code_lot_produit },
   });
   if (!item) return res.status(404).json({ message: "Produit introvable!" });
-  const verif = await Produit.findOne(
-    {
-      where: { code_lot_produit: req.params.code_lot_produit },
-    },
-    {
-      include: [
-        {
-          model: Voie,
-          required: true,
-        },
-        { model: Unite },
-        { model: Fabricant },
-        { model: Famille },
-        { model: Forme },
-      ],
-    }
-  );
-  if (!verif) {
-    let message = "";
-    Object.entries(verif).forEach(([key, value]) => {
-      console.log("value", key, value);
-    });
-    return res.status(404).json({ message: message });
-  }
+  // const verif = await Produit.findOne(
+  //   {
+  //     where: { code_lot_produit: req.params.code_lot_produit },
+  //   },
+  //   {
+  //     include: [
+  //       {
+  //         model: Voie,
+  //         required: true,
+  //       },
+  //       { model: Unite },
+  //       { model: Fabricant },
+  //       { model: Famille },
+  //       { model: Forme },
+  //     ],
+  //   }
+  // );
+  // if (!verif) {
+  //   let message = "";
+  //   Object.entries(verif).forEach(([key, value]) => {
+  //     console.log("value", key, value);
+  //   });
+  //   return res.status(404).json({ message: message });
+  // }
   try {
     await item.destroy();
     return res.status(200).json({ message: "Produit supprimé avec succès!" });

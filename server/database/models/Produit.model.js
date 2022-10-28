@@ -10,7 +10,7 @@ const Produit = db.define(
       unique: true,
     },
     nom_produit: {
-      type: DataTypes.TEXT,
+      type: DataTypes.CHAR(255),
       allowNull: false,
       unique: true,
     },

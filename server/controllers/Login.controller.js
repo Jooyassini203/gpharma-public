@@ -2,6 +2,9 @@ import Utilisateur from "../database/models/Utilisateur.model.js";
 import bcrypt from "bcrypt";
 import cryptojs from "crypto-js";
 import { getDateNow } from "../utils/utils.js";
+import { LocalStorage } from "node-localstorage";
+
+global.localStorage = new LocalStorage("./scratch");
 
 const login = async (req, res) => {
   const nom_login = req.body.nom_login;
@@ -63,6 +66,7 @@ const reloadDataUser = async (req, res) => {
     process.env.KEY_SESSION
   ).toString();
   console.log("dataSessionCrypted", dataSessionCrypted);
+  // localStorage.setItem("gpharma@2.0.0", JSON.stringify(dataSession));
   return res.status(200).send({ dataUser: dataSessionCrypted });
 };
 

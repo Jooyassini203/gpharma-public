@@ -76,13 +76,13 @@ function RightNav() {
 
   const reloadDataUser = (setUserConnect) => {
     axios.get(urlRead('reloadDataUser', userConnect.id)).then((response)=>{
-      sessionStorage.setItem(
+      localStorage.setItem(
         "gpharma@2.0.0",
         response.data.dataUser
       );
-      console.log(window.sessionStorage.getItem("gpharma@2.0.0")); 
+      console.log(window.localStorage.getItem("gpharma@2.0.0")); 
       const userJson = cryptojs.AES.decrypt(
-        sessionStorage.getItem("gpharma@2.0.0"),
+        localStorage.getItem("gpharma@2.0.0"),
         process.env.REACT_APP_KEY_SESSION
       ).toString(cryptojs.enc.Utf8);
       setUserConnect(JSON.parse(userJson));

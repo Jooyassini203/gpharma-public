@@ -24,6 +24,7 @@
     "express-fileupload": "^1.4.0",
     "mariadb": "^3.0.1",
     "mysql2": "^2.3.3",
+    "node-localstorage": "^2.2.1",
     "nodemon": "^2.0.20",
     "react-confirm-alert": "^3.0.6",
     "sequelize": "^6.23.1",

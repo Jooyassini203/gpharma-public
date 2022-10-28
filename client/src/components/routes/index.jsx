@@ -12,7 +12,7 @@ import Produit from "../pages/produit";
 
 function MyRoute() {  
   const getLogin = () => {
-    if (sessionStorage.getItem('gpharma@2.0.0')) {
+    if (localStorage.getItem('gpharma@2.0.0')) {
       return <Navigate to="/" />
     }
     return <Login/>
