@@ -31,7 +31,7 @@ const Produit = db.define(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    prix_vente: {
+    prix_stock: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },

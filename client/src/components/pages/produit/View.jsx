@@ -103,7 +103,7 @@ function View({ id }) {
                         </div>
                         <div className="d-table mb-2">
                           <p className="price float-left d-block">
-                            {produit.prix_vente} Ar
+                            {produit.prix_stock} Ar
                           </p>
                         </div>
                         <p>

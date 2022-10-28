@@ -44,7 +44,7 @@ function Modal() {
     description,
     image,
     presentation_quantite,
-    prix_vente,
+    prix_stock,
     stock_min,
     stock_max,
     quantite_stock,
@@ -315,7 +315,7 @@ function Modal() {
   //     description: "",
   //     image: {},
   //     presentation_quantite: "1",
-  //     prix_vente: "1000",
+  //     prix_stock: "1000",
   //     stock_min: "15",
   //     stock_max: "250",
   //     quantite_stock: "50",
@@ -497,12 +497,12 @@ function Modal() {
                       <InputForm
                         integer
                         postIcon={{ text: "Ar" }}
-                        name="prix_vente"
-                        val={prix_vente}
+                        name="prix_stock"
+                        val={prix_stock}
                         onChange={(e) => onChange(e, setProduit)}
                         obligatory={isOb ? "active" : ""}
                       >
-                        Prix de vente
+                        Prix de stock ( * tva : prix de vente)
                       </InputForm>
                     </div>
                     <div className="col-4">

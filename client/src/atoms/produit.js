@@ -22,7 +22,7 @@ export const initialize = {
   description: "",
   image: null,
   presentation_quantite: "",
-  prix_vente: "",
+  prix_stock: "",
   stock_min: "",
   stock_max: "",
   quantite_stock: "",
