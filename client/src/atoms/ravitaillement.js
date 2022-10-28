@@ -1,4 +1,4 @@
-import { atom, RecoilState } from "recoil";
+import { atom } from "recoil";
 
 export const toggleAddTableEdit = atom({
   key: "is-add-ravitaillement",
@@ -12,10 +12,10 @@ export const listRavitaillement = atom({
 
 export const intializeRavitaillement = {
   motif: "",
-  montant_ht: 0,
+  montant_ht: "",
   etat_ravitaillement: "EN_COURS",
   date_prev_livraison: "",
-  tva: "",
+  tva: "20",
   caisse_id: {
     label: "",
     value: "",
@@ -31,11 +31,12 @@ export const intializeRavitaillement = {
 };
 
 export const intializeRavitaillementDetails = {
-  prix_unit: 0,
-  prix_ht: 0,
-  quantite_demande: 0,
-  montant_ht: 0,
-  produit_id: {
+  prix_unit: "",
+  prix_ht: "",
+  nom_produit: "",
+  quantite_demande: "",
+  montant_ht: "",
+  produit_code_lot_produit: {
     label: "",
     value: "",
   },

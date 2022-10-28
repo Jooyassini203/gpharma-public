@@ -487,15 +487,15 @@ export const getClassByNumber = (nbr) => {
   return classText;
 };
 
-export const convertToOption = (data, setOptions) => {
+export const convertToOption = (data, setOptions, nom = "nom", id = "id") => {
   let tempFull = [];
   let name = "";
   Object.entries(data).forEach(([key, value]) => {
     let temp = { label: "", value: "" };
     Object.entries(value).forEach(([k, val]) => {
-      if (k === "id") {
+      if (k === id) {
         temp.value = val;
-      } else if (k.indexOf("nom") > -1) {
+      } else if (k.indexOf(nom) > -1) {
         temp.label = val;
         name = k;
       }
@@ -530,4 +530,10 @@ export const JsonToFormData = (data, file = null, nameColFile = "") => {
   }
   formData.append("data", JSON.stringify(data));
   return formData;
+};
+
+export const filterOption = (optionSelect, state) => {
+  optionSelect.filter(
+    (option) => JSON.stringify(option) === JSON.stringify(state)
+  );
 };

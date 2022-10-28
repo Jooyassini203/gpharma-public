@@ -42,7 +42,7 @@ import produitListe from "../factories/Produit.factorie.js";
 Produit.belongsToMany(Ajustement, {
   through: Ajustement_detail,
   unique: false,
-  foreignKey: "produit_id",
+  foreignKey: "produit_code_lot_produit",
 });
 Ajustement.belongsToMany(Produit, {
   through: Ajustement_detail,
@@ -128,7 +128,7 @@ Ajustement.belongsTo(Emplacement, {
 Produit.belongsToMany(Emplacement, {
   through: Produit_emplacement,
   unique: false,
-  foreignKey: "produit_id",
+  foreignKey: "produit_code_lot_produit",
 });
 Emplacement.belongsToMany(Produit, {
   through: Produit_emplacement,
@@ -244,7 +244,7 @@ Vente.belongsTo(Ordonnance, {
 Produit.belongsToMany(Ravitaillement, {
   through: Ravitaillement_detail,
   unique: false,
-  foreignKey: "produit_id",
+  foreignKey: "produit_code_lot_produit",
 });
 Ravitaillement.belongsToMany(Produit, {
   through: Ravitaillement_detail,
@@ -330,7 +330,7 @@ Produit.belongsTo(Unite, {
 Produit.belongsToMany(Vente, {
   through: Vente_detail,
   unique: false,
-  foreignKey: "produit_id",
+  foreignKey: "produit_code_lot_produit",
 });
 Vente.belongsToMany(Produit, {
   through: Vente_detail,

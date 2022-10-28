@@ -1,49 +1,148 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
-import { intializeRavitaillement, intializeRavitaillementDetails } from "../../../atoms/ravitaillement";
-import { InputForm, onChange, SelectForm } from "../../../utils/utils";
+import {
+  intializeRavitaillement,
+  intializeRavitaillementDetails,
+} from "../../../atoms/ravitaillement";
+import {
+  convertToOption,
+  filterOption,
+  getData,
+  InputForm,
+  onChange,
+  SelectForm,
+  verifObligatory,
+} from "../../../utils/utils";
 
 function Insert() {
-  const [ravitaillement, setRavitaillement] = useRecoilState(intializeRavitaillement)
-  const [ravitaillementDetails, setRavitaillementDetails] = useRecoilState(intializeRavitaillementDetails)
+  const [ravitaillement, setRavitaillement] = useState(intializeRavitaillement);
+  const [ravitaillementDetails, setRavitaillementDetails] = useState(
+    intializeRavitaillementDetails
+  );
+  const [produit, setProduit] = useState({});
+  const [isObRvt, setIsObRvt] = useState(false);
+  const [isObRvtDt, setIsObRvtDt] = useState(false);
+  const [listRavitaillementDetails, setListRavitaillementDetails] = useState(
+    []
+  );
+  const [OptionsProduit, setOptionsProduit] = useState([]);
+  const [OptionsMode_expedition, setOptionsMode_expedition] = useState([]);
+  const [OptionsFournisseur, setOptionsFournisseur] = useState([]);
   const {
-    motif ,
-    montant_ht_rvt ,
-    etat_ravitaillement ,
-    date_prev_livraison ,
-    tva ,
-    caisse_id ,
-    fournisseur_id ,
-    mode_expedition_id ,
-  } = ravitaillement
+    motif,
+    etat_ravitaillement,
+    date_prev_livraison,
+    tva,
+    caisse_id,
+    fournisseur_id,
+    mode_expedition_id,
+  } = ravitaillement;
   const {
-    prix_unit ,
-    prix_ht ,
-    quantite_demande ,
-    montant_ht_rvtDt ,
-    produit_id ,
-    unite_achat ,
-  } = ravitaillementDetails
+    prix_unit,
+    produit_code_lot_produit,
+    nom_produit,
+    prix_ht,
+    quantite_demande,
+    unite_achat,
+  } = ravitaillementDetails;
+
+  const addItemInList = () => {
+    let item = {
+      ...ravitaillementDetails,
+      produit_code_lot_produit: produit.code_lot_produit,
+      nom_produit: produit.nom_produit,
+      prix_ht: quantite_demande * prix_unit,
+      unite_achat: produit.unite_stock,
+      montant_ht: quantite_demande * prix_unit,
+    };
+    console.log(item);
+    if (verifObligatory(item) && tva) return;
+    let list = listRavitaillementDetails;
+    let verif = false;
+    Object.entries(list).forEach(([key, value]) => {
+      if (value.produit_code_lot_produit === produit.code_lot_produit) verif = true;
+    });
+    if (verif) {
+      toast.warning('Cette produit existe déjà dans la liste; veuillez seulement modifié votre commande dans cette dernière ?')
+      return;
+    }
+    setListRavitaillementDetails(list);
+    list.push(item);
+  };
+
+  useEffect(() => {
+    getData("fournisseur", (data) =>
+      convertToOption(data, setOptionsFournisseur)
+    );
+    getData("Produit", (data) => {
+      console.log("Produit", data);
+      setProduit(data[0]);
+      convertToOption(
+        data,
+        setOptionsProduit,
+        "nom_produit",
+        "code_lot_produit"
+      );
+    });
+    getData("Mode_expedition", (data) =>
+      convertToOption(data, setOptionsMode_expedition)
+    );
+  }, []);
 
   return (
     <div className="card m-auto">
       <div className="card-body">
-        <div className="row">
+        <div className="row mb-4">
           <div className="col-6">
-            <InputForm textarea rows="2" name="motif" val={motif} onChange={(e)=>onChange(e, setRavitaillement)}>
+            <InputForm
+              textarea
+              rows="2"
+              name="motif"
+              val={motif}
+              onChange={(e) => onChange(e, setRavitaillement)}
+              obligatory={isObRvt ? "active" : ""}
+            >
               Motif
             </InputForm>
             <div className="row">
               <div className="col-6">
-                <SelectForm val={fournisseur_id} onChange={(e)=>onChange(e, setRavitaillement)}>Fournisseur</SelectForm>
+                <SelectForm
+                  val={fournisseur_id}
+                  value={filterOption(OptionsFournisseur, fournisseur_id)}
+                  options={OptionsFournisseur}
+                  onChange={(e) => onChange(e, setRavitaillement)}
+                  obligatory={isObRvt ? "active" : ""}
+                >
+                  Fournisseur
+                </SelectForm>
               </div>
               <div className="col-6">
-                <SelectForm val={mode_expedition_id} onChange={(e)=>onChange(e, setRavitaillement)}>Mode d'expedition</SelectForm>
+                <SelectForm
+                  val={mode_expedition_id}
+                  value={filterOption(
+                    OptionsMode_expedition,
+                    mode_expedition_id
+                  )}
+                  options={OptionsMode_expedition}
+                  onChange={(e) => onChange(e, setRavitaillement)}
+                  obligatory={isObRvt ? "active" : ""}
+                >
+                  Mode d'expedition
+                </SelectForm>
               </div>
             </div>
             <div className="row">
               <div className="col-8">
-              <InputForm date  name="date_prev_livraison" val={date_prev_livraison} onChange={(e)=>onChange(e, setRavitaillement)} > Date prévue pour la livraison</InputForm>
+                <InputForm
+                  date
+                  name="date_prev_livraison"
+                  val={date_prev_livraison}
+                  onChange={(e) => onChange(e, setRavitaillement)}
+                  obligatory={isObRvt ? "active" : ""}
+                >
+                  Date prévue pour la livraison
+                </InputForm>
                 {/* <label className="font-w600" htmlFor="datepicker">
                   Date prévue pour la livraison
                 </label>
@@ -57,9 +156,16 @@ function Insert() {
                   aria-readonly="false"
                   aria-owns="datepicker_root"
                 />*/}
-              </div> 
+              </div>
               <div className="col-4">
-                <InputForm integer postIcon={{ text: "%" }} name="tva" val={tva} onChange={(e)=>onChange(e, setRavitaillement)} >
+                <InputForm
+                  integer
+                  postIcon={{ text: "%" }}
+                  name="tva"
+                  val={tva}
+                  onChange={(e) => onChange(e, setRavitaillementDetails)}
+                  obligatory={isObRvtDt ? "active" : ""}
+                >
                   TVA
                 </InputForm>
               </div>
@@ -69,30 +175,90 @@ function Insert() {
             <div className="shadow-sm p-4">
               <div className="row">
                 <div className="col-7">
-                  <SelectForm name="produit_id" val={produit_id} onChange={(e)=>onChange(e, setRavitaillement)} >Produit</SelectForm>
+                  <SelectForm
+                    val={produit_code_lot_produit}
+                    value={filterOption(
+                      OptionsProduit,
+                      produit_code_lot_produit
+                    )}
+                    options={OptionsProduit}
+                    onChange={(e) => {
+                      onChange(e, setRavitaillementDetails);
+                      if (e.value)
+                        getData(
+                          "produit",
+                          (data) => setProduit(data[0]),
+                          e.value
+                        );
+                    }}
+                    obligatory={isObRvtDt ? "active" : ""}
+                  >
+                    Produit
+                  </SelectForm>
                 </div>
                 <div className="col-5">
-                  <InputForm postIcon={{ text: "Ar" }} integer name="prix_unit" val={prix_unit} onChange={(e)=>onChange(e, setRavitaillement)} >
-                    Prix
+                  <InputForm
+                    postIcon={{ text: "Ar" }}
+                    integer
+                    name="prix_unit"
+                    val={prix_unit}
+                    onChange={(e) => onChange(e, setRavitaillementDetails)}
+                    obligatory={isObRvtDt ? "active" : ""}
+                  >
+                    Prix unitaire
                   </InputForm>
                 </div>
               </div>
               <div className="row">
-                <div className="col-8">
-                  <InputForm integer name="quantite_demande" val={quantite_demande} onChange={(e)=>onChange(e, setRavitaillement)} >Qte demandé</InputForm>
+                <div className="col-4">
+                  <InputForm
+                    integer
+                    name="quantite_demande"
+                    val={quantite_demande}
+                    onChange={(e) => onChange(e, setRavitaillementDetails)}
+                    obligatory={isObRvtDt ? "active" : ""}
+                  >
+                    Qte demandé
+                  </InputForm>
                 </div>
                 <div className="col-4">
                   <label className="font-w600">Unité stock</label>
-                  <span className="badge badge-warning p-2 light">
-                    Unité stock
+                  <span
+                    className="badge badge-warning light"
+                    style={{ padding: "1.75vh", marginTop: "-0.35vh" }}
+                  >
+                    {produit.nom_stock}
                   </span>
                 </div>
+                <div className="col-4">
+                  <button
+                    className="btn btn-outline-warning w-100"
+                    style={{ marginTop: "4.25vh" }}
+                    onClick={addItemInList}
+                  >
+                    <i className="fa fa-market"></i> Ajouter
+                  </button>
+                </div>
               </div>
-              <p className="mt-3 text-center mb-0">Prix HT : <b>0000 Ar</b> &nbsp;&nbsp;&nbsp; & &nbsp;&nbsp;&nbsp; Prix TCC : <b>0000 Ar</b></p>
+              <p className="mt-3 text-center mb-0">
+                {prix_unit && quantite_demande ? (
+                  <>
+                    Prix HT : <b>{prix_unit * quantite_demande} Ar</b>{" "}
+                    &nbsp;&nbsp;&nbsp; & &nbsp;&nbsp;&nbsp;
+                  </>
+                ) : null}
+                {prix_unit && quantite_demande && tva ? (
+                  <>
+                    Prix TCC :{" "}
+                    <b>{prix_unit * quantite_demande * (1 + tva / 100)} Ar</b>
+                  </>
+                ) : null}
+              </p>
             </div>
           </div>
         </div>
-        <div>
+        <hr />
+        <div className="mt-4">
           <div className="table-responsive">
             <table className="table table-striped table-responsive-md">
               <thead>
@@ -106,40 +272,18 @@ function Insert() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="center">1</td>
-                  <td className="left strong">Origin License</td>
-                  <td className="left">Extended License</td>
-                  <td className="right">$999,00</td>
-                  <td className="center">1</td>
-                  <td className="right">$999,00</td>
-                </tr>
-                <tr>
-                  <td className="center">2</td>
-                  <td className="left">Custom Services</td>
-                  <td className="left">
-                    Instalation and Customization (cost per hour)
-                  </td>
-                  <td className="right">$150,00</td>
-                  <td className="center">20</td>
-                  <td className="right">$3.000,00</td>
-                </tr>
-                <tr>
-                  <td className="center">3</td>
-                  <td className="left">Hosting</td>
-                  <td className="left">1 year subcription</td>
-                  <td className="right">$499,00</td>
-                  <td className="center">1</td>
-                  <td className="right">$499,00</td>
-                </tr>
-                <tr>
-                  <td className="center">4</td>
-                  <td className="left">Platinum Support</td>
-                  <td className="left">1 year subcription 24/7</td>
-                  <td className="right">$3.999,00</td>
-                  <td className="center">1</td>
-                  <td className="right">$3.999,00</td>
-                </tr>
+                {listRavitaillementDetails.map((item) => (
+                  <tr>
+                    <td className="center">1</td>
+                    <td className="left strong">
+                      {item.produit_code_lot_produit}
+                    </td>
+                    <td className="left">{item.nom_produit}</td>
+                    <td className="right">{item.prix_unit}</td>
+                    <td className="center">{item.quantite_demande}</td>
+                    <td className="right">{item.prix_ht}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
