@@ -252,14 +252,14 @@ Ravitaillement.belongsToMany(Produit, {
   foreignKey: "ravitaillement_id",
 });
 
-Unite.hasMany(Ravitaillement, {
+Unite.hasMany(Ravitaillement_detail, {
   foreignKey: {
     name: "unite_achat",
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
-Ravitaillement.belongsTo(Unite, {
+Ravitaillement_detail.belongsTo(Unite, {
   foreignKey: {
     name: "unite_achat",
     type: DataTypes.INTEGER,
