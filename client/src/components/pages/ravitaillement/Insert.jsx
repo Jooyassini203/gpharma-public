@@ -1,26 +1,49 @@
 import React from "react";
-import { InputForm, SelectForm } from "../../../utils/utils";
+import { useRecoilState } from "recoil";
+import { intializeRavitaillement, intializeRavitaillementDetails } from "../../../atoms/ravitaillement";
+import { InputForm, onChange, SelectForm } from "../../../utils/utils";
 
 function Insert() {
+  const [ravitaillement, setRavitaillement] = useRecoilState(intializeRavitaillement)
+  const [ravitaillementDetails, setRavitaillementDetails] = useRecoilState(intializeRavitaillementDetails)
+  const {
+    motif ,
+    montant_ht_rvt ,
+    etat_ravitaillement ,
+    date_prev_livraison ,
+    tva ,
+    caisse_id ,
+    fournisseur_id ,
+    mode_expedition_id ,
+  } = ravitaillement
+  const {
+    prix_unit ,
+    prix_ht ,
+    quantite_demande ,
+    montant_ht_rvtDt ,
+    produit_id ,
+    unite_achat ,
+  } = ravitaillementDetails
+
   return (
     <div className="card m-auto">
       <div className="card-body">
         <div className="row">
           <div className="col-6">
-            <InputForm textarea rows="2">
+            <InputForm textarea rows="2" name="motif" val={motif} onChange={(e)=>onChange(e, setRavitaillement)}>
               Motif
             </InputForm>
             <div className="row">
               <div className="col-6">
-                <SelectForm>Fournisseur</SelectForm>
+                <SelectForm val={fournisseur_id} onChange={(e)=>onChange(e, setRavitaillement)}>Fournisseur</SelectForm>
               </div>
               <div className="col-6">
-                <InputForm>Mode d'expedition</InputForm>
+                <SelectForm val={mode_expedition_id} onChange={(e)=>onChange(e, setRavitaillement)}>Mode d'expedition</SelectForm>
               </div>
             </div>
             <div className="row">
               <div className="col-8">
-              <InputForm date > Date prévue pour la livraison</InputForm>
+              <InputForm date  name="date_prev_livraison" val={date_prev_livraison} onChange={(e)=>onChange(e, setRavitaillement)} > Date prévue pour la livraison</InputForm>
                 {/* <label className="font-w600" htmlFor="datepicker">
                   Date prévue pour la livraison
                 </label>
@@ -36,7 +59,7 @@ function Insert() {
                 />*/}
               </div> 
               <div className="col-4">
-                <InputForm integer postIcon={{ text: "%" }}>
+                <InputForm integer postIcon={{ text: "%" }} name="tva" val={tva} onChange={(e)=>onChange(e, setRavitaillement)} >
                   TVA
                 </InputForm>
               </div>
@@ -46,17 +69,17 @@ function Insert() {
             <div className="shadow-sm p-4">
               <div className="row">
                 <div className="col-7">
-                  <SelectForm>Produit</SelectForm>
+                  <SelectForm name="produit_id" val={produit_id} onChange={(e)=>onChange(e, setRavitaillement)} >Produit</SelectForm>
                 </div>
                 <div className="col-5">
-                  <InputForm postIcon={{ text: "Ar" }} integer>
+                  <InputForm postIcon={{ text: "Ar" }} integer name="prix_unit" val={prix_unit} onChange={(e)=>onChange(e, setRavitaillement)} >
                     Prix
                   </InputForm>
                 </div>
               </div>
               <div className="row">
                 <div className="col-8">
-                  <InputForm integer>Qte demandé</InputForm>
+                  <InputForm integer name="quantite_demande" val={quantite_demande} onChange={(e)=>onChange(e, setRavitaillement)} >Qte demandé</InputForm>
                 </div>
                 <div className="col-4">
                   <label className="font-w600">Unité stock</label>
