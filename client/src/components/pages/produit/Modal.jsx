@@ -438,8 +438,7 @@ function Modal() {
                       </InputForm>
                     </div>
                     <div className="col-3">
-                      <SelectForm
-                        val={unite_stock}
+                      <SelectForm 
                         value={OptionsUnite.filter((option) =>
                           filterOption(option, unite_stock)
                         )}
@@ -481,8 +480,7 @@ function Modal() {
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <SelectForm
-                        val={unite_vente}
+                      <SelectForm 
                         value={OptionsUnite.filter((option) =>
                           filterOption(option, unite_vente)
                         )}
@@ -506,8 +504,7 @@ function Modal() {
                       </InputForm>
                     </div>
                     <div className="col-4">
-                      <SelectForm
-                        val={unite_achat}
+                      <SelectForm 
                         value={OptionsUnite.filter((option) =>
                           filterOption(option, unite_achat)
                         )}
@@ -525,8 +522,7 @@ function Modal() {
               )}
               <div className="row">
                 <div className="col-4">
-                  <SelectForm
-                    val={fabricant_id}
+                  <SelectForm 
                     value={OptionsFabricant.filter((option) =>
                       filterOption(option, fabricant_id)
                     )}
@@ -538,8 +534,7 @@ function Modal() {
                   </SelectForm>
                 </div>
                 <div className="col-4">
-                  <SelectForm
-                    val={famille_id}
+                  <SelectForm 
                     value={OptionsFamille.filter((option) =>
                       filterOption(option, famille_id)
                     )}
@@ -551,8 +546,7 @@ function Modal() {
                   </SelectForm>
                 </div>
                 <div className="col-4">
-                  <SelectForm
-                    val={forme_id}
+                  <SelectForm 
                     value={OptionsForme.filter((option) =>
                       filterOption(option, forme_id)
                     )}
@@ -566,8 +560,7 @@ function Modal() {
               </div>
               <div className="row">
                 <div className="col-4">
-                  <SelectForm
-                    val={voie_id}
+                  <SelectForm 
                     value={OptionsVoie.filter((option) =>
                       filterOption(option, voie_id)
                     )}

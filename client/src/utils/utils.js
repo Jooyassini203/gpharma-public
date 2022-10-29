@@ -303,7 +303,7 @@ export const SelectForm = (props) => {
       <label className="mb-1">
         <strong>{children}</strong>
       </label>
-      {postIcon || preIcon ? (
+      {/* {postIcon || preIcon ? (
         <div className="input-group transparent-append">
           {" "}
           {preIcon ? (
@@ -335,14 +335,14 @@ export const SelectForm = (props) => {
           )}
         </div>
       ) : (
-        <Select styles={{ height: "90%" }} {...prop} />
-      )}
-
+       
+      )} */}
+      <Select styles={{ height: "90%" }} value={val} {...prop} />
       <span
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
       >
-        {getSpan(val, obligatory)}
+        {getSpan(val.label, "obligatory")}
       </span>
     </div>
   );
@@ -502,18 +502,18 @@ export const convertToOption = (data, setOptions, nom = "nom", id = "id") => {
     });
     tempFull.push(temp);
   });
-  console.log("setOptions " + name + " :", tempFull);
+  // console.log("setOptions " + name + " :", tempFull);
   setOptions(tempFull);
 };
 
 export const verifObligatory = (data, exception = []) => {
-  console.log(
-    "-------------------------------------------------------------------------------------------------------------------------------------------"
-  );
+  // console.log(
+  //   "-------------------------------------------------------------------------------------------------------------------------------------------"
+  // );
   let verif = false;
   Object.entries(data).forEach(([key, value]) => {
     if (!exception.includes(key)) {
-      if (value == "" || value == null) {
+      if (value === "" || value === null) {
         console.log("exception[i]", key, value);
         verif = true;
       } else console.log();

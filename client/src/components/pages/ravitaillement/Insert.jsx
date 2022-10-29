@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import {
@@ -6,6 +7,8 @@ import {
   intializeRavitaillementDetails,
 } from "../../../atoms/ravitaillement";
 import {
+  ButtonTable,
+  confirmDelete,
   convertToOption,
   filterOption,
   getData,
@@ -48,6 +51,8 @@ function Insert() {
   } = ravitaillementDetails;
 
   const addItemInList = () => {
+    console.log("ravitaillementDetails", ravitaillementDetails);
+    setIsObRvtDt(true);
     let item = {
       ...ravitaillementDetails,
       produit_code_lot_produit: produit.code_lot_produit,
@@ -56,19 +61,20 @@ function Insert() {
       unite_achat: produit.unite_stock,
       montant_ht: quantite_demande * prix_unit,
     };
-    console.log(item);
     if (verifObligatory(item) && tva) return;
-    let list = listRavitaillementDetails;
     let verif = false;
-    Object.entries(list).forEach(([key, value]) => {
-      if (value.produit_code_lot_produit === produit.code_lot_produit) verif = true;
+    Object.entries(listRavitaillementDetails).forEach(([key, value]) => {
+      if (value.produit_code_lot_produit === produit.code_lot_produit)
+        verif = true;
     });
     if (verif) {
-      toast.warning('Cette produit existe déjà dans la liste; veuillez seulement modifié votre commande dans cette dernière ?')
+      toast.warning(
+        "Cette produit existe déjà dans la liste; veuillez seulement modifié votre commande dans cette dernière ?"
+      );
       return;
     }
-    setListRavitaillementDetails(list);
-    list.push(item);
+    setListRavitaillementDetails([...listRavitaillementDetails, item]);
+    console.log(listRavitaillementDetails);
   };
 
   useEffect(() => {
@@ -76,8 +82,6 @@ function Insert() {
       convertToOption(data, setOptionsFournisseur)
     );
     getData("Produit", (data) => {
-      console.log("Produit", data);
-      setProduit(data[0]);
       convertToOption(
         data,
         setOptionsProduit,
@@ -89,6 +93,36 @@ function Insert() {
       convertToOption(data, setOptionsMode_expedition)
     );
   }, []);
+
+  const getTotalsHT = () => {
+    if (listRavitaillementDetails.length > 0) {
+      let total = 0;
+      listRavitaillementDetails.forEach((item) => {
+        total += item.montant_ht;
+      });
+      return total;
+    }
+  };
+
+  const getTotalsTVA = () => {
+    if (listRavitaillementDetails.length > 0) {
+      let total = 0;
+      listRavitaillementDetails.forEach((item) => {
+        total += item.montant_ht * (tva / 100);
+      });
+      return total;
+    }
+  };
+
+  const getTotalsTTC = () => {
+    if (listRavitaillementDetails.length > 0) {
+      let total = 0;
+      listRavitaillementDetails.forEach((item) => {
+        total += item.montant_ht;
+      });
+      return total * (1 + tva / 100);
+    }
+  };
 
   return (
     <div className="card m-auto">
@@ -107,8 +141,7 @@ function Insert() {
             </InputForm>
             <div className="row">
               <div className="col-6">
-                <SelectForm
-                  val={fournisseur_id}
+                <SelectForm 
                   value={filterOption(OptionsFournisseur, fournisseur_id)}
                   options={OptionsFournisseur}
                   onChange={(e) => onChange(e, setRavitaillement)}
@@ -118,8 +151,7 @@ function Insert() {
                 </SelectForm>
               </div>
               <div className="col-6">
-                <SelectForm
-                  val={mode_expedition_id}
+                <SelectForm 
                   value={filterOption(
                     OptionsMode_expedition,
                     mode_expedition_id
@@ -175,15 +207,18 @@ function Insert() {
             <div className="shadow-sm p-4">
               <div className="row">
                 <div className="col-7">
-                  <SelectForm
-                    val={produit_code_lot_produit}
+                  <SelectForm 
                     value={filterOption(
                       OptionsProduit,
                       produit_code_lot_produit
                     )}
                     options={OptionsProduit}
                     onChange={(e) => {
-                      onChange(e, setRavitaillementDetails);
+                      onChange(
+                        e,
+                        setRavitaillementDetails,
+                        "produit_code_lot_produit"
+                      );
                       if (e.value)
                         getData(
                           "produit",
@@ -269,11 +304,14 @@ function Insert() {
                   <th className="right">Prix Unit</th>
                   <th className="center">Qte</th>
                   <th className="right">Total</th>
+                  <th style={{ widht: "100px" }} className="center">
+                    Option
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {listRavitaillementDetails.map((item) => (
-                  <tr>
+                  <tr key={item.code_lot_produit + item.nom_produit}>
                     <td className="center">1</td>
                     <td className="left strong">
                       {item.produit_code_lot_produit}
@@ -282,53 +320,106 @@ function Insert() {
                     <td className="right">{item.prix_unit}</td>
                     <td className="center">{item.quantite_demande}</td>
                     <td className="right">{item.prix_ht}</td>
+                    <th className="center">
+                      <ButtonTable
+                        importance="warning"
+                        icon={faEdit}
+                        handleClick={() => {
+                          setRavitaillementDetails({
+                            prix_unit: item.prix_unit,
+                            produit_code_lot_produit: {
+                              label: item.nom_produit,
+                              value: item.produit_code_lot_produit,
+                            },
+                            nom_produit: item.nom_produit,
+                            prix_ht: item.prix_ht,
+                            quantite_demande: item.quantite_demande,
+                            unite_achat: item.unite_achat,
+                          });
+                          console.log(
+                            "ravitaillementDetails",
+                            ravitaillementDetails
+                          );
+                          setListRavitaillementDetails([
+                            ...listRavitaillementDetails.slice(
+                              0,
+                              listRavitaillementDetails.indexOf(item)
+                            ),
+                            ...listRavitaillementDetails.slice(
+                              listRavitaillementDetails.indexOf(item) + 1
+                            ),
+                          ]);
+                        }}
+                      />
+                      <ButtonTable
+                        importance="danger"
+                        icon={faTrash}
+                        handleClick={() => {
+                          confirmDelete(
+                            "Retirer cette élément de la liste des commandes ?",
+                            () => {
+                              setListRavitaillementDetails([
+                                ...listRavitaillementDetails.slice(
+                                  0,
+                                  listRavitaillementDetails.indexOf(item)
+                                ),
+                                ...listRavitaillementDetails.slice(
+                                  listRavitaillementDetails.indexOf(item) + 1
+                                ),
+                              ]);
+                            }
+                          );
+                        }}
+                      />
+                    </th>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="row">
-            <div className="col-lg-4 col-sm-5"> </div>
-            <div className="col-lg-4 col-sm-5 ml-auto">
-              <table className="table table-clear">
-                <tbody>
-                  <tr>
-                    <td className="left">
-                      <strong>Subtotal</strong>
-                    </td>
-                    <td className="right">$8.497,00</td>
-                  </tr>
-                  <tr>
-                    <td className="left">
-                      <strong>Discount (20%)</strong>
-                    </td>
-                    <td className="right">$1,699,40</td>
-                  </tr>
-                  <tr>
-                    <td className="left">
-                      <strong>VAT (10%)</strong>
-                    </td>
-                    <td className="right">$679,76</td>
-                  </tr>
-                  <tr>
-                    <td className="left">
-                      <strong>Total</strong>
-                    </td>
-                    <td className="right">
-                      <strong>$7.477,36</strong>
-                      <br />
-                      <strong>0.15050000 BTC</strong>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          {listRavitaillementDetails.length > 0 ? (
+            <div className="row">
+              <div className="col-lg-4 col-sm-5"> </div>
+              <div className="col-lg-4 col-sm-5 ml-auto">
+                <table className="table table-clear">
+                  <tbody>
+                    <tr>
+                      <td className="left">
+                        <strong>Totals HT</strong>
+                      </td>
+                      <td className="right">{getTotalsHT()}</td>
+                    </tr>
+                    <tr>
+                      <td className="left">
+                        <strong>TVA ({tva}%)</strong>
+                      </td>
+                      <td className="right">{getTotalsTVA()}</td>
+                    </tr>
+                    <tr>
+                      <td className="left">
+                        <strong>Totals TTC</strong>
+                      </td>
+                      <td className="right">
+                        <strong>{getTotalsTTC()}</strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
       <div className="card-footer">
         <div className="row">
-          <button className="btn btn-primary btn-lg w-100">Efféctuer</button>
+          <button
+            className="btn btn-primary btn-lg w-100"
+            onClick={() => {
+              setIsObRvt(true);
+            }}
+          >
+            Efféctuer
+          </button>
         </div>
       </div>
     </div>
