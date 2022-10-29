@@ -302,8 +302,8 @@ export const SelectForm = (props) => {
     <div className="form-group mb-3">
       <label className="mb-1">
         <strong>{children}</strong>
-      </label>
-      {/* {postIcon || preIcon ? (
+      </label>{" "}
+      {postIcon || preIcon ? (
         <div className="input-group transparent-append">
           {" "}
           {preIcon ? (
@@ -335,9 +335,8 @@ export const SelectForm = (props) => {
           )}
         </div>
       ) : (
-       
-      )} */}
-      <Select styles={{ height: "90%" }} {...prop} />
+        <Select styles={{ height: "90%" }} {...prop} />
+      )}
       <span
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
