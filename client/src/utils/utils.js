@@ -292,9 +292,9 @@ export const SelectForm = (props) => {
   const {
     preIcon = null,
     postIcon = null,
+    value,
     children,
     obligatory,
-    val,
     placeholder = "tse",
     ...prop
   } = props;
@@ -337,12 +337,13 @@ export const SelectForm = (props) => {
       ) : (
        
       )} */}
-      <Select styles={{ height: "90%" }} value={val} {...prop} />
+      {console.log("value", value)}
+      <Select styles={{ height: "90%" }} value={value} {...prop} />
       <span
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
       >
-        {getSpan(val.label, "obligatory")}
+        {getSpan(value, "obligatory")}
       </span>
     </div>
   );
