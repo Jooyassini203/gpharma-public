@@ -142,6 +142,7 @@ function Insert() {
             <div className="row">
               <div className="col-6">
                 <SelectForm 
+                val={fournisseur_id}
                   value={filterOption(OptionsFournisseur, fournisseur_id)}
                   options={OptionsFournisseur}
                   onChange={(e) => onChange(e, setRavitaillement)}
@@ -152,7 +153,8 @@ function Insert() {
               </div>
               <div className="col-6">
                 <SelectForm 
-                  value={filterOption(
+                val={mode_expedition_id}
+                value={filterOption(
                     OptionsMode_expedition,
                     mode_expedition_id
                   )}
@@ -208,7 +210,8 @@ function Insert() {
               <div className="row">
                 <div className="col-7">
                   <SelectForm 
-                    value={filterOption(
+                val={produit_code_lot_produit}
+                value={filterOption(
                       OptionsProduit,
                       produit_code_lot_produit
                     )}

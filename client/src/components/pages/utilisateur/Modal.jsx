@@ -241,7 +241,9 @@ function Modal() {
                 </InputForm>
               </div>
               <div className="col-6">
-                <SelectForm 
+                <SelectForm
+                  name="type_utilisateur"
+                  val={type_utilisateur}
                   value={optionsType.filter(
                     (option) =>
                       JSON.stringify(option) ===
@@ -268,7 +270,9 @@ function Modal() {
                 </InputForm>
               </div>
               <div className="col-6">
-                <SelectForm 
+                <SelectForm
+                  name="sexe"
+                  val={sexe}
                   value={sexeOptions.filter(
                     (option) => JSON.stringify(option) === JSON.stringify(sexe)
                   )}
