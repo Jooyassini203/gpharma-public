@@ -63,6 +63,11 @@ function Nav() {
             icon="fas fa-cog"
             title="Paramètre"
           />
+          <NavElementChildren
+            to="/societe"
+            icon="fas fa-entreprise"
+            title="Société"
+          />
         </NavElement>
 
         <NavElement

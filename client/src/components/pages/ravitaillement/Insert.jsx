@@ -5,8 +5,10 @@ import { useRecoilState } from "recoil";
 import {
   intializeRavitaillement,
   intializeRavitaillementDetails,
+  toggleAddTableEdit,
 } from "../../../atoms/ravitaillement";
 import {
+  addData,
   ButtonTable,
   confirmDelete,
   convertToOption,
@@ -17,9 +19,13 @@ import {
   SelectForm,
   verifObligatory,
 } from "../../../utils/utils";
+import { getDateNow } from "../../../utils/utils";
+import { userConnected } from "../../../atoms/authentication";
 
 function Insert() {
-  const [ravitaillement, setRavitaillement] = useState(intializeRavitaillement);
+  const [toggle, setToggle] = useRecoilState(toggleAddTableEdit);
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
+  const [ravitaillement, setRavitaillement] = useState(intializeRavitaillement); 
   const [ravitaillementDetails, setRavitaillementDetails] = useState(
     intializeRavitaillementDetails
   );
@@ -51,17 +57,27 @@ function Insert() {
   } = ravitaillementDetails;
 
   const addItemInList = () => {
-    console.log("ravitaillementDetails", ravitaillementDetails);
-    setIsObRvtDt(true);
-    let item = {
+    setIsObRvtDt(true); 
+    console.log("rvtDetail", {
       ...ravitaillementDetails,
-      produit_code_lot_produit: produit.code_lot_produit,
+      produit_code_lot_produit: produit_code_lot_produit.value,
       nom_produit: produit.nom_produit,
-      prix_ht: quantite_demande * prix_unit,
+      prix_ht: parseInt(quantite_demande) * parseInt(prix_unit),
       unite_achat: produit.unite_stock,
-      montant_ht: quantite_demande * prix_unit,
-    };
-    if (verifObligatory(item) && tva) return;
+      montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+    });
+    if (
+      verifObligatory({
+        ...ravitaillementDetails,
+        produit_code_lot_produit: produit_code_lot_produit.value,
+        nom_produit: produit.nom_produit,
+        prix_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+        unite_achat: produit.unite_stock,
+        montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+      }) &&
+      tva
+    )
+      return;
     let verif = false;
     Object.entries(listRavitaillementDetails).forEach(([key, value]) => {
       if (value.produit_code_lot_produit === produit.code_lot_produit)
@@ -73,8 +89,19 @@ function Insert() {
       );
       return;
     }
-    setListRavitaillementDetails([...listRavitaillementDetails, item]);
-    console.log(listRavitaillementDetails);
+    setListRavitaillementDetails([
+      ...listRavitaillementDetails,
+      {
+        ...ravitaillementDetails,
+        produit_code_lot_produit: produit_code_lot_produit.value,
+        nom_produit: produit.nom_produit,
+        prix_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+        unite_achat: produit.unite_stock,
+        montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+      },
+    ]);
+
+    console.log("listRavitaillementDetails", listRavitaillementDetails);
   };
 
   useEffect(() => {
@@ -124,6 +151,35 @@ function Insert() {
     }
   };
 
+  const add = () => {
+    console.log("ravitaillement", ravitaillement);
+    setIsObRvt(true);
+    let dataRvt = {
+      motif,
+      etat_ravitaillement: "COMMANDE",
+      date_saisi: getDateNow(),
+      date_prev_livraison,
+      tva,
+      utilisateur_id: userConnect.id,
+      fournisseur_id: fournisseur_id.value,
+      mode_expedition_id: mode_expedition_id.value,
+      montant_ht: getTotalsHT(),
+    };
+    let dataRvtDetail = listRavitaillementDetails;
+    console.log("{ dataRvt, dataRvtDetail }", { dataRvt, dataRvtDetail });
+    if (
+      !motif ||
+      !fournisseur_id.value ||
+      !mode_expedition_id.value ||
+      !date_prev_livraison ||
+      !tva || dataRvtDetail.length <= 0
+    )
+      return;
+    addData("ravitaillement", { dataRvt, dataRvtDetail }, () => {
+      setToggle(0);
+    });
+  };
+
   return (
     <div className="card m-auto">
       <div className="card-body">
@@ -141,25 +197,25 @@ function Insert() {
             </InputForm>
             <div className="row">
               <div className="col-6">
-                <SelectForm 
-                val={fournisseur_id}
+                <SelectForm
+                  val={fournisseur_id}
                   value={filterOption(OptionsFournisseur, fournisseur_id)}
                   options={OptionsFournisseur}
-                  onChange={(e) => onChange(e, setRavitaillement)}
+                  onChange={(e) => onChange(e, setRavitaillement, "fournisseur_id")}
                   obligatory={isObRvt ? "active" : ""}
                 >
                   Fournisseur
                 </SelectForm>
               </div>
               <div className="col-6">
-                <SelectForm 
-                val={mode_expedition_id}
-                value={filterOption(
+                <SelectForm
+                  val={mode_expedition_id}
+                  value={filterOption(
                     OptionsMode_expedition,
                     mode_expedition_id
                   )}
                   options={OptionsMode_expedition}
-                  onChange={(e) => onChange(e, setRavitaillement)}
+                  onChange={(e) => onChange(e, setRavitaillement, "mode_expedition_id")}
                   obligatory={isObRvt ? "active" : ""}
                 >
                   Mode d'expedition
@@ -170,6 +226,7 @@ function Insert() {
               <div className="col-8">
                 <InputForm
                   date
+                  min={getDateNow("date")}
                   name="date_prev_livraison"
                   val={date_prev_livraison}
                   onChange={(e) => onChange(e, setRavitaillement)}
@@ -209,9 +266,9 @@ function Insert() {
             <div className="shadow-sm p-4">
               <div className="row">
                 <div className="col-7">
-                  <SelectForm 
-                val={produit_code_lot_produit}
-                value={filterOption(
+                  <SelectForm
+                    val={produit_code_lot_produit}
+                    value={filterOption(
                       OptionsProduit,
                       produit_code_lot_produit
                     )}
@@ -415,12 +472,7 @@ function Insert() {
       </div>
       <div className="card-footer">
         <div className="row">
-          <button
-            className="btn btn-primary btn-lg w-100"
-            onClick={() => {
-              setIsObRvt(true);
-            }}
-          >
+          <button className="btn btn-primary btn-lg w-100" onClick={add}>
             Efféctuer
           </button>
         </div>

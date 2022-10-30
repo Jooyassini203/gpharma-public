@@ -1,9 +1,9 @@
 import express from "express";
 import { getCount } from "../controllers/Parametre.controller.js";
 import Autentification from "../middlewares/Authentification.middleware.js";
-import { LocalStorage } from "node-localstorage";
+// import { LocalStorage } from "node-localstorage";
 
-global.localStorage = new LocalStorage("./scratch");
+// global.localStorage = new LocalStorage("./scratch");
 
 const ParametreRouter = express.Router();
 

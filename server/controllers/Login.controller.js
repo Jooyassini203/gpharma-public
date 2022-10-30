@@ -2,9 +2,9 @@ import Utilisateur from "../database/models/Utilisateur.model.js";
 import bcrypt from "bcrypt";
 import cryptojs from "crypto-js";
 import { getDateNow } from "../utils/utils.js";
-import { LocalStorage } from "node-localstorage";
+// import { LocalStorage } from "node-localstorage";
 
-global.localStorage = new LocalStorage("./scratch");
+// global.localStorage = new LocalStorage("./scratch");
 
 const login = async (req, res) => {
   const nom_login = req.body.nom_login;

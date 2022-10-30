@@ -54,14 +54,14 @@ Caisse.hasMany(Ravitaillement, {
   foreignKey: {
     name: "caisse_id",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 Ravitaillement.belongsTo(Caisse, {
   foreignKey: {
     name: "caisse_id",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
@@ -244,12 +244,12 @@ Vente.belongsTo(Ordonnance, {
 Produit.belongsToMany(Ravitaillement, {
   through: Ravitaillement_detail,
   unique: false,
-  foreignKey: "produit_code_lot_produit",
+  foreignKey: "produit_code_lot_produit",uniqueKey: false
 });
 Ravitaillement.belongsToMany(Produit, {
   through: Ravitaillement_detail,
   unique: false,
-  foreignKey: "ravitaillement_id",
+  foreignKey: "ravitaillement_id",uniqueKey: false
 });
 
 Unite.hasMany(Ravitaillement_detail, {
@@ -263,7 +263,7 @@ Ravitaillement_detail.belongsTo(Unite, {
   foreignKey: {
     name: "unite_achat",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false, 
   },
 });
 

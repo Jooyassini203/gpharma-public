@@ -25,6 +25,15 @@ export const getUrl = (dir, name) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${dir}/${name}`;
 };
 
+export const getDateNow = (name = "") => {
+  const date = new Date(); //2022-10-22 17:41:30
+  let dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  if (name == "date")
+    dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  console.log("dateString : ", dateString);
+  return dateString;
+};
+
 export const getData = (tableName, setList, id = "") => {
   const get = async () => {
     try {
@@ -292,9 +301,9 @@ export const SelectForm = (props) => {
   const {
     preIcon = null,
     postIcon = null,
+    val,
     children,
     obligatory,
-    val,
     placeholder = "tse",
     ...prop
   } = props;
@@ -341,7 +350,7 @@ export const SelectForm = (props) => {
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
       >
-        {getSpan(val.value, obligatory)}
+        {getSpan(props.val.value, obligatory)}
       </span>
     </div>
   );
@@ -515,7 +524,7 @@ export const verifObligatory = (data, exception = []) => {
       if (value === "" || value === null) {
         console.log("exception[i]", key, value);
         verif = true;
-      } else console.log();
+      }
     }
   });
   return verif;

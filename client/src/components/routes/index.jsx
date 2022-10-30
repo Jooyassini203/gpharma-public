@@ -9,6 +9,10 @@ import Ravitaillement from "../pages/ravitaillement";
 import Parametre from "../pages/parametre";
 import Middleware from "../middlewares";
 import Produit from "../pages/produit";
+import Ajustement from "../pages/ajustement";
+import Societe from "../pages/societe";
+import Caisse from "../pages/caisse";
+import Guichet from "../pages/guichet";
 
 function MyRoute() {  
   const getLogin = () => {
@@ -23,11 +27,15 @@ function MyRoute() {
         <Route exact path="/connexion" element={getLogin()} /> 
         
         <Route exact path="/" element={Middleware(Accueil)} />
-        <Route exact path="/produit" element={Middleware(Produit)} />
-        <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
+        <Route exact path="/caisse" element={Middleware(Caisse)} />
+        <Route exact path="/guichet" element={Middleware(Guichet)} />
+        <Route exact path="/ajustement" element={Middleware(Ajustement)} />
         <Route exact path="/fournisseur" element={Middleware(Fournisseur)} />
-        <Route exact path="/utilisateur" element={Middleware(Utilisateur)} />
+        <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
+        <Route exact path="/produit" element={Middleware(Produit)} />
         <Route exact path="/parametre" element={Middleware(Parametre)} />
+        <Route exact path="/societe" element={Middleware(Societe)} />
+        <Route exact path="/utilisateur" element={Middleware(Utilisateur)} />
         
         <Route path="*" element={<NotFound/>} />
       </Routes> 
