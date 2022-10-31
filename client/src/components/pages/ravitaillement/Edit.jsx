@@ -48,7 +48,7 @@ function Edit() {
     if (listRavitaillementDetails.length > 0) {
       let total = 0;
       listRavitaillementDetails.forEach((item) => {
-        total += item.montant_ht;
+        total += item.quantite_livraison * item.prix_unit;
       });
       return total;
     }
@@ -58,20 +58,14 @@ function Edit() {
     if (listRavitaillementDetails.length > 0) {
       let total = 0;
       listRavitaillementDetails.forEach((item) => {
-        total += item.montant_ht * (tva / 100);
+        total +=  item.quantite_livraison * item.prix_unit * (tva / 100);
       });
       return total;
     }
   };
 
-  const getTotalsTTC = () => {
-    if (listRavitaillementDetails.length > 0) {
-      let total = 0;
-      listRavitaillementDetails.forEach((item) => {
-        total += item.montant_ht;
-      });
-      return total * (1 + tva / 100);
-    }
+  const getTotalsTTC = () => { 
+      return getTotalsHT() * (1 + tva / 100); 
   };
 
   const updateOneRavitaillementDetail = () => {
@@ -338,13 +332,13 @@ function Edit() {
                           <td className="right">{getTotalsHT()}</td>
                         </tr>
                         <tr>
-                          <td className="left">
+                          <td className="right">
                             <strong>TVA ({tva}%)</strong>
                           </td>
                           <td className="right">{getTotalsTVA()}</td>
                         </tr>
                         <tr>
-                          <td className="left">
+                          <td className="right">
                             <strong>Totals TTC</strong>
                           </td>
                           <td className="right">

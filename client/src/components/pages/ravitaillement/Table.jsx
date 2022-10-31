@@ -79,8 +79,8 @@ function Table() {
               handleClick={() => {
                 if (row.etat_ravitaillement === "COMMANDE") {
                   setRvtSelect({ id: row.id, etat_ravitaillement: "COMMANDE" });
+                  setToggle(2);
                 }
-                setToggle(2);
               }}
             />
             <ButtonTable

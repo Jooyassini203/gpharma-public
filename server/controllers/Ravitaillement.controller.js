@@ -162,7 +162,7 @@ const validateRavitaillement = async (req, res) => {
     await rvt.save();
     console.log("\n\n\n\n\n", rvt, "\n\n\n\n\n");
     return res.status(200).json({
-      message: "Quantité livré est de " + item.quantite_livraison,
+      message: "Commandes livrées",
     });
   } catch (error) {
     console.log(error);

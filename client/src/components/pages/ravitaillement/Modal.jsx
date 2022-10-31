@@ -14,7 +14,7 @@ import {
 } from "../../../utils/utils";
 
 function Modal({ ravitaillement, listRavitaillementDetails }) {
-  const [isOb, setIsOb] = useState(false);
+  const [isOb, setIsOb] = React.useState(false);
   const [toggle, setToggle] = useRecoilState(toggleAddTableEdit);
   const [caisseSelected, setCaisseSelected] = React.useState({});
   const [OptionsCaisse, setOptionsCaisse] = React.useState([]);
@@ -79,7 +79,7 @@ function Modal({ ravitaillement, listRavitaillementDetails }) {
               <InputForm
                 date
                 val={date_livraision}
-                onChange={setDate_livraision}
+                onChange={(e)=>setDate_livraision(e.target.value)}
                 obligatory={isOb ? "active" : ""}
               >
                 Date de livraision
