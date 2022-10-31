@@ -147,12 +147,32 @@ const validateRavitaillement = async (req, res) => {
   if (!rvt)
     return res.status(404).json({ message: "Ravitaillement introvable!" });
 
-  if (!rvt)
-    return res
-      .status(404)
-      .json({ message: "Cette détails de ravitaillement est introvable!" });
-
   try {
+    const dataRvtDetail = await Ravitaillement_detail.findAll({
+      where: { ravitaillement_id: req.params.id },
+      include: [{ model: Produit }, { model: Unite }],
+    });
+    let messages = "";
+    dataRvtDetail.map(async (item_rvtDetail) => {
+      const item_produit = await Produit.findOne({
+        where: { code_lot_produit: item_rvtDetail.produit_code_lot_produit },
+      });
+      if (item_produit.unite_stock !== item_rvtDetail.unite_achat) {
+        return res.status(404).json({
+          message: `La mise à jour du quantité du produit <b>${item_produit.nom_produit}</b> a échoué : 
+          L'unité de stockage et l'unité d'achat non identique. 
+          (Veuillez mette à niveau l'unité de stockage). `,
+        });
+      }
+      let last_quantite_stock = item_produit.quantite_stock;
+      let new_qte_stock =
+        parseFloat(item_produit.quantite_stock) +
+        parseFloat(item_rvtDetail.quantite_livraison);
+      item_produit.set({ quantite_stock: new_qte_stock });
+      item_produit.save();
+      messages += `<b>${item_produit.nom_produit}</b>: quantité en stock de <b>${last_quantite_stock}</b> à <b>${item_produit.quantite_stock}</b><br/>`;
+    });
+
     rvt.set({
       etat_ravitaillement: "LIVREE",
       caisse_id: req.body.caisse_id,
@@ -161,8 +181,9 @@ const validateRavitaillement = async (req, res) => {
     });
     await rvt.save();
     console.log("\n\n\n\n\n", rvt, "\n\n\n\n\n");
+
     return res.status(200).json({
-      message: "Commandes livrées",
+      message: "Commandes livrées : " + messages,
     });
   } catch (error) {
     console.log(error);

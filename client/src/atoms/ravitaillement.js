@@ -39,6 +39,7 @@ export const intializeRavitaillementDetails = {
   prix_ht: "",
   nom_produit: "",
   quantite_demande: "",
+  quantite_livraison: "",
   montant_ht: "",
   produit_code_lot_produit: {
     label: "",

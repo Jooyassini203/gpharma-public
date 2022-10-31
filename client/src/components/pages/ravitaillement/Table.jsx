@@ -80,6 +80,9 @@ function Table() {
                 if (row.etat_ravitaillement === "COMMANDE") {
                   setRvtSelect({ id: row.id, etat_ravitaillement: "COMMANDE" });
                   setToggle(2);
+                }else{
+                  setRvtSelect({ id: row.id, etat_ravitaillement: "LIVREE" });
+                  document.getElementById('btn-view-modal').click();
                 }
               }}
             />
