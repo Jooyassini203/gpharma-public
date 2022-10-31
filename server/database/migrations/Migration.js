@@ -37,17 +37,37 @@ import voieListe from "../seeders/Voie.seeder.js";
 import utilisateurListe from "../factories/Utilisateur.factorie.js";
 import fournisseurListe from "../factories/Fournisseur.factorie.js";
 import produitListe from "../factories/Produit.factorie.js";
+import emplacementListe from "../seeders/Emplacement.seeder.js";
 
 // Association
-Produit.belongsToMany(Ajustement, {
-  through: Ajustement_detail,
-  unique: false,
-  foreignKey: "produit_code_lot_produit",
+Ajustement.hasMany(Ajustement_detail, {
+  foreignKey: {
+    name: "ajustement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
-Ajustement.belongsToMany(Produit, {
-  through: Ajustement_detail,
-  unique: false,
-  foreignKey: "ajustement_id",
+Ajustement_detail.belongsTo(Ajustement, {
+  foreignKey: {
+    name: "ajustement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+Produit.hasMany(Ajustement_detail, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
+});
+Ajustement_detail.belongsTo(Produit, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
 });
 
 Utilisateur.hasMany(Ajustement, {
@@ -140,15 +160,34 @@ Ajustement.belongsTo(Emplacement, {
   },
 });
 
-Produit.belongsToMany(Emplacement, {
-  through: Produit_emplacement,
-  unique: false,
-  foreignKey: "produit_code_lot_produit",
+Emplacement.hasMany(Produit_emplacement, {
+  foreignKey: {
+    name: "emplacement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
-Emplacement.belongsToMany(Produit, {
-  through: Produit_emplacement,
-  unique: false,
-  foreignKey: "emplacement_id",
+Produit_emplacement.belongsTo(Emplacement, {
+  foreignKey: {
+    name: "emplacement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+Produit.hasMany(Produit_emplacement, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
+});
+Produit_emplacement.belongsTo(Produit, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
 });
 
 Fabricant.hasMany(Produit, {
@@ -456,6 +495,11 @@ const Migration = async () => {
         await Unite.bulkCreate(uniteListe)
           .then(() => console.log(" ------> Table << Unite >> migrée!"))
           .catch(() => console.log(" ------> Table << Unite >> NON migrée!!!"));
+        await Emplacement.bulkCreate(emplacementListe)
+          .then(() => console.log(" ------> Table << Emplacement >> migrée!"))
+          .catch(() =>
+            console.log(" ------> Table << Emplacement >> NON migrée!!!")
+          );
         await Produit.bulkCreate(produitListe)
           .then(() => console.log(" ------> Table << Produit >> migrée!"))
           .catch(() =>

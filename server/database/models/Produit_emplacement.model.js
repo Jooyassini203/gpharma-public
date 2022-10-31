@@ -4,6 +4,12 @@ import db from "../../config/Database.js";
 const Produit_emplacement = db.define(
   "produit_emplacement",
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
     quantite_produit: { type: DataTypes.DOUBLE, allowNull: false },
     quantite_der_depot: { type: DataTypes.DOUBLE, allowNull: false },
     quantite_der_retrait: { type: DataTypes.DOUBLE, allowNull: false },
