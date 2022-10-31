@@ -18,7 +18,7 @@ function Modal({ ravitaillement, listRavitaillementDetails }) {
   const [toggle, setToggle] = useRecoilState(toggleAddTableEdit);
   const [caisseSelected, setCaisseSelected] = React.useState({});
   const [OptionsCaisse, setOptionsCaisse] = React.useState([]);
-  const [date_livraision, setDate_livraision] = React.useState("");
+  const [date_livraison, setDate_livraison] = React.useState("");
   const [rvtSelect, setRvtSelect] = useRecoilState(ravitaillementSelect);
 
   React.useEffect(() => {
@@ -27,14 +27,14 @@ function Modal({ ravitaillement, listRavitaillementDetails }) {
 
   const valider = () => {
     setIsOb(true);
-    if (!caisseSelected.value || !date_livraision) {
+    if (!caisseSelected.value || !date_livraison) {
       return;
     }
     const getTotalsHT = () => {
       if (listRavitaillementDetails.length > 0) {
         let total = 0;
         listRavitaillementDetails.forEach((item) => {
-          total += item.quantite_livraision * item.prix_unit;
+          total += item.quantite_livraison * item.prix_unit;
         });
         return total;
       }
@@ -46,12 +46,13 @@ function Modal({ ravitaillement, listRavitaillementDetails }) {
       {
         caisse_id: caisseSelected.value,
         montant_ht: getTotalsHT(),
-        date_livraision,
+        date_livraison,
         ravitaillement,
         listRavitaillementDetails,
       },
       () => {
         setIsOb(false);
+        document.getElementById("close-modal-valider").click()
         setToggle(0);
       }
     );
@@ -71,18 +72,18 @@ function Modal({ ravitaillement, listRavitaillementDetails }) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Validation</h5>
-              <button type="button" className="close" data-dismiss="modal">
+              <button type="button" className="close" id="close-modal-valider" data-dismiss="modal">
                 <span>×</span>
               </button>
             </div>
             <div className="modal-body">
               <InputForm
                 date
-                val={date_livraision}
-                onChange={(e)=>setDate_livraision(e.target.value)}
+                val={date_livraison}
+                onChange={(e)=>setDate_livraison(e.target.value)}
                 obligatory={isOb ? "active" : ""}
               >
-                Date de livraision
+                Date de livraison
               </InputForm>
               <SelectForm
                 val={caisseSelected}

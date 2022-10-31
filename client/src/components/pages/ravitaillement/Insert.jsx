@@ -165,7 +165,10 @@ function Insert() {
       mode_expedition_id: mode_expedition_id.value,
       montant_ht: getTotalsHT(),
     };
-    let dataRvtDetail = listRavitaillementDetails;
+    let dataRvtDetail = [];
+    listRavitaillementDetails.map((item)=>{
+      dataRvtDetail.push({...item, ["quantite_livraison"]: item.quantite_demande}); 
+    })
     console.log("{ dataRvt, dataRvtDetail }", { dataRvt, dataRvtDetail });
     if (
       !motif ||

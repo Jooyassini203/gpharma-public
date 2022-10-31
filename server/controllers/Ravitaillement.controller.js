@@ -64,11 +64,7 @@ const getSpecific = async (req, res) => {
             "date_prev_livraison",
           ],
           [
-            db.fn(
-              "DATE_FORMAT",
-              db.col("date_livraison"),
-              " %W %d %M %Y à %Hh%i"
-            ),
+            db.fn("DATE_FORMAT", db.col("date_livraison"), " %W %d %M %Y "),
             "date_livraison",
           ],
         ],
@@ -97,8 +93,9 @@ const createOne = async (req, res) => {
     if (newRvt) {
       dataRvtDetail.map((item) => {
         item.ravitaillement_id = newRvt.id;
-        item.quantite_livraison = dataRvtDetail.quantite_demande;
       });
+      console.log("\n\n\n\n\n", dataRvtDetail, "\n\n\n\n\n");
+
       await Ravitaillement_detail.bulkCreate(dataRvtDetail);
       return res
         .status(200)
@@ -159,7 +156,7 @@ const validateRavitaillement = async (req, res) => {
       });
       if (item_produit.unite_stock !== item_rvtDetail.unite_achat) {
         return res.status(404).json({
-          message: `La mise à jour du quantité du produit <b>${item_produit.nom_produit}</b> a échoué : 
+          message: `La mise à jour du quantité du produit **${item_produit.nom_produit}** a échoué : 
           L'unité de stockage et l'unité d'achat non identique. 
           (Veuillez mette à niveau l'unité de stockage). `,
         });
@@ -170,7 +167,7 @@ const validateRavitaillement = async (req, res) => {
         parseFloat(item_rvtDetail.quantite_livraison);
       item_produit.set({ quantite_stock: new_qte_stock });
       item_produit.save();
-      messages += `<b>${item_produit.nom_produit}</b>: quantité en stock de <b>${last_quantite_stock}</b> à <b>${item_produit.quantite_stock}</b><br/>`;
+      messages += `**${item_produit.nom_produit}**: quantité en stock de **${last_quantite_stock}** à **${item_produit.quantite_stock}**\n`;
     });
 
     rvt.set({

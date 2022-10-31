@@ -21,7 +21,8 @@ function View() {
       );
   }, [rvtSelect]);
 
-  const { motif, tva, date_saisi, date_prev_livraison, date_livraison } = ravitaillement;
+  const { motif, tva, date_saisi, date_prev_livraison, date_livraison } =
+    ravitaillement;
 
   const getTotalsHT = () => {
     if (listRavitaillementDetails.length > 0) {
@@ -54,7 +55,7 @@ function View() {
         aria-modal="true"
         data-backdrop="static"
         data-keyboard="true"
-        id={rvtSelect.etat_ravitaillement === "LIVREE"? "modalView": ""}
+        id="modalView"
       >
         <div
           className="modal-dialog modal-lg  modal-dialog-centered"
@@ -219,9 +220,7 @@ function View() {
                               {item.produit_code_lot_produit}
                             </td>
                             <td className="left">{item.produit.nom_produit}</td>
-                            <td className="center">
-                              {item.quantite_demande}
-                            </td>
+                            <td className="center">{item.quantite_demande}</td>
                             <td className="center">
                               {item.quantite_livraison}
                             </td>
