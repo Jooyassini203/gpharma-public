@@ -65,7 +65,7 @@ function Nav() {
           />
           <NavElementChildren
             to="/societe"
-            icon="fas fa-entreprise"
+            icon="fas fa-hospital-alt"
             title="Société"
           />
         </NavElement>
