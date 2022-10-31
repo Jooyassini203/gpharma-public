@@ -1,3 +1,4 @@
+import db from "../config/Database.js";
 import Ajustement from "../database/models/Ajustement.model.js";
 import Emplacement from "../database/models/Emplacement.model.js";
 import Utilisateur from "../database/models/Utilisateur.model.js";

@@ -36,7 +36,10 @@ import voieListe from "../seeders/Voie.seeder.js";
 
 import utilisateurListe from "../factories/Utilisateur.factorie.js";
 import fournisseurListe from "../factories/Fournisseur.factorie.js";
-import produitListe from "../factories/Produit.factorie.js";
+import {
+  produitListe,
+  produitEmplacementListe,
+} from "../factories/Produit.factorie.js";
 import emplacementListe from "../seeders/Emplacement.seeder.js";
 
 // Association
@@ -504,6 +507,15 @@ const Migration = async () => {
           .then(() => console.log(" ------> Table << Produit >> migrée!"))
           .catch(() =>
             console.log(" ------> Table << Produit >> NON migrée!!!")
+          );
+        await Produit_emplacement.bulkCreate(produitEmplacementListe)
+          .then(() =>
+            console.log(" ------> Table << Produit_emplacement >> migrée!")
+          )
+          .catch(() =>
+            console.log(
+              " ------> Table << Produit_emplacement >> NON migrée!!!"
+            )
           );
       }
     })
