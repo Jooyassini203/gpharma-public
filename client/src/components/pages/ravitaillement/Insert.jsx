@@ -25,7 +25,7 @@ import { userConnected } from "../../../atoms/authentication";
 function Insert() {
   const [toggle, setToggle] = useRecoilState(toggleAddTableEdit);
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
-  const [ravitaillement, setRavitaillement] = useState(intializeRavitaillement); 
+  const [ravitaillement, setRavitaillement] = useState(intializeRavitaillement);
   const [ravitaillementDetails, setRavitaillementDetails] = useState(
     intializeRavitaillementDetails
   );
@@ -57,12 +57,12 @@ function Insert() {
   } = ravitaillementDetails;
 
   const addItemInList = () => {
-    setIsObRvtDt(true); 
+    setIsObRvtDt(true);
     console.log("rvtDetail", {
       ...ravitaillementDetails,
       produit_code_lot_produit: produit_code_lot_produit.value,
       nom_produit: produit.nom_produit,
-      prix_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+      prix_ht: parseInt(tva) * parseInt(prix_unit),
       unite_achat: produit.unite_stock,
       montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
     });
@@ -71,7 +71,7 @@ function Insert() {
         ...ravitaillementDetails,
         produit_code_lot_produit: produit_code_lot_produit.value,
         nom_produit: produit.nom_produit,
-        prix_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+        prix_ht: parseInt(tva) * parseInt(prix_unit),
         unite_achat: produit.unite_stock,
         montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
       }) &&
@@ -94,8 +94,8 @@ function Insert() {
       {
         ...ravitaillementDetails,
         produit_code_lot_produit: produit_code_lot_produit.value,
-        nom_produit: produit.nom_produit,
-        prix_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+        nom_produit: produit.nom_produit, 
+        prix_ht: parseInt(tva) * parseInt(prix_unit),
         unite_achat: produit.unite_stock,
         montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
       },
@@ -172,7 +172,8 @@ function Insert() {
       !fournisseur_id.value ||
       !mode_expedition_id.value ||
       !date_prev_livraison ||
-      !tva || dataRvtDetail.length <= 0
+      !tva ||
+      dataRvtDetail.length <= 0
     )
       return;
     addData("ravitaillement", { dataRvt, dataRvtDetail }, () => {
@@ -201,7 +202,9 @@ function Insert() {
                   val={fournisseur_id}
                   value={filterOption(OptionsFournisseur, fournisseur_id)}
                   options={OptionsFournisseur}
-                  onChange={(e) => onChange(e, setRavitaillement, "fournisseur_id")}
+                  onChange={(e) =>
+                    onChange(e, setRavitaillement, "fournisseur_id")
+                  }
                   obligatory={isObRvt ? "active" : ""}
                 >
                   Fournisseur
@@ -215,7 +218,9 @@ function Insert() {
                     mode_expedition_id
                   )}
                   options={OptionsMode_expedition}
-                  onChange={(e) => onChange(e, setRavitaillement, "mode_expedition_id")}
+                  onChange={(e) =>
+                    onChange(e, setRavitaillement, "mode_expedition_id")
+                  }
                   obligatory={isObRvt ? "active" : ""}
                 >
                   Mode d'expedition
@@ -363,7 +368,7 @@ function Insert() {
                   <th>Produit</th>
                   <th className="right">Prix Unit</th>
                   <th className="center">Qte</th>
-                  <th className="right">Total</th>
+                  <th className="right">Montant HT</th>
                   <th style={{ widht: "100px" }} className="center">
                     Option
                   </th>
@@ -379,7 +384,7 @@ function Insert() {
                     <td className="left">{item.nom_produit}</td>
                     <td className="right">{item.prix_unit}</td>
                     <td className="center">{item.quantite_demande}</td>
-                    <td className="right">{item.prix_ht}</td>
+                    <td className="right">{item.montant_ht}</td>
                     <th className="center">
                       <ButtonTable
                         importance="warning"
@@ -393,6 +398,7 @@ function Insert() {
                             },
                             nom_produit: item.nom_produit,
                             prix_ht: item.prix_ht,
+                            montant_ht: item.montant_ht,
                             quantite_demande: item.quantite_demande,
                             unite_achat: item.unite_achat,
                           });
@@ -472,9 +478,24 @@ function Insert() {
       </div>
       <div className="card-footer">
         <div className="row">
-          <button className="btn btn-primary btn-lg w-100" onClick={add}>
-            Efféctuer
-          </button>
+          <div className="col-4">
+            <button
+              className="btn btn-danger light btn-lg w-100 "
+              onClick={() => {
+                setRavitaillement(intializeRavitaillement);
+                setRavitaillementDetails(intializeRavitaillementDetails);
+                setListRavitaillementDetails([]);
+                setToggle(0);
+              }}
+            >
+              Annuler
+            </button>
+          </div>
+          <div className="col-8">
+            <button className="btn btn-primary btn-lg w-100 mr-1" onClick={add}>
+              Efféctuer
+            </button>
+          </div>
         </div>
       </div>
     </div>

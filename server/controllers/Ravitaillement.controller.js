@@ -1,8 +1,46 @@
+import db from "../config/Database.js";
+import Caisse from "../database/models/Caisse.model.js";
+import Fournisseur from "../database/models/Fournisseur.model.js";
+import Mode_expedition from "../database/models/Mode_expedition.model.js";
+import Produit from "../database/models/Produit.model.js";
 import Ravitaillement from "../database/models/Ravitaillement.model.js";
 import Ravitaillement_detail from "../database/models/Ravitaillement_detail.model.js";
+import Unite from "../database/models/Unite.model.js";
+import Utilisateur from "../database/models/Utilisateur.model.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Ravitaillement.findAll();
+    const response = await Ravitaillement.findAll({
+      attributes: {
+        include: [
+          [
+            db.fn("DATE_FORMAT", db.col("date_saisi"), " %W %d %M %Y à %Hh%i"),
+            "date_saisi",
+          ],
+          [
+            db.fn(
+              "DATE_FORMAT",
+              db.col("date_prev_livraison"),
+              " %W %d %M %Y à %Hh%i"
+            ),
+            "date_prev_livraison",
+          ],
+          [
+            db.fn(
+              "DATE_FORMAT",
+              db.col("date_livraison"),
+              " %W %d %M %Y à %Hh%i"
+            ),
+            "date_livraison",
+          ],
+        ],
+      },
+      include: [
+        { model: Fournisseur },
+        { model: Mode_expedition },
+        { model: Caisse },
+        { model: Utilisateur },
+      ],
+    });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -10,10 +48,44 @@ const getAll = async (req, res) => {
 };
 const getSpecific = async (req, res) => {
   try {
-    const response = await Ravitaillement.findOne({
+    const dataRvt = await Ravitaillement.findOne({
+      attributes: {
+        include: [
+          [
+            db.fn("DATE_FORMAT", db.col("date_saisi"), " %W %d %M %Y à %Hh%i"),
+            "date_saisi",
+          ],
+          [
+            db.fn(
+              "DATE_FORMAT",
+              db.col("date_prev_livraison"),
+              " %W %d %M %Y "
+            ),
+            "date_prev_livraison",
+          ],
+          [
+            db.fn(
+              "DATE_FORMAT",
+              db.col("date_livraison"),
+              " %W %d %M %Y à %Hh%i"
+            ),
+            "date_livraison",
+          ],
+        ],
+      },
       where: { id: req.params.id },
+      include: [
+        { model: Fournisseur },
+        { model: Mode_expedition },
+        { model: Caisse },
+        { model: Utilisateur },
+      ],
     });
-    res.json(response);
+    const dataRvtDetail = await Ravitaillement_detail.findAll({
+      where: { ravitaillement_id: req.params.id },
+      include: [{ model: Produit }, { model: Unite }],
+    });
+    if (dataRvt || dataRvtDetail) res.json([dataRvt, dataRvtDetail]);
   } catch (error) {
     console.log(error.message);
   }
@@ -23,12 +95,10 @@ const createOne = async (req, res) => {
   try {
     const newRvt = await Ravitaillement.create({ ...dataRvt, caisse_id: null });
     if (newRvt) {
-      console.log("\n\n\n\n newRvt : ", newRvt, "\n\n\n\n");
       dataRvtDetail.map((item) => {
-         item.ravitaillement_id = newRvt.id
-         item.quantite_livraison = null
-        } );
-      console.log("\n\n\n\n dataRvtDetail : ", dataRvtDetail, "\n\n\n\n");
+        item.ravitaillement_id = newRvt.id;
+        item.quantite_livraison = null;
+      });
       await Ravitaillement_detail.bulkCreate(dataRvtDetail);
       return res
         .status(200)
@@ -50,7 +120,7 @@ const deleteOne = async (req, res) => {
       .status(200)
       .json({ message: "Ravitaillement supprimé avec succès!" });
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
 };
 export { getAll, getSpecific, createOne, updateOne, deleteOne };

@@ -6,8 +6,8 @@ const Produit = db.define(
   {
     code_lot_produit: {
       type: DataTypes.CHAR(255),
+      primaryKey: true,
       allowNull: false,
-      unique: true,
     },
     nom_produit: {
       type: DataTypes.CHAR(255),

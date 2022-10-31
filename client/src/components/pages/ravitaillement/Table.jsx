@@ -1,7 +1,11 @@
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
-import { listRavitaillement, toggleAddTableEdit } from "../../../atoms/ravitaillement";
+import {
+  listRavitaillement,
+  toggleAddTableEdit,
+  ravitaillementSelect,
+} from "../../../atoms/ravitaillement";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   ButtonTable,
@@ -13,39 +17,70 @@ import {
 function Table() {
   const [toggle, setToggle] = useRecoilState(toggleAddTableEdit);
   const [list, setList] = useRecoilState(listRavitaillement);
+  const [rvtSelect, setRvtSelect] = useRecoilState(ravitaillementSelect);
   const columns = [
+    {
+      name: "#",
+      selector: (row) => row.id,
+      sortable: true,
+      width: "8%",
+    },
     {
       name: "Motif",
       selector: (row) => row.motif,
       sortable: true,
+      width: "30%",
+    },
+    {
+      name: "Fournisseur",
+      selector: (row) => row.fournisseur.nom_fournisseur,
+      sortable: true,
+    },
+    {
+      name: "Efféctuer par",
+      selector: (row) => row.utilisateur.nom_utilisateur,
+      sortable: true,
+    },
+    {
+      name: "Etat",
+      selector: (row) => (
+        <div className="text-center">
+          <span
+            className={
+              row.etat_ravitaillement == "COMMANDE"
+                ? "badge light badge-warning"
+                : "badge light badge-success"
+            }
+          >
+            <i
+              className={
+                row.etat_ravitaillement == "COMMANDE"
+                  ? "fa fa-circle text-warning mr-1"
+                  : "fa fa-circle text-success mr-1"
+              }
+            />
+            {row.etat_ravitaillement === "COMMANDE" ? "Commandée" : "Livrée"}
+          </span>
+        </div>
+      ),
+      sortable: true,
     },
     {
       name: "Action",
-      width: "200px",
+      width: "150px",
       selector: (row) => {
         return (
           <>
             <ButtonTable
-              importance="secondary"
-              icon={faEye}
+              importance={
+                row.etat_ravitaillement === "COMMANDE" ? "warning" : "secondary"
+              }
+              icon={row.etat_ravitaillement === "COMMANDE" ? faEdit : faEye}
               handleClick={() => {
-                // getData(
-                //   "produit",
-                //   (data) => setProduit(data[0]),
-                //   row.code_lot_produit
-                // );
-              }}
-            />
-            <ButtonTable
-              importance="warning"
-              icon={faEdit}
-              handleClick={() => {
-                // setIsAdd({ status: false });
-                // getData(
-                //   "produit",
-                //   (data) => setProduit(data[0]),
-                //   row.code_lot_produit
-                // );
+                if (row.etat_ravitaillement === "COMMANDE") {
+                  setRvtSelect({ id: row.id, etat_ravitaillement: "COMMANDE" });
+                }
+                setToggle(2);
               }}
             />
             <ButtonTable

@@ -241,15 +241,34 @@ Vente.belongsTo(Ordonnance, {
   },
 });
 
-Produit.belongsToMany(Ravitaillement, {
-  through: Ravitaillement_detail,
-  unique: false,
-  foreignKey: "produit_code_lot_produit",uniqueKey: false
+Produit.hasMany(Ravitaillement_detail, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
 });
-Ravitaillement.belongsToMany(Produit, {
-  through: Ravitaillement_detail,
-  unique: false,
-  foreignKey: "ravitaillement_id",uniqueKey: false
+Ravitaillement_detail.belongsTo(Produit, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
+});
+
+Ravitaillement.hasMany(Ravitaillement_detail, {
+  foreignKey: {
+    name: "ravitaillement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+Ravitaillement_detail.belongsTo(Ravitaillement, {
+  foreignKey: {
+    name: "ravitaillement_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 Unite.hasMany(Ravitaillement_detail, {
@@ -263,7 +282,7 @@ Ravitaillement_detail.belongsTo(Unite, {
   foreignKey: {
     name: "unite_achat",
     type: DataTypes.INTEGER,
-    allowNull: false, 
+    allowNull: false,
   },
 });
 

@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import { toggleAddTableEdit } from "../../../atoms/ravitaillement";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
+import Edit from "./Edit";
 import Insert from "./Insert";
 import Table from "./Table";
 
@@ -19,7 +20,7 @@ function Ravitaillement() {
           
         </div>
         <div className="card-body">
-        {toggle === 0 ? <Table /> : toggle === 1 ? <Insert /> : ""}
+        {toggle === 0 ? <Table /> : toggle === 1 ? <Insert /> : <Edit/>}
         </div>
       </div>
       <FooterNav />

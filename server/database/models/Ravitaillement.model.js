@@ -16,21 +16,21 @@ const Ravitaillement = db.define(
       allowNull: false,
     },
     date_saisi: {
-      type: DataTypes.DATE, 
+      type: DataTypes.DATE,
       allowNull: false,
       unique: true,
     },
     date_prev_livraison: {
-      type: DataTypes.DATE, 
+      type: DataTypes.DATE,
       allowNull: false,
       unique: true,
     },
-    data_livraison: {
+    date_livraison: {
       type: DataTypes.DATE,
       unique: true,
-    }, 
+    },
     date_ravitaillement: {
-      type: DataTypes.DATE, 
+      type: DataTypes.DATE,
     },
     tva: {
       type: DataTypes.DOUBLE,

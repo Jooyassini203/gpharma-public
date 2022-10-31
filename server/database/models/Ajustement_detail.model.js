@@ -4,6 +4,12 @@ import db from "../../config/Database.js";
 const Ajustement_detail = db.define(
   "ajustement_detail",
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
     qantite_nouveau: { type: DataTypes.DOUBLE, allowNull: false },
     qantite_ancien: { type: DataTypes.DOUBLE, allowNull: false },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
