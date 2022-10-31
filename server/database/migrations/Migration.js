@@ -50,6 +50,21 @@ Ajustement.belongsToMany(Produit, {
   foreignKey: "ajustement_id",
 });
 
+Utilisateur.hasMany(Ajustement, {
+  foreignKey: {
+    name: "utilisateur_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+Ajustement.belongsTo(Utilisateur, {
+  foreignKey: {
+    name: "utilisateur_id",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
 Caisse.hasMany(Ravitaillement, {
   foreignKey: {
     name: "caisse_id",
