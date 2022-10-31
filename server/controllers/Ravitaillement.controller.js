@@ -97,7 +97,7 @@ const createOne = async (req, res) => {
     if (newRvt) {
       dataRvtDetail.map((item) => {
         item.ravitaillement_id = newRvt.id;
-        item.quantite_livraison = null;
+        item.quantite_livraison = dataRvtDetail.quantite_demande;
       });
       await Ravitaillement_detail.bulkCreate(dataRvtDetail);
       return res
@@ -110,6 +110,65 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {};
+
+const updateOneRavitaillementDetail = async (req, res) => {
+  const rvt = await Ravitaillement.findOne({ where: { id: req.params.id } });
+  if (!rvt)
+    return res.status(404).json({ message: "Ravitaillement introvable!" });
+
+  const item = await Ravitaillement_detail.findOne({
+    where: {
+      produit_code_lot_produit: req.body.data.code_lot_produit,
+      ravitaillement_id: req.body.data.ravitaillement_id,
+    },
+  });
+  if (!item)
+    return res
+      .status(404)
+      .json({ message: "Cette détails de ravitaillement est introvable!" });
+
+  try {
+    item.set({
+      quantite_livraison: req.body.data.quantite_livraison,
+      montant_ht: item.prix_unit * req.body.data.quantite_livraison,
+    });
+    item.save().then(() => {
+      console.log("\n\n\n\n\n", item, "\n\n\n\n\n");
+      return res.status(200).json({
+        message: "Quantité livré de cette est de " + item.quantite_livraison,
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const validateRavitaillement = async (req, res) => {
+  const rvt = await Ravitaillement.findOne({ where: { id: req.params.id } });
+  if (!rvt)
+    return res.status(404).json({ message: "Ravitaillement introvable!" });
+
+  if (!rvt)
+    return res
+      .status(404)
+      .json({ message: "Cette détails de ravitaillement est introvable!" });
+
+  try {
+    rvt.set({
+      etat_ravitaillement: "LIVREE",
+      caisse_id: req.body.caisse_id,
+      montant_ht: req.body.montant_ht,
+      date_livraison: req.body.date_livraison,
+    });
+    await rvt.save();
+    console.log("\n\n\n\n\n", rvt, "\n\n\n\n\n");
+    return res.status(200).json({
+      message: "Quantité livré est de " + item.quantite_livraison,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const deleteOne = async (req, res) => {
   const item = await Ravitaillement.findOne({ where: { id: req.params.id } });
   if (!item)
@@ -123,4 +182,12 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+export {
+  getAll,
+  getSpecific,
+  createOne,
+  updateOne,
+  updateOneRavitaillementDetail,
+  validateRavitaillement,
+  deleteOne,
+};
