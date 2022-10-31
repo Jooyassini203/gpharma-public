@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
+import Table from "./Table";
 
 function Ajustement() {
   return (
@@ -9,7 +10,9 @@ function Ajustement() {
       <div className="content-body" style={{ minHeight: "80vh" }}>
         <div className="container-fluid">
           <div className="card">
-            <div className="card-body"></div>
+            <div className="card-body">
+              <Table/>
+            </div>
           </div>
         </div>
       </div>

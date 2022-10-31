@@ -20,7 +20,7 @@ const getSpecific = async (req, res) => {
 const createOne = async (req, res) => {
   try {
     await Emplacement.create(req.body);
-    res.status(200).send({ message: "Caisse ajouté avec succès!" });
+    res.status(200).send({ message: "Emplacement ajouté avec succès!" });
   } catch (error) {
     res.status(422).send({ message: error.message });
     console.log(error.message);

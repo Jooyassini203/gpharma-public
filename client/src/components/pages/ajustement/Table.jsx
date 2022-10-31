@@ -1,27 +1,19 @@
-import {
-  faEdit,
-  faEye,
-  faListAlt,
-  faTrash,
+import { 
+  faListAlt, 
 } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
-import {
-  listajustement,
-  toggleAddTableEdit,
-  ajustementSelect,
-} from "../../../atoms/ajustement";
+import { listAjustement, ajustementSelect } from "../../../atoms/ajustement";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
-  ButtonTable,
-  confirmDelete,
-  deleteData,
+  ButtonTable, 
   getData,
 } from "../../../utils/utils";
 
-function Table() { 
-  const [list, setList] = useRecoilState(listajustement);
-  const [ajustementSelected, setAjustementSelected] = useRecoilState(ajustementSelect);
+function Table() {
+  const [list, setList] = useRecoilState(listAjustement);
+  const [ajustementSelected, setAjustementSelected] =
+    useRecoilState(ajustementSelect);
   const columns = [
     {
       name: "#",
@@ -36,37 +28,18 @@ function Table() {
       width: "30%",
     },
     {
-      name: "Fournisseur",
-      selector: (row) => row.fournisseur.nom_fournisseur,
+      name: "Date",
+      selector: (row) => row.date_ajustement,
+      sortable: true,
+    },
+    {
+      name: "Emplacement",
+      selector: (row) => row.emplacement.nom_emplacement,
       sortable: true,
     },
     {
       name: "Efféctuer par",
       selector: (row) => row.utilisateur.nom_utilisateur,
-      sortable: true,
-    },
-    {
-      name: "Etat",
-      selector: (row) => (
-        <div className="text-center">
-          <span
-            className={
-              row.etat_ajustement == "COMMANDE"
-                ? "badge light badge-warning"
-                : "badge light badge-success"
-            }
-          >
-            <i
-              className={
-                row.etat_ajustement == "COMMANDE"
-                  ? "fa fa-circle text-warning mr-1"
-                  : "fa fa-circle text-success mr-1"
-              }
-            />
-            {row.etat_ajustement === "COMMANDE" ? "Commandée" : "Livrée"}
-          </span>
-        </div>
-      ),
       sortable: true,
     },
     {
@@ -79,9 +52,7 @@ function Table() {
               importance="success"
               icon={faListAlt}
               handleClick={() => {
-                deleteData("ajustement", row.id, () => {
-                  getData("ajustement", setList);
-                });
+                getData("ajustement", setAjustementSelected, row.id);
               }}
             />
           </>
@@ -90,7 +61,7 @@ function Table() {
     },
   ];
   React.useEffect(() => {
-    getData("ajustement", (data) => setList(data));
+    getData("ajustement", setList);
   }, []);
   return (
     <>
