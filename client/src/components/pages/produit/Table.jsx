@@ -8,6 +8,7 @@ import {
   deleteData,
   getData,
   getUrl,
+  getEmplacement,
   updateData,
 } from "../../../utils/utils";
 import { useRecoilState } from "recoil";
@@ -18,6 +19,19 @@ function Table() {
   const [produit, setProduit] = useRecoilState(produitSelect);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
 
+  const getInfoEmplacement = (finalArr) => {
+    return (
+      <>
+        {getEmplacement(finalArr).map((item) => (
+          <div>
+            <span className="fs-14 text-warning font-w400">
+              #{item.nom_emplacement}({item.quantite_produit})
+            </span>
+          </div>
+        ))}
+      </>
+    );
+  };
   const columns = [
     {
       name: "",
@@ -39,18 +53,21 @@ function Table() {
     },
     {
       name: "Produit",
-      selector: (row) => (
-        <div className=" align-items-center  ">
-          <h4 className="text-black">{row.nom_produit}</h4>
-          <p className="fs-14 text-primary font-w600">
-            #{row.code_lot_produit}
-          </p>
-          <span className="fs-14 text-warning font-w600">#{"Etalé"}</span>
-          {/* <span className="fs-14 text-secondary font-w600 text-justify">
+      selector: (row) => {
+        return (
+          <div className=" align-items-center  ">
+            <h4 className="text-black">{row.nom_produit}</h4>
+            <p className="fs-14 text-primary font-w600">
+              #{row.code_lot_produit}
+            </p>
+            {row.emplacement ? getInfoEmplacement(row.emplacement) : ""}
+            {/* <span className="fs-14 text-secondary font-w600 text-justify">
+            <span className="fs-14 text-warning font-w600">#{"Etalé"}</span>
               {row.classification_produit}
             </span>  */}
-        </div>
-      ),
+          </div>
+        );
+      },
       sortable: true,
       width: "222px",
     },
@@ -189,7 +206,11 @@ function Table() {
               data-target="#modalProduit"
               handleClick={() => {
                 setIsAdd({ status: false });
-                getData("produit", (data) => setProduit(data[0]), row.code_lot_produit);
+                getData(
+                  "produit",
+                  (data) => setProduit(data[0]),
+                  row.code_lot_produit
+                );
               }}
             />
             <ButtonTable
@@ -197,7 +218,10 @@ function Table() {
               icon={faTrash}
               handleClick={() => {
                 confirmDelete(
-                  (<>Voulez-vous vraimment supprimé le produit <strong>{row.nom_produit}</strong> ?</>),
+                  <>
+                    Voulez-vous vraimment supprimé le produit{" "}
+                    <strong>{row.nom_produit}</strong> ?
+                  </>,
                   () => {
                     deleteData("produit", row.code_lot_produit, () => {
                       getData("produit", setList);
@@ -212,8 +236,13 @@ function Table() {
     },
   ];
   React.useEffect(() => {
-    getData("produit", (data)=>{setList(data)
-    console.log("-------------------------list-------------------------", list);});
+    getData("produit", (data) => {
+      setList(data);
+      console.log(
+        "-------------------------list-------------------------",
+        list
+      );
+    });
   }, []);
   return (
     <div className="card-body">

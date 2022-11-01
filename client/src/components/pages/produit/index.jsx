@@ -15,7 +15,7 @@ function Produit() {
       > 
         <Modal/>
         <Table/>
-        <View />
+        <View/>
       </div>
       <FouterNav />
     </>

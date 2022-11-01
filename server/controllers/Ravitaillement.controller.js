@@ -3,6 +3,7 @@ import Caisse from "../database/models/Caisse.model.js";
 import Fournisseur from "../database/models/Fournisseur.model.js";
 import Mode_expedition from "../database/models/Mode_expedition.model.js";
 import Produit from "../database/models/Produit.model.js";
+import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
 import Ravitaillement from "../database/models/Ravitaillement.model.js";
 import Ravitaillement_detail from "../database/models/Ravitaillement_detail.model.js";
 import Unite from "../database/models/Unite.model.js";
@@ -154,6 +155,12 @@ const validateRavitaillement = async (req, res) => {
       const item_produit = await Produit.findOne({
         where: { code_lot_produit: item_rvtDetail.produit_code_lot_produit },
       });
+      const item_produit_emplacement = await Produit_emplacement.findOne({
+        where: {
+          produit_code_lot_produit: item_rvtDetail.produit_code_lot_produit,
+          emplacement_id: 1,
+        },
+      });
       if (item_produit.unite_stock !== item_rvtDetail.unite_achat) {
         return res.status(404).json({
           message: `La mise à jour du quantité du produit **${item_produit.nom_produit}** a échoué : 
@@ -165,9 +172,14 @@ const validateRavitaillement = async (req, res) => {
       let new_qte_stock =
         parseFloat(item_produit.quantite_stock) +
         parseFloat(item_rvtDetail.quantite_livraison);
+      let new_qte_stock_PE =
+        parseFloat(item_produit.quantite_stock) +
+        parseFloat(item_produit_emplacement.quantite_produit);
       item_produit.set({ quantite_stock: new_qte_stock });
+      item_produit_emplacement.set({ quantite_produit: new_qte_stock_PE });
       item_produit.save();
-      messages += `**${item_produit.nom_produit}**: quantité en stock de **${last_quantite_stock}** à **${item_produit.quantite_stock}**\n`;
+      item_produit_emplacement.save();
+      messages += `**${item_produit.nom_produit}**: quantité en stock (principale + etalé) de **${last_quantite_stock}** à **${item_produit.quantite_stock}**\n`;
     });
 
     rvt.set({

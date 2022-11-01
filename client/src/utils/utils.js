@@ -91,6 +91,16 @@ export const addData = (
   });
 };
 
+export const getEmplacement = (strEmplacement) => {
+  let arr = strEmplacement.slice(0, -6).split("--//--,");
+  let finalArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    const json = JSON.parse(arr[i]);
+    finalArr.push(json);
+  }
+  return finalArr;
+};
+
 export const updateData = (
   tableName,
   id,

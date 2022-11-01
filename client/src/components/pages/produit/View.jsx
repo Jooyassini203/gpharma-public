@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { produitSelect } from "../../../atoms/produit";
-import { getClassByNumber, getData, getUrl } from "../../../utils/utils";
+import { getClassByNumber, getData, getEmplacement, getUrl } from "../../../utils/utils";
 
 function View({ id }) {
   const [produit, setProduit] = useRecoilState(produitSelect);
@@ -36,9 +36,9 @@ function View({ id }) {
               </button>
             </div>
             <div className="modal-body">
-              <div className="card-body" style={{margin:"-4vh"}}>
+              <div className="card-body" style={{ margin: "-4vh" }}>
                 <div className="row">
-                  <div className="col-xl-3 col-lg-6  col-md-6 col-xxl-5 "> 
+                  <div className="col-xl-3 col-lg-6  col-md-6 col-xxl-5 ">
                     <div className="tab-content">
                       <div
                         role="tabpanel"
@@ -46,7 +46,7 @@ function View({ id }) {
                         id="first"
                       >
                         <img
-                          style={produit.image?{ width: "25vw"  }:{}}
+                          style={produit.image ? { width: "25vw" } : {}}
                           className="img-fluid"
                           styles={{ borderRadius: "5%" }}
                           src={
@@ -72,7 +72,9 @@ function View({ id }) {
                     <div className="product-detail-content">
                       {/*Product details*/}
                       <div className="new-arrival-content pr">
-                        <h4>{produit.nom_produit} (Voie <b>{produit.nom_voie}</b>)</h4>
+                        <h4>
+                          {produit.nom_produit} (Voie <b>{produit.nom_voie}</b>)
+                        </h4>
                         <div className="comment-review star-rating">
                           <ul>
                             <li>
@@ -120,10 +122,15 @@ function View({ id }) {
                         </p>
                         <p>
                           Etaté :
-                          <span className="ml-2 item">
-                            Oui
-                            <span className="badge badge-success light">
-                              15
+                          <span className="ml-2 item"> 
+                            <span
+                              className={
+                                "badge badge-" +
+                                getClassByNumber(produit.quantite_stock) +
+                                " light"
+                              }
+                            >
+                              {getEmplacement(produit.emplacement)[1].quantite_produit > 0 ? getEmplacement(produit.emplacement)[1].quantite_produit : "0"}
                             </span>
                           </span>
                         </p>
