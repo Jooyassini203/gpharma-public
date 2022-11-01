@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilState } from "recoil";
+import { actionEtalage } from "../../../atoms/ravitaillement";
 import Nav from "../../nav";
 import FouterNav from "../../nav/FooterNav";
 import IndexEtalage from "./indexEtalage";
@@ -7,6 +9,7 @@ import Table from "./Table";
 import View from "./View";
 
 function Produit() {
+  const [actEtalage, setActEtalage] = useRecoilState(actionEtalage)
   return (
     <>
       <Nav />
@@ -18,7 +21,7 @@ function Produit() {
         <Table/>
          <View/>  
       </div>
-      <IndexEtalage />
+      {actEtalage.status ? <IndexEtalage /> : null}
       <FouterNav />
     </>
   );

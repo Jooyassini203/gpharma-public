@@ -1,7 +1,7 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
-import { listEtalage } from "../../../atoms/produit";
+import { listEtalage, listProduit } from "../../../atoms/produit";
 import {
   ButtonTable,
   convertToOption,
@@ -15,6 +15,7 @@ import {
 } from "../../../utils/utils";
 
 function InsertElatage() {
+  const [listPrdt, setListPrdt] = useRecoilState(listProduit);
   const [list, setList] = useRecoilState(listEtalage);
   const [OptionsProduit, setOptionsProduit] = React.useState([]);
   const [etalage, setEtalage] = React.useState({
@@ -36,6 +37,7 @@ function InsertElatage() {
         "code_lot_produit"
       );
     });
+    getData("produit", setListPrdt); 
     getData("produitEtalage", setList); 
   };
   return (

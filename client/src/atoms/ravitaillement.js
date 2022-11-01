@@ -4,6 +4,10 @@ export const toggleAddTableEdit = atom({
   key: "is-add-ravitaillement",
   default: 0, //0:Table , 1:Add, 2:Edit
 });
+export const actionEtalage = atom({
+  key: "actionEtalage-ravitaillement",
+  default: { status: false }, //0:Table , 1:Add, 2:Edit
+});
 export const ravitaillementSelect = atom({
   key: "idRavitaillementSelect-ravitaillement",
   default: { id: "", etat_ravitaillement: "" }, //0:Table , 1:Add, 2:Edit

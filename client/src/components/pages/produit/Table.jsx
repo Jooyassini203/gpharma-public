@@ -13,8 +13,10 @@ import {
 } from "../../../utils/utils";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
+import { actionEtalage } from "../../../atoms/ravitaillement";
 
 function Table() {
+  const [actEtalage, setActEtalage] = useRecoilState(actionEtalage);
   const [list, setList] = useRecoilState(listProduit);
   const [produit, setProduit] = useRecoilState(produitSelect);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
@@ -253,8 +255,8 @@ function Table() {
               className="btn btn-primary btn-sm mr-3"
               data-toggle="modal"
               data-target="#modalProduit"
-              onClick={() => {
-                setIsAdd({ status: true });
+              onClick={() => { 
+                setActEtalage({ status: true });
               }}
             >
               <i className="fa fa-plus mr-3" />
@@ -264,6 +266,9 @@ function Table() {
               className="btn btn-outline-warning btn-sm"
               data-toggle="modal"
               data-target="#modalEtalage"
+              onClick={() => { 
+                setActEtalage({ status: true });
+              }}
             >
               <i className="fa fa-list-alt mr-3"></i>Etalage
             </button>

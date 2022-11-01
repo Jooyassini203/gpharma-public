@@ -152,7 +152,7 @@ const validateRavitaillement = async (req, res) => {
       include: [{ model: Produit }, { model: Unite }],
     });
     let messages = "";
-    dataRvtDetail.map(async (item_rvtDetail) => {
+    dataRvtDetail.forEach(async (item_rvtDetail) => {
       const item_produit = await Produit.findOne({
         where: { code_lot_produit: item_rvtDetail.produit_code_lot_produit },
       });
@@ -169,13 +169,14 @@ const validateRavitaillement = async (req, res) => {
           (Veuillez mette à niveau l'unité de stockage). `,
         });
       }
+
       let last_quantite_stock = item_produit.quantite_stock;
       let new_qte_stock =
         parseFloat(item_produit.quantite_stock) +
         parseFloat(item_rvtDetail.quantite_livraison);
       let new_qte_stock_PE =
-        parseFloat(item_produit.quantite_stock) +
-        parseFloat(item_produit_emplacement.quantite_produit);
+        parseFloat(item_produit_emplacement.quantite_produit) +
+        parseFloat(item_rvtDetail.quantite_livraison);
       item_produit.set({ quantite_stock: new_qte_stock });
       item_produit_emplacement.set({
         quantite_produit: new_qte_stock_PE,

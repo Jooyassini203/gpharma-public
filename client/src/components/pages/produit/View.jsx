@@ -122,20 +122,21 @@ function View({ id }) {
                         </p>
                         <p>
                           Etaté :
-                          <span className="ml-2 item"> 
+                        {produit.emplacement? getEmplacement(produit.emplacement)[1].quantite_produit > 0 ? <span className="ml-2 item"> 
                             <span
                               className={
                                 "badge badge-" +
-                                getClassByNumber(produit.quantite_stock) +
+                                getClassByNumber(parseFloat(getEmplacement(produit.emplacement)[1].quantite_produit)) +
                                 " light"
                               }
                             >
-                              {produit.emplacement? getEmplacement(produit.emplacement)[1].quantite_produit > 0 ? getEmplacement(produit.emplacement)[1].quantite_produit : "0" : "0"}
+                              {getEmplacement(produit.emplacement)[1].quantite_produit}
                             </span>
-                          </span>
+                          </span> : "0" : ""}
+                          
                         </p>
                         <p>
-                          Stock :&nbsp;&nbsp;
+                          Stock Générale :&nbsp;&nbsp;
                           <span
                             className={
                               "badge badge-" +
