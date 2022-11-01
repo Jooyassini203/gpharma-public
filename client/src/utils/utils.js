@@ -336,7 +336,8 @@ export const SelectForm = (props) => {
           )}
           <Select
             placeholder={placeholder}
-            styles={{ height: "90%" }}
+            menuPortalTarget={document.body}
+            menuPosition={"fixed"}
             {...prop}
           />
           {postIcon ? (

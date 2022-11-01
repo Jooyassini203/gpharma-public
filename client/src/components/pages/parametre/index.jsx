@@ -88,13 +88,13 @@ function Parametre() {
               >
                 Caisse
               </ItemParametre>
-              <ItemParametre
+              {/* <ItemParametre
                 icon={faWarehouse}
                 array={countArray}
                 table="emplacement"
               >
                 Emplacement
-              </ItemParametre>
+              </ItemParametre> */}
               <ItemParametre
                 icon={faHammer}
                 array={countArray}

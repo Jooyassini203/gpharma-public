@@ -12,9 +12,9 @@ const Produit_emplacement = db.define(
     },
     quantite_produit: { type: DataTypes.DOUBLE, allowNull: false },
     quantite_der_depot: { type: DataTypes.DOUBLE, allowNull: false },
-    quantite_der_retrait: { type: DataTypes.DOUBLE, allowNull: false },
+    quantite_der_retrait: { type: DataTypes.DOUBLE, allowNull: true },
     date_der_depot: { type: DataTypes.DATE, allowNull: false },
-    date_der_retrait: { type: DataTypes.DATE, allowNull: false },
+    date_der_retrait: { type: DataTypes.DATE, allowNull: true },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
 

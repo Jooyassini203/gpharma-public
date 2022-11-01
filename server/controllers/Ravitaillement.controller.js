@@ -8,6 +8,7 @@ import Ravitaillement from "../database/models/Ravitaillement.model.js";
 import Ravitaillement_detail from "../database/models/Ravitaillement_detail.model.js";
 import Unite from "../database/models/Unite.model.js";
 import Utilisateur from "../database/models/Utilisateur.model.js";
+import { getDateNow } from "../utils/utils.js";
 const getAll = async (req, res) => {
   try {
     const response = await Ravitaillement.findAll({
@@ -176,7 +177,11 @@ const validateRavitaillement = async (req, res) => {
         parseFloat(item_produit.quantite_stock) +
         parseFloat(item_produit_emplacement.quantite_produit);
       item_produit.set({ quantite_stock: new_qte_stock });
-      item_produit_emplacement.set({ quantite_produit: new_qte_stock_PE });
+      item_produit_emplacement.set({
+        quantite_produit: new_qte_stock_PE,
+        quantite_der_depot: item_rvtDetail.quantite_livraison,
+        date_der_depot: getDateNow(),
+      });
       item_produit.save();
       item_produit_emplacement.save();
       messages += `**${item_produit.nom_produit}**: quantité en stock (principale + etalé) de **${last_quantite_stock}** à **${item_produit.quantite_stock}**\n`;

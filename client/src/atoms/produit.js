@@ -10,6 +10,11 @@ export const listProduit = atom({
   default: [],
 });
 
+export const listEtalage = atom({
+  key: "listEtalage-produit",
+  default: [],
+});
+
 export const produitSelect = atom({
   key: "produitSelect-produit",
   default: {},

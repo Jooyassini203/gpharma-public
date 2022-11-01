@@ -130,7 +130,7 @@ function View({ id }) {
                                 " light"
                               }
                             >
-                              {getEmplacement(produit.emplacement)[1].quantite_produit > 0 ? getEmplacement(produit.emplacement)[1].quantite_produit : "0"}
+                              {produit.emplacement? getEmplacement(produit.emplacement)[1].quantite_produit > 0 ? getEmplacement(produit.emplacement)[1].quantite_produit : "0" : "0"}
                             </span>
                           </span>
                         </p>

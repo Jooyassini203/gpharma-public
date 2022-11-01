@@ -237,11 +237,7 @@ function Table() {
   ];
   React.useEffect(() => {
     getData("produit", (data) => {
-      setList(data);
-      console.log(
-        "-------------------------list-------------------------",
-        list
-      );
+      setList(data); 
     });
   }, []);
   return (
@@ -266,8 +262,8 @@ function Table() {
             </button>
             <button
               className="btn btn-outline-warning btn-sm"
-              // data-toggle="modal"
-              // data-target="#modalActivityFournisseur"
+              data-toggle="modal"
+              data-target="#modalEtalage"
             >
               <i className="fa fa-list-alt mr-3"></i>Etalage
             </button>

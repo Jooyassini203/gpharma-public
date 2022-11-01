@@ -29,8 +29,8 @@ for (let index = 0; index < 6; index++) {
     unite_presentation: getNumberRadom(1, 16),
     voie_id: getNumberRadom(1, 5),
   });
-
-  for (let index = 0; index < 2; index++) {
+  // if (index < 4)
+  for (let i = 0; i < 2; i++) {
     produitEmplacementListe.push({
       produit_code_lot_produit: code_lot_produit,
       quantite_produit: quantite_stock / 2,
@@ -38,7 +38,7 @@ for (let index = 0; index < 6; index++) {
       quantite_der_retrait: 0, //quantite_stock / 2 - getNumberRadom(1, quantite_stock / 2 - 1)
       date_der_depot: faker.date.recent(),
       date_der_retrait: faker.date.recent(),
-      emplacement_id: index + 1,
+      emplacement_id: i + 1,
     });
   }
 }

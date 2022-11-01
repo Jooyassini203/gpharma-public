@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from "../../nav";
 import FouterNav from "../../nav/FooterNav";
+import IndexEtalage from "./indexEtalage";
 import Modal from "./Modal";
 import Table from "./Table";
 import View from "./View";
@@ -15,8 +16,9 @@ function Produit() {
       > 
         <Modal/>
         <Table/>
-        <View/>
+         <View/>  
       </div>
+      <IndexEtalage />
       <FouterNav />
     </>
   );
