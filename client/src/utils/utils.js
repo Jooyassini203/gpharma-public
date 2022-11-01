@@ -129,6 +129,7 @@ export const updateData = (
       );
       if (responseUp) {
         toast.success(responseUp.data.message);
+        console.log("message", responseUp.data.message);
         if (callBack) {
           callBack();
         }

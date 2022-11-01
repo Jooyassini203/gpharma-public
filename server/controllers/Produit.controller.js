@@ -202,6 +202,10 @@ const updateEtalage = async (req, res) => {
     }
   );
   if (!item_produit_emplacement_PRINCIPALE)
+    return res
+      .status(404)
+      .json({ message: "Produit_emplacement_PRINCIPALE introvable!" });
+  if (!item_produit_emplacement_PRINCIPALE)
     return res.status(404).json({ message: "Produit introvable!" });
 
   let item_produit_emplacement_ETALE = await Produit_emplacement.findOne({
@@ -222,13 +226,13 @@ const updateEtalage = async (req, res) => {
       parseFloat(req.body.qte)
     ) {
       return res.status(404).json({
-        message: `**${item_produit.nom_produit}**: quantité en stock (principale) est INFERIEUR **${last_quantite_stock}** à celle que vous avez entrée **${req.body.qte}** `,
+        message: `**${item_produit.nom_produit}**: quantité en stock (principale) est INFERIEUR **${last_quantite_PRINCIPALE}** à celle que vous avez entrée **${req.body.qte}** `,
       });
     }
     //Si de Produit_emplacement ETALE de cette produit n'est pas encore créée
     if (!item_produit_emplacement_ETALE) {
       //CREATION de la table Produit_emplacement ETALE
-      let item_produit_emplacement_ETALE = await Produit_emplacement.create({
+      item_produit_emplacement_ETALE = await Produit_emplacement.create({
         quantite_produit: req.params.qte,
         quantite_der_depot: req.params.qte,
         quantite_der_retrait: null,
@@ -246,12 +250,13 @@ const updateEtalage = async (req, res) => {
       //Mise à jours de la table Produit_emplacement 2
       new_qte_ETALE =
         parseFloat(last_quantite_ETALE) + parseFloat(req.body.qte);
-      item_produit_emplacement_PRINCIPALE.set({
+      item_produit_emplacement_ETALE.set({
         quantite_produit: new_qte_ETALE,
         quantite_der_depot: req.body.qte,
         date_der_depot: getDateNow(),
       });
       item_produit_emplacement_ETALE.save();
+
       message = `**${item_produit.nom_produit}**: quantité étalé était de **${last_quantite_ETALE}** à **${item_produit_emplacement_ETALE.quantite_produit}**\n`;
     }
     //Mise à jours item_produit_emplacement_PRINCIPALE
@@ -262,7 +267,15 @@ const updateEtalage = async (req, res) => {
       quantite_produit: new_qte_PRINCIPALE,
     });
     item_produit_emplacement_PRINCIPALE.save();
-
+    console.log(
+      "\n\n\n\n\nlast_quantite_ETALE",
+      last_quantite_ETALE,
+      "new_qte_ETALE",
+      new_qte_ETALE,
+      item_produit_emplacement_ETALE,
+      item_produit_emplacement_PRINCIPALE,
+      "\n\n\n\n\n"
+    );
     message += `\n\nQuantité en stock (principale) était de **${last_quantite_PRINCIPALE}** à **${item_produit_emplacement_PRINCIPALE.quantite_produit}**`;
 
     return res.status(200).json({

@@ -30,7 +30,7 @@ function TableEtalage() {
         );
       },
       sortable: true,
-      width: "200px",
+      // width: "200px",
     },
     {
       name: "Etalé",
@@ -74,7 +74,7 @@ function TableEtalage() {
           </div>
         </div>
       ),
-      width: "18%",
+      // width: "18%",
     },
     {
       name: "Détails",
@@ -98,36 +98,36 @@ function TableEtalage() {
           </div>
         </div>
       ),
-      width: "18%",
+      // width: "18%",
     },
-    {
-      name: "Action",
-      width: "150px",
-      selector: (row) => {
-        return (
-          <>
-            <ButtonTable
-              importance="success"
-              icon={faListAlt}
-              handleClick={() => {}}
-            />
-            <ButtonTable
-              importance="secondary"
-              icon={faEye}
-              data-toggle="modal"
-              data-target="#modalViewProduit"
-              handleClick={() => {
-                getData(
-                  "produit",
-                  (data) => setProduit(data[0]),
-                  row.code_lot_produit
-                );
-              }}
-            />
-          </>
-        );
-      },
-    },
+    // {
+    //   name: "Action",
+    //   width: "150px",
+    //   selector: (row) => {
+    //     return (
+    //       <>
+    //         <ButtonTable
+    //           importance="success"
+    //           icon={faListAlt}
+    //           handleClick={() => {}}
+    //         />
+    //         <ButtonTable
+    //           importance="secondary"
+    //           icon={faEye}
+    //           data-toggle="modal"
+    //           data-target="#modalViewProduit"
+    //           handleClick={() => {
+    //             getData(
+    //               "produit",
+    //               (data) => setProduit(data[0]),
+    //               row.code_lot_produit
+    //             );
+    //           }}
+    //         />
+    //       </>
+    //     );
+    //   },
+    // },
   ];
   React.useEffect(() => {
     getData("produitEtalage", (data) => {
