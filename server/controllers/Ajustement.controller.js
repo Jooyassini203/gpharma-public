@@ -1,7 +1,9 @@
 import db from "../config/Database.js";
 import Ajustement from "../database/models/Ajustement.model.js";
+import Ajustement_detail from "../database/models/Ajustement_detail.model.js";
 import Emplacement from "../database/models/Emplacement.model.js";
 import Produit from "../database/models/Produit.model.js";
+import Unite from "../database/models/Unite.model.js";
 import Utilisateur from "../database/models/Utilisateur.model.js";
 const getAll = async (req, res) => {
   try {
@@ -40,28 +42,44 @@ const getSpecific = async (req, res) => {
     console.log(error.message);
   }
 };
-const createOne = async (req, res) => {
-  const { dataAjt, dataAjtDt, utilisateur_id } = req.body;
+const createOne = async (req, res) => { 
+  const { dataAjt, dataAjtDetail, utilisateur_id } = req.body;
   try {
+    // ________________________________________________
+    const unites = await Unite.findAll()
+    const getNameUniteById = (id) =>{
+      return unites.find((a) => a.id === id).nom_unite;
+    }
+    // ________________________________________________
+    let message = "";
     const item_ajt = await Ajustement.create({
       ...dataAjt,
       utilisateur_id,
       emplacement_id: 1,
     });
-    dataAjtDt.forEach(async (item_ajtDt) => {
+    dataAjtDetail.forEach(async (item_ajtDt) => {
       const item_produit = await Produit.findOne({
         where: { code_lot_produit: item_ajtDt.produit_code_lot_produit },
       });
       if (!item_produit)
-        return res
-          .status(404)
-          .json({
-            message:
-              "Produit " + item_ajtDt.produit_code_lot_produit + " introvable!",
-          });
-
-      //----------------------------------
+        return res.status(404).json({
+          message:
+            "Produit " + item_ajtDt.produit_code_lot_produit + " introvable!",
+        });
+      await Ajustement_detail.create({
+        ...item_ajtDt,
+        ajutement_id: item_ajt.id,
+      });
+      item_produit.set({
+        quantite_stock: item_ajtDt.quantite_nouveau_stock,
+        presentation_quantite: item_ajtDt.quantite_nouveau_presentation,
+        unite_stock: item_ajtDt.unite_nouveau_stock,
+        unite_presentation: item_ajtDt.unite_nouveau_presentation, 
+      });
+      item_produit.save()
+      message += `Le produit **${item_produit.nom_produit}** est ajusté de [ Stock : ${item_ajtDt.quantite_ancien_stock} ${getNameUniteById(item_ajtDt.unite_ancien_stock)} ; Présentation : ${item_ajtDt.quantite_ancien_presentation} ${getNameUniteById(item_ajtDt.unite_ancien_presentation)} ] à [ Stock : ${item_produit.quantite_stock} ${getNameUniteById(item_produit.unite_stock)} ; Présentation : ${item_ajtDt.presentation_quantite} ${getNameUniteById(item_ajtDt.unite_presentation)} ]\n\n`
     });
+    return res.status(200).send({ message });
   } catch (error) {
     console.log(error);
     return res.status(404).json({ message: error.message });

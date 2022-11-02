@@ -1,3 +1,4 @@
+import cryptojs from "crypto-js";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
@@ -6,6 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../atoms/authentication";
+import { useRecoilState } from "recoil";
+
+const userJson = cryptojs.AES.decrypt(
+  localStorage.getItem("gpharma@2.0.0"),
+  process.env.REACT_APP_KEY_SESSION
+).toString(cryptojs.enc.Utf8);
+const  userConnect = JSON.parse(userJson)
 
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
@@ -68,11 +76,12 @@ export const addData = (
     };
     if (!isFormData) {
       headers = {};
-      data["utilisateur_id"] = userConnected.id;
+      data["utilisateur_id"] = userConnect.id;
     } else {
-      data.append("utilisateur_id", userConnected.id);
+      data.append("utilisateur_id", userConnect.id);
     }
     try {
+      console.log("post : ",urlInsert(tableName), data, headers);
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
         toast.success(responseAdd.data.message);
@@ -116,10 +125,10 @@ export const updateData = (
     };
     if (!isFormData) {
       headers = {};
-      data["utilisateur_id"] = userConnected.id;
+      data["utilisateur_id"] = userConnect.id;
     } else {
-      data.append("utilisateur_id", userConnected.id);
-    }
+      data.append("utilisateur_id", userConnect.id);
+    } 
     try {
       console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
@@ -151,7 +160,7 @@ export const deleteData = (tableName, id, callBack) => {
   const del = async () => {
     try {
       const response = await axios.delete(urlDelete(tableName, id), {
-        utilisateur_id: userConnected.id,
+        utilisateur_id: userConnect.id,
       });
       if (response) {
         toast.success(response.data.message);
