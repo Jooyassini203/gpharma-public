@@ -44,7 +44,7 @@ function NavElement({ to, icon, title, children }) {
 export function NavElementChildren({ to, icon, title }) {
   return (
     <li className="">
-      <Link to={to} >
+      <Link to={to} id={"idLink"+title} >
         <i className={icon} />
         {title}
       </Link>

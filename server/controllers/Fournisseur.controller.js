@@ -1,9 +1,22 @@
 import Fournisseur from "../database/models/Fournisseur.model.js";
 import fs from "fs";
 import { uploadFile } from "../utils/utils.js";
+import Ravitaillement from "../database/models/Ravitaillement.model.js";
 const getAll = async (req, res) => {
   try {
     const response = await Fournisseur.findAll();
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getActivityFournisseur = async (req, res) => {
+  try {
+    const response = await Ravitaillement.findAll({
+      where: {},
+      group: "ravitaillement.id",
+      include: [{ model: Fournisseur }],
+    });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -113,4 +126,11 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+export {
+  getAll,
+  getActivityFournisseur,
+  getSpecific,
+  createOne,
+  updateOne,
+  deleteOne,
+};

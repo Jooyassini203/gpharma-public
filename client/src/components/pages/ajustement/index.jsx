@@ -1,6 +1,7 @@
 import React from "react";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
+import Modal from "./Modal";
 import Table from "./Table";
 
 function Ajustement() {
@@ -11,6 +12,7 @@ function Ajustement() {
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">
+              <Modal/>
               <Table/>
             </div>
           </div>

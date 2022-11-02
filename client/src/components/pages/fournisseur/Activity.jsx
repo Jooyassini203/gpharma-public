@@ -1,4 +1,5 @@
 import React from "react"; 
+import TableActivity from "./TableActivity";
 
 function Activity({ id }) { 
   return (
@@ -15,10 +16,11 @@ function Activity({ id }) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                Activité sur le {/* {fournisseur.nom_fournisseur} */}
+                Activités des fournisseurs
               </h5>
               <button
                 // ref={closeRef}
+                id="closeModalActivity"
                 type="button"
                 className="close"
                 data-dismiss="modal"
@@ -28,7 +30,7 @@ function Activity({ id }) {
               </button>
             </div>
             <div className="modal-body">
-                
+                <TableActivity/>
             </div>
           </div>
         </div>

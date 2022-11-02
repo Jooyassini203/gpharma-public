@@ -427,7 +427,12 @@ export const getRule = (rule) => {
   else if (rule === "GUICHETIER") text = "Guichetier";
   return text;
 };
-export const confirmDelete = (message, callBack) => {
+export const confirmDelete = (
+  message,
+  callBack,
+  btnYesText = "Supprimer",
+  btnYesClass = "danger"
+) => {
   confirmAlert({
     customUI: ({ onClose }) => {
       return (
@@ -439,7 +444,7 @@ export const confirmDelete = (message, callBack) => {
                 <p>{message}</p>
                 <div>
                   <button
-                    className="btn btn-danger mr-2"
+                    className={"btn btn-" + btnYesClass + " mr-2"}
                     onClick={() => {
                       callBack();
                       onClose();

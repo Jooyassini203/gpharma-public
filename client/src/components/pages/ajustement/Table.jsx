@@ -71,7 +71,9 @@ function Table() {
         title="Liste des ajustements efféctuées"
         filterClass="form-control w-100"
         actions={
-          <button className="btn btn-sm btn-primary">
+          <button className="btn btn-sm btn-primary" 
+          data-toggle="modal"
+          data-target="#modalAjustement">
             <i className="fa fa-plus mr-2"></i> Efféctuer une ajustement
           </button>
         }
