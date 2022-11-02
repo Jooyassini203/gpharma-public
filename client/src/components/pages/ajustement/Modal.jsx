@@ -52,17 +52,17 @@ function Modal() {
   useEffect(() => {
     getData("produit", (data) => {
       convertToOption(
-        data[0],
+        data,
         setOptionsProduit,
         "nom_produit",
         "produit_dode_lot_produit"
       );
     });
     getData("unite", (data) => {
-      convertToOption(data[0], setOptionsUniteStock);
+      convertToOption(data, setOptionsUniteStock);
     });
     getData("unite", (data) => {
-      convertToOption(data[0], setOptionsUnitePresentation);
+      convertToOption(data, setOptionsUnitePresentation);
     });
   }, []);
   return (
