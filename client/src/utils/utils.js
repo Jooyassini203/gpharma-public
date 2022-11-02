@@ -431,7 +431,8 @@ export const confirmDelete = (
   message,
   callBack,
   btnYesText = "Supprimer",
-  btnYesClass = "danger"
+  btnYesClass = "danger",
+  title = "danger"
 ) => {
   confirmAlert({
     customUI: ({ onClose }) => {
@@ -440,7 +441,7 @@ export const confirmDelete = (
           <div className="react-confirm-alert-overlay">
             <div className="react-confirm-alert">
               <div className="react-confirm-alert-body">
-                <h1>Suppression</h1>
+                <h1>{title}</h1>
                 <p>{message}</p>
                 <div>
                   <button
@@ -450,7 +451,7 @@ export const confirmDelete = (
                       onClose();
                     }}
                   >
-                    Supprimer
+                    {btnYesText}
                   </button>
                   <button
                     className="btn btn-dark"
