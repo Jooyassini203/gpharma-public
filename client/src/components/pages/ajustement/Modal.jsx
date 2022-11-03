@@ -110,6 +110,7 @@ function Modal() {
           setAjustement(initializeAjt);
           setAjustementDetails(initializeAjtDt);
           setListAjustementDetails([]);
+          document.getElementById("closeModalAjustement").click()
         }
       );
     };
@@ -163,6 +164,7 @@ function Modal() {
             <button
               type="button"
               className="close"
+              id="closeModalAjustement"
               data-dismiss="modal"
               onClick={() => {
                 setIsObAjt(false);
