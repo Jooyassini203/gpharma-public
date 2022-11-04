@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
 
-export const MIGRATE = true;
+export const MIGRATE =false ;// true
 
 export const getDateTime = (name = "") => {
   const date = new Date();

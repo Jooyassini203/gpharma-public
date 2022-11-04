@@ -1,12 +1,10 @@
 import React from "react";
-import axios from "axios";
-import cryptojs from "crypto-js";
+import axios from "axios"; 
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
-import { InputForm, urlInsert } from "../../../utils/utils";
-import { Link, Navigate } from "react-router-dom";
+import { InputForm, urlInsert } from "../../../utils/utils"; 
 
 function Login() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);

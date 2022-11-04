@@ -21,11 +21,9 @@ import { toast } from "react-toastify";
 
 function Modal() {
   const initializeAjt = {
-    quantite_nouveau_stock: "",
-    quantite_nouveau_presentation: "",
-    unite_nouveau_stock: "",
-    unite_nouveau_presentation: "",
-    produit_code_lot_produit: { value: "", label: "" },
+    motif: "",
+    date_saisi: "",
+    date_ajustement: "",
   };
   const initializeAjtDt = {
     quantite_nouveau_stock: "",
@@ -54,8 +52,7 @@ function Modal() {
   } = ajustementDetails;
 
   const addItemInTable = () => {
-    setIsObAjtDt(true);
-
+    setIsObAjtDt(true); 
     console.log("ajustementDetails", {
       ...ajustementDetails,
       produit_code_lot_produit: produit_code_lot_produit.value,
@@ -102,10 +99,6 @@ function Modal() {
   };
   const add = () => {
     const ajuster = () => {
-      console.log("{ dataAjt, dataAjtDetail }", {
-        dataAjt: { ...ajustement, date_saisi: getDateNow() },
-        dataAjtDetail: listAjustementDetails,
-      });
       addData(
         "ajustement",
         {
@@ -117,10 +110,16 @@ function Modal() {
           setAjustement(initializeAjt);
           setAjustementDetails(initializeAjtDt);
           setListAjustementDetails([]);
+          document.getElementById("closeModalAjustement").click()
         }
       );
     };
-    if (!date_ajustement || listAjustementDetails.length > 0 || !motif) return;
+    console.log("ajustement", ajustement);
+    console.log("{ dataAjt, dataAjtDetail }", {
+      dataAjt: { ...ajustement, date_saisi: getDateNow() },
+      dataAjtDetail: listAjustementDetails,
+    });
+    if (!date_ajustement || listAjustementDetails.length < 0 || !motif) return;
     confirmDelete(
       `Cette opération modifiera votre quantité de stock( et sa présentation (avec leur unité)); de ce fait les quantités étalées seront supprimées et la nouvelles informations seront dans le dépôt principal.\n
                   Voulez-vous vraiment continuez?`,
@@ -165,6 +164,7 @@ function Modal() {
             <button
               type="button"
               className="close"
+              id="closeModalAjustement"
               data-dismiss="modal"
               onClick={() => {
                 setIsObAjt(false);

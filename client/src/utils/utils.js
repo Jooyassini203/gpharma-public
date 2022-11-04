@@ -1,3 +1,4 @@
+import cryptojs from "crypto-js";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
@@ -5,7 +6,15 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import { userConnected } from "../atoms/authentication";
+
+let userConnect = null;
+if (localStorage.getItem("gpharma@2.0.0")) {
+  const userJson = cryptojs.AES.decrypt(
+    localStorage.getItem("gpharma@2.0.0"),
+    process.env.REACT_APP_KEY_SESSION
+  ).toString(cryptojs.enc.Utf8);
+  userConnect = JSON.parse(userJson);
+}
 
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
@@ -68,11 +77,12 @@ export const addData = (
     };
     if (!isFormData) {
       headers = {};
-      data["utilisateur_id"] = userConnected.id;
+      data["utilisateur_id"] = userConnect.id;
     } else {
-      data.append("utilisateur_id", userConnected.id);
+      data.append("utilisateur_id", userConnect.id);
     }
     try {
+      console.log("post : ", urlInsert(tableName), data, headers);
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
         toast.success(responseAdd.data.message);
@@ -116,9 +126,9 @@ export const updateData = (
     };
     if (!isFormData) {
       headers = {};
-      data["utilisateur_id"] = userConnected.id;
+      data["utilisateur_id"] = userConnect.id;
     } else {
-      data.append("utilisateur_id", userConnected.id);
+      data.append("utilisateur_id", userConnect.id);
     }
     try {
       console.log("up : ", urlUpdate(tableName, id), data, headers);
@@ -151,7 +161,7 @@ export const deleteData = (tableName, id, callBack) => {
   const del = async () => {
     try {
       const response = await axios.delete(urlDelete(tableName, id), {
-        utilisateur_id: userConnected.id,
+        utilisateur_id: userConnect.id,
       });
       if (response) {
         toast.success(response.data.message);
@@ -362,7 +372,7 @@ export const SelectForm = (props) => {
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
       >
-        {getSpan(props.val.value, obligatory)}
+        {/* {getSpan(val.value, obligatory)} */}
       </span>
     </div>
   );
@@ -391,7 +401,7 @@ const getClass = (cond, obligatory) => {
     return "form-control"; // form-control-sm
   }
 };
-const getSpan = (cond, obligatory) => {
+export const getSpan = (cond, obligatory) => {
   if (obligatory === "active") {
     if (cond) return "";
     else return "Champ obligatoire";
