@@ -1,14 +1,9 @@
-import { 
-  faListAlt, 
-} from "@fortawesome/free-solid-svg-icons";
+import { faListAlt } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { listAjustement, ajustementSelect } from "../../../atoms/ajustement";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
-import {
-  ButtonTable, 
-  getData,
-} from "../../../utils/utils";
+import { ButtonTable, getData } from "../../../utils/utils";
 
 function Table() {
   const [list, setList] = useRecoilState(listAjustement);
@@ -51,6 +46,8 @@ function Table() {
             <ButtonTable
               importance="success"
               icon={faListAlt}
+            data-toggle="modal"
+            data-target="#modalView"
               handleClick={() => {
                 getData("ajustement", setAjustementSelected, row.id);
               }}
@@ -71,9 +68,11 @@ function Table() {
         title="Liste des ajustements efféctuées"
         filterClass="form-control w-100"
         actions={
-          <button className="btn btn-sm btn-primary" 
-          data-toggle="modal"
-          data-target="#modalAjustement">
+          <button
+            className="btn btn-sm btn-primary"
+            data-toggle="modal"
+            data-target="#modalAjustement"
+          >
             <i className="fa fa-plus mr-2"></i> Efféctuer une ajustement
           </button>
         }

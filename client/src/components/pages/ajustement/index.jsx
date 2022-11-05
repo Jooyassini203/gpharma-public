@@ -3,6 +3,7 @@ import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import Modal from "./Modal";
 import Table from "./Table";
+import View from "./View";
 
 function Ajustement() {
   return (
@@ -13,6 +14,7 @@ function Ajustement() {
           <div className="card">
             <div className="card-body">
               <Modal/>
+              <View/>
               <Table/>
             </div>
           </div>

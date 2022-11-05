@@ -11,12 +11,31 @@ const getAll = async (req, res) => {
       attributes: {
         include: [
           [
+            db.fn("DATE_FORMAT", db.col("date_saisi"), " %W %d %M %Y "),
+            "date_saisi",
+          ],
+          [
             db.fn("DATE_FORMAT", db.col("date_ajustement"), " %W %d %M %Y "),
             "date_ajustement",
           ],
         ],
       },
-      include: [{ model: Utilisateur }, { model: Emplacement }],
+      include: [
+        { model: Utilisateur },
+        { model: Emplacement },
+        { model: Utilisateur },
+      ],
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAjustementDetails = async (req, res) => {
+  try {
+    const response = await Ajustement_detail.findAll({
+      where: { ajustement_id: req.params.ajustement_id },
+      include: [{ model: Ajustement }, { model: Produit }],
     });
     res.json(response);
   } catch (error) {
@@ -101,4 +120,4 @@ const createOne = async (req, res) => {
     return res.status(404).json({ message: error.message });
   }
 };
-export { getAll, getSpecific, createOne };
+export { getAll, getAjustementDetails, getSpecific, createOne };

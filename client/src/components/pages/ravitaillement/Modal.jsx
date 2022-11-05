@@ -80,6 +80,7 @@ function Modal({ ravitaillement, listRavitaillementDetails }) {
               <InputForm
                 date
                 val={date_livraison}
+                min={rvtSelect.date_prev_livraison}
                 onChange={(e)=>setDate_livraison(e.target.value)}
                 obligatory={isOb ? "active" : ""}
               >

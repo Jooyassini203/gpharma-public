@@ -21,27 +21,46 @@ function Table({ update, del, view, list, isAdd }) {
       width: "10%",
     },
     {
-      name: "Nom et prénom",
-      selector: (row) => row.nom_utilisateur,
-      sortable: true,
-    },
-    {
       name: "Identifiant",
       selector: (row) => row.nom_login,
       sortable: true,
       width: "10%",
     },
     {
+      name: "Nom et prénom",
+      selector: (row) => row.nom_utilisateur,
+      sortable: true,
+    },
+    {
+      name: "Est",
+      selector: (row) =>(
+        <div className="text-center">
+          <span
+            className={
+              row.isOnline == "0"
+                ? "badge light badge-dark"
+                : "badge light badge-success"
+            }
+          >
+            <i
+              className={
+                row.isOnline == "0"
+                  ? "fa fa-circle text-dark mr-1"
+                  : "fa fa-circle text-success mr-1"
+              }
+            />
+            {row.isOnline == "0" ? "Déconnecté" : "En ligne"}
+          </span>
+        </div>
+      ),
+      sortable: true,
+      width: "15%",
+    },
+    {
       name: "Date dernière connexion",
       selector: (row) => row.date_der_log,
       sortable: true,
       width: "20%",
-    },
-    {
-      name: "Sexe",
-      selector: (row) => row.sexe,
-      sortable: true,
-      width: "10%",
     },
     {
       name: "Contact",
