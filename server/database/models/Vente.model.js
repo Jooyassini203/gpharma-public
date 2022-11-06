@@ -8,6 +8,7 @@ const Vente = db.define(
     file_societe: { type: DataTypes.CHAR(255) },
     montant_total: { type: DataTypes.DOUBLE, allowNull: false },
     data_vente: { type: DataTypes.DATE, allowNull: false },
+    societe_prise_en_charge: { type: DataTypes.CHAR(255), allowNull: true },
     etat_vente: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
   { paranoid: true, freezeTableName: true }

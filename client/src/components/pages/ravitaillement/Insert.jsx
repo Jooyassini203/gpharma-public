@@ -17,9 +17,9 @@ import {
   InputForm,
   onChange,
   SelectForm,
+  getDateNow,
   verifObligatory,
-} from "../../../utils/utils";
-import { getDateNow } from "../../../utils/utils";
+} from "../../../utils/utils"; 
 import { userConnected } from "../../../atoms/authentication";
 
 function Insert() {

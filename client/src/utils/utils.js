@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
- 
 
 let userConnect = null;
 if (localStorage.getItem("gpharma@2.0.0")) {
@@ -15,7 +14,7 @@ if (localStorage.getItem("gpharma@2.0.0")) {
     process.env.REACT_APP_KEY_SESSION
   ).toString(cryptojs.enc.Utf8);
   userConnect = JSON.parse(userJson);
-} 
+}
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
 };
@@ -81,8 +80,8 @@ export const addData = (
     } else {
       data.append("utilisateur_id", userConnect.id);
     }
-    try { 
-      console.log("post : ", urlInsert(tableName), data, headers); 
+    try {
+      console.log("post : ", urlInsert(tableName), data, headers);
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
         toast.success(responseAdd.data.message);
@@ -128,8 +127,8 @@ export const updateData = (
       headers = {};
       data["utilisateur_id"] = userConnect.id;
     } else {
-      data.append("utilisateur_id", userConnect.id); 
-    } 
+      data.append("utilisateur_id", userConnect.id);
+    }
     try {
       console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
@@ -216,6 +215,7 @@ export const InputForm = ({
   integer = null,
   text = null,
   date = null,
+  file = null,
   tel = null,
   obligatory = null,
   textarea = null,
@@ -233,6 +233,8 @@ export const InputForm = ({
     type = "number";
   } else if (email) {
     type = "email";
+  } else if (file) {
+    type = "file";
   } else if (password) {
     type = "password";
   } else if (integer) {
@@ -294,10 +296,11 @@ export const InputForm = ({
           type={type}
           onKeyPress={onKeyPress}
           value={val}
-          className={getClass(val, obligatory)}
+          className={file ? "custom-file-input" : getClass(val, obligatory)}
           onChange={onChange}
           {...props}
         />
+        {file ? <label className="custom-file-label">Choisissez un ficher</label> : null}
         {postIcon ? (
           <div className="input-group-append show-pass">
             <span className="input-group-text">
