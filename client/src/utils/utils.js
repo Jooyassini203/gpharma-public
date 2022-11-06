@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-<<<<<<< HEAD
+ 
 
 let userConnect = null;
 if (localStorage.getItem("gpharma@2.0.0")) {
@@ -15,18 +15,7 @@ if (localStorage.getItem("gpharma@2.0.0")) {
     process.env.REACT_APP_KEY_SESSION
   ).toString(cryptojs.enc.Utf8);
   userConnect = JSON.parse(userJson);
-}
-=======
-import { userConnected } from "../atoms/authentication";
-import { useRecoilState } from "recoil";
-
-const userJson = cryptojs.AES.decrypt(
-  localStorage.getItem("gpharma@2.0.0"),
-  process.env.REACT_APP_KEY_SESSION
-).toString(cryptojs.enc.Utf8);
-const  userConnect = JSON.parse(userJson)
->>>>>>> f3c61d00b35d2122f40008412f20f780cafe8e53
-
+} 
 export const urlInsert = (tableName) => {
   return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
 };
@@ -92,12 +81,8 @@ export const addData = (
     } else {
       data.append("utilisateur_id", userConnect.id);
     }
-    try {
-<<<<<<< HEAD
-      console.log("post : ", urlInsert(tableName), data, headers);
-=======
-      console.log("post : ",urlInsert(tableName), data, headers);
->>>>>>> f3c61d00b35d2122f40008412f20f780cafe8e53
+    try { 
+      console.log("post : ", urlInsert(tableName), data, headers); 
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
         toast.success(responseAdd.data.message);
@@ -143,12 +128,8 @@ export const updateData = (
       headers = {};
       data["utilisateur_id"] = userConnect.id;
     } else {
-      data.append("utilisateur_id", userConnect.id);
-<<<<<<< HEAD
-    }
-=======
+      data.append("utilisateur_id", userConnect.id); 
     } 
->>>>>>> f3c61d00b35d2122f40008412f20f780cafe8e53
     try {
       console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(

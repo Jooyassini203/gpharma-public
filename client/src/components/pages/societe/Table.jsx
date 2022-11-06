@@ -1,14 +1,20 @@
-import { faListAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faListAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
-import { listAjustement, ajustementSelect } from "../../../atoms/ajustement";
+import { isAddState, listSociete, societeSelect } from "../../../atoms/societe";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
-import { ButtonTable, getData } from "../../../utils/utils";
+import {
+  ButtonTable,
+  confirmDelete,
+  deleteData,
+  getData,
+  updateData,
+} from "../../../utils/utils";
 
 function Table() {
-  const [list, setList] = useRecoilState(listAjustement);
-  const [ajustementSelected, setAjustementSelected] =
-    useRecoilState(ajustementSelect);
+  const [isAdd, setIsAdd] = useRecoilState(isAddState);
+  const [list, setList] = useRecoilState(listSociete);
+  const [societeSelected, setSocieteSelected] = useRecoilState(societeSelect);
   const columns = [
     {
       name: "#",
@@ -17,45 +23,53 @@ function Table() {
       width: "8%",
     },
     {
-      name: "Motif",
-      selector: (row) => row.motif,
+      name: "Société",
+      selector: (row) => row.nom_societe,
       sortable: true,
-      width: "30%",
     },
     {
-      name: "Date",
-      selector: (row) => row.date_ajustement,
+      name: "Prise en charge",
+      selector: (row) => row.prise_en_charge + " %",
       sortable: true,
+      width: "20%",
     },
     {
       name: "Etat",
-      selector: (row) =>(
+      selector: (row) => (
         <div className="text-center">
           <span
+            style={{ cursor: "pointer" }}
             className={
-              row.etat_vente == "COMMANDE"
-                ? "badge light badge-dark"
+              row.status == "0"
+                ? "badge light badge-warning"
                 : "badge light badge-success"
             }
+            onClick={() => {
+              updateData(
+                "SocieteStatus",
+                row.id,
+                {
+                  status: row.status == "0" ? "1" : "0",
+                },
+                () => {
+                  getData("societe", setList);
+                }
+              );
+            }}
           >
             <i
               className={
-                row.etat_vente == "COMMANDE"
-                  ? "fa fa-circle text-dark mr-1"
+                row.status == "0"
+                  ? "fa fa-circle text-warning mr-1"
                   : "fa fa-circle text-success mr-1"
               }
             />
-            {row.etat_vente == "COMMANDE" ? "Commandé" : "Vendue"}
+            {row.status == "0" ? "Désactivée" : "Activée"}
           </span>
         </div>
       ),
       sortable: true,
       width: "15%",
-    },
-    {
-      name: "Efféctuer par",
-      selector: (row) => row.utilisateur.nom_utilisateur,
-      sortable: true,
     },
     {
       name: "Action",
@@ -64,11 +78,33 @@ function Table() {
         return (
           <>
             <ButtonTable
-              importance="success"
-              icon={faListAlt}
-            data-toggle="modal"
-            data-target="#modalView"
-              handleClick={() => { 
+              importance="warning mr-2"
+              icon={faEdit}
+              data-toggle="modal"
+              data-target="#modalSociete"
+              handleClick={() => {
+                getData(
+                  "societe",
+                  (data) => {
+                    setSocieteSelected(data);
+                    setIsAdd({ status: false });
+                  },
+                  row.id
+                );
+              }}
+            />
+            <ButtonTable
+              importance="danger"
+              icon={faTrash}
+              handleClick={() => {
+                confirmDelete(
+                  "Voulez-vous vraiment supprimer cette société?",
+                  () => {
+                    deleteData("societe", row.id, () => {
+                      getData("societe", setList);
+                    });
+                  }
+                );
               }}
             />
           </>
@@ -87,13 +123,22 @@ function Table() {
         title="Liste des sociétés"
         filterClass="form-control w-100"
         actions={
-          <button
-            className="btn btn-sm btn-primary"
-            data-toggle="modal"
-            data-target="#modalSociete"
-          >
-            <i className="fa fa-plus mr-2"></i> Ajouter une société
-          </button>
+          <>
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#modalSociete"
+            >
+              <i className="fa fa-plus mr-2"></i> Ajouter une société
+            </button>
+            <button
+              className="btn btn-sm btn-outline-warning "
+              data-toggle="modal"
+              data-target="#modalSocieteActivity"
+            >
+              <i className="fa fa-list-alt mr-2"></i> Activité
+            </button>
+          </>
         }
       />
     </>

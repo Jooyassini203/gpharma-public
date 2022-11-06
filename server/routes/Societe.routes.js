@@ -4,6 +4,7 @@ import {
   getSpecific,
   createOne,
   updateOne,
+  updateStatus,
   deleteOne,
 } from "../controllers/Societe.controller.js";
 import Autentification from "../middlewares/Authentification.middleware.js";
@@ -12,5 +13,6 @@ SocieteRouter.get("/Societe/", Autentification, getAll);
 SocieteRouter.get("/Societe/:id", Autentification, getSpecific);
 SocieteRouter.post("/Societe/", Autentification, createOne);
 SocieteRouter.put("/Societe/:id", Autentification, updateOne);
+SocieteRouter.put("/SocieteStatus/:id", Autentification, updateStatus);
 SocieteRouter.delete("/Societe/:id", Autentification, deleteOne);
 export default SocieteRouter;
