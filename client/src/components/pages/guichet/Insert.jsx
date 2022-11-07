@@ -32,14 +32,7 @@ function Insert() {
   const [venteDetails, setVenteDetails] = React.useState(intializeVenteDetails);
   const { nom_prenom, adresse, societe_id } = client;
   const { nom_docteur, hopital } = ordonnance;
-  const {
-    motif,
-    montant_total,
-    date_vente,
-    etat_vente,
-    file_societe,
-    societe_prise_en_charge,
-  } = vente;
+  const { motif, montant_total, societe_prise_en_charge } = vente;
   const {
     quantite_vente,
     prix_stock,
@@ -114,7 +107,14 @@ function Insert() {
     verifObSocieteAndOrdonnance();
     if (!widhtOrdonnance) if (verifObligatory(ordonnance)) return;
     if (widhtSociete) if (verifObligatory(societe)) return;
-
+    setVente({
+      ...vente,
+      montant_total: listVenteDetails.reduce(
+        (acc, item) => (acc += parseFloat(item.montant_vente)),
+        0
+      ),
+      date_saisi: getDateNow(),
+    });
     addData(
       "guichet",
       JsonToFormData(
@@ -124,7 +124,7 @@ function Insert() {
       ),
       () => {
         initialize();
-        setIsAdd({ status: false });
+        setIsAdd("0");
       }
     );
   };
@@ -360,13 +360,17 @@ function Insert() {
         <div className="col">
           <span className="font-w600 mb-1 w-100">Montant</span>
           <br />
-          <span className="badge badge-xl light badge-warning mt-1">
+          <span
+            style={{ height: "41px", paddingTop: "2.5px" }}
+            className="badge badge-xl light badge-warning mt-1 w-100"
+          >
             {numberWithCommas(prix_stock * quantite_vente) + " Ar"}
           </span>
         </div>
         <div className="col mt-4 align-items-center">
           <ButtonTable
-            importance="success mt-2 w-100"
+            style={{ height: "41px", paddingTop: "6px" }}
+            importance="success mt-1 w-100"
             handleClick={addItemInList}
           >
             Valider
@@ -497,7 +501,7 @@ function Insert() {
             <button
               className="btn btn-info light btn-lg w-100 "
               onClick={() => {
-                setIsAdd({ status: false });
+                setIsAdd("0");
               }}
             >
               <i className="fa fa-list-alt"></i>

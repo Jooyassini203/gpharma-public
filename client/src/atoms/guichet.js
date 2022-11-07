@@ -4,6 +4,10 @@ export const isAddState = atom({
   key: "isAddState-societe",
   default: "1",
 });
+export const listGuichet = atom({
+  key: "isAddState-societe",
+  default: [],
+});
 
 export const intializeClient = {
   nom_prenom: "",
@@ -17,6 +21,7 @@ export const intializeOrdonnance = {
 export const intializeVente = {
   motif: "",
   montant_total: "",
+  date_saisi: "",
   date_vente: "",
   etat_vente: "COMMANDE",
   file_societe: null,
