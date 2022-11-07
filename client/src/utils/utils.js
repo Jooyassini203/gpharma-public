@@ -195,10 +195,12 @@ export const ButtonTable = ({
       onClick={handleClick}
       {...props}
     >
-      <FontAwesomeIcon
-        icon={icon}
-        // className={!importance ? "text-warning" : "text-" + importance}
-      />
+      {!icon ? null : (
+        <FontAwesomeIcon
+          icon={icon}
+          // className={!importance ? "text-warning" : "text-" + importance}
+        />
+      )}
       {children}
     </button>
   );
@@ -300,7 +302,9 @@ export const InputForm = ({
           onChange={onChange}
           {...props}
         />
-        {file ? <label className="custom-file-label">Choisissez un ficher</label> : null}
+        {file ? (
+          <label className="custom-file-label">Choisissez un ficher</label>
+        ) : null}
         {postIcon ? (
           <div className="input-group-append show-pass">
             <span className="input-group-text">
@@ -369,7 +373,7 @@ export const SelectForm = (props) => {
           )}
         </div>
       ) : (
-        <Select styles={{ height: "90%" }} {...prop} />
+        <Select styles={colourStyles} {...prop} />
       )}
       <span
         className="text-danger"
@@ -380,7 +384,27 @@ export const SelectForm = (props) => {
     </div>
   );
 };
-
+const colourStyles = {
+  control: (styles, { isFocused, isHovered, is }) => {
+    return {
+      ...styles,
+      height: "41px",
+      color: "#B1B1B1",
+      border: isFocused ? "2px solid #CCFFF6 !important" : "1px solid #f0f1f5",
+      borderRadius: "0px !important",
+    };
+  },
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor: !isFocused ? "" : "#CCFFF6",
+      color: "default",
+    };
+  },
+};
+export const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
+};
 const getId = (test) => {
   let string = test
     .toLowerCase()
@@ -500,7 +524,6 @@ export const confirmDelete = (
 
 export const onChange = (e, setItem, nameSelect = "") => {
   if (e.label) {
-    console.log("event : ", e);
     setItem((prevState) => ({ ...prevState, [nameSelect]: e }));
     return;
   } else if (e.target.files) {

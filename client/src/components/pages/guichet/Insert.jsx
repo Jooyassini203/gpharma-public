@@ -12,6 +12,8 @@ import {
   getDateNow,
   verifObligatory,
   getEmplacement,
+  numberWithCommas,
+  JsonToFormData,
 } from "../../../utils/utils";
 import {
   isAddState,
@@ -22,6 +24,7 @@ import {
 } from "../../../atoms/guichet";
 import { useRecoilState } from "recoil";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 function Insert() {
   const [client, setClient] = React.useState(intializeClient);
   const [ordonnance, setOrdonnance] = React.useState(intializeOrdonnance);
@@ -45,28 +48,85 @@ function Insert() {
   } = venteDetails;
 
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
+  const [isObSociete, setIsObSociete] = React.useState(false);
+  const [isObOrdonnance, setIsObOrdonnance] = React.useState(false);
   const [isObVtDt, setIsObVtDt] = React.useState(false);
   const [produit, setProduit] = React.useState({});
   const [societe, setSociete] = React.useState({});
   const [OptionsProduit, setOptionsProduit] = React.useState([]);
+  const [file, setFile] = React.useState();
   const [OptionsSociete, setOptionsSociete] = React.useState([]);
   const [listVenteDetails, setListVenteDetails] = React.useState([]);
 
   const [showAccordion, setShowAccordion] = React.useState(false);
 
+  const initialize = () => {
+    setClient(intializeClient);
+    setOrdonnance(intializeOrdonnance);
+    setProduit({});
+    setSociete({});
+    setVente(intializeVente);
+    setVenteDetails(intializeVenteDetails);
+    setVenteDetails([]);
+  };
   const addItemInList = () => {
     if (!produit_code_lot_produit.value || !prix_stock || !quantite_vente) {
       setIsObVtDt(true);
       return;
     }
-    console.log("venteDetails", {
-      ...venteDetails,
-      ["montant_vente"]: "" + prix_stock * quantite_vente,
-    });
+    if (
+      listVenteDetails.find(
+        (a) => a.produit_code_lot_produit == produit_code_lot_produit.value
+      )
+    ) {
+      toast.warning(
+        "Cette produit existe déjà dans la liste; veuillez seulement modifié votre commande dans cette dernière !"
+      );
+      return;
+    }
     setListVenteDetails([
       ...listVenteDetails,
-      { ...venteDetails, ["montant_vente"]: "" + prix_stock * quantite_vente },
+      {
+        ...venteDetails,
+        ["produit_code_lot_produit"]: produit_code_lot_produit.value,
+        ["nom_produit"]: produit.nom_produit,
+        ["montant_vente"]: "" + prix_stock * quantite_vente,
+      },
     ]);
+  };
+
+  const verifObSocieteAndOrdonnance = () => {
+    const widhtOrdonnance = nom_docteur || hopital ? true : false;
+    const widhtSociete = file ? true : false;
+    if (!widhtOrdonnance) setIsObOrdonnance(false);
+    else setIsObOrdonnance(true);
+    if (!widhtSociete) setIsObSociete(false);
+    else setIsObSociete(true);
+  };
+
+  const add = () => {
+    const widhtOrdonnance = nom_docteur || hopital ? true : false;
+    const widhtSociete = file ? true : false;
+    if (listVenteDetails.length <= 0) {
+      toast.warning("Ajouter au moins une commande!");
+      return;
+    }
+    verifObSocieteAndOrdonnance();
+    if (!widhtOrdonnance) if (verifObligatory(ordonnance)) return;
+    if (widhtSociete) if (verifObligatory(societe)) return;
+
+    addData(
+      "guichet",
+      JsonToFormData(
+        { vente, venteDetails: listVenteDetails },
+        file,
+        "file_societe"
+      ),
+      () => {
+        initialize();
+        setIsAdd({ status: false });
+      }
+    );
   };
 
   React.useEffect(() => {
@@ -140,6 +200,8 @@ function Insert() {
               style={{ borderRadius: "2vw" }}
             >
               <InputForm
+                textarea
+                rows="2"
                 name="motif"
                 val={motif}
                 onChange={(e) => onChange(e, setVente)}
@@ -153,7 +215,9 @@ function Insert() {
                   <InputForm
                     name="nom_prenom"
                     val={nom_prenom}
-                    onChange={(e) => onChange(e, setClient)}
+                    onChange={(e) => {
+                      onChange(e, setClient);
+                    }}
                     obligatory={false ? "active" : ""}
                   >
                     Nom et prénom du Client
@@ -176,8 +240,11 @@ function Insert() {
                   <InputForm
                     name="nom_docteur"
                     val={nom_docteur}
-                    onChange={(e) => onChange(e, setOrdonnance)}
-                    obligatory={false ? "active" : ""}
+                    onChange={(e) => {
+                      onChange(e, setOrdonnance);
+                      verifObSocieteAndOrdonnance();
+                    }}
+                    obligatory={isObOrdonnance ? "active" : ""}
                   >
                     Nom du Docteur
                   </InputForm>
@@ -186,8 +253,11 @@ function Insert() {
                   <InputForm
                     name="hopital"
                     val={hopital}
-                    onChange={(e) => onChange(e, setOrdonnance)}
-                    obligatory={false ? "active" : ""}
+                    onChange={(e) => {
+                      verifObSocieteAndOrdonnance();
+                      onChange(e, setOrdonnance);
+                    }}
+                    obligatory={isObOrdonnance ? "active" : ""}
                   >
                     Hopital
                   </InputForm>
@@ -202,10 +272,11 @@ function Insert() {
                     options={OptionsSociete}
                     onChange={(e) => {
                       onChange(e, setVente, "societe_id");
+                      verifObSocieteAndOrdonnance();
                       if (e.value)
                         getData("societe", (data) => setSociete(data), e.value);
                     }}
-                    obligatory={false ? "active" : ""}
+                    obligatory={isObSociete ? "active" : ""}
                   >
                     Société
                   </SelectForm>
@@ -217,8 +288,9 @@ function Insert() {
                     val={societe_prise_en_charge}
                     onChange={(e) => {
                       onChange(e, setVenteDetails);
+                      verifObSocieteAndOrdonnance();
                     }}
-                    obligatory={false ? "active" : ""}
+                    obligatory={isObSociete ? "active" : ""}
                   >
                     Taux prise en charge
                   </InputForm>
@@ -226,10 +298,16 @@ function Insert() {
                 <div className="col">
                   <InputForm
                     file
-                    name="file_societe"
-                    val={file_societe}
-                    onChange={(e) => onChange(e, setVente)}
-                    obligatory={false ? "active" : ""}
+                    name="file"
+                    val={file}
+                    onChange={(e) => {
+                      verifObSocieteAndOrdonnance();
+                      if (e.target.files.length > 0) {
+                        console.log("e.target.files", e.target.files[0]);
+                        setFile(e.target.files[0]);
+                      }
+                    }}
+                    obligatory={isObSociete ? "active" : ""}
                   >
                     Ficher Société
                   </InputForm>
@@ -283,7 +361,7 @@ function Insert() {
           <span className="font-w600 mb-1 w-100">Montant</span>
           <br />
           <span className="badge badge-xl light badge-warning mt-1">
-            {prix_stock * quantite_vente + " Ar"}
+            {numberWithCommas(prix_stock * quantite_vente) + " Ar"}
           </span>
         </div>
         <div className="col mt-4 align-items-center">
@@ -302,7 +380,7 @@ function Insert() {
             <thead>
               <tr>
                 <th className="center">#</th>
-                <th>#Code</th>
+                <th>Code</th>
                 <th>Produit</th>
                 <th className="right">Prix Unit</th>
                 <th className="center">Qte</th>
@@ -314,46 +392,50 @@ function Insert() {
             </thead>
             <tbody>
               {listVenteDetails.length > 0
-                ? listVenteDetails.map((item) => (
+                ? listVenteDetails.map((item, index) => (
                     <tr key={item.produit_code_lot_produit + item.nom_produit}>
-                      <td className="center">1</td>
+                      <td className="center">{++index}</td>
                       <td className="left strong">
                         {item.produit_code_lot_produit}
                       </td>
                       <td className="left">{item.nom_produit}</td>
-                      <td className="right">{item.prix_stock}</td>
-                      <td className="center">{item.quantite_vente}</td>
-                      <td className="right">{item.montant_vente}</td>
+                      <td className="right">
+                        {numberWithCommas(item.prix_stock)}
+                      </td>
+                      <td className="center">
+                        {numberWithCommas(item.quantite_vente)}
+                      </td>
+                      <td className="right">
+                        {numberWithCommas(item.montant_vente)}
+                      </td>
                       <th className="center">
                         <ButtonTable
                           importance="warning"
                           icon={faEdit}
                           handleClick={() => {
-                            // setRavitaillementDetails({
-                            //   prix_unit: item.prix_unit,
-                            //   produit_code_lot_produit: {
-                            //     label: item.nom_produit,
-                            //     value: item.produit_code_lot_produit,
-                            //   },
-                            //   nom_produit: item.nom_produit,
-                            //   prix_ht: item.prix_ht,
-                            //   montant_ht: item.montant_ht,
-                            //   quantite_demande: item.quantite_demande,
-                            //   unite_achat: item.unite_achat,
-                            // });
-                            // console.log(
-                            //   "ravitaillementDetails",
-                            //   ravitaillementDetails
-                            // );
-                            // setListVenteDetails([
-                            //   ...listVenteDetails.slice(
-                            //     0,
-                            //     listVenteDetails.indexOf(item)
-                            //   ),
-                            //   ...listVenteDetails.slice(
-                            //     listVenteDetails.indexOf(item) + 1
-                            //   ),
-                            // ]);
+                            onChange(
+                              {
+                                label: item.nom_produit,
+                                value: item.produit_code_lot_produit,
+                              },
+                              setVenteDetails,
+                              "produit_code_lot_produit"
+                            );
+                            setVenteDetails({
+                              prix_stock: item.prix_stock,
+                              quantite_vente: item.quantite_vente,
+                              montant_vente: item.montant_vente,
+                            });
+                            console.log(venteDetails);
+                            setListVenteDetails([
+                              ...listVenteDetails.slice(
+                                0,
+                                listVenteDetails.indexOf(item)
+                              ),
+                              ...listVenteDetails.slice(
+                                listVenteDetails.indexOf(item) + 1
+                              ),
+                            ]);
                           }}
                         />
                         <ButtonTable
@@ -388,28 +470,22 @@ function Insert() {
             <div className="col-lg-4 col-sm-5"> </div>
             <div className="col-lg-4 col-sm-5 ml-auto">
               <table className="table table-clear">
-                {/* <tbody>
-                      <tr>
-                        <td className="left">
-                          <strong>Totals HT</strong>
-                        </td>
-                        <td className="right">{getTotalsHT()}</td>
-                      </tr>
-                      <tr>
-                        <td className="left">
-                          <strong>TVA ({tva}%)</strong>
-                        </td>
-                        <td className="right">{getTotalsTVA()}</td>
-                      </tr>
-                      <tr>
-                        <td className="left">
-                          <strong>Totals TTC</strong>
-                        </td>
-                        <td className="right">
-                          <strong>{getTotalsTTC()}</strong>
-                        </td>
-                      </tr>
-                    </tbody> */}
+                <tbody>
+                  <tr>
+                    <td className="left">
+                      <strong>Totals</strong>
+                    </td>
+                    <td className="right">
+                      {numberWithCommas(
+                        listVenteDetails.reduce(
+                          (acc, item) =>
+                            (acc += parseFloat(item.montant_vente)),
+                          0
+                        )
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -420,7 +496,9 @@ function Insert() {
           <div className="col">
             <button
               className="btn btn-info light btn-lg w-100 "
-              onClick={() => {}}
+              onClick={() => {
+                setIsAdd({ status: false });
+              }}
             >
               <i className="fa fa-list-alt"></i>
             </button>
@@ -428,7 +506,9 @@ function Insert() {
           <div className="col-3">
             <button
               className="btn btn-danger light btn-lg w-100 "
-              onClick={() => {}}
+              onClick={() => {
+                initialize();
+              }}
             >
               Annuler
             </button>
@@ -436,7 +516,7 @@ function Insert() {
           <div className="col-7">
             <button
               className="btn btn-success light btn-lg w-100 "
-              onClick={() => {}}
+              onClick={add}
             >
               Efféctuer
             </button>
