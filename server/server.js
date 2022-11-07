@@ -19,6 +19,7 @@ import SocieteRouter from "./routes/Societe.routes.js";
 import ProduitRouter from "./routes/Produit.routes.js";
 import RavitaillementRouter from "./routes/Ravitaillement.routes.js";
 import AjustementRouter from "./routes/Ajustement.routes.js";
+import GuichetRouter from "./routes/Guichet.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -45,6 +46,7 @@ app.use(SocieteRouter);
 app.use(ProduitRouter);
 app.use(RavitaillementRouter);
 app.use(AjustementRouter);
+app.use(GuichetRouter);
 
 Migration();
 

@@ -1,6 +1,7 @@
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
+import { userConnected } from "../../../atoms/authentication";
 import {
   isAddState, 
   listGuichet, 
@@ -14,6 +15,7 @@ import {
 } from "../../../utils/utils";
 
 function Table() {
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [list, setList] = useRecoilState(listGuichet); 
   const columns = [
@@ -104,7 +106,7 @@ function Table() {
     },
   ];
   React.useEffect(() => {
-    getData("guichet", (data) => setList(data));
+    getData("myGuichet", (data) => setList(data), userConnect.id);
   }, []);
   return (
     <>

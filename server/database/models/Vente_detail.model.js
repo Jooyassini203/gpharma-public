@@ -11,7 +11,8 @@ const Vente_detail = db.define(
     },
     quantite_vente: { type: DataTypes.DOUBLE, allowNull: false },
     prix_stock: { type: DataTypes.DOUBLE, allowNull: false },
-    montant_vente: { type: DataTypes.DOUBLE, allowNull: false }, 
+    montant_vente: { type: DataTypes.DOUBLE, allowNull: false },
+    unite_vente: { type: DataTypes.CHAR("25"), allowNull: false },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },
   { paranoid: true, freezeTableName: true }

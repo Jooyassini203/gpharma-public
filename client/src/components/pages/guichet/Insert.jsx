@@ -37,6 +37,7 @@ function Insert() {
     quantite_vente,
     prix_stock,
     montant_vente,
+    unite_vente,
     produit_code_lot_produit,
   } = venteDetails;
 
@@ -47,11 +48,13 @@ function Insert() {
   const [produit, setProduit] = React.useState({});
   const [societe, setSociete] = React.useState({});
   const [OptionsProduit, setOptionsProduit] = React.useState([]);
-  const [file, setFile] = React.useState();
+  const [file, setFile] = React.useState("");
   const [OptionsSociete, setOptionsSociete] = React.useState([]);
   const [listVenteDetails, setListVenteDetails] = React.useState([]);
-
+  
   const [showAccordion, setShowAccordion] = React.useState(false);
+  const [toggleUniteVente, setToggleUniteVente] = React.useState(true);
+  const [unites, setUnites] = React.useState([]);
 
   const initialize = () => {
     setClient(intializeClient);
@@ -97,6 +100,9 @@ function Insert() {
     else setIsObSociete(true);
   };
 
+  const getNameUniteById = (id) => {
+    return unites.find((a) => a.id === id).nom_unite;
+  };
   const add = () => {
     const widhtOrdonnance = nom_docteur || hopital ? true : false;
     const widhtSociete = file ? true : false;
@@ -114,14 +120,11 @@ function Insert() {
         0
       ),
       date_saisi: getDateNow(),
+      unite_vente: produit.unite_vente,
     });
     addData(
       "guichet",
-      JsonToFormData(
-        { vente, venteDetails: listVenteDetails },
-        file,
-        "file_societe"
-      ),
+      JsonToFormData({ vente, listVenteDetails }, file, "file_societe"),
       () => {
         initialize();
         setIsAdd("0");
@@ -158,7 +161,16 @@ function Insert() {
     getData("societe", (data) => {
       convertToOption(data, setOptionsSociete);
     });
+    getData("unite", setUnites);
   }, []);
+  React.useEffect(() => {
+    if (produit) {
+      if(toggleUniteVente)
+      setVenteDetails({...venteDetails, quantite_vente: getEmplacement(produit.emplacement)[0].quantite_produit })
+      else
+      setVenteDetails({...venteDetails, quantite_vente: quantite_vente * produit.presentation_quantite })
+    }
+  }, [toggleUniteVente]);
   return (
     <>
       <div
@@ -319,7 +331,7 @@ function Insert() {
       </div>
       <hr className="my-4" />
       <div className="row">
-        <div className="col-4">
+        <div className="col-3">
           <SelectForm
             val={produit_code_lot_produit}
             value={filterOption(OptionsProduit, produit_code_lot_produit)}
@@ -333,6 +345,25 @@ function Insert() {
           >
             Produit
           </SelectForm>
+        </div>
+        <div className="col">
+          <span className="font-w600 mb-1 w-100">Vendre par</span>
+          <br />
+          <span
+            style={{ height: "41px", paddingTop: "2.5px", cursor: "pointer" }}
+            className="badge badge-xl light badge-dark mt-1 w-100"
+            onClick={() => {
+              if (produit) setToggleUniteVente(!toggleUniteVente);
+            }}
+          >
+            {!toggleUniteVente
+              ? produit.unite_vente
+                ? getNameUniteById(produit.unite_vente)
+                : "Vente"
+              : produit.unite_presentation
+              ? getNameUniteById(produit.unite_presentation)
+              : "Présentation"}
+          </span>
         </div>
         <div className="col">
           <InputForm
@@ -349,6 +380,15 @@ function Insert() {
         <div className="col">
           <InputForm
             number
+            postIcon={{
+              text: (toggleUniteVente
+                ? produit.unite_vente
+                  ? getNameUniteById(produit.unite_vente)
+                  : "Vente"
+                : produit.unite_presentation
+                ? getNameUniteById(produit.unite_presentation)
+                : "Présentation"),
+            }}
             name="quantite_vente"
             val={quantite_vente}
             onChange={(e) => onChange(e, setVenteDetails)}
