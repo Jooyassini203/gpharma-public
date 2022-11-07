@@ -11,6 +11,7 @@ import {
   SelectForm,
   getDateNow,
   verifObligatory,
+  getEmplacement,
 } from "../../../utils/utils";
 import {
   isAddState,
@@ -53,14 +54,27 @@ function Insert() {
 
   const [showAccordion, setShowAccordion] = React.useState(false);
 
-  const addItemInList = () => {};
+  const addItemInList = () => {
+    if (!produit_code_lot_produit.value || !prix_stock || !quantite_vente) {
+      setIsObVtDt(true);
+      return;
+    }
+    console.log("venteDetails", {
+      ...venteDetails,
+      ["montant_vente"]: "" + prix_stock * quantite_vente,
+    });
+    setListVenteDetails([
+      ...listVenteDetails,
+      { ...venteDetails, ["montant_vente"]: "" + prix_stock * quantite_vente },
+    ]);
+  };
 
   React.useEffect(() => {
-    if (produit) {
+    if (produit.emplacement) {
       setVenteDetails((prev) => ({
         ...prev,
         prix_stock: produit.prix_stock,
-        quantite_vente: produit.quantite_produit,
+        quantite_vente: getEmplacement(produit.emplacement)[0].quantite_produit,
       }));
     }
   }, [produit]);
@@ -73,7 +87,7 @@ function Insert() {
     }
   }, [societe]);
   React.useEffect(() => {
-    getData("produitEtale", (data) => {
+    getData("produitEtalage", (data) => {
       convertToOption(
         data,
         setOptionsProduit,
@@ -82,7 +96,7 @@ function Insert() {
       );
     });
     getData("societe", (data) => {
-      convertToOption(data, OptionsSociete);
+      convertToOption(data, setOptionsSociete);
     });
   }, []);
   return (
@@ -104,7 +118,7 @@ function Insert() {
             aria-expanded="false"
           >
             <span className="accordion__header--text">
-              Faire une vente détailés.
+              Faire une vente détailée.
             </span>
             <span className="accordion__header--indicator"></span>
           </div>
@@ -139,20 +153,20 @@ function Insert() {
                   <InputForm
                     name="nom_prenom"
                     val={nom_prenom}
-                    onChange={(e) => onChange(e, setVente)}
+                    onChange={(e) => onChange(e, setClient)}
                     obligatory={false ? "active" : ""}
                   >
-                    Client
+                    Nom et prénom du Client
                   </InputForm>
                 </div>
                 <div className="col">
                   <InputForm
                     name="adresse"
                     val={adresse}
-                    onChange={(e) => onChange(e, setVente)}
+                    onChange={(e) => onChange(e, setClient)}
                     obligatory={false ? "active" : ""}
                   >
-                    Adresse client
+                    Adresse du client
                   </InputForm>
                 </div>
               </div>
@@ -165,7 +179,7 @@ function Insert() {
                     onChange={(e) => onChange(e, setOrdonnance)}
                     obligatory={false ? "active" : ""}
                   >
-                    Docteur
+                    Nom du Docteur
                   </InputForm>
                 </div>
                 <div className="col">
@@ -235,7 +249,7 @@ function Insert() {
             onChange={(e) => {
               onChange(e, setVenteDetails, "produit_code_lot_produit");
               if (e.value)
-                getData("produitEtale", (data) => setProduit(data[0]), e.value);
+                getData("produit", (data) => setProduit(data[0]), e.value);
             }}
             obligatory={isObVtDt ? "active" : ""}
           >
@@ -266,10 +280,10 @@ function Insert() {
           </InputForm>
         </div>
         <div className="col">
-          <span className="font-w600 mt-1 w-100">Montant</span>
+          <span className="font-w600 mb-1 w-100">Montant</span>
           <br />
-          <span className="badge light badge-warning">
-            {montant_vente + " Ar"}
+          <span className="badge badge-xl light badge-warning mt-1">
+            {prix_stock * quantite_vente + " Ar"}
           </span>
         </div>
         <div className="col mt-4 align-items-center">
@@ -299,71 +313,73 @@ function Insert() {
               </tr>
             </thead>
             <tbody>
-              {listVenteDetails.map((item) => (
-                <tr key={item.code_lot_produit + item.nom_produit}>
-                  <td className="center">1</td>
-                  <td className="left strong">
-                    {item.produit_code_lot_produit}
-                  </td>
-                  <td className="left">{item.nom_produit}</td>
-                  <td className="right">{item.prix_unit}</td>
-                  <td className="center">{item.quantite_demande}</td>
-                  <td className="right">{item.montant_ht}</td>
-                  <th className="center">
-                    <ButtonTable
-                      importance="warning"
-                      icon={faEdit}
-                      handleClick={() => {
-                        // setRavitaillementDetails({
-                        //   prix_unit: item.prix_unit,
-                        //   produit_code_lot_produit: {
-                        //     label: item.nom_produit,
-                        //     value: item.produit_code_lot_produit,
-                        //   },
-                        //   nom_produit: item.nom_produit,
-                        //   prix_ht: item.prix_ht,
-                        //   montant_ht: item.montant_ht,
-                        //   quantite_demande: item.quantite_demande,
-                        //   unite_achat: item.unite_achat,
-                        // });
-                        // console.log(
-                        //   "ravitaillementDetails",
-                        //   ravitaillementDetails
-                        // );
-                        // setListVenteDetails([
-                        //   ...listVenteDetails.slice(
-                        //     0,
-                        //     listVenteDetails.indexOf(item)
-                        //   ),
-                        //   ...listVenteDetails.slice(
-                        //     listVenteDetails.indexOf(item) + 1
-                        //   ),
-                        // ]);
-                      }}
-                    />
-                    <ButtonTable
-                      importance="danger"
-                      icon={faTrash}
-                      handleClick={() => {
-                        confirmDelete(
-                          "Retirer cette élément de la liste des commandes ?",
-                          () => {
-                            setListVenteDetails([
-                              ...listVenteDetails.slice(
-                                0,
-                                listVenteDetails.indexOf(item)
-                              ),
-                              ...listVenteDetails.slice(
-                                listVenteDetails.indexOf(item) + 1
-                              ),
-                            ]);
-                          }
-                        );
-                      }}
-                    />
-                  </th>
-                </tr>
-              ))}
+              {listVenteDetails.length > 0
+                ? listVenteDetails.map((item) => (
+                    <tr key={item.produit_code_lot_produit + item.nom_produit}>
+                      <td className="center">1</td>
+                      <td className="left strong">
+                        {item.produit_code_lot_produit}
+                      </td>
+                      <td className="left">{item.nom_produit}</td>
+                      <td className="right">{item.prix_stock}</td>
+                      <td className="center">{item.quantite_vente}</td>
+                      <td className="right">{item.montant_vente}</td>
+                      <th className="center">
+                        <ButtonTable
+                          importance="warning"
+                          icon={faEdit}
+                          handleClick={() => {
+                            // setRavitaillementDetails({
+                            //   prix_unit: item.prix_unit,
+                            //   produit_code_lot_produit: {
+                            //     label: item.nom_produit,
+                            //     value: item.produit_code_lot_produit,
+                            //   },
+                            //   nom_produit: item.nom_produit,
+                            //   prix_ht: item.prix_ht,
+                            //   montant_ht: item.montant_ht,
+                            //   quantite_demande: item.quantite_demande,
+                            //   unite_achat: item.unite_achat,
+                            // });
+                            // console.log(
+                            //   "ravitaillementDetails",
+                            //   ravitaillementDetails
+                            // );
+                            // setListVenteDetails([
+                            //   ...listVenteDetails.slice(
+                            //     0,
+                            //     listVenteDetails.indexOf(item)
+                            //   ),
+                            //   ...listVenteDetails.slice(
+                            //     listVenteDetails.indexOf(item) + 1
+                            //   ),
+                            // ]);
+                          }}
+                        />
+                        <ButtonTable
+                          importance="danger"
+                          icon={faTrash}
+                          handleClick={() => {
+                            confirmDelete(
+                              "Retirer cette élément de la liste des commandes ?",
+                              () => {
+                                setListVenteDetails([
+                                  ...listVenteDetails.slice(
+                                    0,
+                                    listVenteDetails.indexOf(item)
+                                  ),
+                                  ...listVenteDetails.slice(
+                                    listVenteDetails.indexOf(item) + 1
+                                  ),
+                                ]);
+                              }
+                            );
+                          }}
+                        />
+                      </th>
+                    </tr>
+                  ))
+                : null}
             </tbody>
           </table>
         </div>
@@ -401,7 +417,15 @@ function Insert() {
       </div>
       <div className="">
         <div className="row">
-          <div className="col-4">
+          <div className="col">
+            <button
+              className="btn btn-info light btn-lg w-100 "
+              onClick={() => {}}
+            >
+              <i className="fa fa-list-alt"></i>
+            </button>
+          </div>
+          <div className="col-3">
             <button
               className="btn btn-danger light btn-lg w-100 "
               onClick={() => {}}
@@ -409,9 +433,9 @@ function Insert() {
               Annuler
             </button>
           </div>
-          <div className="col-8">
+          <div className="col-7">
             <button
-              className="btn btn-success light btn-lg w-100 mr-1"
+              className="btn btn-success light btn-lg w-100 "
               onClick={() => {}}
             >
               Efféctuer

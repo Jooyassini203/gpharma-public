@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 export const isAddState = atom({
-  key: "isAddState-societe",
+  key: "isAdd-societe",
   default: {status : true},
 });
 
