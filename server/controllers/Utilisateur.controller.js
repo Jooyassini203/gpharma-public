@@ -10,6 +10,7 @@ const getAll = async (req, res) => {
       where: {
         [Op.not]: [{ nom_utilisateur: "Administrateur" }],
       },
+      order: [["date_der_log", "DESC"]]
     });
     res.json(response);
   } catch (error) {

@@ -51,7 +51,7 @@ function Insert() {
   const [file, setFile] = React.useState("");
   const [OptionsSociete, setOptionsSociete] = React.useState([]);
   const [listVenteDetails, setListVenteDetails] = React.useState([]);
-  
+
   const [showAccordion, setShowAccordion] = React.useState(false);
   const [toggleUniteVente, setToggleUniteVente] = React.useState(true);
   const [unites, setUnites] = React.useState([]);
@@ -120,11 +120,11 @@ function Insert() {
         0
       ),
       date_saisi: getDateNow(),
-      unite_vente: produit.unite_vente,
+      unite_vente: toggleUniteVente ? produit.unite_stock : produit.unite_presentation,
     });
     addData(
       "guichet",
-      JsonToFormData({ vente, listVenteDetails }, file, "file_societe"),
+      JsonToFormData({ vente, listVenteDetails, client, ordonnance }, file, "file_societe"),
       () => {
         initialize();
         setIsAdd("0");
@@ -165,10 +165,17 @@ function Insert() {
   }, []);
   React.useEffect(() => {
     if (produit) {
-      if(toggleUniteVente)
-      setVenteDetails({...venteDetails, quantite_vente: getEmplacement(produit.emplacement)[0].quantite_produit })
+      if (toggleUniteVente)
+        setVenteDetails({
+          ...venteDetails,
+          quantite_vente: getEmplacement(produit.emplacement)[0]
+            .quantite_produit,
+        });
       else
-      setVenteDetails({...venteDetails, quantite_vente: quantite_vente * produit.presentation_quantite })
+        setVenteDetails({
+          ...venteDetails,
+          quantite_vente: quantite_vente * produit.presentation_quantite,
+        });
     }
   }, [toggleUniteVente]);
   return (
@@ -357,9 +364,9 @@ function Insert() {
             }}
           >
             {!toggleUniteVente
-              ? produit.unite_vente
-                ? getNameUniteById(produit.unite_vente)
-                : "Vente"
+              ? produit.unite_stock
+                ? getNameUniteById(produit.unite_stock)
+                : "Stock"
               : produit.unite_presentation
               ? getNameUniteById(produit.unite_presentation)
               : "Présentation"}
@@ -381,13 +388,13 @@ function Insert() {
           <InputForm
             number
             postIcon={{
-              text: (toggleUniteVente
-                ? produit.unite_vente
-                  ? getNameUniteById(produit.unite_vente)
-                  : "Vente"
+              text: toggleUniteVente
+                ? produit.unite_stock
+                  ? getNameUniteById(produit.unite_stock)
+                  : "Stock"
                 : produit.unite_presentation
                 ? getNameUniteById(produit.unite_presentation)
-                : "Présentation"),
+                : "Présentation",
             }}
             name="quantite_vente"
             val={quantite_vente}

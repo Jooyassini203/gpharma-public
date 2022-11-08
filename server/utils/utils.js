@@ -81,3 +81,40 @@ export const uploadFile = (
     }
   });
 };
+
+const formatZero = async (number, length = 4) => {
+  const zero = (j) => {
+    let a = "";
+    for (let i = 0; i < j; i++) {
+      a += "0";
+    }
+    return a;
+  };
+  return number.toString().length >= length
+    ? number
+    : zero(length - number.toString().length) + number.toString();
+};
+export const getId = async (Model, sigle = "") => {
+  try {
+    const response = await Model.findOne({
+      order: [["createdAt", "DESC"]],
+    });
+    let new_id = sigle;
+    if (response)
+      new_id += formatZero(parse(response.id.slice(sigle.length)), 4);
+    else new_id += formatZero(1, 4);
+    return new_id;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const getEmplacement = (strEmplacement) => {
+  let arr = strEmplacement.slice(0, -6).split("--//--,");
+  let finalArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    const json = JSON.parse(arr[i]);
+    finalArr.push(json);
+  }
+  return finalArr;
+};
