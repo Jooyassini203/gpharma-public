@@ -28,8 +28,8 @@ export const intializeVente = {
   },
   date_vente: null,
   etat_vente: "COMMANDE",
-  file_societe: null,
-  societe_prise_en_charge: null,
+  file_societe: "",
+  societe_prise_en_charge: "",
 };
 export const intializeVenteDetails = {
   quantite_vente: "",

@@ -80,7 +80,7 @@ function View() {
                   </div>
                 </div>
                 <div className="col mb-4 ">
-                  <div className="align-items-center">
+                  <div className=" ">
                     <div className=" row">
                       {ajustement.utilisateur ? (
                         <>

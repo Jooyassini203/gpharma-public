@@ -67,7 +67,8 @@ const createOne = async (req, res) => {
     // ________________________________________________
     const unites = await Unite.findAll();
     const getNameUniteById = (id) => {
-      return unites.find((a) => a.id === id).nom_unite;
+      // return unites.find((a) => a.id == id).nom_unite;
+      return "Unite";
     };
     // ________________________________________________
     let message = "";

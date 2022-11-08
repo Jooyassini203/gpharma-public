@@ -32,7 +32,13 @@ function Insert() {
   const [venteDetails, setVenteDetails] = React.useState(intializeVenteDetails);
   const { nom_prenom, adresse, societe_id } = client;
   const { nom_docteur, hopital } = ordonnance;
-  const { motif, montant_total, societe_prise_en_charge, guichet_id } = vente;
+  const {
+    motif,
+    montant_total,
+    societe_prise_en_charge,
+    guichet_id,
+    file_societe,
+  } = vente;
   const {
     quantite_vente,
     prix_stock,
@@ -147,7 +153,7 @@ function Insert() {
     addData(
       "vente/guichet",
       JsonToFormData(
-        { vente:dataSendVente, listVenteDetails, client, ordonnance },
+        { vente: dataSendVente, listVenteDetails, client, ordonnance },
         file,
         "file_societe"
       ),
@@ -332,11 +338,12 @@ function Insert() {
                 </div>
                 <div className="col">
                   <InputForm
+                    double
                     postIcon={{ text: "%" }}
                     name="societe_prise_en_charge"
                     val={societe_prise_en_charge}
                     onChange={(e) => {
-                      onChange(e, setVenteDetails);
+                      onChange(e, setVente);
                       verifObSocieteAndOrdonnance();
                     }}
                     obligatory={isObSociete ? "active" : ""}
@@ -348,15 +355,14 @@ function Insert() {
                   <InputForm
                     file
                     name="file"
-                    val={file}
+                    val={file_societe}
                     onChange={(e) => {
                       verifObSocieteAndOrdonnance();
                       if (e.target.files.length > 0) {
-                        console.log("e.target.files", e.target.files[0]);
                         setFile(e.target.files[0]);
+                        console.log("file", file);
                       }
                     }}
-                    obligatory={isObSociete ? "active" : ""}
                   >
                     Ficher Société
                   </InputForm>
