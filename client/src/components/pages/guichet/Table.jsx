@@ -1,4 +1,4 @@
-import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye, faListAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
@@ -78,7 +78,7 @@ function Table() {
           <>
             <ButtonTable
               importance={ "success" }
-              icon={ faEye}
+              icon={ faListAlt}
               handleClick={() => { 
                   document.getElementById('btn-view-modal').click(); 
               }}
@@ -106,10 +106,10 @@ function Table() {
     },
   ];
   React.useEffect(() => {
-    getData("myGuichet", (data) => setList(data), userConnect.id);
+    getData("vente/myGuichet", (data) => setList(data), userConnect.id);
   }, []);
   return (
-    <>
+    <> 
       <MyDataTable
         columns={columns}
         data={list}

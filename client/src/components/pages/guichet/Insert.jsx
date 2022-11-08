@@ -32,13 +32,12 @@ function Insert() {
   const [venteDetails, setVenteDetails] = React.useState(intializeVenteDetails);
   const { nom_prenom, adresse, societe_id } = client;
   const { nom_docteur, hopital } = ordonnance;
-  const { motif, montant_total, societe_prise_en_charge } = vente;
+  const { motif, montant_total, societe_prise_en_charge, guichet_id } = vente;
   const {
     quantite_vente,
     prix_stock,
     montant_vente,
     unite_vente,
-    guichet_id,
     produit_code_lot_produit,
   } = venteDetails;
 
@@ -46,6 +45,7 @@ function Insert() {
   const [isObSociete, setIsObSociete] = React.useState(false);
   const [isObOrdonnance, setIsObOrdonnance] = React.useState(false);
   const [isObVtDt, setIsObVtDt] = React.useState(false);
+  const [isObGuichet, setIsObGuichet] = React.useState(false);
   const [produit, setProduit] = React.useState({});
   const [societe, setSociete] = React.useState({});
   const [OptionsProduit, setOptionsProduit] = React.useState([]);
@@ -109,6 +109,8 @@ function Insert() {
     return unites.find((a) => a.id === id).nom_unite;
   };
   const add = () => {
+    setIsObGuichet(true);
+    if (!guichet_id.value) return;
     const withOrdonnance = nom_docteur || hopital ? true : false;
     const widhtSociete = file ? true : false;
     if (listVenteDetails.length <= 0) {
@@ -125,28 +127,35 @@ function Insert() {
         0
       ),
       date_saisi: getDateNow(),
+      ["guichet_id"]: guichet_id.value,
       unite_vente: toggleUniteVente
         ? produit.unite_stock
         : produit.unite_presentation,
     });
-    console.log(
-      JsonToFormData(
-        { vente, listVenteDetails, client, ordonnance },
-        file,
-        "file_societe"
-      )
-    );
+    const dataSendVente = {
+      ...vente,
+      montant_total: listVenteDetails.reduce(
+        (acc, item) => (acc += parseFloat(item.montant_vente)),
+        0
+      ),
+      date_saisi: getDateNow(),
+      ["guichet_id"]: guichet_id.value,
+      unite_vente: toggleUniteVente
+        ? produit.unite_stock
+        : produit.unite_presentation,
+    };
     addData(
-      "guichet",
+      "vente/guichet",
       JsonToFormData(
-        { vente, listVenteDetails, client, ordonnance },
+        { vente:dataSendVente, listVenteDetails, client, ordonnance },
         file,
         "file_societe"
       ),
       () => {
         initialize();
         setIsAdd("0");
-      }
+      },
+      true
     );
   };
 
@@ -452,14 +461,14 @@ function Insert() {
             defaultValue={
               OptionsGuichet[0]
                 ? OptionsGuichet[0]
-                : { label: "Guichet 001", value: "1" }
+                : { label: "Choisissez un guichet", value: "0" }
             }
             value={filterOption(OptionsGuichet, guichet_id)}
             options={OptionsGuichet}
             onChange={(e) => {
               onChange(e, setVente, "guichet_id");
             }}
-            obligatory={isObVtDt ? "active" : ""}
+            obligatory={isObGuichet ? "active" : ""}
           />
         </div>
         <div className="col-8 align-items-center">

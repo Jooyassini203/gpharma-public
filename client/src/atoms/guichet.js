@@ -22,16 +22,16 @@ export const intializeVente = {
   motif: "",
   montant_total: "",
   date_saisi: "",
-  date_vente: "",
+  guichet_id: {
+    label: "",
+    value: "",
+  },
+  date_vente: null,
   etat_vente: "COMMANDE",
   file_societe: null,
   societe_prise_en_charge: null,
 };
 export const intializeVenteDetails = {
-  guichet_id: {
-    label: "",
-    value: "",
-  },
   quantite_vente: "",
   prix_stock: "",
   unite_vente: "",

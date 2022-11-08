@@ -405,6 +405,21 @@ Produit.belongsTo(Unite, {
   },
 });
 
+Unite.hasMany(Vente_detail, {
+  foreignKey: {
+    name: "unite_vente",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+Vente_detail.belongsTo(Unite, {
+  foreignKey: {
+    name: "unite_vente",
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
 Produit.belongsToMany(Vente, {
   through: Vente_detail,
   unique: false,

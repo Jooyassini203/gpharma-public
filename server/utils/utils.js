@@ -82,7 +82,7 @@ export const uploadFile = (
   });
 };
 
-const formatZero = async (number, length = 4) => {
+const formatZero = (number, length = 4) => {
   const zero = (j) => {
     let a = "";
     for (let i = 0; i < j; i++) {
@@ -100,9 +100,18 @@ export const getId = async (Model, sigle = "") => {
       order: [["createdAt", "DESC"]],
     });
     let new_id = sigle;
-    if (response)
-      new_id += formatZero(parse(response.id.slice(sigle.length)), 4);
-    else new_id += formatZero(1, 4);
+    console.log("\n\nresponse", response);
+    if (response) {
+      console.log("\n\nresponse", response.id);
+
+      new_id += formatZero(
+        parseInt(response.id.toString().slice(sigle.length)),
+        4
+      );
+    } else {
+      new_id += formatZero(1, 4);
+    }
+    console.log("\n\nnew_id", new_id, "\n\n");
     return new_id;
   } catch (error) {
     console.log(error.message);
