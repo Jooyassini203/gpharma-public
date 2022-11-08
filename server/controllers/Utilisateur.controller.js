@@ -8,9 +8,9 @@ const getAll = async (req, res) => {
   try {
     const response = await Utilisateur.findAll({
       where: {
-        [Op.not]: [{ nom_utilisateur: "Administrateur" }],
+        [Op.not]: [{ id: "0" }],
       },
-      order: [["date_der_log", "DESC"]]
+      order: [["date_der_log", "DESC"]],
     });
     res.json(response);
   } catch (error) {

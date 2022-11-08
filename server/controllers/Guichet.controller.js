@@ -1,18 +1,7 @@
-import Client from "../database/models/Client.model.js";
 import Guichet from "../database/models/Guichet.model.js";
-import Ordonnance from "../database/models/Ordonnance.model.js";
-import Produit from "../database/models/Produit.model.js";
-import { getEmplacement, getId } from "../utils/utils.js";
-
-const queryGet =
-  'SELECT `produit`.`code_lot_produit`,  `produit`.`nom_produit`,  GROUP_CONCAT(\'{ "emplacement_id" : "\',PE.emplacement_id,\'", "nom_emplacement" : "\',E.nom_emplacement, \'" , "quantite_produit" : "\', PE.quantite_produit, \'" }--//--\') AS emplacement, `produit`.`prix_stock`, `produit`.`quantite_stock`,  `produit`.`classification_produit`,  `produit`.`description`,  `produit`.`image`,  `produit`.`presentation_quantite`,  `produit`.`stock_min`,  `produit`.`stock_max`,  `produit`.`date_der_ravitaillement`,  `produit`.`status`,  `produit`.`createdAt`,  `produit`.`updatedAt`,  `produit`.`deletedAt`,  `produit`.`fabricant_id`,  `produit`.`forme_id`,  `produit`.`famille_id`,  `produit`.`unite_presentation`,  `produit`.`unite_achat`,  `produit`.`unite_vente`,  `produit`.`unite_stock`,  `produit`.`voie_id`, `fabricant`.`nom_fabricant` AS `nom_fabricant`, `famille`.`nom_famille` AS `nom_famille`,  `forme`.`nom_forme` AS `nom_forme`, P.`nom_unite` AS `nom_presentation`, A.`nom_unite` AS `nom_achat`,   S.`nom_unite` AS `nom_stock`,  V.`nom_unite` AS `nom_vente`, `voie`.`nom_voie` AS `nom_voie` FROM `produit` LEFT JOIN `famille` ON `produit`.`famille_id` = `famille`.`id` LEFT JOIN `fabricant` ON `produit`.`fabricant_id` = `fabricant`.`id` LEFT JOIN `forme` ON `produit`.`forme_id` = `forme`.`id` LEFT JOIN `unite` P ON `produit`.`unite_presentation` = P.`id` LEFT JOIN `unite` A ON `produit`.`unite_achat` = A.`id` LEFT JOIN `unite` V ON `produit`.`unite_vente` = V.`id` LEFT JOIN `unite` S ON `produit`.`unite_stock` = S.`id` LEFT JOIN `voie` ON `produit`.`voie_id` = `voie`.`id` LEFT JOIN `Produit_emplacement` PE ON `produit`.`code_lot_produit` = PE.`produit_code_lot_produit` LEFT JOIN `emplacement` E ON PE.`emplacement_id` = E.`id` WHERE  `produit`.`deletedAt` IS NULL AND `famille`.`deletedAt` IS NULL AND `fabricant`.`deletedAt` IS NULL AND `forme`.`deletedAt` IS NULL AND P.`deletedAt` IS NULL AND A.`deletedAt` IS NULL AND V.`deletedAt` IS NULL AND S.`deletedAt` IS NULL ';
-const queryGroupBy = " GROUP BY `produit`.`code_lot_produit` ";
-
 const getAll = async (req, res) => {
   try {
-    const response = await Guichet.findAll({
-      where: { utilisateur_id: req.params.id },
-    });
+    const response = await Guichet.findAll();
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -27,91 +16,27 @@ const getSpecific = async (req, res) => {
   }
 };
 const createOne = async (req, res) => {
-  const { vente, listVenteDetails, utilisateur_id, client, ordonnance } =
-    JSON.parse(req.body);
   try {
-    let ordonnance_id = null;
-    if (ordonnance.hopital) {
-      const item_ordonnance = await Ordonnance.create(ordonnance);
-      if (!item_ordonnance)
-        return res.status(404).json({ message: "Une erreur est survénue!" });
-      ordonnance_id = item_ordonnance.id;
-    }
-    const item_client = await Client.create({
-      nom_prenom: client.nom_prenom ? client.nom_prenom : "Inconun",
-      adresse: client.adresse ? client.adresse : "Inconune",
-    });
-    if (!item_client)
-      return res.status(404).json({ message: "Une erreur est survénue!" });
-
-    const id_vente = getId(Guichet, "VENTE_");
-    const item_vente = await Guichet.create({
-      id: id_vente,
-      motif: motif ? motif : "Motif du vente #" + id_vente,
-      ordonnance_id,
-      client_id : item_client.id,
-      ...vente,
-    });
-    if (!item_vente)
-      return res.status(404).json({ message: "Une erreur est survénue!" });
-
-    let message = "Guichet n°" + item_vente.id + " : ";
-    listVenteDetails.forEach(async (element) => {
-      const item_produit = await db.query(
-        queryGet +
-          '  AND PE.quantite_produit != "0"  AND PE.emplacement_id = "2" AND `produit`.code_lot_produit' +
-          element.produit_code_lot_produit +
-          " ",
-        queryGroupBy,
-        {
-          type: QueryTypes.SELECT,
-        }
-      );
-      if (!item_produit[0])
-        return res.status(404).json({
-          message: `${element.nom_produit} introuvable dans l'étalage!`,
-        });
-      const item_venteDetail = await Guichet.create({
-        ...element,
-        vente_id: item_vente.id,
-        utilisateur_id,
-      });
-      if (!item_venteDetail)
-        return res.status(404).json({
-          message: "Une erreur est survénue!",
-        });
-      const quantite_produit = getEmplacement(item_produit[0].emplacement)[0]
-        .quantite_produit;
-      if (item_venteDetail.unite_vente == item_produit[0].unite_stock) {
-        if (item_venteDetail.quantite_vente > quantite_produit)
-          return res.status(404).json({
-            message: `Quantité de ${element.nom_produit} insuffisante, quantité actuelle (${quantite_produit} ${item_produit[0].nom_stock})!`,
-          });
-        message = ` **${item_produit[0].nom_produit}** (${quantite_vente} ${item_produit[0].nom_stock})`;
-      } else if (
-        item_venteDetail.unite_vente == item_produit[0].unite_presentation
-      ) {
-        if (
-          item_venteDetail.quantite_vente >
-          quantite_produit * item_produit[0].presentation_quantite
-        )
-          return res.status(404).json({
-            message: `Quantité de ${
-              element.nom_produit
-            } insuffisante, quantité actuelle (${
-              quantite_produit * item_produit[0].presentation_quantite
-            } ${item_produit[0].nom_presentation})!`,
-          });
-        message = ` **${item_produit[0].nom_produit}** (${quantite_vente} ${item_produit[0].nom_presentation})`;
-      }
-    });
-
-    return res.status(200).json({ message });
+    await Guichet.create(req.body);
+    res.status(200).send({ message: "Guichet ajouté avec succès!" });
   } catch (error) {
-    console.log(error);
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
   }
 };
-const updateOne = async (req, res) => {};
+const updateOne = async (req, res) => {
+  const item = await Guichet.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).send({ message: "Guichet introvable!" });
+  try {
+    console.log("item", item);
+    item.set(req.body);
+    await item.save();
+    res.status(201).send({ message: "Guichet modifié avec succès!" });
+  } catch (error) {
+    res.status(422).send({ message: error.message });
+    console.log(error.message);
+  }
+};
 const deleteOne = async (req, res) => {
   const item = Guichet.findOne({ where: { id: req.params.id } });
   if (!item) return res.status(404).json({ message: "Guichet introvable!" });

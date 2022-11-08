@@ -41,6 +41,8 @@ import {
   produitEmplacementListe,
 } from "../factories/Produit.factorie.js";
 import emplacementListe from "../seeders/Emplacement.seeder.js";
+import utilisateurData from "../seeders/Utilisateur.seeder.js";
+import guichetListe from "../seeders/Guichet.seeder.js";
 
 // Association
 Ajustement.hasMany(Ajustement_detail, {
@@ -272,14 +274,14 @@ Guichet.hasOne(Vente, {
   foreignKey: {
     name: "guichet_id",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 Vente.belongsTo(Guichet, {
   foreignKey: {
     name: "guichet_id",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
@@ -287,14 +289,14 @@ Ordonnance.hasOne(Vente, {
   foreignKey: {
     name: "ordonnance_id",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 Vente.belongsTo(Ordonnance, {
   foreignKey: {
     name: "ordonnance_id",
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
@@ -423,16 +425,30 @@ Produit.belongsTo(Voie, {
 
 Utilisateur.hasMany(Vente, {
   foreignKey: {
-    name: "utilisateur_id",
+    name: "guichetier_id",
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
 Vente.belongsTo(Utilisateur, {
   foreignKey: {
-    name: "utilisateur_id",
+    name: "guichetier_id",
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+});
+Utilisateur.hasMany(Vente, {
+  foreignKey: {
+    name: "caissier_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+Vente.belongsTo(Utilisateur, {
+  foreignKey: {
+    name: "caissier_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
 });
 
@@ -478,6 +494,11 @@ const Migration = async () => {
         await Voie.bulkCreate(voieListe)
           .then(() => console.log(" ------> Table << Voie >> migrée!"))
           .catch(() => console.log(" ------> Table << Voie >> NON migrée!!!"));
+        await Utilisateur.bulkCreate(utilisateurData)
+          .then(() => console.log(" ------> Table << Utilisateur >> migrée!"))
+          .catch(() =>
+            console.log(" ------> Table << Utilisateur >> NON migrée!!!")
+          );
         await Utilisateur.bulkCreate(utilisateurListe)
           .then(() => console.log(" ------> Table << Utilisateur >> migrée!"))
           .catch(() =>
@@ -494,6 +515,11 @@ const Migration = async () => {
           )
           .catch(() =>
             console.log(" ------> Table << Mode_expedition >> NON migrée!!!")
+          );
+        await Guichet.bulkCreate(guichetListe)
+          .then(() => console.log(" ------> Table << Guichet >> migrée!"))
+          .catch(() =>
+            console.log(" ------> Table << Guichet >> NON migrée!!!")
           );
         await Unite.bulkCreate(uniteListe)
           .then(() => console.log(" ------> Table << Unite >> migrée!"))

@@ -101,6 +101,7 @@ export const addData = (
 };
 
 export const getEmplacement = (strEmplacement) => {
+  // console.log("strEmplacement", strEmplacement);
   let arr = strEmplacement.slice(0, -6).split("--//--,");
   let finalArr = [];
   for (let i = 0; i < arr.length; i++) {
@@ -215,6 +216,9 @@ export const InputForm = ({
   email = null,
   number = null,
   integer = null,
+  double = null,
+  mini = null,
+  maxi = null,
   text = null,
   date = null,
   file = null,
@@ -245,6 +249,23 @@ export const InputForm = ({
       if (!/[0-9]/.test(e.key)) {
         e.preventDefault();
       }
+      if (!mini) mini = 0;
+      if (parseFloat(mini) > parseFloat(e.target.value)) e.preventDefault();
+      if (maxi)
+        if (parseFloat(maxi) < parseFloat(e.target.value)) e.preventDefault();
+    };
+  } else if (double) {
+    type = "text";
+    onKeyPress = (e) => {
+      console.log("e.target.value", e.target.value);
+      if ("." != e.key)
+        if (!/[0-9]/.test(e.key)) {
+          e.preventDefault();
+        }
+      if (mini)
+        if (parseFloat(mini) > parseFloat(e.target.value)) e.preventDefault();
+      if (maxi)
+        if (parseFloat(maxi) < parseFloat(e.target.value)) e.preventDefault();
     };
   } else if (tel) {
     type = "tel";
@@ -331,15 +352,20 @@ export const SelectForm = (props) => {
     postIcon = null,
     val,
     children,
+    defaultValue,
     obligatory,
     placeholder = "tse",
     ...prop
   } = props;
   return (
-    <div className="form-group mb-3">
-      <label className="mb-1">
-        <strong>{children}</strong>
-      </label>{" "}
+    <div className={children ? "form-group mb-3" : ""}>
+      {children ? (
+        <label className="mb-1">
+          <strong>{children}</strong>
+        </label>
+      ) : (
+        ""
+      )}
       {postIcon || preIcon ? (
         <div className="input-group transparent-append">
           {" "}
@@ -373,7 +399,7 @@ export const SelectForm = (props) => {
           )}
         </div>
       ) : (
-        <Select styles={colourStyles} {...prop} />
+        <Select defaultValue={defaultValue} styles={colourStyles} {...prop} />
       )}
       <span
         className="text-danger"
@@ -469,7 +495,7 @@ export const confirmDelete = (
   callBack,
   btnYesText = "Supprimer",
   btnYesClass = "danger",
-  title = "danger"
+  title = "Supprimer"
 ) => {
   confirmAlert({
     customUI: ({ onClose }) => {

@@ -38,6 +38,7 @@ function Insert() {
     prix_stock,
     montant_vente,
     unite_vente,
+    guichet_id,
     produit_code_lot_produit,
   } = venteDetails;
 
@@ -48,8 +49,9 @@ function Insert() {
   const [produit, setProduit] = React.useState({});
   const [societe, setSociete] = React.useState({});
   const [OptionsProduit, setOptionsProduit] = React.useState([]);
-  const [file, setFile] = React.useState("");
   const [OptionsSociete, setOptionsSociete] = React.useState([]);
+  const [OptionsGuichet, setOptionsGuichet] = React.useState([]);
+  const [file, setFile] = React.useState("");
   const [listVenteDetails, setListVenteDetails] = React.useState([]);
 
   const [showAccordion, setShowAccordion] = React.useState(false);
@@ -87,14 +89,17 @@ function Insert() {
         ["produit_code_lot_produit"]: produit_code_lot_produit.value,
         ["nom_produit"]: produit.nom_produit,
         ["montant_vente"]: "" + prix_stock * quantite_vente,
+        ["unite_vente"]: toggleUniteVente
+          ? produit.unite_stock
+          : produit.unite_presentation,
       },
     ]);
   };
 
   const verifObSocieteAndOrdonnance = () => {
-    const widhtOrdonnance = nom_docteur || hopital ? true : false;
+    const withOrdonnance = nom_docteur || hopital ? true : false;
     const widhtSociete = file ? true : false;
-    if (!widhtOrdonnance) setIsObOrdonnance(false);
+    if (!withOrdonnance) setIsObOrdonnance(false);
     else setIsObOrdonnance(true);
     if (!widhtSociete) setIsObSociete(false);
     else setIsObSociete(true);
@@ -104,14 +109,14 @@ function Insert() {
     return unites.find((a) => a.id === id).nom_unite;
   };
   const add = () => {
-    const widhtOrdonnance = nom_docteur || hopital ? true : false;
+    const withOrdonnance = nom_docteur || hopital ? true : false;
     const widhtSociete = file ? true : false;
     if (listVenteDetails.length <= 0) {
       toast.warning("Ajouter au moins une commande!");
       return;
     }
     verifObSocieteAndOrdonnance();
-    if (!widhtOrdonnance) if (verifObligatory(ordonnance)) return;
+    if (withOrdonnance) if (verifObligatory(ordonnance)) return;
     if (widhtSociete) if (verifObligatory(societe)) return;
     setVente({
       ...vente,
@@ -120,11 +125,24 @@ function Insert() {
         0
       ),
       date_saisi: getDateNow(),
-      unite_vente: toggleUniteVente ? produit.unite_stock : produit.unite_presentation,
+      unite_vente: toggleUniteVente
+        ? produit.unite_stock
+        : produit.unite_presentation,
     });
+    console.log(
+      JsonToFormData(
+        { vente, listVenteDetails, client, ordonnance },
+        file,
+        "file_societe"
+      )
+    );
     addData(
       "guichet",
-      JsonToFormData({ vente, listVenteDetails, client, ordonnance }, file, "file_societe"),
+      JsonToFormData(
+        { vente, listVenteDetails, client, ordonnance },
+        file,
+        "file_societe"
+      ),
       () => {
         initialize();
         setIsAdd("0");
@@ -161,10 +179,13 @@ function Insert() {
     getData("societe", (data) => {
       convertToOption(data, setOptionsSociete);
     });
+    getData("guichet", (data) => {
+      convertToOption(data, setOptionsGuichet);
+    });
     getData("unite", setUnites);
   }, []);
   React.useEffect(() => {
-    if (produit) {
+    if (produit.emplacement) {
       if (toggleUniteVente)
         setVenteDetails({
           ...venteDetails,
@@ -353,7 +374,7 @@ function Insert() {
             Produit
           </SelectForm>
         </div>
-        <div className="col">
+        <div className="col-2">
           <span className="font-w600 mb-1 w-100">Vendre par</span>
           <br />
           <span
@@ -386,7 +407,16 @@ function Insert() {
         </div>
         <div className="col">
           <InputForm
-            number
+            double
+            mini={0}
+            maxi={
+              produit.emplacement
+                ? toggleUniteVente
+                  ? getEmplacement(produit.emplacement)[0].quantite_produit
+                  : getEmplacement(produit.emplacement)[0].quantite_produit *
+                    produit.presentation_quantite
+                : "0"
+            }
             postIcon={{
               text: toggleUniteVente
                 ? produit.unite_stock
@@ -404,7 +434,7 @@ function Insert() {
             Quantité
           </InputForm>
         </div>
-        <div className="col">
+        <div className="col-2">
           <span className="font-w600 mb-1 w-100">Montant</span>
           <br />
           <span
@@ -414,7 +444,25 @@ function Insert() {
             {numberWithCommas(prix_stock * quantite_vente) + " Ar"}
           </span>
         </div>
-        <div className="col mt-4 align-items-center">
+      </div>
+      <div className="row mt-1">
+        <div className="col mt-1">
+          <SelectForm
+            val={guichet_id}
+            defaultValue={
+              OptionsGuichet[0]
+                ? OptionsGuichet[0]
+                : { label: "Guichet 001", value: "1" }
+            }
+            value={filterOption(OptionsGuichet, guichet_id)}
+            options={OptionsGuichet}
+            onChange={(e) => {
+              onChange(e, setVente, "guichet_id");
+            }}
+            obligatory={isObVtDt ? "active" : ""}
+          />
+        </div>
+        <div className="col-8 align-items-center">
           <ButtonTable
             style={{ height: "41px", paddingTop: "6px" }}
             importance="success mt-1 w-100"
@@ -454,7 +502,9 @@ function Insert() {
                         {numberWithCommas(item.prix_stock)}
                       </td>
                       <td className="center">
-                        {numberWithCommas(item.quantite_vente)}
+                        {`${numberWithCommas(
+                          item.quantite_vente
+                        )} (${getNameUniteById(item.unite_vente)}) `}
                       </td>
                       <td className="right">
                         {numberWithCommas(item.montant_vente)}
@@ -533,7 +583,7 @@ function Insert() {
                             (acc += parseFloat(item.montant_vente)),
                           0
                         )
-                      )}
+                      ) + " Ar"}
                     </td>
                   </tr>
                 </tbody>

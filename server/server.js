@@ -47,6 +47,7 @@ app.use(ProduitRouter);
 app.use(RavitaillementRouter);
 app.use(AjustementRouter);
 app.use(GuichetRouter);
+app.use(GuichetRouter);
 
 Migration();
 

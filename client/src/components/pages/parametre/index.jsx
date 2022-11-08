@@ -11,6 +11,7 @@ import {
   faBox,
   faBuilding,
   faCashRegister,
+  faDonate,
   faHammer,
   faList,
   faRecycle,
@@ -107,6 +108,9 @@ function Parametre() {
               </ItemParametre>
               <ItemParametre icon={faBox} array={countArray} table="forme">
                 Forme
+              </ItemParametre>
+              <ItemParametre icon={faDonate} array={countArray} table="guichet">
+                Guichet
               </ItemParametre>
               <ItemParametre
                 icon={faRoute}

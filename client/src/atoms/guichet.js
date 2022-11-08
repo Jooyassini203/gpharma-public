@@ -1,11 +1,11 @@
 import { atom } from "recoil";
 
 export const isAddState = atom({
-  key: "isAddState-societe",
+  key: "isAddState-guichet",
   default: "1",
 });
 export const listGuichet = atom({
-  key: "list-societe",
+  key: "list-guichet",
   default: [],
 });
 
@@ -28,6 +28,10 @@ export const intializeVente = {
   societe_prise_en_charge: null,
 };
 export const intializeVenteDetails = {
+  guichet_id: {
+    label: "",
+    value: "",
+  },
   quantite_vente: "",
   prix_stock: "",
   unite_vente: "",
