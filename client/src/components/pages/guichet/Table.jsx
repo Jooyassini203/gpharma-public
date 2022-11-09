@@ -72,13 +72,14 @@ function Table() {
     },
     {
       name: "Action",
-      width: "150px",
+      width: "80px",
       selector: (row) => {
         return (
           <>
             <ButtonTable
               importance={ "success" }
               icon={ faListAlt}
+              
               handleClick={() => { 
                   document.getElementById('btn-view-modal').click(); 
               }}

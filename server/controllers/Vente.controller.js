@@ -104,113 +104,107 @@ const createOne = async (req, res) => {
     let message = [];
     message.push("Guichet n°" + item_vente.id + " : ");
     let produit_arr = [];
-    listVenteDetails.map((element, index_element) => {
-      db.query(
+    listVenteDetails.map(async (element, index_element) => {
+      const item_produit = await db.query(
         queryGet +
           '  AND PE.quantite_produit != "0"  AND PE.emplacement_id = "2" AND `produit`.code_lot_produit = "' +
           element.produit_code_lot_produit +
           '" ',
         queryGroupBy,
         { type: QueryTypes.SELECT }
-      )
-        .then((item_produit) => {
-          produit_arr.push(item_produit[0][0]);
-          Vente_detail.create(
-            {
-              quantite_vente: element.quantite_vente,
-              prix_stock: element.prix_stock,
-              montant_vente: element.montant_vente,
-              produit_code_lot_produit: element.produit_code_lot_produit,
-              unite_vente: element.unite_vente,
-              vente_id: item_vente.id,
-            },
-            { transaction }
-          )
-            .then(async (item_venteDetail) => {
-              const quantite_produit = getEmplacement(
-                produit_arr[index_element].emplacement
-              )[0].quantite_produit;
-              console.log(
-                "\nitem_venteDetail // produit_arr[index_element]",
-                item_venteDetail,
-                produit_arr[index_element],
-                "\n\n"
-              );
-              if (
-                item_venteDetail.unite_vente ==
-                produit_arr[index_element].unite_stock
-              ) {
-                console.log("\n 0000", "\n\n");
-                if (
-                  parseFloat(item_venteDetail.quantite_vente) >
-                  parseFloat(quantite_produit)
-                ) {
-                  console.log(
-                    "\nitem_venteDetail.quantite_vente > quantite_produit",
-                    item_venteDetail.quantite_vente,
-                    quantite_produit,
-                    "\n\n"
-                  );
-                  await transaction.rollback();
-                  return res.status(404).json({
-                    message: `Quantité de ${element.nom_produit} insuffisante, quantité actuelle (${quantite_produit} ${produit_arr[index_element].nom_stock})!`,
-                  });
-                }
-                message.push(
-                  ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_vente} ${produit_arr[index_element].nom_stock}) `
-                );
-              } else if (
-                item_venteDetail.unite_vente ==
-                produit_arr[index_element].unite_presentation
-              ) {
-                console.log("\n 1111", "\n\n");
-                if (
-                  parseFloat(item_venteDetail.quantite_vente) >
-                  parseFloat(quantite_produit) *
-                    parseFloat(produit_arr[index_element].presentation_quantite)
-                ) {
-                  console.log(
-                    "\nitem_venteDetail.quantite_vente > quantite_produit * produit_arr[index_element].presentation_quantite",
-                    item_venteDetail.quantite_vente,
-                    quantite_produit *
-                      produit_arr[index_element].presentation_quantite,
-                    "\n\n"
-                  );
-                  await transaction.rollback();
-                  return res.status(404).json({
-                    message: `Quantité de ${
-                      element.nom_produit
-                    } insuffisante, quantité actuelle (${
-                      quantite_produit *
-                      produit_arr[index_element].presentation_quantite
-                    } ${produit_arr[index_element].nom_presentation})!`,
-                  });
-                }
-                message.push(
-                  ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_vente} ${produit_arr[index_element].nom_presentation}) `
-                );
-              }
-              console.log("\n\n message ", index_element, message, "\n\n");
-              if (index_element == listVenteDetails.length - 1) {
-                transaction.commit();
-                return res.status(200).json({ message: message.join(" \n ") });
-              }
-            })
-            .catch(async (err) => {
-              console.log("\n\n index_element", index_element, "\n\n");
-              await transaction.rollback();
-              return res.status(404).json({
-                message:
-                  "Une erreur est survénue au niveau de la création des ventes détails!",
-              });
-            });
-        })
-        .catch(async (err) => {
+      );
+      if (!item_produit[0][0]) {
+        await transaction.rollback();
+        return res.status(404).json({
+          message: `${element.nom_produit} introuvable dans l'étalage!`,
+        });
+      }
+      produit_arr.push(item_produit[0][0]);
+      const item_venteDetail = await Vente_detail.create(
+        {
+          quantite_vente: element.quantite_vente,
+          prix_stock: element.prix_stock,
+          montant_vente: element.montant_vente,
+          produit_code_lot_produit: element.produit_code_lot_produit,
+          unite_vente: element.unite_vente,
+          vente_id: item_vente.id,
+        },
+        { transaction }
+      );
+      if (!item_venteDetail) {
+        await transaction.rollback();
+        return res.status(404).json({
+          message:
+            "Une erreur est survénue au niveau de la création des ventes détails!",
+        });
+      }
+
+      const quantite_produit = getEmplacement(
+        produit_arr[index_element].emplacement
+      )[0].quantite_produit;
+      console.log(
+        "\nitem_venteDetail // produit_arr[index_element]",
+        item_venteDetail,
+        produit_arr[index_element],
+        "\n\n"
+      );
+      if (
+        item_venteDetail.unite_vente == produit_arr[index_element].unite_stock
+      ) {
+        console.log("\n 0000", "\n\n");
+        if (
+          parseFloat(item_venteDetail.quantite_vente) >
+          parseFloat(quantite_produit)
+        ) {
+          console.log(
+            "\nitem_venteDetail.quantite_vente > quantite_produit",
+            item_venteDetail.quantite_vente,
+            quantite_produit,
+            "\n\n"
+          );
           await transaction.rollback();
           return res.status(404).json({
-            message: `${element.nom_produit} introuvable dans l'étalage!`,
+            message: `Quantité de ${element.nom_produit} insuffisante, quantité actuelle (${quantite_produit} ${produit_arr[index_element].nom_stock})!`,
           });
-        });
+        }
+        message.push(
+          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_vente} ${produit_arr[index_element].nom_stock}) `
+        );
+      } else if (
+        item_venteDetail.unite_vente ==
+        produit_arr[index_element].unite_presentation
+      ) {
+        console.log("\n 1111", "\n\n");
+        if (
+          parseFloat(item_venteDetail.quantite_vente) >
+          parseFloat(quantite_produit) *
+            parseFloat(produit_arr[index_element].presentation_quantite)
+        ) {
+          console.log(
+            "\nitem_venteDetail.quantite_vente > quantite_produit * produit_arr[index_element].presentation_quantite",
+            item_venteDetail.quantite_vente,
+            quantite_produit * produit_arr[index_element].presentation_quantite,
+            "\n\n"
+          );
+          await transaction.rollback();
+          return res.status(404).json({
+            message: `Quantité de ${
+              element.nom_produit
+            } insuffisante, quantité actuelle (${
+              quantite_produit *
+              produit_arr[index_element].presentation_quantite
+            } ${produit_arr[index_element].nom_presentation})!`,
+          });
+        }
+        message.push(
+          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_vente} ${produit_arr[index_element].nom_presentation}) `
+        );
+      }
+      console.log("\n\n message ", index_element, message, "\n\n");
+      if (index_element == listVenteDetails.length - 1) {
+        await transaction.commit();
+        return res.status(200).json({ message: message.join(" \n ") });
+      }
     });
   } catch (error) {
     console.log(error);
