@@ -3,6 +3,7 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
 import {
+  guichetSelect,
   isAddState, 
   listGuichet, 
 } from "../../../atoms/guichet";
@@ -17,6 +18,7 @@ import {
 function Table() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
+  const [guichetSelected, setGuichetSelected] = useRecoilState(guichetSelect);
   const [list, setList] = useRecoilState(listGuichet); 
   const columns = [
     {
@@ -79,9 +81,10 @@ function Table() {
             <ButtonTable
               importance={ "success" }
               icon={ faListAlt}
-              
+              data-toggle="modal"
+              data-target="#modalView"
               handleClick={() => { 
-                  document.getElementById('btn-view-modal').click(); 
+                getData("vente/details", setGuichetSelected, row.id);
               }}
             />
             {/* <ButtonTable

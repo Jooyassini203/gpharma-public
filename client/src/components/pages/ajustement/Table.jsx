@@ -46,8 +46,8 @@ function Table() {
             <ButtonTable
               importance="success"
               icon={faListAlt}
-            data-toggle="modal"
-            data-target="#modalView"
+              data-toggle="modal"
+              data-target="#modalView"
               handleClick={() => {
                 getData("ajustement", setAjustementSelected, row.id);
               }}

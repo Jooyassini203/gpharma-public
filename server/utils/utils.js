@@ -105,7 +105,7 @@ export const getId = async (Model, sigle = "") => {
       console.log("\n\nresponse", response.id);
 
       new_id += formatZero(
-        parseInt(response.id.toString().slice(sigle.length))+1,
+        parseInt(response.id.toString().slice(sigle.length)) + 1,
         4
       );
     } else {

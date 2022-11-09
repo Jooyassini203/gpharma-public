@@ -135,6 +135,21 @@ Vente.belongsTo(Client, {
   },
 });
 
+Societe.hasMany(Vente, {
+  foreignKey: {
+    name: "societe_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+Vente.belongsTo(Societe, {
+  foreignKey: {
+    name: "societe_id",
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
+
 Societe.hasMany(Client, {
   foreignKey: {
     name: "societe_id",

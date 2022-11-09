@@ -4,10 +4,13 @@ import Vente from "../database/models/Vente.model.js";
 import Ordonnance from "../database/models/Ordonnance.model.js";
 import Produit from "../database/models/Produit.model.js";
 import Vente_detail from "../database/models/Vente_detail.model.js";
-import { getEmplacement, getId } from "../utils/utils.js";
+import { getEmplacement, getId, uploadFile } from "../utils/utils.js";
 import { QueryTypes } from "sequelize";
 import Utilisateur from "../database/models/Utilisateur.model.js";
 import Unite from "../database/models/Unite.model.js";
+import Guichet from "../database/models/Guichet.model.js";
+import Caisse from "../database/models/Caisse.model.js";
+import Societe from "../database/models/Societe.model.js";
 
 const queryGet =
   'SELECT `produit`.`code_lot_produit`,  `produit`.`nom_produit`,  GROUP_CONCAT(\'{ "emplacement_id" : "\',PE.emplacement_id,\'", "nom_emplacement" : "\',E.nom_emplacement, \'" , "quantite_produit" : "\', PE.quantite_produit, \'" }--//--\') AS emplacement, `produit`.`prix_stock`, `produit`.`quantite_stock`,  `produit`.`classification_produit`,  `produit`.`description`,  `produit`.`image`,  `produit`.`presentation_quantite`,  `produit`.`stock_min`,  `produit`.`stock_max`,  `produit`.`date_der_ravitaillement`,  `produit`.`status`,  `produit`.`createdAt`,  `produit`.`updatedAt`,  `produit`.`deletedAt`,  `produit`.`fabricant_id`,  `produit`.`forme_id`,  `produit`.`famille_id`,  `produit`.`unite_presentation`,  `produit`.`unite_achat`,  `produit`.`unite_vente`,  `produit`.`unite_stock`,  `produit`.`voie_id`, `fabricant`.`nom_fabricant` AS `nom_fabricant`, `famille`.`nom_famille` AS `nom_famille`,  `forme`.`nom_forme` AS `nom_forme`, P.`nom_unite` AS `nom_presentation`, A.`nom_unite` AS `nom_achat`,   S.`nom_unite` AS `nom_stock`,  V.`nom_unite` AS `nom_vente`, `voie`.`nom_voie` AS `nom_voie` FROM `produit` LEFT JOIN `famille` ON `produit`.`famille_id` = `famille`.`id` LEFT JOIN `fabricant` ON `produit`.`fabricant_id` = `fabricant`.`id` LEFT JOIN `forme` ON `produit`.`forme_id` = `forme`.`id` LEFT JOIN `unite` P ON `produit`.`unite_presentation` = P.`id` LEFT JOIN `unite` A ON `produit`.`unite_achat` = A.`id` LEFT JOIN `unite` V ON `produit`.`unite_vente` = V.`id` LEFT JOIN `unite` S ON `produit`.`unite_stock` = S.`id` LEFT JOIN `voie` ON `produit`.`voie_id` = `voie`.`id` LEFT JOIN `Produit_emplacement` PE ON `produit`.`code_lot_produit` = PE.`produit_code_lot_produit` LEFT JOIN `emplacement` E ON PE.`emplacement_id` = E.`id` WHERE  `produit`.`deletedAt` IS NULL AND `famille`.`deletedAt` IS NULL AND `fabricant`.`deletedAt` IS NULL AND `forme`.`deletedAt` IS NULL AND P.`deletedAt` IS NULL AND A.`deletedAt` IS NULL AND V.`deletedAt` IS NULL AND S.`deletedAt` IS NULL ';
@@ -26,21 +29,47 @@ const getAll = async (req, res) => {
 };
 const getSpecific = async (req, res) => {
   try {
-    const response_vente = await Vente.findOne({
+    let response_vente = await Vente.findAll({
       where: { id: req.params.id },
-      include: [{ model: Client }, { model: Utilisateur }],
+      include: [
+        { model: Client },
+        { model: Guichet },
+        { model: Ordonnance },
+        { model: Caisse },
+        { model: Societe },
+      ],
     });
+    const guichetier = await Utilisateur.findOne({
+      where: { id: response_vente[0].guichetier_id },
+    });
+    const caissier = await Utilisateur.findOne({
+      where: { id: response_vente[0].caissier_id },
+    });
+    const _vente = { ...response_vente[0].dataValues, caissier, guichetier };
     let response_venteDetails = await Vente_detail.findAll({
       where: { vente_id: req.params.id },
       include: [{ model: Unite }],
     });
-    response_venteDetails.map(async (item) => {
+    response_venteDetails.map(async (item, i) => {
       const produit = await Produit.findOne({
-        where: item.produit_code_lot_produit,
+        where: { code_lot_produit: item.produit_code_lot_produit },
       });
-      item = { ...item, produit };
+      if (produit) {
+        item = { ...item.dataValues, ...produit.dataValues };
+        if (i == response_venteDetails.length - 1) {
+          console.log(
+            "\n\n\n\nitem",
+            { ...item.dataValues, ...produit.dataValues },
+            "\n\n\n\n"
+          );
+          return res.json([_vente, response_venteDetails]);
+        }
+      } else {
+        return res.status(404).json({
+          message: `${element.nom_produit} introuvable dans l'étalage!`,
+        });
+      }
     });
-    res.json([response_vente, response_venteDetails]);
   } catch (error) {
     console.log(error.message);
   }
@@ -73,8 +102,8 @@ const createOne = async (req, res) => {
     }
     const item_client = await Client.create(
       {
-        nom_prenom: client.nom_prenom ? client.nom_prenom : "Inconun",
-        adresse: client.adresse ? client.adresse : "Inconune",
+        nom_prenom: client.nom_prenom ? client.nom_prenom : "Inconnu",
+        adresse: client.adresse ? client.adresse : "Inconnu",
       },
       { transaction }
     );
@@ -203,12 +232,29 @@ const createOne = async (req, res) => {
       console.log("\n\n message ", index_element, message, "\n\n");
       if (index_element == listVenteDetails.length - 1) {
         await transaction.commit();
+        if (req.files) {
+          const dataUpdateFile = { file_societe: "" };
+          uploadFile(
+            req,
+            res,
+            "FILE_",
+            "pdf/file_societe",
+            dataUpdateFile,
+            async () => {
+              item_vente.set(dataUpdateFile);
+              await item_vente.save();
+            },
+            "",
+            file_societe
+          );
+        }
         return res.status(200).json({ message: message.join(" \n ") });
       }
     });
   } catch (error) {
     console.log(error);
     await transaction.rollback();
+    return res.status(404).json({ message: "Guichet non ajouté!" });
   }
 };
 const updateOne = async (req, res) => {};

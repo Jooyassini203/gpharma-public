@@ -7,6 +7,14 @@ const getAll = async (req, res) => {
     console.log(error.message);
   }
 };
+const getAllActive = async (req, res) => {
+  try {
+    const response = await Societe.findAll({ where: { status: "1" } });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 const getSpecific = async (req, res) => {
   try {
     const response = await Societe.findOne({ where: { id: req.params.id } });
@@ -69,4 +77,12 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne, updateStatus };
+export {
+  getAll,
+  getSpecific,
+  createOne,
+  updateOne,
+  deleteOne,
+  updateStatus,
+  getAllActive,
+};

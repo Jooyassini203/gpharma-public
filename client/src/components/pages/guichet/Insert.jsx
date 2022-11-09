@@ -74,7 +74,7 @@ function Insert() {
     setVenteDetails([]);
   };
   const addItemInList = () => {
-    if (!produit_code_lot_produit.value || !prix_stock || !quantite_vente) {
+    if (!produit_code_lot_produit.value || !quantite_vente) {
       setIsObVtDt(true);
       return;
     }
@@ -125,7 +125,7 @@ function Insert() {
     }
     verifObSocieteAndOrdonnance();
     if (withOrdonnance) if (verifObligatory(ordonnance)) return;
-    if (widhtSociete) if (verifObligatory(societe)) return;
+    if (widhtSociete) if ( !societe_id.value || !societe_prise_en_charge) return;
     setVente({
       ...vente,
       montant_total: listVenteDetails.reduce(
@@ -133,13 +133,13 @@ function Insert() {
         0
       ),
       date_saisi: getDateNow(),
-      ["guichet_id"]: guichet_id.value,
       unite_vente: toggleUniteVente
         ? produit.unite_stock
         : produit.unite_presentation,
     });
     const dataSendVente = {
       ...vente,
+      ["societe_id"]: societe_id.value ? societe_id.value : null,
       montant_total: listVenteDetails.reduce(
         (acc, item) => (acc += parseFloat(item.montant_vente)),
         0
@@ -178,10 +178,38 @@ function Insert() {
     if (societe) {
       setVente((prev) => ({
         ...prev,
-        prix_stock: societe.prise_en_charge,
+        societe_prise_en_charge: societe.prise_en_charge,
       }));
     }
   }, [societe]);
+  const calPrisEnCharge = () => {
+    if (!societe_prise_en_charge) return; 
+    setVenteDetails((prev) => ({
+      ...prev,
+      prix_stock: Math.round(
+        produit.prix_stock * (1 - parseFloat(societe_prise_en_charge) / 100)
+      ),
+    })); 
+  };
+  const calPrisEnChargeList = () => {
+    if (!societe_prise_en_charge) return; 
+    let list = [...listVenteDetails];
+    list.map((item) => {
+      item.prix_stock = Math.round(
+        item.prix_stock * (1 - parseFloat(societe_prise_en_charge) / 100)
+      );
+      item.montant_vente = Math.round(
+        parseFloat(item.prix_stock) * parseFloat(item.quantite_vente)
+      );
+    });
+    setListVenteDetails(list);
+  };
+  React.useEffect(() => {
+    calPrisEnCharge();
+  }, [societe_prise_en_charge, prix_stock, quantite_vente]);
+  React.useEffect(() => {
+    setListVenteDetails([])
+  }, [societe_prise_en_charge]);
   React.useEffect(() => {
     getData("produitEtalage", (data) => {
       convertToOption(
@@ -191,7 +219,7 @@ function Insert() {
         "code_lot_produit"
       );
     });
-    getData("societe", (data) => {
+    getData("societeActive", (data) => {
       convertToOption(data, setOptionsSociete);
     });
     getData("guichet", (data) => {
@@ -415,7 +443,7 @@ function Insert() {
             name="prix_stock"
             val={prix_stock}
             onChange={(e) => onChange(e, setVenteDetails)}
-            obligatory={isObVtDt ? "active" : ""}
+            // obligatory={isObVtDt ? "active" : ""}
           >
             Prix Unit.
           </InputForm>
