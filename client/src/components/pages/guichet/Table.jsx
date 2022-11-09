@@ -23,7 +23,7 @@ function Table() {
       name: "#",
       selector: (row) => row.id,
       sortable: true,
-      width: "15%",
+      width: "12%",
     },
     {
       name: "Motif",
