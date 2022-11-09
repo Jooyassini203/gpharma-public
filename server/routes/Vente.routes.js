@@ -5,6 +5,7 @@ import {
   createOne,
   updateOne,
   deleteOne,
+  getAllVenteDetails,
 } from "../controllers/Vente.controller.js";
 import Autentification from "../middlewares/Authentification.middleware.js";
 const VenteRouter = express.Router();

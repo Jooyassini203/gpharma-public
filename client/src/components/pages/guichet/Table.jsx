@@ -52,19 +52,19 @@ function Table() {
         <div className="text-center">
           <span
             className={
-              row.etat_vente == "COMMANDE"
+              row.etat_vente == "0"
                 ? "badge light badge-warning"
                 : "badge light badge-success"
             }
           >
             <i
               className={
-                row.etat_vente == "COMMANDE"
+                row.etat_vente == "0"
                   ? "fa fa-circle text-warning mr-1"
                   : "fa fa-circle text-success mr-1"
               }
             />
-            {row.etat_vente === "COMMANDE" ? "Commandée" : "Livrée"}
+            {row.etat_vente == "0" ? "Commandée" : "Livrée"}
           </span>
         </div>
       ),

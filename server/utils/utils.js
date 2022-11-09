@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
 
-export const MIGRATE = true; // true
+export const MIGRATE = false; // true
 
 export const getDateTime = (name = "") => {
   const date = new Date();
@@ -105,7 +105,7 @@ export const getId = async (Model, sigle = "") => {
       console.log("\n\nresponse", response.id);
 
       new_id += formatZero(
-        parseInt(response.id.toString().slice(sigle.length)),
+        parseInt(response.id.toString().slice(sigle.length))+1,
         4
       );
     } else {
