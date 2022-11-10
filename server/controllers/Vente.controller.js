@@ -50,25 +50,25 @@ const getSpecific = async (req, res) => {
       where: { vente_id: req.params.id },
       include: [{ model: Unite }],
     });
+    let _venteDts = [];
     response_venteDetails.map(async (item, i) => {
-      const produit = await Produit.findOne({
+      await Produit.findOne({
         where: { code_lot_produit: item.produit_code_lot_produit },
-      });
-      if (produit) {
-        item = { ...item.dataValues, ...produit.dataValues };
-        if (i == response_venteDetails.length - 1) {
-          console.log(
-            "\n\n\n\nitem",
-            { ...item.dataValues, ...produit.dataValues },
-            "\n\n\n\n"
-          );
-          return res.json([_vente, response_venteDetails]);
-        }
-      } else {
-        return res.status(404).json({
-          message: `${element.nom_produit} introuvable dans l'étalage!`,
+      })
+        .then((produit) => {
+          _venteDts.push({ ...item.dataValues, produit });
+          if (
+            i == response_venteDetails.length - 1 &&
+            _venteDts.length === response_venteDetails.length
+          ) {
+            res.json([_vente, _venteDts]);
+          }
+        })
+        .catch(() => {
+          return res.status(404).json({
+            message: `${element.nom_produit} introuvable!`,
+          });
         });
-      }
     });
   } catch (error) {
     console.log(error.message);
@@ -151,7 +151,7 @@ const createOne = async (req, res) => {
       produit_arr.push(item_produit[0][0]);
       const item_venteDetail = await Vente_detail.create(
         {
-          quantite_vente: element.quantite_vente,
+          quantite_demande: element.quantite_demande,
           prix_stock: element.prix_stock,
           montant_vente: element.montant_vente,
           produit_code_lot_produit: element.produit_code_lot_produit,
@@ -182,12 +182,12 @@ const createOne = async (req, res) => {
       ) {
         console.log("\n 0000", "\n\n");
         if (
-          parseFloat(item_venteDetail.quantite_vente) >
+          parseFloat(item_venteDetail.quantite_demande) >
           parseFloat(quantite_produit)
         ) {
           console.log(
-            "\nitem_venteDetail.quantite_vente > quantite_produit",
-            item_venteDetail.quantite_vente,
+            "\nitem_venteDetail.quantite_demande > quantite_produit",
+            item_venteDetail.quantite_demande,
             quantite_produit,
             "\n\n"
           );
@@ -197,7 +197,7 @@ const createOne = async (req, res) => {
           });
         }
         message.push(
-          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_vente} ${produit_arr[index_element].nom_stock}) `
+          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_demande} ${produit_arr[index_element].nom_stock}) `
         );
       } else if (
         item_venteDetail.unite_vente ==
@@ -205,13 +205,13 @@ const createOne = async (req, res) => {
       ) {
         console.log("\n 1111", "\n\n");
         if (
-          parseFloat(item_venteDetail.quantite_vente) >
+          parseFloat(item_venteDetail.quantite_demande) >
           parseFloat(quantite_produit) *
             parseFloat(produit_arr[index_element].presentation_quantite)
         ) {
           console.log(
-            "\nitem_venteDetail.quantite_vente > quantite_produit * produit_arr[index_element].presentation_quantite",
-            item_venteDetail.quantite_vente,
+            "\nitem_venteDetail.quantite_demande > quantite_produit * produit_arr[index_element].presentation_quantite",
+            item_venteDetail.quantite_demande,
             quantite_produit * produit_arr[index_element].presentation_quantite,
             "\n\n"
           );
@@ -226,11 +226,15 @@ const createOne = async (req, res) => {
           });
         }
         message.push(
-          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_vente} ${produit_arr[index_element].nom_presentation}) `
+          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_demande} ${produit_arr[index_element].nom_presentation}) `
         );
       }
       console.log("\n\n message ", index_element, message, "\n\n");
-      if (index_element == listVenteDetails.length - 1) {
+      if (
+        index_element == listVenteDetails.length - 1 &&
+        message.length === listVenteDetails.length
+      ) {
+        return res.status(200).json({ message: message.join(" \n ") });
         await transaction.commit();
         if (req.files) {
           const dataUpdateFile = { file_societe: "" };
@@ -238,17 +242,17 @@ const createOne = async (req, res) => {
             req,
             res,
             "FILE_",
-            "pdf/file_societe",
+            "pdf/vente/file_societe",
             dataUpdateFile,
             async () => {
               item_vente.set(dataUpdateFile);
               await item_vente.save();
             },
             "",
-            file_societe
+            "file_societe",
+            [".pdf"]
           );
         }
-        return res.status(200).json({ message: message.join(" \n ") });
       }
     });
   } catch (error) {

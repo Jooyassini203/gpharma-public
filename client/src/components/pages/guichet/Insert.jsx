@@ -40,7 +40,7 @@ function Insert() {
     file_societe,
   } = vente;
   const {
-    quantite_vente,
+    quantite_demande,
     prix_stock,
     montant_vente,
     unite_vente,
@@ -74,7 +74,7 @@ function Insert() {
     setVenteDetails([]);
   };
   const addItemInList = () => {
-    if (!produit_code_lot_produit.value || !quantite_vente) {
+    if (!produit_code_lot_produit.value || !quantite_demande) {
       setIsObVtDt(true);
       return;
     }
@@ -94,7 +94,7 @@ function Insert() {
         ...venteDetails,
         ["produit_code_lot_produit"]: produit_code_lot_produit.value,
         ["nom_produit"]: produit.nom_produit,
-        ["montant_vente"]: "" + prix_stock * quantite_vente,
+        ["montant_vente"]: "" + prix_stock * quantite_demande,
         ["unite_vente"]: toggleUniteVente
           ? produit.unite_stock
           : produit.unite_presentation,
@@ -124,6 +124,11 @@ function Insert() {
       return;
     }
     verifObSocieteAndOrdonnance();
+    console.log("ordonnance", ordonnance);
+    console.log("client",client);
+    console.log("socisociete_id",societe_id);
+    console.log("societe_prise_en_charge",societe_prise_en_charge);
+    console.log("file",file);
     if (withOrdonnance) if (verifObligatory(ordonnance)) return;
     if (widhtSociete) if ( !societe_id.value || !societe_prise_en_charge) return;
     setVente({
@@ -170,7 +175,7 @@ function Insert() {
       setVenteDetails((prev) => ({
         ...prev,
         prix_stock: produit.prix_stock,
-        quantite_vente: getEmplacement(produit.emplacement)[0].quantite_produit,
+        quantite_demande: getEmplacement(produit.emplacement)[0].quantite_produit,
       }));
     }
   }, [produit]);
@@ -199,14 +204,14 @@ function Insert() {
         item.prix_stock * (1 - parseFloat(societe_prise_en_charge) / 100)
       );
       item.montant_vente = Math.round(
-        parseFloat(item.prix_stock) * parseFloat(item.quantite_vente)
+        parseFloat(item.prix_stock) * parseFloat(item.quantite_demande)
       );
     });
     setListVenteDetails(list);
   };
   React.useEffect(() => {
     calPrisEnCharge();
-  }, [societe_prise_en_charge, prix_stock, quantite_vente]);
+  }, [societe_prise_en_charge, prix_stock, quantite_demande]);
   React.useEffect(() => {
     setListVenteDetails([])
   }, [societe_prise_en_charge]);
@@ -232,13 +237,13 @@ function Insert() {
       if (toggleUniteVente)
         setVenteDetails({
           ...venteDetails,
-          quantite_vente: getEmplacement(produit.emplacement)[0]
+          quantite_demande: getEmplacement(produit.emplacement)[0]
             .quantite_produit,
         });
       else
         setVenteDetails({
           ...venteDetails,
-          quantite_vente: quantite_vente * produit.presentation_quantite,
+          quantite_demande: quantite_demande * produit.presentation_quantite,
         });
     }
   }, [toggleUniteVente]);
@@ -354,7 +359,7 @@ function Insert() {
                     value={filterOption(OptionsSociete, societe_id)}
                     options={OptionsSociete}
                     onChange={(e) => {
-                      onChange(e, setVente, "societe_id");
+                      onChange(e, setClient, "societe_id");
                       verifObSocieteAndOrdonnance();
                       if (e.value)
                         getData("societe", (data) => setSociete(data), e.value);
@@ -469,8 +474,8 @@ function Insert() {
                 ? getNameUniteById(produit.unite_presentation)
                 : "Présentation",
             }}
-            name="quantite_vente"
-            val={quantite_vente}
+            name="quantite_demande"
+            val={quantite_demande}
             onChange={(e) => onChange(e, setVenteDetails)}
             obligatory={isObVtDt ? "active" : ""}
           >
@@ -484,7 +489,7 @@ function Insert() {
             style={{ height: "41px", paddingTop: "2.5px" }}
             className="badge badge-xl light badge-warning mt-1 w-100"
           >
-            {numberWithCommas(prix_stock * quantite_vente) + " Ar"}
+            {numberWithCommas(prix_stock * quantite_demande) + " Ar"}
           </span>
         </div>
       </div>
@@ -546,7 +551,7 @@ function Insert() {
                       </td>
                       <td className="center">
                         {`${numberWithCommas(
-                          item.quantite_vente
+                          item.quantite_demande
                         )} (${getNameUniteById(item.unite_vente)}) `}
                       </td>
                       <td className="right">
@@ -567,7 +572,7 @@ function Insert() {
                             );
                             setVenteDetails({
                               prix_stock: item.prix_stock,
-                              quantite_vente: item.quantite_vente,
+                              quantite_demande: item.quantite_demande,
                               montant_vente: item.montant_vente,
                             });
                             console.log(venteDetails);

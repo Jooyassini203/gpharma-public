@@ -15,8 +15,7 @@ export default function MyDataTable({
   //   item => item.name && item.name.includes(filterText)
   // );
   let filteredItems = null;
-  if (data){
-console.log("dt", data);
+  if (data){ 
     filteredItems = data.filter(
       (item) =>
         JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !==

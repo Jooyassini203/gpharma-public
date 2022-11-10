@@ -31,6 +31,25 @@ export const guichetSelect = atom({
   ],
 });
 
+export const intializeGuichetSelected = [
+  {
+    id: "",
+    motif: "",
+    date_saisi: "",
+    date_vente: "",
+    client: "",
+    etat_vente: "",
+    ordonnance: "",
+    societe: "",
+    file_societe: "",
+    societe_prise_en_charge: "",
+    caisse: "",
+    guichet: "",
+    caissier: "",
+    guichetier: "",
+  },
+  [],
+];
 export const intializeClient = {
   nom_prenom: "",
   adresse: "",
@@ -57,7 +76,7 @@ export const intializeVente = {
   societe_prise_en_charge: "1",
 };
 export const intializeVenteDetails = {
-  quantite_vente: "",
+  quantite_demande: "",
   prix_stock: "000.00",
   unite_vente: "",
   montant_vente: "000.00",

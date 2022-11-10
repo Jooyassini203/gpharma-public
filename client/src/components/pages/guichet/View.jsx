@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { guichetSelect } from "../../../atoms/guichet";
+import { guichetSelect, intializeGuichetSelected } from "../../../atoms/guichet";
 import { getData, getUrl, numberWithCommas } from "../../../utils/utils";
 
 function View() {
@@ -31,7 +31,7 @@ function View() {
         aria-modal="true"
         data-backdrop="static"
         data-keyboard="true"
-        id="modalView"
+        id="modalViewGuichet"
       >
         <div
           className="modal-dialog modal-xl  modal-dialog-centered"
@@ -50,7 +50,7 @@ function View() {
                 className="close"
                 data-dismiss="modal"
                 onClick={() => {
-                  setGuichetSelected([]);
+                  setGuichetSelected(intializeGuichetSelected);
                 }}
               >
                 <span>×</span>
@@ -62,7 +62,7 @@ function View() {
               Date de saisie
               <strong>{date_saisi}</strong>
               <span className="float-right">
-                <strong></strong> Commandé le guichet
+                <strong></strong> Guichet commandé 
               </span>
             </div>
             <div className="card-body">
@@ -84,6 +84,21 @@ function View() {
                     <span>{client ? client.nom_prenom : ""}</span>
                     <span>(Adresse : {client ? client.adresse : ""} )</span>
                   </div>
+                  
+                {ordonnance ? (
+                  < >
+                    <div>
+                      {" "}
+                      <strong>Docteur : </strong>{" "}
+                      <span>{ordonnance.nom_docteur}</span>
+                    </div>
+                    <div>
+                      {" "}
+                      <strong>Hopital : </strong> 
+                      <span>{ordonnance.hopital}</span>
+                    </div>
+                  </>
+                ) : null}
                 </div>
                 {societe ? (
                   <div className="col-4 mb-4">
@@ -101,33 +116,19 @@ function View() {
                     {file_societe ? (
                       <div>
                         {" "}
-                        <strong>Ficher vénant du societe : </strong>
+                        <strong>Ficher vénant du societe : </strong><br />
                         <a
                           href={getUrl("pdf/vente/file_societe", file_societe)}
+                          target="_blank" 
                           download="file_societe"
                         >
-                          <i className="fa fa-download mr-2"></i> Télécharger le
-                          ficher
+                          <i className="fa fa-download mr-1"></i> Télécharger le
+                          fichier
                         </a>{" "}
                       </div>
                     ) : (
                       ""
                     )}
-                  </div>
-                ) : null}
-                {ordonnance ? (
-                  <div className="col-4 mb-4">
-                    <div>
-                      {" "}
-                      <strong>Docteur : </strong>{" "}
-                      <span>{ordonnance.nom_docteur}</span>
-                    </div>
-                    <div>
-                      {" "}
-                      <strong>Hopital : </strong>
-                      <br />
-                      <span>{ordonnance.hopital}</span>
-                    </div>
                   </div>
                 ) : null}
                 <div className="col-4 mb-4 ">
@@ -208,7 +209,7 @@ function View() {
                               </td>
                               <td className="center">
                                 {`${numberWithCommas(
-                                  item.quantite_vente
+                                  item.quantite_demande
                                 )} (${(item.unite.nom_unite)}) `}
                               </td>
                               <td className="right">

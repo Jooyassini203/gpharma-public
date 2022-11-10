@@ -31,7 +31,8 @@ export const uploadFile = (
   itemData,
   callBack = null,
   lastImage = "",
-  nameColImage = "image"
+  nameColImage = "image",
+  allowType = [".png", ".jpeg", ".jpg"]
 ) => {
   console.log("\n\n\n\n\navec file\n\n\n\n");
   const file = req.files.file;
@@ -39,7 +40,6 @@ export const uploadFile = (
   const fileExt = path.extname(file.name);
   const fileName = getDateTime(sigle) + fileExt;
   const url = `${req.protocol}://${req.get("host")}/${dir}/${fileName}`;
-  const allowType = [".png", ".jpeg", ".jpg"];
   if (!allowType.includes(fileExt.toLowerCase())) {
     return res.status(422).send({ message: "Fichier invalide!" });
   }

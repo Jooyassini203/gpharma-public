@@ -82,7 +82,7 @@ function Table() {
               importance={ "success" }
               icon={ faListAlt}
               data-toggle="modal"
-              data-target="#modalView"
+              data-target="#modalViewGuichet"
               handleClick={() => { 
                 getData("vente/details", setGuichetSelected, row.id);
               }}

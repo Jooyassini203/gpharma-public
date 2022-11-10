@@ -7,7 +7,7 @@ const Ordonnance = db.define(
     nom_docteur: {
       type: DataTypes.CHAR(255),
       allowNull: false,
-      unique: true,
+      // unique: true,
     },
     hopital: {
       type: DataTypes.CHAR(255),
