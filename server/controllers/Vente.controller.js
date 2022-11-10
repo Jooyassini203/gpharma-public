@@ -27,6 +27,16 @@ const getAll = async (req, res) => {
     console.log(error.message);
   }
 };
+const getGuichetNonLivrer = async (req, res) => {
+  try {
+    const response = await Vente.findAll({
+      where: { etat_vente: "0" },
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 const getSpecific = async (req, res) => {
   try {
     let response_vente = await Vente.findAll({
@@ -149,9 +159,10 @@ const createOne = async (req, res) => {
         });
       }
       produit_arr.push(item_produit[0][0]);
-      const item_venteDetail = await Vente_detail.create(
+      await Vente_detail.create(
         {
           quantite_demande: element.quantite_demande,
+          quantite_vente: element.quantite_demande,
           prix_stock: element.prix_stock,
           montant_vente: element.montant_vente,
           produit_code_lot_produit: element.produit_code_lot_produit,
@@ -159,101 +170,114 @@ const createOne = async (req, res) => {
           vente_id: item_vente.id,
         },
         { transaction }
-      );
-      if (!item_venteDetail) {
-        await transaction.rollback();
-        return res.status(404).json({
-          message:
-            "Une erreur est survénue au niveau de la création des ventes détails!",
-        });
-      }
+      )
+        .then(async (item_venteDetail) => {
+          if (!item_venteDetail) {
+            await transaction.rollback();
+            return res.status(404).json({
+              message:
+                "Une erreur est survénue au niveau de la création des ventes détails!",
+            });
+          }
 
-      const quantite_produit = getEmplacement(
-        produit_arr[index_element].emplacement
-      )[0].quantite_produit;
-      console.log(
-        "\nitem_venteDetail // produit_arr[index_element]",
-        item_venteDetail,
-        produit_arr[index_element],
-        "\n\n"
-      );
-      if (
-        item_venteDetail.unite_vente == produit_arr[index_element].unite_stock
-      ) {
-        console.log("\n 0000", "\n\n");
-        if (
-          parseFloat(item_venteDetail.quantite_demande) >
-          parseFloat(quantite_produit)
-        ) {
+          const quantite_produit = getEmplacement(
+            produit_arr[index_element].emplacement
+          )[0].quantite_produit;
           console.log(
-            "\nitem_venteDetail.quantite_demande > quantite_produit",
-            item_venteDetail.quantite_demande,
-            quantite_produit,
+            "\nitem_venteDetail // produit_arr[index_element]",
+            item_venteDetail,
+            produit_arr[index_element],
             "\n\n"
           );
+          if (
+            item_venteDetail.unite_vente ==
+            produit_arr[index_element].unite_stock
+          ) {
+            console.log("\n 0000", "\n\n");
+            if (
+              parseFloat(item_venteDetail.quantite_demande) >
+              parseFloat(quantite_produit)
+            ) {
+              console.log(
+                "\nitem_venteDetail.quantite_demande > quantite_produit",
+                item_venteDetail.quantite_demande,
+                quantite_produit,
+                "\n\n"
+              );
+              await transaction.rollback();
+              return res.status(404).json({
+                message: `Quantité de ${element.nom_produit} insuffisante, quantité actuelle (${quantite_produit} ${produit_arr[index_element].nom_stock})!`,
+              });
+            }
+            message.push(
+              ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_demande} ${produit_arr[index_element].nom_stock}) `
+            );
+          } else if (
+            item_venteDetail.unite_vente ==
+            produit_arr[index_element].unite_presentation
+          ) {
+            console.log("\n 1111", "\n\n");
+            if (
+              parseFloat(item_venteDetail.quantite_demande) >
+              parseFloat(quantite_produit) *
+                parseFloat(produit_arr[index_element].presentation_quantite)
+            ) {
+              console.log(
+                "\nitem_venteDetail.quantite_demande > quantite_produit * produit_arr[index_element].presentation_quantite",
+                item_venteDetail.quantite_demande,
+                quantite_produit *
+                  produit_arr[index_element].presentation_quantite,
+                "\n\n"
+              );
+              await transaction.rollback();
+              return res.status(404).json({
+                message: `Quantité de ${
+                  element.nom_produit
+                } insuffisante, quantité actuelle (${
+                  quantite_produit *
+                  produit_arr[index_element].presentation_quantite
+                } ${produit_arr[index_element].nom_presentation})!`,
+              });
+            }
+            message.push(
+              ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_demande} ${produit_arr[index_element].nom_presentation}) `
+            );
+          }
+          console.log("\n\n message ", index_element, message, "\n\n");
+          if (index_element == listVenteDetails.length - 1) {
+            await transaction.commit();
+            if (req.files) {
+              const dataUpdateFile = { file_societe: "" };
+              uploadFile(
+                req,
+                res,
+                "FILE_",
+                "pdf/vente/file_societe",
+                dataUpdateFile,
+                async () => {
+                  item_vente.set(dataUpdateFile);
+                  await item_vente.save();
+                },
+                "",
+                "file_societe",
+                [".pdf"]
+              );
+            }
+            console.log(
+              "message.length === listVenteDetails.length",
+              message.length,
+              listVenteDetails.length
+            );
+            if (message.length === listVenteDetails.length - 1)
+              return res.status(200).json({ message: message.join(" \n ") });
+          }
+        })
+        .catch(async (err) => {
           await transaction.rollback();
-          return res.status(404).json({
-            message: `Quantité de ${element.nom_produit} insuffisante, quantité actuelle (${quantite_produit} ${produit_arr[index_element].nom_stock})!`,
-          });
-        }
-        message.push(
-          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_demande} ${produit_arr[index_element].nom_stock}) `
-        );
-      } else if (
-        item_venteDetail.unite_vente ==
-        produit_arr[index_element].unite_presentation
-      ) {
-        console.log("\n 1111", "\n\n");
-        if (
-          parseFloat(item_venteDetail.quantite_demande) >
-          parseFloat(quantite_produit) *
-            parseFloat(produit_arr[index_element].presentation_quantite)
-        ) {
-          console.log(
-            "\nitem_venteDetail.quantite_demande > quantite_produit * produit_arr[index_element].presentation_quantite",
-            item_venteDetail.quantite_demande,
-            quantite_produit * produit_arr[index_element].presentation_quantite,
-            "\n\n"
-          );
-          await transaction.rollback();
-          return res.status(404).json({
-            message: `Quantité de ${
-              element.nom_produit
-            } insuffisante, quantité actuelle (${
-              quantite_produit *
-              produit_arr[index_element].presentation_quantite
-            } ${produit_arr[index_element].nom_presentation})!`,
-          });
-        }
-        message.push(
-          ` **${produit_arr[index_element].nom_produit}** (${item_venteDetail.quantite_demande} ${produit_arr[index_element].nom_presentation}) `
-        );
-      }
-      console.log("\n\n message ", index_element, message, "\n\n");
-      if (
-        index_element == listVenteDetails.length - 1 &&
-        message.length === listVenteDetails.length
-      ) {
-        return res.status(200).json({ message: message.join(" \n ") });
-        await transaction.commit();
-        if (req.files) {
-          const dataUpdateFile = { file_societe: "" };
-          uploadFile(
-            req,
-            res,
-            "FILE_",
-            "pdf/vente/file_societe",
-            dataUpdateFile,
-            async () => {
-              item_vente.set(dataUpdateFile);
-              await item_vente.save();
-            },
-            "",
-            "file_societe",
-            [".pdf"]
-          );
-        }
-      }
+          return res
+            .status(404)
+            .json({ message: "Guichet detail non ajouté!" });
+        });
     });
   } catch (error) {
     console.log(error);
@@ -262,6 +286,38 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {};
+const updateOneVenteDetail = async (req, res) => {
+  const vente = await Vente.findOne({ where: { id: req.params.id } });
+  if (!vente)
+    return res
+      .status(404)
+      .json({ message: "Vente #" + req.params.id + " introvable!" });
+
+  const item = await Vente_detail.findOne({
+    where: {
+      produit_code_lot_produit: req.body.data.code_lot_produit,
+      vente_id: vente.id,
+    },
+  });
+  if (!item)
+    return res
+      .status(404)
+      .json({ message: "Cette détails de vente est introvable!" });
+
+  try {
+    item.set({
+      quantite_livraison: req.body.data.quantite_livraison,
+      montant_ht: item.prix_stock * req.body.data.quantite_livraison,
+    });
+    item.save().then(() => {
+      return res.status(200).json({
+        message: "Quantité livré de cette est de " + item.quantite_livraison,
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 const deleteOne = async (req, res) => {
   const item = Vente.findOne({ where: { id: req.params.id } });
   if (!item) return res.status(404).json({ message: "Vente introvable!" });
@@ -279,4 +335,6 @@ export {
   updateOne,
   deleteOne,
   getAllVenteDetails,
+  getGuichetNonLivrer,
+  updateOneVenteDetail,
 };

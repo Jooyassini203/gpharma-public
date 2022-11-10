@@ -354,7 +354,7 @@ export const SelectForm = (props) => {
     children,
     defaultValue,
     obligatory,
-    placeholder = "tse",
+    placeholder = "",
     ...prop
   } = props;
   return (

@@ -131,13 +131,13 @@ function Table() {
             >
               <i className="fa fa-plus mr-2"></i> Ajouter une société
             </button>
-            <button
+            {/* <button
               className="btn btn-sm btn-outline-warning "
               data-toggle="modal"
               data-target="#modalSocieteActivity"
             >
               <i className="fa fa-list-alt mr-2"></i> Activité
-            </button>
+            </button> */}
           </>
         }
       />

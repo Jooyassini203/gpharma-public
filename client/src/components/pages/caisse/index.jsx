@@ -7,13 +7,12 @@ function Caisse() {
   return (
     <div id="main-wrapper" className="show">
       <Nav />
-      <div className="content-body" style={{ minHeight: "80vh", marginTop:"-10vh"  }}>
+      <div
+        className="content-body"
+        style={{ minHeight: "80vh", marginTop: "-10vh" }}
+      >
         <div className="container-fluid">
-          <div className="card">
-            <div className="card-body">
-              <Insert/>
-            </div>
-          </div>
+          <Insert />
         </div>
       </div>
       <FooterNav />
