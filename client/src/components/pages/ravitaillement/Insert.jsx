@@ -121,6 +121,12 @@ function Insert() {
     );
   }, []);
 
+  const myFilterProduit = () => {
+    filterOption(
+      OptionsProduit,
+      produit_code_lot_produit
+    )
+  };
   const getTotalsHT = () => {
     if (listRavitaillementDetails.length > 0) {
       let total = 0;
@@ -276,9 +282,10 @@ function Insert() {
                 <div className="col-7">
                   <SelectForm
                     val={produit_code_lot_produit}
-                    value={filterOption(
-                      OptionsProduit,
-                      produit_code_lot_produit
+                    value={OptionsProduit.filter(
+                      (option) =>
+                        JSON.stringify(option) ===
+                        JSON.stringify(produit_code_lot_produit)
                     )}
                     options={OptionsProduit}
                     onChange={(e) => {
