@@ -68,8 +68,7 @@ const createOne = async (req, res) => {
     // ________________________________________________
     const unites = await Unite.findAll();
     const getNameUniteById = (id) => {
-      // return unites.find((a) => a.id == id).nom_unite;
-      return "Unite";
+      return unites.find((a) => a.id == id).nom_unite;
     };
     // ________________________________________________
     let message = [];
@@ -106,8 +105,8 @@ const createOne = async (req, res) => {
         unite_presentation: item_ajtDt.unite_nouveau_presentation,
       });
       console.log("\n\n\n\n\n", item_produit, "\n\n\n\n");
-      item_produit.save({ transaction });
-      message.push[
+      await item_produit.save({ transaction });
+      message.push(
         `Le produit **${item_produit.nom_produit}** est ajusté de [ Stock : ${
           item_ajtDt.quantite_ancien_stock
         } ${getNameUniteById(item_ajtDt.unite_ancien_stock)} ; Présentation : ${
@@ -117,9 +116,9 @@ const createOne = async (req, res) => {
         )} ] à [ Stock : ${item_produit.quantite_stock} ${getNameUniteById(
           item_produit.unite_stock
         )} ; Présentation : ${
-          item_ajtDt.presentation_quantite
-        } ${getNameUniteById(item_ajtDt.unite_presentation)} ]\n\n`
-      ];
+          item_produit.presentation_quantite
+        } ${getNameUniteById(item_produit.unite_presentation)} ]\n\n`
+      );
       console.log("index == dataAjtDetail.length", index, dataAjtDetail.length);
       if (index == dataAjtDetail.length - 1) {
         console.log(

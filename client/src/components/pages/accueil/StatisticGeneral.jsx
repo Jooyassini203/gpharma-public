@@ -158,7 +158,7 @@ function StatisticGeneral() {
                     </h2>
                     <span>Commande (Ravitaillement)</span>
                   </div>
-                  <i className="fa fa-list fa-3x text-primary"></i>
+                  <i className="fa fa-clipboard-list fa-3x text-primary"></i>
                 </div>
               </div>
               <div className="progress  rounded-0" style={{ height: 4 }}>
@@ -177,12 +177,12 @@ function StatisticGeneral() {
               <div className="card-body">
                 <div className="media align-items-center">
                   <div className="media-body mr-3">
-                    <h2 className="fs-34 text-shipping-fast font-w600">
+                    <h2 className="fs-34 font-w600">
                       {count_livraison}
                     </h2>
                     <span>Livraison (Ravitaillement)</span>
                   </div>
-                  <i className="fa fa-money fa-3x text-primary"></i>
+                  <i className="fa  fa-shipping-fast fa-3x text-primary"></i>
                 </div>
               </div>
               <div className="progress  rounded-0" style={{ height: 4 }}>

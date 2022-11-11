@@ -8,6 +8,7 @@ import Table from "./Table";
 import View from "./View";
 
 function Caisse() { 
+  const [isAdd, setIsAdd] = useRecoilState(isAddState)
   return (
     <div id="main-wrapper" className="show">
       <Nav />
@@ -16,7 +17,7 @@ function Caisse() {
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
       >
         <div className="container-fluid">
-          {isAddState == "1" ? <Insert /> :<> <Table /> <View/></>}
+          {isAdd == "1" ? <Insert /> :<> <Table /> <View/></>}
         </div>
       </div>
       <FooterNav />

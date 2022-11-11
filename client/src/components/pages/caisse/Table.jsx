@@ -137,7 +137,7 @@ function Table() {
               setIsAdd("1");
             }}
           >
-            <i className="fa fa-plus mr-2"></i> Ajouter un guichet
+            <i className="fa fa-plus mr-2"></i> Valider une vente
           </button>
         }
       />
