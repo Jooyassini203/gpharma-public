@@ -11,15 +11,27 @@ import Unite from "../database/models/Unite.model.js";
 import Guichet from "../database/models/Guichet.model.js";
 import Caisse from "../database/models/Caisse.model.js";
 import Societe from "../database/models/Societe.model.js";
+import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
 
 const queryGet =
   'SELECT `produit`.`code_lot_produit`,  `produit`.`nom_produit`,  GROUP_CONCAT(\'{ "emplacement_id" : "\',PE.emplacement_id,\'", "nom_emplacement" : "\',E.nom_emplacement, \'" , "quantite_produit" : "\', PE.quantite_produit, \'" }--//--\') AS emplacement, `produit`.`prix_stock`, `produit`.`quantite_stock`,  `produit`.`classification_produit`,  `produit`.`description`,  `produit`.`image`,  `produit`.`presentation_quantite`,  `produit`.`stock_min`,  `produit`.`stock_max`,  `produit`.`date_der_ravitaillement`,  `produit`.`status`,  `produit`.`createdAt`,  `produit`.`updatedAt`,  `produit`.`deletedAt`,  `produit`.`fabricant_id`,  `produit`.`forme_id`,  `produit`.`famille_id`,  `produit`.`unite_presentation`,  `produit`.`unite_achat`,  `produit`.`unite_vente`,  `produit`.`unite_stock`,  `produit`.`voie_id`, `fabricant`.`nom_fabricant` AS `nom_fabricant`, `famille`.`nom_famille` AS `nom_famille`,  `forme`.`nom_forme` AS `nom_forme`, P.`nom_unite` AS `nom_presentation`, A.`nom_unite` AS `nom_achat`,   S.`nom_unite` AS `nom_stock`,  V.`nom_unite` AS `nom_vente`, `voie`.`nom_voie` AS `nom_voie` FROM `produit` LEFT JOIN `famille` ON `produit`.`famille_id` = `famille`.`id` LEFT JOIN `fabricant` ON `produit`.`fabricant_id` = `fabricant`.`id` LEFT JOIN `forme` ON `produit`.`forme_id` = `forme`.`id` LEFT JOIN `unite` P ON `produit`.`unite_presentation` = P.`id` LEFT JOIN `unite` A ON `produit`.`unite_achat` = A.`id` LEFT JOIN `unite` V ON `produit`.`unite_vente` = V.`id` LEFT JOIN `unite` S ON `produit`.`unite_stock` = S.`id` LEFT JOIN `voie` ON `produit`.`voie_id` = `voie`.`id` LEFT JOIN `Produit_emplacement` PE ON `produit`.`code_lot_produit` = PE.`produit_code_lot_produit` LEFT JOIN `emplacement` E ON PE.`emplacement_id` = E.`id` WHERE  `produit`.`deletedAt` IS NULL AND `famille`.`deletedAt` IS NULL AND `fabricant`.`deletedAt` IS NULL AND `forme`.`deletedAt` IS NULL AND P.`deletedAt` IS NULL AND A.`deletedAt` IS NULL AND V.`deletedAt` IS NULL AND S.`deletedAt` IS NULL ';
 const queryGroupBy = " GROUP BY `produit`.`code_lot_produit` ";
 
-const getAll = async (req, res) => {
+const getAllGuichet = async (req, res) => {
   try {
     const response = await Vente.findAll({
       where: { guichetier_id: req.params.utilisateur_id },
+      include: [{ model: Client }, { model: Utilisateur }],
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+const getAllCaisse = async (req, res) => {
+  try {
+    const response = await Vente.findAll({
+      where: { caissier_id: req.params.utilisateur_id },
       include: [{ model: Client }, { model: Utilisateur }],
     });
     res.json(response);
@@ -58,10 +70,10 @@ const getSpecific = async (req, res) => {
     const _vente = { ...response_vente[0].dataValues, caissier, guichetier };
     let response_venteDetails = await Vente_detail.findAll({
       where: { vente_id: req.params.id },
-      include: [{ model: Unite }],
+      include: [{ model: Unite }, { model: Produit, include: Vente_detail }],
     });
     let _venteDts = [];
-    response_venteDetails.map(async (item, i) => {
+    /*response_ve nteDetails.map(async (item, i) => {
       await Produit.findOne({
         where: { code_lot_produit: item.produit_code_lot_produit },
       })
@@ -69,7 +81,7 @@ const getSpecific = async (req, res) => {
           _venteDts.push({ ...item.dataValues, produit });
           if (
             i == response_venteDetails.length - 1 &&
-            _venteDts.length === response_venteDetails.length
+            _venteDts.length == response_venteDetails.length
           ) {
             res.json([_vente, _venteDts]);
           }
@@ -79,7 +91,8 @@ const getSpecific = async (req, res) => {
             message: `${element.nom_produit} introuvable!`,
           });
         });
-    });
+    }); */
+    res.json([_vente, response_venteDetails]);
   } catch (error) {
     console.log(error.message);
   }
@@ -162,7 +175,7 @@ const createOne = async (req, res) => {
       await Vente_detail.create(
         {
           quantite_demande: element.quantite_demande,
-          quantite_vente: element.quantite_demande,
+          quantite_vendue: element.quantite_demande,
           prix_stock: element.prix_stock,
           montant_vente: element.montant_vente,
           produit_code_lot_produit: element.produit_code_lot_produit,
@@ -268,7 +281,7 @@ const createOne = async (req, res) => {
               message.length,
               listVenteDetails.length
             );
-            if (message.length === listVenteDetails.length - 1)
+            if (message.length === listVenteDetails.length + 1)
               return res.status(200).json({ message: message.join(" \n ") });
           }
         })
@@ -286,6 +299,117 @@ const createOne = async (req, res) => {
   }
 };
 const updateOne = async (req, res) => {};
+const validateVenteCaisse = async (req, res) => {
+  const { vente_id, caisse_id, date_vente, utilisateur_id } = req.body;
+  const transaction = await db.transaction();
+  const vente = await Vente.findOne({ where: { id: req.params.id } });
+  if (!vente)
+    return res
+      .status(404)
+      .json({ message: "Vente #" + req.params.id + " introvable!" });
+
+  // ________________________________________________
+  const unites = await Unite.findAll();
+  const getNameUniteById = (id) => {
+    return unites.find((a) => a.id == id).nom_unite;
+  };
+  // ________________________________________________
+  try {
+    const listVtDtls = await Vente_detail.findAll({ where: { vente_id } });
+    if (!listVtDtls) {
+      return res
+        .status(404)
+        .json({ message: "Les détails de vente est introvable!" });
+    }
+    let message = ["Vente du guichet n°" + vente.id];
+    let produit_arr = [];
+    listVtDtls.map(async (item_venteDetail, index) => {
+      const item_produit_emplacement = await Produit_emplacement.findOne({
+        where: {
+          produit_code_lot_produit: item_venteDetail.produit_code_lot_produit,
+          emplacement_id: "2",
+        },
+        include: [{ model: Produit }],
+      });
+      if (!item_produit_emplacement) {
+        await transaction.rollback();
+        return res.status(404).json({
+          message: `${element.nom_produit} introuvable dans l'étalage!`,
+        });
+      }
+      produit_arr.push(item_produit_emplacement);
+      const last_quantite_produit = parseFloat(
+        item_produit_emplacement.quantite_produit
+      );
+      const presentation_quantite = parseFloat(
+        item_produit_emplacement.produit.presentation_quantite
+      );
+      const quantite_vendue = parseFloat(item_venteDetail.quantite_vendue);
+      if (
+        item_produit_emplacement.produit.unite_stock ==
+        item_venteDetail.unite_vente
+      ) {
+        if (last_quantite_produit < quantite_vendue) {
+          await transaction.rollback();
+          return res.status(404).json({
+            message: `Quantité du ${
+              item_produit_emplacement.produit.nom_produit
+            } dans l'étalage (${last_quantite_produit} ${getNameUniteById(
+              item_produit_emplacement.produit.unite_stock
+            )}) est inférieur celle que vous voulez vendre (${quantite_vendue} ${getNameUniteById(
+              item_venteDetail.unite_vente
+            )})!`,
+          });
+        }
+      } else if (
+        item_produit_emplacement.produit.unite_presentation ==
+        item_venteDetail.unite_vente
+      ) {
+        if (last_quantite_produit * presentation_quantite < quantite_vendue) {
+          await transaction.rollback();
+          return res.status(404).json({
+            message: `Quantité du ${
+              item_produit_emplacement.produit.nom_produit
+            } dans l'étalage (${
+              last_quantite_produit * presentation_quantite
+            } ${getNameUniteById(
+              item_produit_emplacement.produit.unite_presentation
+            )}) est inférieur celle que vous voulez vendre (${quantite_vendue} ${getNameUniteById(
+              item_venteDetail.unite_vente
+            )})!`,
+          });
+        }
+      }
+      let new_quantite_produit = last_quantite_produit - quantite_vendue;
+      item_produit_emplacement.set({ quantite_produit: new_quantite_produit });
+      await item_produit_emplacement.save({ transaction });
+
+      message.push(
+        ` ${
+          item_produit_emplacement.produit.nom_produit
+        }  :   (${quantite_vendue} ${getNameUniteById(
+          item_venteDetail.unite_vente
+        )})!`
+      );
+
+      if (index == listVtDtls.length - 1) {
+        vente.set({
+          date_vente,
+          caisse_id,
+          caissier_id: utilisateur_id,
+          etat_vente: "1",
+        });
+        await vente.save({ transaction });
+        await transaction.commit();
+        return res.status(200).json({ message: message.join("\n") });
+      }
+    });
+  } catch (error) {
+    await transaction.rollback();
+    console.log(error);
+    return res.status(404).json({ message: error.message });
+  }
+};
 const updateOneVenteDetail = async (req, res) => {
   const vente = await Vente.findOne({ where: { id: req.params.id } });
   if (!vente)
@@ -296,7 +420,7 @@ const updateOneVenteDetail = async (req, res) => {
   const item = await Vente_detail.findOne({
     where: {
       produit_code_lot_produit: req.body.data.code_lot_produit,
-      vente_id: vente.id,
+      vente_id: req.body.data.vente_id,
     },
   });
   if (!item)
@@ -305,14 +429,32 @@ const updateOneVenteDetail = async (req, res) => {
       .json({ message: "Cette détails de vente est introvable!" });
 
   try {
+    const last_total = vente.montant_total;
+    const last_montant_vente = item.montant_vente;
+    const new_montant_vente =
+      parseFloat(item.prix_stock) * parseFloat(req.body.data.quantite_vendue);
+    const new_montant_total =
+      parseFloat(last_total) -
+      parseFloat(last_montant_vente) +
+      parseFloat(new_montant_vente);
+    console.log("\n\nlast_total ", last_total);
+    console.log("\nlast_montant_vente ", last_montant_vente);
+    console.log("\n\nnew_montant_total ", new_montant_total);
     item.set({
-      quantite_livraison: req.body.data.quantite_livraison,
-      montant_ht: item.prix_stock * req.body.data.quantite_livraison,
+      quantite_vendue: parseFloat(req.body.data.quantite_vendue),
+      montant_vente: new_montant_vente,
     });
-    item.save().then(() => {
-      return res.status(200).json({
-        message: "Quantité livré de cette est de " + item.quantite_livraison,
-      });
+    await item.save();
+    vente.set({
+      montant_total: new_montant_total,
+    });
+    await vente.save();
+    return res.status(200).json({
+      message:
+        "Quantité livré de cette est de " +
+        item.quantite_vendue +
+        " nouvelle montant total " +
+        vente.montant_total,
     });
   } catch (error) {
     console.log(error);
@@ -329,7 +471,8 @@ const deleteOne = async (req, res) => {
   }
 };
 export {
-  getAll,
+  getAllGuichet,
+  getAllCaisse,
   getSpecific,
   createOne,
   updateOne,
@@ -337,4 +480,5 @@ export {
   getAllVenteDetails,
   getGuichetNonLivrer,
   updateOneVenteDetail,
+  validateVenteCaisse,
 };

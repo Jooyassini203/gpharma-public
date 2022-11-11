@@ -625,3 +625,13 @@ export const filterOption = (optionSelect, state) => {
     (option) => JSON.stringify(option) === JSON.stringify(state)
   );
 };
+export const getDaysInMonth = (month, year) => {
+  let date = new Date(year, month, 1);
+  let days = [];
+  let i = 1;
+  while (date.getMonth() === month) {
+    days.push(i++);
+    date.setDate(date.getDate() + 1);
+  }
+  return days;
+};

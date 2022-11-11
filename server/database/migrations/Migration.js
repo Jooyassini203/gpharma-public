@@ -434,7 +434,7 @@ Vente_detail.belongsTo(Unite, {
     allowNull: false,
   },
 });
-
+/* 
 Produit.belongsToMany(Vente, {
   through: Vente_detail,
   unique: false,
@@ -444,6 +444,26 @@ Vente.belongsToMany(Produit, {
   through: Vente_detail,
   unique: false,
   foreignKey: "vente_id",
+}); */
+Produit.hasMany(Vente_detail, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
+});
+Vente_detail.belongsTo(Produit, {
+  foreignKey: {
+    name: "produit_code_lot_produit",
+    type: DataTypes.CHAR(255),
+    allowNull: false,
+  },
+});
+Vente.hasMany(Vente_detail, {
+  foreignKey: { name: "vente_id", type: DataTypes.CHAR(25), allowNull: false },
+});
+Vente_detail.belongsTo(Vente, {
+  foreignKey: { name: "vente_id", type: DataTypes.CHAR(25), allowNull: false },
 });
 
 Voie.hasMany(Produit, {

@@ -6,6 +6,7 @@ import {
   convertToOption,
   filterOption,
   getData,
+  getDateNow,
   getUrl,
   InputForm,
   numberWithCommas,
@@ -14,15 +15,17 @@ import {
   updateData,
   verifObligatory,
 } from "../../../utils/utils";
-import { intializeGuichetSelected } from "../../../atoms/guichet";
+import { intializeGuichetSelected, isAddState } from "../../../atoms/guichet";
 import { faCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { useRecoilState } from "recoil";
 
-function Insert() { 
+function Insert() {
+  const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [edit_item, setEdit_item] = useState({
     code_lot_produit: "",
     vente_id: "",
-    quantite_vente: "",
+    quantite_vendue: "",
   });
   const [guichet_id, setGuichet_id] = useState([]);
   const [caisse_id, setCaisse_id] = useState([]);
@@ -51,28 +54,66 @@ function Insert() {
   } = guichetSelected[0];
   const getAll = () => {
     if (guichet_id.value)
-    getData("vente/details", setGuichetSelected, guichet_id.value)
+      getData("vente/details", setGuichetSelected, guichet_id.value);
   };
   const updateOneVenteDetail = () => {
-    if (edit_item.quantite_vente === ""  ) return;
-    if (  guichet_id.value) {
-      toast.warning("Veulliez séléctionné une caisse!")
+    if (edit_item.quantite_vendue == "") return;
+    if (!guichet_id.value) {
+      toast.warning("Veulliez séléctionné une guichet de vente!");
     }
-    updateData(
-      "vente/details",
-      guichet_id.value,
-      { data: edit_item },
+    updateData("vente/details", guichet_id.value, { data: edit_item }, () => {
+      getAll();
+      setEdit_item({
+        code_lot_produit: "",
+        vente_id: "",
+        quantite_vendue: "",
+      });
+    });
+  };
+
+  const validateVenteCaisse = () => {
+    if (!guichet_id.value) {
+      toast.warning("Veulliez séléctionné une guichet de vente!");
+      return;
+    }
+    if (!caisse_id.value) {
+      toast.warning("Veulliez séléctionné une caisse de vente!");
+      return;
+    }
+    confirmDelete(
+      `Valider la vente #${guichet_id.value} ?`,
       () => {
-        getAll();
-        setEdit_item({
-          code_lot_produit: "",
-          vente_id: "",
-          quantite_vente: "",
-        });
-      }
+        updateData(
+          "vente/caisse",
+          guichet_id.value,
+          {
+            caisse_id: caisse_id.value,
+            vente_id: guichet_id.value,
+            date_vente: getDateNow(),
+          },
+          () => {
+            getAll();
+            getData("vente/GuichetNonLivrer", (data) => {
+              let options = [];
+              data.forEach((element) => {
+                options.push({ label: element.id, value: element.id });
+              });
+              setOptionsGuichetNonLivre(options);
+            });
+            setEdit_item({
+              code_lot_produit: "",
+              vente_id: "",
+              quantite_vendue: "",
+            });
+          }
+        );
+      },
+      "Valider",
+      "success",
+      "Vente (Livraison)"
     );
   };
-  
+
   React.useEffect(() => {
     getData("vente/GuichetNonLivrer", (data) => {
       let options = [];
@@ -108,7 +149,7 @@ function Insert() {
                   }}
                   obligatory={true ? "active" : ""}
                 />
-                <button className="btn btn-sm btn-default">
+                <button className="btn btn-sm btn-default" onClick={getAll}>
                   <i className="fa fa-refresh"></i>
                 </button>
                 <SelectForm
@@ -127,7 +168,7 @@ function Insert() {
                 />
               </div>
               <span className="float-right">
-                Date de saisie :<strong> {}</strong>
+                Date de saisie :<strong> {date_saisi}</strong>
               </span>
             </div>
             <div className="card-body">
@@ -173,7 +214,7 @@ function Insert() {
                     </div>
                     <div>
                       {" "}
-                      <strong>Prise en charge : </strong> 
+                      <strong>Prise en charge : </strong>
                       <span>{societe_prise_en_charge}%</span>
                     </div>
 
@@ -281,39 +322,38 @@ function Insert() {
                               <td className="center">
                                 {`${numberWithCommas(item.quantite_demande)}`}
                               </td>
-                            <td className="center">
-                              {edit_item.code_lot_produit ===
-                              item.produit_code_lot_produit ? (
-                                <InputForm
-                                  key={edit_item.code_lot_produit} 
-                                  double
-                                  maxi={parseFloat(edit_item.quantite_demande)}
-                                  val={edit_item.quantite_vente}
-                                  onChange={(e) => {
-                                    console.log("item", edit_item);
-                                    setEdit_item({
-                                      code_lot_produit:
-                                        edit_item.code_lot_produit,
-                                      vente_id: item.vente_id,
-                                      quantite_vente: e.target.value,
-                                    });
-                                  }}
-                                  onKeyPress={(e) => {
-                                    if (!/[0-9]/.test(e.key)) {
-                                      e.preventDefault();
-                                    }
-                                    if (e.key == "Enter" && edit_item) {
-                                      updateOneVenteDetail();
-                                    }
-                                  }}
-                                />
-                              ) : (
-                                item.quantite_vente
-                              )}{" "}
-                            </td>
                               <td className="center">
-                                {  item.unite.nom_unite }
+                                {edit_item.code_lot_produit ===
+                                item.produit_code_lot_produit ? (
+                                  <InputForm
+                                    key={edit_item.code_lot_produit}
+                                    double
+                                    maxi={parseFloat(item.quantite_demande)}
+                                    val={edit_item.quantite_vendue}
+                                    onChange={(e) => {
+                                      console.log("item", edit_item);
+                                      setEdit_item({
+                                        code_lot_produit:
+                                          edit_item.code_lot_produit,
+                                        vente_id: item.vente_id,
+                                        quantite_vendue: e.target.value,
+                                      });
+                                      console.log("edit_item", edit_item);
+                                    }}
+                                    onKeyPress={(e) => {
+                                      if (!/[0-9]/.test(e.key)) {
+                                        e.preventDefault();
+                                      }
+                                      if (e.key == "Enter" && edit_item) {
+                                        updateOneVenteDetail();
+                                      }
+                                    }}
+                                  />
+                                ) : (
+                                  item.quantite_vendue
+                                )}{" "}
                               </td>
+                              <td className="center">{item.unite.nom_unite}</td>
                               <td className="right">
                                 {numberWithCommas(item.montant_vente)}
                               </td>
@@ -344,10 +384,8 @@ function Insert() {
                                         setEdit_item({
                                           code_lot_produit:
                                             item.produit_code_lot_produit,
-                                          vente_id:
-                                            item.vente_id,
-                                          quantite_vente:
-                                            item.quantite_vente,
+                                          vente_id: item.vente_id,
+                                          quantite_vendue: item.quantite_vendue,
                                         });
                                       }
                                     }}
@@ -392,7 +430,7 @@ function Insert() {
                 <div className="col-2">
                   <button
                     className="btn btn-info btn-lg w-100 light "
-                    onClick={() => {}}
+                    onClick={() => {setIsAdd("0"); console.log("isAdd",isAdd);}}
                   >
                     <i className="fa fa-list-alt"></i>
                   </button>
@@ -400,7 +438,16 @@ function Insert() {
                 <div className="col ">
                   <button
                     className="btn btn-danger btn-lg w-100 light "
-                    onClick={() => {}}
+                    onClick={() => {
+                      setEdit_item({
+                        code_lot_produit: "",
+                        vente_id: "",
+                        quantite_vendue: "",
+                      });
+                      setCaisse_id([]);
+                      setGuichetSelected(intializeGuichetSelected);
+                      // window.location.reload();
+                    }}
                   >
                     Annuler
                   </button>
@@ -408,8 +455,9 @@ function Insert() {
                 <div className="col-7">
                   <button
                     className="btn btn-primary btn-lg w-100 mr-2"
-                    data-toggle="modal"
-                    data-target="#modalInsert"
+                    // data-toggle="modal"
+                    // data-target="#modalInsert"
+                    onClick={validateVenteCaisse}
                   >
                     Livrer
                   </button>

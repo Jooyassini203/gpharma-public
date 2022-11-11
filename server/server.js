@@ -21,6 +21,7 @@ import RavitaillementRouter from "./routes/Ravitaillement.routes.js";
 import AjustementRouter from "./routes/Ajustement.routes.js";
 import GuichetRouter from "./routes/Guichet.routes.js";
 import VenteRouter from "./routes/Vente.routes.js";
+import AccueilRouter from "./routes/Accueil.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -31,6 +32,7 @@ app.use(express.static("public"));
 app.use(FileUpload());
 
 app.use(LoginRouter);
+app.use(AccueilRouter);
 
 app.use(UtilisateurRouter);
 app.use(VoieRouter);

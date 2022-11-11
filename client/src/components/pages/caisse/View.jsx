@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { guichetSelect, intializeGuichetSelected } from "../../../atoms/guichet";
+import { venteSelect, intializeVenteSelected } from "../../../atoms/caisse";
 import { getData, getUrl, numberWithCommas } from "../../../utils/utils";
 
 function View() {
-  const [guichetSelected, setGuichetSelected] = useRecoilState(guichetSelect);
+  const [venteSelected, setVenteSelected] = useRecoilState(venteSelect);
 
   const {
     id,
@@ -22,7 +22,7 @@ function View() {
     guichet,
     caissier,
     guichetier,
-  } = guichetSelected[0]; 
+  } = venteSelected[0]; 
   return (
     <>
       <div
@@ -31,7 +31,7 @@ function View() {
         aria-modal="true"
         data-backdrop="static"
         data-keyboard="true"
-        id="modalViewGuichet"
+        id="modalViewVente"
       >
         <div
           className="modal-dialog modal-xl  modal-dialog-centered"
@@ -50,7 +50,7 @@ function View() {
                 className="close"
                 data-dismiss="modal"
                 onClick={() => {
-                  setGuichetSelected(intializeGuichetSelected);
+                  setVenteSelected(intializeVenteSelected);
                 }}
               >
                 <span>×</span>
@@ -192,8 +192,8 @@ function View() {
                       </tr>
                     </thead>
                     <tbody>
-                      {guichetSelected[1].length > 0
-                        ? guichetSelected[1].map((item, index) => (
+                      {venteSelected[1].length > 0
+                        ? venteSelected[1].map((item, index) => (
                             <tr
                               key={
                                 item.produit_code_lot_produit + item.produit.nom_produit
@@ -221,7 +221,7 @@ function View() {
                     </tbody>
                   </table>
                 </div>
-                {guichetSelected[1].length > 0 ? (
+                {venteSelected[1].length > 0 ? (
                   <div className="row">
                     <div className="col-lg-4 col-sm-5"> </div>
                     <div className="col-lg-4 col-sm-5 ml-auto">
@@ -233,7 +233,7 @@ function View() {
                             </td>
                             <td className="right">
                               {numberWithCommas(
-                                guichetSelected[1].reduce(
+                                venteSelected[1].reduce(
                                   (acc, item) =>
                                     (acc += parseFloat(item.montant_vente)),
                                   0

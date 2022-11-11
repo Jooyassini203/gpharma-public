@@ -1,29 +1,252 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Doughnut, Line, Pie, PolarArea } from "react-chartjs-2";
 import { Chart, ArcElement, registerables } from "chart.js";
+import { getData, getDaysInMonth } from "../../../utils/utils";
 
 Chart.register(...registerables);
 Chart.register(ArcElement);
-const data = {
-  labels: ["Red", "Blue", "Yellow"],
-  datasets: [
-    {
-      label: "My First Dataset",
-      data: [300, 50, 100],
-      backgroundColor: [
-        "rgb(255, 99, 132)",
-        "rgb(54, 162, 235)",
-        "rgb(255, 205, 86)",
-      ],
-      hoverOffset: 4,
-    },
-  ],
-};
+const date = new Date();
+
 function StatisticGeneral() {
+  const [StatGeneral, setStatGeneral] = useState({
+    count_commande: 0,
+    count_livraison: 0,
+    count_guichet: 0,
+    count_caisse: 0,
+    count_rvt_total: 0,
+    count_vente_total: 0,
+  });
+  const [dataVente, setDataVente] = useState([]);
+  const [StatVente, setStatVente] = useState([
+    [],
+    [
+      15, 2, 15, 15, 45, 9, 15, 145, 15, 15, 5, 15, 15, 53, 15, 15, 54, 15, 15,
+      15, 15, 15, 15, 15, 15, 15, 15, 15, 96, 15,
+    ],
+  ]);
+  const {
+    count_commande,
+    count_livraison,
+    count_guichet,
+    count_caisse,
+    count_rvt_total,
+    count_vente_total,
+  } = StatGeneral;
+
+  useEffect(() => {
+    getData("accueil/StatGeneral", (data) => {
+      setStatGeneral(data[0]);
+    });
+    getData(
+      "accueil/StatVente",
+      (data) => {
+        setStatVente(data);
+        console.log("StatVente[0]", StatVente);
+      },
+      date.getFullYear() + "-" + date.getMonth()
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   setStatVente([]);
+  //   let day = 1;
+  //   let count = 0;
+  //   let new_arr = []
+  //   for (
+  //     let index = 1;
+  //     index <= getDaysInMonth(date.getMonth(), date.getFullYear()).at(-1);
+  //     index++
+  //   ) {
+  //     dataVente.forEach(element => {
+  //       const isDay = parseInt((element.date_vente).replace(date.getMonth()+"-"+date.getFullYear()).slice(0,2))
+  //       if(isDay == index){
+  //         new_arr.push(element);
+  //       }else{
+  //         new_arr.push({date_vente:0});
+  //       }
+  //     });
+  //   }
+  //   console.log(new_arr);
+  //   dataVente.forEach((item) => {
+
+  //     if (
+  //       item.date_vente.indexOf(
+  //         date.getFullYear() +
+  //           "-" +
+  //           date.getMonth() +
+  //           "-" +
+  //           (day.toString().length == 1 ? "0" + day : day)
+  //       ) > -1
+  //     ) {
+  //       console.log(
+  //         date.getFullYear() +
+  //           "-" +
+  //           date.getMonth() +
+  //           "-" +
+  //           (day.toString().length == 1 ? "0" + day : day)
+  //       );
+  //       count++;
+  //     } else {
+  //       console.log(
+  //         date.getFullYear() +
+  //           "-" +
+  //           date.getMonth() +
+  //           "-" +
+  //           (day.toString().length == 1 ? "0" + day : day)
+  //       );
+  //       setStatVente((prev) => [...prev, count]);
+  //       day++;
+  //       count = 0;
+  //     }
+  //   });
+  // }, [dataVente]);
+
+  let dataDoughnut = {
+    labels: [
+      "Commande (Ravitaillement)",
+      "Livraison (Ravitaillement)",
+      "Guichet (Vente)",
+      "Caisse (Vente)",
+    ],
+    datasets: [
+      {
+        data: [count_commande, count_livraison, count_guichet, count_caisse], //[count_commande, count_livraison, count_guichet, count_caisse]
+        backgroundColor: [
+          "rgb(255, 99, 132)",
+          "rgb(95, 116, 191)",
+          "rgb(255, 205, 86)",
+          "rgb(95, 191, 145)",
+        ],
+        hoverOffset: 4,
+      },
+    ],
+  };
+  let dataLine = {
+    labels: StatVente[0],
+    datasets: [
+      {
+        label: "Les ventes du premier du mois jusqu'à aujourd'hui",
+        data: StatVente[1],
+        backgroundColor: ["rgb(255, 99, 132)"],
+        hoverOffset: 4,
+      },
+    ],
+  };
+  const count_commande_100 = count_rvt_total
+    ? Math.round((count_commande / count_rvt_total) * 100)
+    : 0;
+  const count_livraison_100 = count_rvt_total
+    ? Math.round((count_livraison / count_rvt_total) * 100)
+    : 0;
+  const count_guichet_100 = count_vente_total
+    ? Math.round((count_guichet / count_vente_total) * 100)
+    : 0;
+  const count_caisse_100 = count_vente_total
+    ? Math.round((count_caisse / count_vente_total) * 100)
+    : 0;
   return (
     <>
-      <div className="col-xl-12 ml-3">
-        <div className="card">
+      <>
+        <div className="row m-3">
+          <div className="col-xl-3  col-sm-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <div className="media align-items-center">
+                  <div className="media-body mr-3">
+                    <h2 className="fs-34 text-black font-w600">
+                      {count_commande}
+                    </h2>
+                    <span>Commande (Ravitaillement)</span>
+                  </div>
+                  <i className="fa fa-list fa-3x text-primary"></i>
+                </div>
+              </div>
+              <div className="progress  rounded-0" style={{ height: 4 }}>
+                <div
+                  className="progress-bar rounded-0 bg-secondary progress-animated"
+                  style={{ width: count_commande_100 + "%", height: 4 }}
+                  role="progressbar"
+                >
+                  {/* <span className="sr-only">90% Complete</span> */}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-xl-3  col-sm-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <div className="media align-items-center">
+                  <div className="media-body mr-3">
+                    <h2 className="fs-34 text-shipping-fast font-w600">
+                      {count_livraison}
+                    </h2>
+                    <span>Livraison (Ravitaillement)</span>
+                  </div>
+                  <i className="fa fa-money fa-3x text-primary"></i>
+                </div>
+              </div>
+              <div className="progress  rounded-0" style={{ height: 4 }}>
+                <div
+                  className="progress-bar rounded-0 bg-secondary progress-animated"
+                  style={{ width: count_livraison_100 + "%", height: 4 }}
+                  role="progressbar"
+                >
+                  {/* <span className="sr-only">90% Complete</span> */}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-xl-3 col-sm-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <div className="media align-items-center">
+                  <div className="media-body mr-3">
+                    <h2 className="fs-34 text-black font-w600">
+                      {count_guichet}
+                    </h2>
+                    <span>Guichet (Vente)</span>
+                  </div>
+                  <i className="fa fa-list-alt fa-3x text-primary"></i>
+                </div>
+              </div>
+              <div className="progress  rounded-0" style={{ height: 4 }}>
+                <div
+                  className="progress-bar rounded-0 bg-secondary progress-animated"
+                  style={{ width: count_guichet_100 + "%", height: 4 }}
+                  role="progressbar"
+                >
+                  {/* <span className="sr-only">50% Complete</span> */}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-xl-3  col-sm-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <div className="media align-items-center">
+                  <div className="media-body mr-3">
+                    <h2 className="fs-34 text-black font-w600">
+                      {count_caisse}
+                    </h2>
+                    <span>Caisse (Vente)</span>
+                  </div>
+                  <i className="fa fa-money fa-3x text-primary"></i>
+                </div>
+              </div>
+              <div className="progress  rounded-0" style={{ height: 4 }}>
+                <div
+                  className="progress-bar rounded-0 bg-secondary progress-animated"
+                  style={{ width: count_caisse_100 + "%", height: 4 }}
+                  role="progressbar"
+                >
+                  {/* <span className="sr-only">90% Complete</span> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card m-4">
           <div className="card-header border-0 pb-0">
             <div>
               <h4 className="fs-20 text-black mb-1">Statistique</h4>
@@ -32,7 +255,7 @@ function StatisticGeneral() {
           </div>
           <div className="card-body">
             <div className="row align-items-center">
-              {/* <div className="col-lg-5 mb-lg-0 mb-3">
+              <div className="col  ml-4 mb-lg-0 mb-3">
                 <div className="d-flex mb-3 align-items-center">
                   <span className="fs-12 col-6 p-0 text-black">
                     <svg
@@ -45,15 +268,21 @@ function StatisticGeneral() {
                     >
                       <rect width={19} height={19} fill="#5F74BF" />
                     </svg>
-                    Commande
+                    Commande (Ravitaillement)
                   </span>
                   <div className="progress rounded-0 col-6 p-0">
                     <div
                       className="progress-bar rounded-0 progress-animated"
-                      style={{ width: "80%", height: 6, background: "#5F74BF" }}
+                      style={{
+                        width: (count_commande / count_vente_total) * 100 + "%",
+                        height: 6,
+                        background: "#5F74BF",
+                      }}
                       role="progressbar"
                     >
-                      <span className="sr-only">60% Complete</span>
+                      <span className="sr-only">
+                        {(count_commande / count_rvt_total) * 100}% Complète
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -69,15 +298,22 @@ function StatisticGeneral() {
                     >
                       <rect width={19} height={19} fill="#FFD439" />
                     </svg>
-                    Livraison
+                    Livraison (Ravitaillement)
                   </span>
                   <div className="progress rounded-0 col-6 p-0">
                     <div
                       className="progress-bar rounded-0 progress-animated"
-                      style={{ width: "40%", height: 6, background: "#FFD439" }}
+                      style={{
+                        width:
+                          (count_livraison / count_vente_total) * 100 + "%",
+                        height: 6,
+                        background: "#FFD439",
+                      }}
                       role="progressbar"
                     >
-                      <span className="sr-only">60% Complete</span>
+                      <span className="sr-only">
+                        {(count_livraison / count_rvt_total) * 100}% Complète
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -93,15 +329,21 @@ function StatisticGeneral() {
                     >
                       <rect width={19} height={19} fill="#FF6E5A" />
                     </svg>
-                    Guichet
+                    Guichet (Vente)
                   </span>
                   <div className="progress rounded-0 col-6 p-0">
                     <div
                       className="progress-bar rounded-0 progress-animated"
-                      style={{ width: "90%", height: 6, background: "#FF6E5A" }}
+                      style={{
+                        width: (count_guichet / count_vente_total) * 100 + "%",
+                        height: 6,
+                        background: "#FF6E5A",
+                      }}
                       role="progressbar"
                     >
-                      <span className="sr-only">60% Complete</span>
+                      <span className="sr-only">
+                        {(count_guichet / count_vente_total) * 100}% Complète
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -117,40 +359,54 @@ function StatisticGeneral() {
                     >
                       <rect width={19} height={19} fill="#5FBF91" />
                     </svg>
-                    Caisse
+                    Caisse (Vente)
                   </span>
                   <div className="progress rounded-0 col-6 p-0">
                     <div
                       className="progress-bar rounded-0 progress-animated"
-                      style={{ width: "80%", height: 6, background: "#5FBF91" }}
+                      style={{
+                        width: (count_caisse / count_vente_total) * 100 + "%",
+                        height: 6,
+                        background: "#5FBF91",
+                      }}
                       role="progressbar"
                     >
-                      <span className="sr-only">60% Complete</span>
+                      <span className="sr-only">
+                        {(count_caisse / count_vente_total) * 100}% Complète
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div> */}
-              <div className="col -lg-7">
-                <div className="row align-items-center">
-                  <div className="col-lg-6 col-sm-6 mb-sm-0 mb-3"></div>
-                  <div className="col-lg-4 col-sm-6">
-                    <div className="d-flex align-items-center">
-                      <Doughnut data={data}  />
-                    </div>
-                  </div>
+              </div>
+
+              <div className="col-lg-7">
+                <div
+                  className="d-flex align-items-center justify-content-center w-50"
+                  style={{ marginLeft: "11vw" }}
+                >
+                  <Doughnut
+                    data={dataDoughnut}
+                    options={{ plugins: { legend: { display: false } } }}
+                  />
                 </div>
               </div>
             </div>
-              <div className="row m-3">
-                <span class="fs-12">Hebdomadaire</span>
-                <div className="card-body">
-
-                <Line data={data} />
-                </div>
+            <span className="fs-12">Hebdomadaire</span>
+            <div className="row m-3">
+              <div className="card-body">
+                <Line
+                  style={{
+                    position: "relative",
+                    height: "10vh",
+                    width: "40vw",
+                  }}
+                  data={dataLine}
+                />
               </div>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     </>
   );
 }

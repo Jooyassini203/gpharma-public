@@ -52,7 +52,7 @@ function Modal() {
   } = ajustementDetails;
 
   const addItemInTable = () => {
-    setIsObAjtDt(true); 
+    setIsObAjtDt(true);
     console.log("ajustementDetails", {
       ...ajustementDetails,
       produit_code_lot_produit: produit_code_lot_produit.value,
@@ -110,7 +110,7 @@ function Modal() {
           setAjustement(initializeAjt);
           setAjustementDetails(initializeAjtDt);
           setListAjustementDetails([]);
-          document.getElementById("closeModalAjustement").click()
+          document.getElementById("closeModalAjustement").click();
         }
       );
     };
@@ -197,7 +197,7 @@ function Modal() {
                 </InputForm>
               </div>
             </div>
-            <div className="row align-items-center">
+            <div className=" row">
               <div className="col-3">
                 <SelectForm
                   val={produit_code_lot_produit}

@@ -63,6 +63,7 @@ const getSpecific = async (req, res) => {
 };
 const createOne = async (req, res) => {
   const { dataAjt, dataAjtDetail, utilisateur_id } = req.body;
+  const transaction = await db.transaction();
   try {
     // ________________________________________________
     const unites = await Unite.findAll();
@@ -71,13 +72,16 @@ const createOne = async (req, res) => {
       return "Unite";
     };
     // ________________________________________________
-    let message = "";
-    const item_ajt = await Ajustement.create({
-      ...dataAjt,
-      utilisateur_id,
-      emplacement_id: 1,
-    });
-    dataAjtDetail.forEach(async (item_ajtDt, index) => {
+    let message = [];
+    const item_ajt = await Ajustement.create(
+      {
+        ...dataAjt,
+        utilisateur_id,
+        emplacement_id: 1,
+      },
+      { transaction }
+    );
+    dataAjtDetail.map(async (item_ajtDt, index) => {
       const item_produit = await Produit.findOne({
         where: { code_lot_produit: item_ajtDt.produit_code_lot_produit },
       });
@@ -87,10 +91,13 @@ const createOne = async (req, res) => {
             "Produit " + item_ajtDt.produit_code_lot_produit + " introvable!",
         });
       console.log("\n\n\n\n\n", item_ajtDt, "\n\n\n\n");
-      await Ajustement_detail.create({
-        ...item_ajtDt,
-        ajustement_id: item_ajt.id,
-      });
+      await Ajustement_detail.create(
+        {
+          ...item_ajtDt,
+          ajustement_id: item_ajt.id,
+        },
+        { transaction }
+      );
 
       item_produit.set({
         quantite_stock: item_ajtDt.quantite_nouveau_stock,
@@ -99,24 +106,36 @@ const createOne = async (req, res) => {
         unite_presentation: item_ajtDt.unite_nouveau_presentation,
       });
       console.log("\n\n\n\n\n", item_produit, "\n\n\n\n");
-      item_produit.save();
-      message += `Le produit **${
-        item_produit.nom_produit
-      }** est ajusté de [ Stock : ${
-        item_ajtDt.quantite_ancien_stock
-      } ${getNameUniteById(item_ajtDt.unite_ancien_stock)} ; Présentation : ${
-        item_ajtDt.quantite_ancien_presentation
-      } ${getNameUniteById(
-        item_ajtDt.unite_ancien_presentation
-      )} ] à [ Stock : ${item_produit.quantite_stock} ${getNameUniteById(
-        item_produit.unite_stock
-      )} ; Présentation : ${
-        item_ajtDt.presentation_quantite
-      } ${getNameUniteById(item_ajtDt.unite_presentation)} ]\n\n`;
-      if (index + 1 === dataAjtDetail.lenght)
-        return res.status(200).send({ message });
+      item_produit.save({ transaction });
+      message.push[
+        `Le produit **${item_produit.nom_produit}** est ajusté de [ Stock : ${
+          item_ajtDt.quantite_ancien_stock
+        } ${getNameUniteById(item_ajtDt.unite_ancien_stock)} ; Présentation : ${
+          item_ajtDt.quantite_ancien_presentation
+        } ${getNameUniteById(
+          item_ajtDt.unite_ancien_presentation
+        )} ] à [ Stock : ${item_produit.quantite_stock} ${getNameUniteById(
+          item_produit.unite_stock
+        )} ; Présentation : ${
+          item_ajtDt.presentation_quantite
+        } ${getNameUniteById(item_ajtDt.unite_presentation)} ]\n\n`
+      ];
+      console.log("index == dataAjtDetail.length", index, dataAjtDetail.length);
+      if (index == dataAjtDetail.length - 1) {
+        console.log(
+          "message.length == dataAjtDetail.length",
+          message,
+          message.length,
+          dataAjtDetail.length
+        );
+        await transaction.commit();
+        if (message.length == dataAjtDetail.length) {
+          return res.status(200).send({ message: message.join("\n") });
+        }
+      }
     });
   } catch (error) {
+    await transaction.rollback();
     console.log(error);
     return res.status(404).json({ message: error.message });
   }

@@ -127,15 +127,27 @@ const updateOneRavitaillementDetail = async (req, res) => {
       .json({ message: "Cette détails de ravitaillement est introvable!" });
 
   try {
+    const last_total = vente.montant_ht;
+    const last_montant_ht = item.montant_ht;
+    const new_montant_ht =
+      parseFloat(item.prix_unit) * parseFloat(req.body.data.quantite_livraison);
+    const new_montant_total =
+      parseFloat(last_total) -
+      parseFloat(last_montant_ht) +
+      parseFloat(new_montant_ht);
+    console.log("\n\nlast_total ", last_total);
+    console.log("\nlast_montant_ht ", last_montant_ht);
+    console.log("\n\nnew_montant_total ", new_montant_total);
     item.set({
       quantite_livraison: req.body.data.quantite_livraison,
-      montant_ht: item.prix_unit * req.body.data.quantite_livraison,
+      montant_ht: new_montant_ht,
     });
-    item.save().then(() => {
-      console.log("\n\n\n\n\n", item, "\n\n\n\n\n");
-      return res.status(200).json({
-        message: "Quantité livré de cette est de " + item.quantite_livraison,
-      });
+    await item.save();
+    rvt.set({ montant_ht: new_montant_total });
+    await rvt.save();
+
+    return res.status(200).json({
+      message: "Quantité livré de cette est de " + item.quantite_livraison,
     });
   } catch (error) {
     console.log(error);

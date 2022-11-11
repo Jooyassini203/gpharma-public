@@ -4,7 +4,7 @@ import db from "../config/Database.js";
 const getCount = async (req, res) => {
   try {
     const count = await db.query(
-      `SELECT  (    SELECT COUNT(*)   AS count_forme  FROM   forme WHERE deletedAt IS NULL)
+      `SELECT  (    SELECT COUNT(*)  FROM   forme WHERE deletedAt IS NULL)  AS count_forme 
       ,(    SELECT COUNT(*)  FROM   caisse WHERE deletedAt IS NULL) AS count_caisse
       ,(    SELECT COUNT(*)  FROM   emplacement WHERE deletedAt IS NULL) AS count_emplacement
       ,(    SELECT COUNT(*)  FROM   fabricant  WHERE deletedAt IS NULL) AS count_fabricant
