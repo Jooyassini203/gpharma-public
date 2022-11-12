@@ -19,7 +19,7 @@ import {
   SelectForm,
   getDateNow,
   verifObligatory,
-} from "../../../utils/utils"; 
+} from "../../../utils/utils";
 import { userConnected } from "../../../atoms/authentication";
 
 function Insert() {
@@ -94,7 +94,7 @@ function Insert() {
       {
         ...ravitaillementDetails,
         produit_code_lot_produit: produit_code_lot_produit.value,
-        nom_produit: produit.nom_produit, 
+        nom_produit: produit.nom_produit,
         prix_ht: parseInt(tva) * parseInt(prix_unit),
         unite_achat: produit.unite_stock,
         montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
@@ -122,10 +122,7 @@ function Insert() {
   }, []);
 
   const myFilterProduit = () => {
-    filterOption(
-      OptionsProduit,
-      produit_code_lot_produit
-    )
+    filterOption(OptionsProduit, produit_code_lot_produit);
   };
   const getTotalsHT = () => {
     if (listRavitaillementDetails.length > 0) {
@@ -172,9 +169,12 @@ function Insert() {
       montant_ht: getTotalsHT(),
     };
     let dataRvtDetail = [];
-    listRavitaillementDetails.map((item)=>{
-      dataRvtDetail.push({...item, ["quantite_livraison"]: item.quantite_demande}); 
-    })
+    listRavitaillementDetails.map((item) => {
+      dataRvtDetail.push({
+        ...item,
+        ["quantite_livraison"]: item.quantite_demande,
+      });
+    });
     console.log("{ dataRvt, dataRvtDetail }", { dataRvt, dataRvtDetail });
     if (
       !motif ||
@@ -268,8 +268,8 @@ function Insert() {
                   postIcon={{ text: "%" }}
                   name="tva"
                   val={tva}
-                  onChange={(e) => onChange(e, setRavitaillementDetails)}
-                  obligatory={isObRvtDt ? "active" : ""}
+                  onChange={(e) => onChange(e, setRavitaillement)}
+                  obligatory={isObRvt ? "active" : ""}
                 >
                   TVA
                 </InputForm>
@@ -400,6 +400,14 @@ function Insert() {
                         importance="warning"
                         icon={faEdit}
                         handleClick={() => {
+                          setRavitaillementDetails(
+                            intializeRavitaillementDetails
+                          );
+                          getData(
+                            "produit",
+                            (data) => setProduit(data[0]),
+                            item.produit_code_lot_produit
+                          );
                           setRavitaillementDetails({
                             prix_unit: item.prix_unit,
                             produit_code_lot_produit: {

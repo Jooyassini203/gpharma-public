@@ -28,8 +28,8 @@ function Modal() {
   const initializeAjtDt = {
     quantite_nouveau_stock: "",
     quantite_nouveau_presentation: "",
-    unite_nouveau_stock: "",
-    unite_nouveau_presentation: "",
+    unite_nouveau_stock:{ value: "", label: "" },
+    unite_nouveau_presentation: { value: "", label: "" },
     produit_code_lot_produit: { value: "", label: "" },
   };
   const [list, setList] = useRecoilState(listAjustement);
@@ -387,8 +387,9 @@ function Modal() {
                           <ButtonTable
                             importance="warning"
                             icon={faEdit}
-                            handleClick={() => {
-                              setListAjustementDetails({
+                            handleClick={() => { 
+                              setAjustementDetails(initializeAjtDt)
+                              setAjustementDetails({
                                 prix_unit: item.prix_unit,
                                 produit_code_lot_produit: {
                                   label: item.nom_produit,
@@ -399,6 +400,7 @@ function Modal() {
                                 montant_ht: item.montant_ht,
                                 quantite_demande: item.quantite_demande,
                                 unite_achat: item.unite_achat,
+                                
                               });
                               setListAjustementDetails([
                                 ...listAjustementDetails.slice(

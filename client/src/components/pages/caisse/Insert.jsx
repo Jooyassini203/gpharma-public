@@ -15,7 +15,7 @@ import {
   updateData,
   verifObligatory,
 } from "../../../utils/utils";
-import { intializeGuichetSelected, isAddState } from "../../../atoms/guichet";
+import { intializeVenteSelected, isAddState } from "../../../atoms/caisse";
 import { faCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
@@ -33,7 +33,7 @@ function Insert() {
   const [OptionsCaisse, setOptionsCaisse] = useState([]);
 
   const [guichetSelected, setGuichetSelected] = useState(
-    intializeGuichetSelected
+    intializeVenteSelected
   );
 
   const {
@@ -105,6 +105,8 @@ function Insert() {
               vente_id: "",
               quantite_vendue: "",
             });
+            setGuichet_id({label:"", value:""})
+            setGuichetSelected(intializeVenteSelected)
           }
         );
       },
@@ -445,7 +447,7 @@ function Insert() {
                         quantite_vendue: "",
                       });
                       setCaisse_id([]);
-                      setGuichetSelected(intializeGuichetSelected);
+                      setGuichetSelected(intializeVenteSelected);
                       // window.location.reload();
                     }}
                   >

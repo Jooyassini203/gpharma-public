@@ -99,7 +99,7 @@ function Insert() {
           ? produit.unite_stock
           : produit.unite_presentation,
       },
-    ]);
+    ]); 
   };
 
   const verifObSocieteAndOrdonnance = () => {
@@ -174,6 +174,10 @@ function Insert() {
     if (produit.emplacement) {
       setVenteDetails((prev) => ({
         ...prev,
+        produit_code_lot_produit:{
+          label: produit.nom_produit,
+          value: produit.code_lot_produit,
+        },
         prix_stock: produit.prix_stock,
         quantite_demande: getEmplacement(produit.emplacement)[0].quantite_produit,
       }));
@@ -562,20 +566,25 @@ function Insert() {
                           importance="warning"
                           icon={faEdit}
                           handleClick={() => {
-                            onChange(
-                              {
-                                label: item.nom_produit,
-                                value: item.produit_code_lot_produit,
-                              },
-                              setVenteDetails,
-                              "produit_code_lot_produit"
+                            setVenteDetails({...intializeVenteDetails })
+                            getData(
+                              "produit",
+                              (data) => setProduit(data[0]),
+                              item.produit_code_lot_produit
                             );
                             setVenteDetails({
                               prix_stock: item.prix_stock,
                               quantite_demande: item.quantite_demande,
                               montant_vente: item.montant_vente,
+                              produit_code_lot_produit: {
+                                label: item.nom_produit,
+                                value: item.produit_code_lot_produit,
+                              }
                             });
-                            console.log(venteDetails);
+                            console.log({...intializeVenteDetails, produit_code_lot_produit:{
+                              label: item.nom_produit,
+                              value: item.produit_code_lot_produit,
+                            }});
                             setListVenteDetails([
                               ...listVenteDetails.slice(
                                 0,

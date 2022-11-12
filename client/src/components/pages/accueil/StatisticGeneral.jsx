@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut, Line, Pie, PolarArea } from "react-chartjs-2";
 import { Chart, ArcElement, registerables } from "chart.js";
-import { getData, getDaysInMonth } from "../../../utils/utils";
+import { getData, getDaysInMonth, urlRead } from "../../../utils/utils";
+import axios from "axios";
 
 Chart.register(...registerables);
 Chart.register(ArcElement);
@@ -33,73 +34,21 @@ function StatisticGeneral() {
     count_vente_total,
   } = StatGeneral;
 
-  useEffect(() => {
-    getData("accueil/StatGeneral", (data) => {
-      setStatGeneral(data[0]);
-    });
-    getData(
-      "accueil/StatVente",
-      (data) => {
-        setStatVente(data);
-        console.log("StatVente[0]", StatVente);
-      },
-      date.getFullYear() + "-" + date.getMonth()
+  const getAll = async () => { 
+    const dataG = await axios.get(urlRead("accueil/StatGeneral"));
+    if (dataG) {
+      console.log(dataG.data[0]);
+      setStatGeneral(dataG.data[0]);
+    }
+    const dataV = await axios.get(
+      urlRead("accueil/StatVente", date.getFullYear() + "-" + date.getMonth())
     );
+    if (dataV) setStatVente(dataV.data);
+  };
+
+  useEffect(() => {
+    getAll();
   }, []);
-
-  // useEffect(() => {
-  //   setStatVente([]);
-  //   let day = 1;
-  //   let count = 0;
-  //   let new_arr = []
-  //   for (
-  //     let index = 1;
-  //     index <= getDaysInMonth(date.getMonth(), date.getFullYear()).at(-1);
-  //     index++
-  //   ) {
-  //     dataVente.forEach(element => {
-  //       const isDay = parseInt((element.date_vente).replace(date.getMonth()+"-"+date.getFullYear()).slice(0,2))
-  //       if(isDay == index){
-  //         new_arr.push(element);
-  //       }else{
-  //         new_arr.push({date_vente:0});
-  //       }
-  //     });
-  //   }
-  //   console.log(new_arr);
-  //   dataVente.forEach((item) => {
-
-  //     if (
-  //       item.date_vente.indexOf(
-  //         date.getFullYear() +
-  //           "-" +
-  //           date.getMonth() +
-  //           "-" +
-  //           (day.toString().length == 1 ? "0" + day : day)
-  //       ) > -1
-  //     ) {
-  //       console.log(
-  //         date.getFullYear() +
-  //           "-" +
-  //           date.getMonth() +
-  //           "-" +
-  //           (day.toString().length == 1 ? "0" + day : day)
-  //       );
-  //       count++;
-  //     } else {
-  //       console.log(
-  //         date.getFullYear() +
-  //           "-" +
-  //           date.getMonth() +
-  //           "-" +
-  //           (day.toString().length == 1 ? "0" + day : day)
-  //       );
-  //       setStatVente((prev) => [...prev, count]);
-  //       day++;
-  //       count = 0;
-  //     }
-  //   });
-  // }, [dataVente]);
 
   let dataDoughnut = {
     labels: [
@@ -177,9 +126,7 @@ function StatisticGeneral() {
               <div className="card-body">
                 <div className="media align-items-center">
                   <div className="media-body mr-3">
-                    <h2 className="fs-34 font-w600">
-                      {count_livraison}
-                    </h2>
+                    <h2 className="fs-34 font-w600">{count_livraison}</h2>
                     <span>Livraison (Ravitaillement)</span>
                   </div>
                   <i className="fa  fa-shipping-fast fa-3x text-primary"></i>

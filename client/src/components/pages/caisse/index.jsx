@@ -17,7 +17,7 @@ function Caisse() {
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
       >
         <div className="container-fluid">
-          {isAdd == "1" ? <Insert /> :<> <Table /> <View/></>}
+          {isAdd === "1" ? <Insert /> :<> <Table /> <View/></>}
         </div>
       </div>
       <FooterNav />
