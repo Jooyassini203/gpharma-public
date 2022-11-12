@@ -15,7 +15,7 @@ import {
   filterOption,
   getDateNow,
 } from "../../../utils/utils";
-import { listAjustement } from "../../../atoms/ajustement";
+import { isAddState, listAjustement } from "../../../atoms/ajustement";
 import { faAdd, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
@@ -32,6 +32,7 @@ function Modal() {
     unite_nouveau_presentation: { value: "", label: "" },
     produit_code_lot_produit: { value: "", label: "" },
   };
+  const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [list, setList] = useRecoilState(listAjustement);
   const [isObAjt, setIsObAjt] = React.useState(false);
   const [isObAjtDt, setIsObAjtDt] = React.useState(false);
@@ -110,7 +111,7 @@ function Modal() {
           setAjustement(initializeAjt);
           setAjustementDetails(initializeAjtDt);
           setListAjustementDetails([]);
-          document.getElementById("closeModalAjustement").click();
+          setIsAdd("0")
         }
       );
     };
@@ -168,6 +169,7 @@ function Modal() {
               data-dismiss="modal"
               onClick={() => {
                 setIsObAjt(false);
+                setIsAdd("0")
               }}
             >
               <span>×</span>
@@ -447,6 +449,7 @@ function Modal() {
                 data-dismiss="modal"
                 onClick={() => {
                   setIsObAjt(false);
+                  setIsAdd("0")
                 }}
               >
                 Annuler

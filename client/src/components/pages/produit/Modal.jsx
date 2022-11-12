@@ -212,7 +212,7 @@ function Modal() {
         // _produit.unite_vente.value &&
         _produit["unite_presentation"].value ? (
           <>
-          <br/>
+            <br />
             Quantité dispo pour le vente sera{" "}
             <strong>
               {getQteVente(_produit) + " " + _produit.unite_vente.label}
@@ -264,7 +264,7 @@ function Modal() {
       ...produitSelected,
       ["fabricant_id"]: idToOption(
         produitSelected.fabricant_id,
-        "nom_fabricant"
+        produitSelected.nom_fabricant
       ),
       ["famille_id"]: idToOption(
         produitSelected.famille_id,
@@ -400,18 +400,21 @@ function Modal() {
                 />
               </div>
               <div className="row">
-                <div className="col-4">
-                  <InputForm
-                    preIcon={{ text: "#" }}
-                    name="code_lot_produit"
-                    val={code_lot_produit}
-                    onChange={(e) => onChange(e, setProduit)}
-                    obligatory={isOb ? "active" : ""}
-                  >
-                    Code lot produit
-                  </InputForm>
-                </div>
-                <div className="col-8">
+                {isAdd.status ? (
+                  <div className="col-4">
+                    <InputForm
+                      preIcon={{ text: "#" }}
+                      name="code_lot_produit"
+                      val={code_lot_produit}
+                      onChange={(e) => onChange(e, setProduit)}
+                      obligatory={isOb ? "active" : ""}
+                    >
+                      Code lot produit
+                    </InputForm>
+                  </div>
+                ) : null}
+
+                <div className="col ">
                   <InputForm
                     name="nom_produit"
                     val={nom_produit}

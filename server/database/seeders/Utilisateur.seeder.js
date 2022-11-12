@@ -1,6 +1,7 @@
 import { bcryptData } from "../../utils/utils.js";
 let utilisateurData = [];
 utilisateurData.push({
+  id: 0,
   nom_utilisateur: "JOSOA Yassini Jacquerel",
   nom_login: "YASS",
   type_utilisateur: "ADMIN",
