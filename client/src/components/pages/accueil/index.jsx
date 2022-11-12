@@ -20,7 +20,7 @@ function Accueil() {
                   style={{ marginBottom: " 0vh" }}
                 >
                   <p className="text-justify">
-                    Bienvenue sur GPHARMA Chez vous, en déplacement, depuis
+                    Bienvenue sur GPHARMA. Chez vous, en déplacement, depuis
                     votre tablette, smartphone ou ordinateur personnel, votre
                     officine reste toujours accessible et connectée. Vérifiez
                     l’état de vos stocks, suivez l’évolution de vos ventes,

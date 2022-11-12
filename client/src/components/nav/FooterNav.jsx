@@ -8,7 +8,7 @@ function FooterNav({...props}) {
           <p>
             Copyright © Developed by{" "}
             <a href="https://www.mada-digital.net/" target="_blank">
-              MADA-DIGITAL
+              MADA-Digital
             </a>
             {"  "}
             2022

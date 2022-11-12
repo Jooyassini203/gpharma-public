@@ -79,7 +79,7 @@ function HeadNav() {
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left"></div>
               <ul className="navbar-nav header-right">
-                <li className="nav-item dropdown notification_dropdown">
+                {/* <li className="nav-item dropdown notification_dropdown">
                   <a
                     className="nav-link  ai-icon"
                     type="button"
@@ -206,7 +206,7 @@ function HeadNav() {
                       Voir tout <i className="ti-arrow-right" />
                     </a>
                   </div>
-                </li>
+                </li> */}
                 <li className="nav-item dropdown header-profile">
                   <a
                     className="nav-link"

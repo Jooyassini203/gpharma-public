@@ -1,10 +1,10 @@
 import React from "react";
-import axios from "axios"; 
+import axios from "axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
-import { InputForm, urlInsert } from "../../../utils/utils"; 
+import { InputForm, urlInsert } from "../../../utils/utils";
 
 function Login() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -32,7 +32,7 @@ function Login() {
               "gpharma@2.0.0",
               response.data.dataUser
             );
-            console.log(window.localStorage.getItem("gpharma@2.0.0")); 
+            console.log(window.localStorage.getItem("gpharma@2.0.0"));
             document.getElementById("btn-login").click();
           }
         } catch (error) {
@@ -45,7 +45,7 @@ function Login() {
       }
     );
   };
- 
+
   return (
     <div
       className="authincation h-100 align-middle"
@@ -82,8 +82,7 @@ function Login() {
                         onChange={(e) => setNom_login(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
                         onKeyPress={(e) => {
-                          if (e.key === "Enter")
-                            login()
+                          if (e.key === "Enter") login();
                         }}
                       >
                         Identifiant
@@ -97,30 +96,37 @@ function Login() {
                         onChange={(e) => setMot_de_passe(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
                         onKeyPress={(e) => {
-                          if (e.key === "Enter")
-                          login()
+                          if (e.key === "Enter") login();
                         }}
                       >
                         Mot de passe
                       </InputForm>
-                      <div className="form-row d-flex justify-content-between mt-4 mb-2">
-                        <button
-                          type="button"
-                          className="btn btn-sm bg-transparent  text-white "
+                      <div className="custom-control custom-checkbox m-3 checkbox-warning">
+                        <input
+                          type="checkbox"
+                          className="custom-control-input"
+                          defaultChecked
+                          id="customCheckBox4"
+                          required
+                          style={{ cursor: "pointer !important" }}
                           onClick={() => setShowPswd(!showPswd)}
+                        />
+                        <label
+                          className="custom-control-label text-white"
+                          style={{
+                            marginBottom: "-10px !important", 
+                          }}
+                          onClick={() => {
+                            document.getElementById("customCheckBox4").click();
+                            setShowPswd(!showPswd);
+                          }}
                         >
-                          <font
-                            style={{
-                              verticalAlign: "inherit",
-                              cursor: "default",
-                            }}
-                          >
-                            {!showPswd ? "Afficher" : "Cacher"} le mot de passe
-                          </font>
-                        </button>
+                          {!showPswd ? "Afficher" : "Cacher"} le mot de passe
+                        </label>
                       </div>
+
                       <div className="text-center">
-                        <button  
+                        <button
                           type="button"
                           className="btn bg-white text-primary btn-block"
                           onClick={login}

@@ -213,7 +213,7 @@ function RightNav() {
                 className="text-primary"
                 target="_blank"
               >
-                MADA-DIGITAL
+                MADA-Digital
               </a>
               {"  "}
               2022

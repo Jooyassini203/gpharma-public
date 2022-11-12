@@ -43,13 +43,12 @@ function Utilisateur() {
       <Nav />
       <div
         className="content-body"
-        style={{ minHeight: "90vh", marginTop: "-8vh" }}
+        style={{ minHeight: "90vh", marginTop: "-12vh" }}
       >
         <div className="container-fluid">
-          <div className="page-titles" style={{ marginBottom: "0vh" }}>
+          {/* <div className="page-titles" style={{ marginBottom: "0vh" }}>
             <h4>Gestion des utilisateurs</h4>
-          </div>
-
+          </div> */} 
           <Table
             isAdd={setIsAdd}
             update={showModalUpdateUser}
