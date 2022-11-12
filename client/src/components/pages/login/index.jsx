@@ -1,3 +1,4 @@
+import cryptojs from "crypto-js";
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
@@ -31,7 +32,12 @@ function Login() {
             window.localStorage.setItem(
               "gpharma@2.0.0",
               response.data.dataUser
-            );
+            ); 
+            const userJson = cryptojs.AES.decrypt(
+              localStorage.getItem("gpharma@2.0.0"),
+              process.env.REACT_APP_KEY_SESSION
+            ).toString(cryptojs.enc.Utf8);
+            setUserConnect(JSON.parse(userJson)); 
             console.log(window.localStorage.getItem("gpharma@2.0.0"));
             document.getElementById("btn-login").click();
           }

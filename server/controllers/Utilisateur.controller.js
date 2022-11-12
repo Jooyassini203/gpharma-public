@@ -18,12 +18,14 @@ const getAll = async (req, res) => {
   }
 };
 const getSpecific = async (req, res) => {
+  const arr = req.params.id.split("--//--");
+  let where = {
+    [Op.not]: [{ id: "0" }],
+  };
+  if (arr[1]) where["id"] = arr[1];
   try {
-    const response = await Utilisateur.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
+    let response = await Utilisateur.findOne({ where });
+    if (!req.params) response = [{}];
     res.json(response);
   } catch (error) {
     console.log(error.message);

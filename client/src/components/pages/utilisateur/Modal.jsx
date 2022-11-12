@@ -1,5 +1,7 @@
+import cryptojs from "crypto-js";
 import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { userConnected } from "../../../atoms/authentication.js";
 import {
   isAddState,
   listUtilisateurState,
@@ -67,14 +69,22 @@ function Modal() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
 
   //DEBUT Déclaration des functions Modal
   const getAllUser = () => {
     closeRef.current.click();
     setPreview("images/profile/1.jpg");
-    getData(`utilisateurs`, setListUser);
+    if (!userConnect.id) {
+      const userJson = cryptojs.AES.decrypt(
+        localStorage.getItem("gpharma@2.0.0"),
+        process.env.REACT_APP_KEY_SESSION
+      ).toString(cryptojs.enc.Utf8);
+      setUserConnect(JSON.parse(userJson));
+    }
+    console.log("userConnect", userConnect.id);
+    getData(`utilisateurs`, setListUser, ""+ userConnect.id);
   };
-
   const addUser = () => {
     if (
       !nom_utilisateur ||
@@ -159,7 +169,7 @@ function Modal() {
   };
   //FIN Déclaration des simples functions
   //FIN Déclaration des functions Modal
-  useEffect(() => { 
+  useEffect(() => {
     setUtilisateur(initialize);
     setIsObligatory(false);
     getAllUser();
@@ -174,7 +184,7 @@ function Modal() {
       ["sexe"]: sexeOptions.filter(
         (option) => option.value === userSelect.sexe
       )[0],
-    }); 
+    });
     setPreview(userSelect.url ? userSelect.url : "images/profile/1.jpg");
   }, [userSelect]);
   //FIN utilisation states
@@ -241,7 +251,7 @@ function Modal() {
                 </InputForm>
               </div>
               <div className="col-6">
-                <SelectForm  
+                <SelectForm
                   value={optionsType.filter(
                     (option) =>
                       JSON.stringify(option) ===
@@ -268,7 +278,7 @@ function Modal() {
                 </InputForm>
               </div>
               <div className="col-6">
-                <SelectForm 
+                <SelectForm
                   val={sexe}
                   value={sexeOptions.filter(
                     (option) => JSON.stringify(option) === JSON.stringify(sexe)

@@ -11,32 +11,38 @@ import {
   userSelectState,
 } from "../../../atoms/utilisateur";
 import { confirmDelete, deleteData, getData } from "../../../utils/utils";
+import { userConnected } from "../../../atoms/authentication";
 
 function Utilisateur() {
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
 
   const showModalUpdateUser = (id) => {
     getData(
-      "utilisateur",
+      "utilisateurs",
       (user) => {
-        setUserSelect({...user, mot_de_passe: ""}); 
+        setUserSelect({ ...user, mot_de_passe: "" });
       },
-      id
+      userConnect.id + "--//--" + id
     );
   };
   const deleteUser = (id) => {
     confirmDelete("Voulez-vous vraimment supprimé cet utilisateur?", () => {
-      deleteData("utilisateur", id, () => {
-        console.log("delete ", id, "lancement du mise à jours de la liste");
-        getData("utilisateurs", setListUser);
+      deleteData("utilisateur", userConnect.id + "--//--" + id, () => {
+        console.log(
+          "delete ",
+          userConnect.id + "--//--" + id,
+          "lancement du mise à jours de la liste"
+        );
+        getData("utilisateurs", setListUser, userConnect.id);
       });
     });
   };
   const viewUser = (id) => {
-    console.log(id);
-    getData(`utilisateur`, setUserSelect, id);
+    console.log(userConnect.id + "--//--" + id);
+    getData(`utilisateurs`, setUserSelect, userConnect.id + "--//--" + id);
   };
   return (
     <div id="main-wrapper" className="show">
@@ -48,7 +54,7 @@ function Utilisateur() {
         <div className="container-fluid">
           {/* <div className="page-titles" style={{ marginBottom: "0vh" }}>
             <h4>Gestion des utilisateurs</h4>
-          </div> */} 
+          </div> */}
           <Table
             isAdd={setIsAdd}
             update={showModalUpdateUser}
