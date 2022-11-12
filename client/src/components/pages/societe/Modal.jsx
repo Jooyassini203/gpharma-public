@@ -50,13 +50,13 @@ function Modal() {
       setSociete(initialize);
     } else {
       if (societeSelected) {
-        console.log(societeSelected);
+        ////console.log(societeSelected);
         setSociete(societeSelected);
       }
     }
   }, [isAdd]);
   useEffect(() => { 
-    console.log(societeSelected);
+    //console.log(societeSelected);
       if (societeSelected) {
         setSociete(societeSelected);
       }  
@@ -101,6 +101,9 @@ function Modal() {
 
             <InputForm
               number
+              step="0.01"
+              min="1"
+              max="100"
               name="prise_en_charge"
               val={prise_en_charge}
               onChange={(e) => onChange(e, setSociete)}

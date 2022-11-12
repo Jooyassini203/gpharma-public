@@ -8,7 +8,7 @@ function Societe() {
   return (
     <div id="main-wrapper" className="show">
       <Nav />
-      <div className="content-body" style={{ minHeight: "80vh" }}>
+      <div className="content-body" style={{ minHeight: "80vh", marginTop:"-12vh" }}>
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">

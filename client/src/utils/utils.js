@@ -232,7 +232,7 @@ export const InputForm = ({
   ...props
 }) => {
   let type = "text";
-  let onKeyPress = (e) => {};
+  let onKeyDown = (e) => {};
   if (text) {
     type = "text";
   } else if (number) {
@@ -245,7 +245,7 @@ export const InputForm = ({
     type = "password";
   } else if (integer) {
     type = "text";
-    onKeyPress = (e) => {
+    onKeyDown = (e) => {
       if (!/[0-9]/.test(e.key)) {
         e.preventDefault();
       }
@@ -256,7 +256,7 @@ export const InputForm = ({
     };
   } else if (double) {
     type = "text";
-    onKeyPress = (e) => {
+    onKeyDown = (e) => {
       console.log("e.target.value", e.target.value);
       if ("." != e.key)
         if (!/[0-9]/.test(e.key)) {
@@ -264,8 +264,7 @@ export const InputForm = ({
         }
       if (mini)
         if (parseFloat(mini) > parseFloat(e.target.value)) e.preventDefault();
-      if (maxi)
-        if (parseFloat(maxi) < parseFloat(e.target.value)) e.preventDefault();
+      if (maxi) if (parseFloat(maxi) < parseFloat(e.target.value)) onChange();
     };
   } else if (tel) {
     type = "tel";
@@ -317,7 +316,7 @@ export const InputForm = ({
           aria-autocomplete="none"
           id={getId(children)}
           type={type}
-          onKeyPress={onKeyPress}
+          onKeyPress={onKeyDown}
           value={val}
           className={file ? "custom-file-input" : getClass(val, obligatory)}
           onChange={onChange}

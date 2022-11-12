@@ -27,8 +27,11 @@ function MyRoute() {
         <Route exact path="/connexion" element={getLogin()} /> 
         
         <Route exact path="/" element={Middleware(Accueil)} />
+
         <Route exact path="/caisse" element={Middleware(Caisse)} />
+        
         <Route exact path="/guichet" element={Middleware(Guichet)} />
+
         <Route exact path="/ajustement" element={Middleware(Ajustement)} />
         <Route exact path="/fournisseur" element={Middleware(Fournisseur)} />
         <Route exact path="/ravitaillement" element={Middleware(Ravitaillement)} />
