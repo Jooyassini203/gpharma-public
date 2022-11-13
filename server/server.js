@@ -4,6 +4,7 @@ import cors from "cors";
 import UtilisateurRouter from "./routes/Utilisateur.routes.js";
 import VoieRouter from "./routes/Voie.routes.js";
 import ParametreRouter from "./routes/Parametre.routes.js";
+import expressLayouts from "express-ejs-layouts";
 
 import Migration from "./database/migrations/Migration.js";
 import CaisseRouter from "./routes/Caisse.routes.js";
@@ -27,6 +28,9 @@ import EntrepriseRouter from "./routes/Entreprise.routes.js";
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
 const app = express();
+app.use(expressLayouts);
+app.set("view engine", "ejs");
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));

@@ -68,30 +68,10 @@ const getSpecific = async (req, res) => {
       where: { id: response_vente[0].caissier_id },
     });
     const _vente = { ...response_vente[0].dataValues, caissier, guichetier };
-    let response_venteDetails = await Vente_detail.findAll({
+    const response_venteDetails = await Vente_detail.findAll({
       where: { vente_id: req.params.id },
-      include: [{ model: Unite }, { model: Produit, include: Vente_detail }],
-    });
-    let _venteDts = [];
-    /*response_ve nteDetails.map(async (item, i) => {
-      await Produit.findOne({
-        where: { code_lot_produit: item.produit_code_lot_produit },
-      })
-        .then((produit) => {
-          _venteDts.push({ ...item.dataValues, produit });
-          if (
-            i == response_venteDetails.length - 1 &&
-            _venteDts.length == response_venteDetails.length
-          ) {
-            res.json([_vente, _venteDts]);
-          }
-        })
-        .catch(() => {
-          return res.status(404).json({
-            message: `${element.nom_produit} introuvable!`,
-          });
-        });
-    }); */
+      include: [{ model: Unite }, { model: Produit }],
+    }); 
     res.json([_vente, response_venteDetails]);
   } catch (error) {
     console.log(error.message);

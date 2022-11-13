@@ -601,7 +601,7 @@ export const verifObligatory = (data, exception = []) => {
   Object.entries(data).forEach(([key, value]) => {
     if (!exception.includes(key)) {
       if (value === "" || value === null) {
-        console.log("exception[i]", key, value);
+        //console.log("exception[i]", key, value);
         verif = true;
       }
     }

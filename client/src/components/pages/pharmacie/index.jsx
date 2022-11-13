@@ -1,9 +1,29 @@
+import axios from "axios";
 import React from "react";
+import { toast } from "react-toastify";
+import { getData, getUrl, urlRead } from "../../../utils/utils";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import Edit from "./Edit"; 
 
 function Pharmacie() {
+  const generatePdf = () =>{
+    const get = async () => {
+      try {
+        const response = await axios.get(urlRead('download/pdf/vente', 'VENTE_0001'));
+        if (response.status === 200 ) {
+          window.open(getUrl('public/pdf/vente/facture',response.data.url), '_blank')
+        }
+      } catch (error) { 
+        toast.error("Une erreur est survenue !"); 
+      }
+    };
+    toast.promise(get, {
+      pending: `Génération de la facture de vente #${"VENTE_0001"} en cours ...`,
+      // success: "Promise  Loaded",
+      error: `Une erreur de chargement est survenue !`,
+    });
+  }
   return (
     <div id="main-wrapper" className="show">
       <Nav />
@@ -11,6 +31,7 @@ function Pharmacie() {
         <div className="container-fluid">
           <div className="card">
             <div className="card-body">
+              <button className="btn btn-warning" onClick={generatePdf}>Telecharger le pdf</button>
               <Edit/> 
             </div>
           </div>
