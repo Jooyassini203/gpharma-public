@@ -1,10 +1,8 @@
 import express from "express";
-import {
-  gerneratePdf
-} from "../controllers/Download.controller.js";
+import { gerneratePdf } from "../controllers/Download.controller.js";
 import Autentification from "../middlewares/Authentification.middleware.js";
-const AccueilRouter = express.Router();
+const DownloadRouter = express.Router();
 
-AccueilRouter.get("/download/pdf/vente/:id", Autentification, gerneratePdf); 
+DownloadRouter.get("/download/pdf/vente/:id", Autentification, gerneratePdf); 
 
-export default AccueilRouter;
+export default DownloadRouter;

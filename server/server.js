@@ -24,8 +24,13 @@ import GuichetRouter from "./routes/Guichet.routes.js";
 import VenteRouter from "./routes/Vente.routes.js";
 import AccueilRouter from "./routes/Accueil.routes.js";
 import EntrepriseRouter from "./routes/Entreprise.routes.js";
+import DownloadRouter from "./routes/Download.routes.js";
+import path, { dirname } from "path"; 
+import { fileURLToPath } from "url";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = express();
 app.use(expressLayouts);
@@ -33,7 +38,7 @@ app.set("view engine", "ejs");
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname,"public"))); 
 app.use(FileUpload());
 
 app.use(LoginRouter);
@@ -57,6 +62,7 @@ app.use(AjustementRouter);
 app.use(GuichetRouter);
 app.use(VenteRouter);
 app.use(EntrepriseRouter);
+app.use(DownloadRouter);
 
 Migration();
 

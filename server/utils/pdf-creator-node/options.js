@@ -1,5 +1,5 @@
 const options = {
-  format: "A5",
+  format: "A4",
   orientation: "portrait",
   border: "10mm",
   header: {
