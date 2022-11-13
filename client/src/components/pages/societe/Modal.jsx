@@ -50,13 +50,13 @@ function Modal() {
       setSociete(initialize);
     } else {
       if (societeSelected) {
-        ////console.log(societeSelected);
+        //////consol.log(societeSelected);
         setSociete(societeSelected);
       }
     }
   }, [isAdd]);
   useEffect(() => { 
-    //console.log(societeSelected);
+    ////consol.log(societeSelected);
       if (societeSelected) {
         setSociete(societeSelected);
       }  

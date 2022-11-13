@@ -15,7 +15,7 @@ export default function MyDataTable({
   //   item => item.name && item.name.includes(filterText)
   // );
   let filteredItems = null;
-  if (data){ 
+  if (data) {
     filteredItems = data.filter(
       (item) =>
         JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !==
@@ -23,7 +23,7 @@ export default function MyDataTable({
     );
   }
 
-    const subHeaderComponent = useMemo(() => {
+  const subHeaderComponent = useMemo(() => {
     const handleClear = () => {
       if (filterText) {
         setResetPaginationToggle(!resetPaginationToggle);

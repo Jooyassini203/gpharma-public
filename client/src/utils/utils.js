@@ -38,7 +38,7 @@ export const getDateNow = (name = "") => {
   let dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   if (name == "date")
     dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-  console.log("dateString : ", dateString);
+  //console.log("dateString : ", dateString);
   return dateString;
 };
 
@@ -50,9 +50,9 @@ export const getData = (tableName, setList, id = "") => {
         setList(response.data);
       }
     } catch (error) {
-      console.log("Url Read", urlRead(tableName, id));
+      //console.log("Url Read", urlRead(tableName, id));
       toast.error("Une erreur est survenue !");
-      console.log(error);
+      //console.log(error);
     }
   };
   toast.promise(get, {
@@ -81,7 +81,7 @@ export const addData = (
       data.append("utilisateur_id", userConnect.id);
     }
     try {
-      console.log("post : ", urlInsert(tableName), data, headers);
+      //console.log("post : ", urlInsert(tableName), data, headers);
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
         toast.success(responseAdd.data.message);
@@ -89,7 +89,7 @@ export const addData = (
       }
     } catch (error) {
       toast.error(JSON.parse(error.response.request.response).message);
-      console.log("err", JSON.parse(error.response.request.response).message);
+      //console.log("err", JSON.parse(error.response.request.response).message);
     }
   };
 
@@ -101,7 +101,7 @@ export const addData = (
 };
 
 export const getEmplacement = (strEmplacement) => {
-  // console.log("strEmplacement", strEmplacement);
+  // //console.log("strEmplacement", strEmplacement);
   let arr = strEmplacement.slice(0, -6).split("--//--,");
   let finalArr = [];
   for (let i = 0; i < arr.length; i++) {
@@ -131,7 +131,7 @@ export const updateData = (
       data.append("utilisateur_id", userConnect.id);
     }
     try {
-      console.log("up : ", urlUpdate(tableName, id), data, headers);
+      //console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
         urlUpdate(tableName, id),
         data,
@@ -139,14 +139,14 @@ export const updateData = (
       );
       if (responseUp) {
         toast.success(responseUp.data.message);
-        console.log("message", responseUp.data.message);
+        //console.log("message", responseUp.data.message);
         if (callBack) {
           callBack();
         }
       }
     } catch (error) {
       toast.error(JSON.parse(error.response.request.response).message);
-      console.log("err", JSON.parse(error.response.request.response).message);
+      //console.log("err", JSON.parse(error.response.request.response).message);
     }
   };
 
@@ -169,7 +169,7 @@ export const deleteData = (tableName, id, callBack) => {
       }
     } catch (error) {
       toast.error(JSON.parse(error.response.request.response).message);
-      console.log("err", JSON.parse(error.response.request.response).message);
+      //console.log("err", JSON.parse(error.response.request.response).message);
     }
   };
   toast.promise(del, {
@@ -257,7 +257,7 @@ export const InputForm = ({
   } else if (double) {
     type = "text";
     onKeyDown = (e) => {
-      console.log("e.target.value", e.target.value);
+      //console.log("e.target.value", e.target.value);
       if ("." != e.key)
         if (!/[0-9]/.test(e.key)) {
           e.preventDefault();
@@ -589,12 +589,12 @@ export const convertToOption = (data, setOptions, nom = "nom", id = "id") => {
     });
     tempFull.push(temp);
   });
-  // console.log("setOptions " + name + " :", tempFull);
+  // //console.log("setOptions " + name + " :", tempFull);
   setOptions(tempFull);
 };
 
 export const verifObligatory = (data, exception = []) => {
-  // console.log(
+  // //console.log(
   //   "-------------------------------------------------------------------------------------------------------------------------------------------"
   // );
   let verif = false;

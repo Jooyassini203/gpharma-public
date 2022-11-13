@@ -75,6 +75,11 @@ function Nav() {
           icon="fas fa-user-cog"
           title="Utilisateur"
         />
+        <NavElement
+          to="/pharmacie"
+          icon="fas fa-cog"
+          title="Pharmacie"
+        />
       </LeftNav>
       <FooterNav />
     </>

@@ -1,3 +1,4 @@
+import Entreprise from "../models/Entreprise.model.js";
 import db from "../../config/Database.js";
 import { MIGRATE } from "../../utils/utils.js";
 import { Association, DataTypes } from "sequelize";
@@ -43,6 +44,7 @@ import {
 import emplacementListe from "../seeders/Emplacement.seeder.js";
 import utilisateurData from "../seeders/Utilisateur.seeder.js";
 import guichetListe from "../seeders/Guichet.seeder.js";
+import entrepriveData from "../seeders/Entreprise.seeder.js";
 
 // Association
 Ajustement.hasMany(Ajustement_detail, {
@@ -591,6 +593,15 @@ const Migration = async () => {
           .catch(() =>
             console.log(
               " ------> Table << Produit_emplacement >> NON migrée!!!"
+            )
+          );
+        await Entreprise.bulkCreate(entrepriveData)
+          .then(() =>
+            console.log(" ------> Table << Entreprise >> migrée!")
+          )
+          .catch(() =>
+            console.log(
+              " ------> Table << Entreprise >> NON migrée!!!"
             )
           );
       }

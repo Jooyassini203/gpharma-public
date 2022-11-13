@@ -43,11 +43,11 @@ function Table() {
       tempFull.push(temp);
     });
     setList(tempFull);
-    console.log("list ;", list);
+    //consol.log("list ;", list);
   }, [listBefore]);
 
   const update = (row) => {
-    console.log("update", row);
+    //consol.log("update", row);
     updateData(
       tb_name,
       row.id,
@@ -124,7 +124,7 @@ function Table() {
               importance="danger ml-2"
               icon={faTrash}
               handleClick={() => {
-                console.log(tb_name);
+                //consol.log(tb_name);
                 confirmDelete(
                   "Voulez-vous vraimment supprimé cet " + tb_name + "?",
                   () => {
@@ -196,7 +196,7 @@ function Table() {
               <MyDataTable
                 data={list}
                 columns={columns}
-                filterClass="form-control form-control-sm"
+                filterClass="form-control form-control-sm" 
               />
             </div>
           </div>

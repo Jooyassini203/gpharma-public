@@ -5,6 +5,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../../atoms/authentication";
 import { showRightNav } from "../../atoms/nav";
 import { getData, getRule, getUrl } from "../../utils/utils";
+import { Link } from "react-router-dom";
 
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -58,11 +59,11 @@ function HeadNav() {
   return (
     <>
       <div className="nav-header">
-        <a type="button" className="brand-logo">
+        <Link type="button" className="brand-logo" to="/">
           <img className="w-100" src="./images/logo.png" alt="Image" />
           {/* <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
           <img className="brand-title" src="./images/logo-text.png" alt = "Image" /> */}
-        </a>
+        </Link>
         <div className="nav-control">
           <div className="hamburger">
             <span className="line" />

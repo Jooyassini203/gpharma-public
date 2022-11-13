@@ -13,6 +13,7 @@ import Ajustement from "../pages/ajustement";
 import Societe from "../pages/societe";
 import Caisse from "../pages/caisse";
 import Guichet from "../pages/guichet";
+import Pharmacie from "../pages/pharmacie";
 
 function MyRoute() {  
   const getLogin = () => {
@@ -39,6 +40,7 @@ function MyRoute() {
         <Route exact path="/parametre" element={Middleware(Parametre)} />
         <Route exact path="/societe" element={Middleware(Societe)} />
         <Route exact path="/utilisateur" element={Middleware(Utilisateur)} />
+        <Route exact path="/pharmacie" element={Middleware(Pharmacie)} />
         
         <Route path="*" element={<NotFound/>} />
       </Routes> 
