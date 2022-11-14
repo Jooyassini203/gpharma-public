@@ -13,7 +13,7 @@ function View() {
       getData(
         "ravitaillement",
         (data) => {
-          console.log("data", data);
+          // console.log("data", data);
           setRavitaillement(data[0]);
           setListRavitaillementDetails(data[1]);
         },

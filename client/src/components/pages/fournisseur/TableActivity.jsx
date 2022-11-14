@@ -21,18 +21,19 @@ function TableActivity() {
     },
     {
       name: "Montant Totals",
-      selector: (row) => <>{row.totals} Ar</>,
+      selector: (row) => <>{row.montant_ht} Ar</>,
       sortable: true,
       //   width: "30%"
     },
     {
       name: "Fournisseur",
       selector: (row) => (
-        <>
-          #{row.fournisseur.sigle} | {row.fournisseur.nom_fournisseur}
-        </>
+        <div className="text-justify">
+          #{row.fournisseur.sigle} <br />{row.fournisseur.nom_fournisseur}
+        </div>
       ),
       sortable: true,
+      width: "25%",
     },
     {
       name: "Etat",

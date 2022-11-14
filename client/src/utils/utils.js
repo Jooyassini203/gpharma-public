@@ -299,7 +299,7 @@ export const InputForm = ({
   return (
     <div className="form-group mb-3">
       <label className={classLabel + " mb-1"} htmlFor={getId(children)}>
-        <strong>{children}</strong>
+        <b>{children}</b>
       </label>
       <div className="input-group transparent-append">
         {preIcon ? (
@@ -404,7 +404,7 @@ export const SelectForm = (props) => {
         className="text-danger"
         style={{ fontSize: "12px", marginTop: "0.5vh" }}
       >
-        {/* {getSpan(val.value, obligatory)} */}
+        {val ? getSpan(val.value, obligatory) : null}
       </span>
     </div>
   );

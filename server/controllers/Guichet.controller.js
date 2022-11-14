@@ -8,6 +8,17 @@ const getAll = async (req, res) => {
     console.log(error.message);
   }
 };
+const getGuichetActive = async (req, res) => {
+  try {
+    const response = await Guichet.findAll({
+      order: [["nom_guichet", "ASC"]],
+      where: { status: "1" },
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 const getSpecific = async (req, res) => {
   try {
     const response = await Guichet.findOne({ where: { id: req.params.id } });
@@ -58,4 +69,11 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+export {
+  getAll,
+  getSpecific,
+  createOne,
+  updateOne,
+  deleteOne,
+  getGuichetActive,
+};

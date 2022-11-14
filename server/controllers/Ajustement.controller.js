@@ -3,6 +3,7 @@ import Ajustement from "../database/models/Ajustement.model.js";
 import Ajustement_detail from "../database/models/Ajustement_detail.model.js";
 import Emplacement from "../database/models/Emplacement.model.js";
 import Produit from "../database/models/Produit.model.js";
+import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
 import Unite from "../database/models/Unite.model.js";
 import Utilisateur from "../database/models/Utilisateur.model.js";
 const getAll = async (req, res) => {
@@ -118,6 +119,23 @@ const createOne = async (req, res) => {
         )} ; Présentation : ${
           item_produit.presentation_quantite
         } ${getNameUniteById(item_produit.unite_presentation)} ]\n\n`
+      );
+      const item_PRP = await Produit_emplacement.findOne({
+        where: {
+          produit_code_lot_produit: item_produit.code_lot_produit,
+          emplacement_id: 1,
+        },
+      });
+      item_PRP.set({ quantite_produit: item_ajtDt.quantite_nouveau_stock });
+      item_PRP.save({ transaction });
+      await Produit_emplacement.destroy(
+        {
+          where: {
+            produit_code_lot_produit: item_produit.code_lot_produit,
+            emplacement_id: 2,
+          },
+        },
+        { transaction }
       );
       console.log("index == dataAjtDetail.length", index, dataAjtDetail.length);
       if (index == dataAjtDetail.length - 1) {

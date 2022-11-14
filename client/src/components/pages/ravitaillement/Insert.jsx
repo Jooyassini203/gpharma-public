@@ -58,14 +58,14 @@ function Insert() {
 
   const addItemInList = () => {
     setIsObRvtDt(true);
-    console.log("rvtDetail", {
-      ...ravitaillementDetails,
-      produit_code_lot_produit: produit_code_lot_produit.value,
-      nom_produit: produit.nom_produit,
-      prix_ht: parseInt(tva) * parseInt(prix_unit),
-      unite_achat: produit.unite_stock,
-      montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
-    });
+    // console.log("rvtDetail", {
+    //   ...ravitaillementDetails,
+    //   produit_code_lot_produit: produit_code_lot_produit.value,
+    //   nom_produit: produit.nom_produit,
+    //   prix_ht: parseInt(tva) * parseInt(prix_unit),
+    //   unite_achat: produit.unite_stock,
+    //   montant_ht: parseInt(quantite_demande) * parseInt(prix_unit),
+    // });
     if (
       verifObligatory({
         ...ravitaillementDetails,
@@ -101,7 +101,7 @@ function Insert() {
       },
     ]);
 
-    console.log("listRavitaillementDetails", listRavitaillementDetails);
+    // console.log("listRavitaillementDetails", listRavitaillementDetails);
   };
 
   useEffect(() => {
@@ -155,7 +155,7 @@ function Insert() {
   };
 
   const add = () => {
-    console.log("ravitaillement", ravitaillement);
+    // console.log("ravitaillement", ravitaillement);
     setIsObRvt(true);
     let dataRvt = {
       motif,
@@ -175,7 +175,7 @@ function Insert() {
         ["quantite_livraison"]: item.quantite_demande,
       });
     });
-    console.log("{ dataRvt, dataRvtDetail }", { dataRvt, dataRvtDetail });
+    // console.log("{ dataRvt, dataRvtDetail }", { dataRvt, dataRvtDetail });
     if (
       !motif ||
       !fournisseur_id.value ||
@@ -183,15 +183,16 @@ function Insert() {
       !date_prev_livraison ||
       !tva ||
       dataRvtDetail.length <= 0
-    )
-      return;
+    ){
+      window.location.href = "#divInsertRvt";
+      return;}
     addData("ravitaillement", { dataRvt, dataRvtDetail }, () => {
       setToggle(0);
     });
   };
 
   return (
-    <div className="card m-auto">
+    <div className="card m-auto" id="divInsertRvt">
       <div className="card-body">
         <div className="row mb-4">
           <div className="col-6">
@@ -420,10 +421,10 @@ function Insert() {
                             quantite_demande: item.quantite_demande,
                             unite_achat: item.unite_achat,
                           });
-                          console.log(
-                            "ravitaillementDetails",
-                            ravitaillementDetails
-                          );
+                          // console.log(
+                          //   "ravitaillementDetails",
+                          //   ravitaillementDetails
+                          // );
                           setListRavitaillementDetails([
                             ...listRavitaillementDetails.slice(
                               0,

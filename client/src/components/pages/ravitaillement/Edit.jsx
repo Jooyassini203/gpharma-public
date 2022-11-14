@@ -11,23 +11,12 @@ import {
   ravitaillementSelect,
   toggleAddTableEdit,
 } from "../../../atoms/ravitaillement";
-import {
-  addData,
-  ButtonTable,
-  confirmDelete,
-  convertToOption,
-  filterOption,
+import { 
+  ButtonTable, 
   getData,
-  getUrl,
-  InputForm,
-  onChange,
-  SelectForm,
-  updateData,
-  verifObligatory,
-} from "../../../utils/utils";
-import { getDateNow } from "../../../utils/utils";
-import { userConnected } from "../../../atoms/authentication";
-import { icon } from "@fortawesome/fontawesome-svg-core";
+  getUrl, 
+  updateData, 
+} from "../../../utils/utils"; 
 
 function Edit() {
   const [toggle, setToggle] = useRecoilState(toggleAddTableEdit);
@@ -90,7 +79,7 @@ function Edit() {
       "ravitaillement",
       (data) => {
         // console.clear()/
-        console.log(data);
+        // console.log(data);
         setRavitaillement(data[0]);
         setListRavitaillementDetails(data[1]);
       },

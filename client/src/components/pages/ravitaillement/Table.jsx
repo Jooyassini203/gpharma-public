@@ -21,7 +21,7 @@ function Table() {
   const columns = [
     {
       name: "#",
-      selector: (row) => row.id,
+      selector: (row) => list.indexOf(row) + 1,
       sortable: true,
       width: "8%",
     },
@@ -86,7 +86,7 @@ function Table() {
                 }
               }}
             />
-            <ButtonTable
+            {/* <ButtonTable
               importance="danger"
               icon={faTrash}
               handleClick={() => {
@@ -102,7 +102,7 @@ function Table() {
                   }
                 );
               }}
-            />
+            /> */}
           </>
         );
       },

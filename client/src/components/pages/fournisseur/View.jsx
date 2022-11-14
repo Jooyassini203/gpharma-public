@@ -37,7 +37,11 @@ function View({ id }) {
                 <div className="col-5">
                   <div className="">
                     <img
-                      src={fournisseur.logo ? getUrl("images/fournisseur", fournisseur.logo) : `images/users/1.jpg`}
+                      src={
+                        fournisseur.logo
+                          ? getUrl("images/fournisseur", fournisseur.logo)
+                          : `images/users/1.jpg`
+                      }
                       width={"40vh"}
                       alt="Image"
                       className="img-fluid mt-2 mb-4 w-100"
@@ -84,9 +88,18 @@ function View({ id }) {
                   <div className="mt-1 row">
                     <p className="text-primary text-bold">
                       <span className="text-secondary">
+                        Délais de règlement :{" "}
+                      </span>
+                      {fournisseur.delais_reglement}
+                      {fournisseur.delais_reglement == "1" ? " jour" : " jours"}
+                    </p>
+                  </div>
+                  <div className="mt-1 row">
+                    <p className="text-primary text-bold">
+                      <span className="text-secondary">
                         Plan comptable général :{" "}
                       </span>
-                      {fournisseur.compte__PCG}
+                      {fournisseur.compte_PCG}
                     </p>
                   </div>
                   <div className="mt-1 row">
@@ -113,14 +126,18 @@ function View({ id }) {
                       {fournisseur.stat}
                     </p>
                   </div>
-                  <div className="mt-1 row">
-                    <p className="text-primary text-bold">
-                      <span className="text-secondary">
-                        Délais de paiement :{" "}
-                      </span>
-                      {fournisseur.delais_paiement}
-                    </p> 
-                  </div>
+                  {fournisseur.condition_paiement ? (
+                    <div className="mt-1 row">
+                      <p className="text-primary text-bold">
+                        <span className="text-secondary">
+                          Condition de paiement :{" "}
+                        </span>
+                        {fournisseur.condition_paiement}
+                      </p>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>

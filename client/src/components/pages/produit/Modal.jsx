@@ -73,6 +73,7 @@ function Modal() {
     setIsOb(false);
     setPreview("");
     setProduit(initialize);
+    setProduitSelected(initialize);
     closeRef.current.click();
   };
 
@@ -147,7 +148,7 @@ function Modal() {
     // console.log("getDetailsQte _produit", _produit);
     return (
       <>
-        {_produit["famille_id"]["label"] != "" ? (
+        {_produit["famille_id"]["label"] ? (
           <>
             Appartient au famillle{" "}
             <strong>{_produit["famille_id"]["label"]}</strong>.<br />
@@ -178,7 +179,7 @@ function Modal() {
         ) : (
           ""
         )}
-        {_produit.unite_stock["label"] ? (
+        {_produit.unite_stock["label"] && _produit.quantite_stock ? (
           <>
             {" "}
             <strong>{_produit.unite_stock["label"]}</strong>{" "}
@@ -186,10 +187,10 @@ function Modal() {
         ) : (
           ""
         )}
-        {_produit.presentation_quantite ? (
+        {_produit.presentation_quantite && _produit.quantite_stock ? (
           <>
             {" "}
-            dont{" "}
+            avec{" "}
             <strong>
               {_produit.quantite_stock * _produit.presentation_quantite}
             </strong>{" "}
@@ -197,7 +198,9 @@ function Modal() {
         ) : (
           ""
         )}
-        {_produit.unite_presentation["label"] ? (
+        {_produit.unite_presentation["label"] &&
+        _produit.presentation_quantite &&
+        _produit.quantite_stock ? (
           <>
             {" "}
             <strong>{_produit.unite_presentation["label"]}</strong>.
@@ -210,10 +213,11 @@ function Modal() {
         // _produit["quantite_stock"].value &&
         // _produit["unite_stock"].value &&
         // _produit.unite_vente.value &&
-        _produit["unite_presentation"].value ? (
+        _produit["unite_presentation"].value &&
+        _produit.quantite_stock ? (
           <>
             <br />
-            Quantité dispo pour le vente sera{" "}
+            Quantité dispo pour le vente(que l'on peut étalé) sera{" "}
             <strong>
               {getQteVente(_produit) + " " + _produit.unite_vente.label}
             </strong>
@@ -256,6 +260,13 @@ function Modal() {
     if (img) setPreview(URL.createObjectURL(img));
   }, [img]);
 
+  React.useEffect(() => {
+    if (isAdd.status) {
+      setIsOb(false);
+      setPreview("");
+      setProduit(initialize);
+    }
+  }, [isAdd]);
   const dbToEditProduit = (produitSelected) => {
     const idToOption = (value, label) => {
       return { label: label, value: value };
@@ -301,37 +312,11 @@ function Modal() {
     // console.log("produitSelected", produitSelected);
     if (produitSelected) {
       setProduit(dbToEditProduit(produitSelected));
-      console.log("produit select", produit);
+      // console.log("produit select", produit);
       if (produitSelected.image)
         setPreview(getUrl("images/produit", produitSelected.image));
     }
   }, [produitSelected]);
-
-  // React.useEffect(() => {
-  //   setProduit(dbToEditProduit({
-  //     code_lot_produit: "PRODUIT",
-  //     nom_produit: "PARACETAMOLE",
-  //     classification_produit: "Cette classification est une exemple.",
-  //     description: "",
-  //     image: {},
-  //     presentation_quantite: "1",
-  //     prix_stock: "1000",
-  //     stock_min: "15",
-  //     stock_max: "250",
-  //     quantite_stock: "50",
-  //     date_der_ravitaillement: "",
-  //     fabricant_id: 5,
-  //     famille_id: 2,
-  //     forme_id: 15,
-  //     voie_id: 1,
-  //     unite_presentation: 9,
-  //     unite_achat: 5,
-  //     unite_vente: 9,
-  //     unite_stock: 5,
-  //   }))
-  // }, []);
-
-  // -----------------------------------------EN COURS--------------------------------------------------
 
   React.useEffect(() => {
     let qtt_stock = quantite_stock;
@@ -424,6 +409,22 @@ function Modal() {
                     Nom produit
                   </InputForm>
                 </div>
+                {!isAdd.status ? (
+                  <div className="col-4">
+                    <InputForm
+                      integer
+                      postIcon={{ text: "Ar" }}
+                      name="prix_stock"
+                      val={prix_stock}
+                      onChange={(e) => onChange(e, setProduit)}
+                      obligatory={isOb ? "active" : ""}
+                    >
+                      Prix de stock {/* ( * tva : prix de vente) */}
+                    </InputForm>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
               {isAdd.status ? (
                 <>
@@ -505,7 +506,7 @@ function Modal() {
                         onChange={(e) => onChange(e, setProduit)}
                         obligatory={isOb ? "active" : ""}
                       >
-                        Prix de stock ( * tva : prix de vente)
+                        Prix de stock {/* ( * tva : prix de vente) */}
                       </InputForm>
                     </div>
                     <div className="col-4">
@@ -523,9 +524,7 @@ function Modal() {
                     </div>
                   </div>{" "}
                 </>
-              ) : (
-                ""
-              )}
+              ) : null}
               <div className="row">
                 <div className="col-4">
                   <SelectForm

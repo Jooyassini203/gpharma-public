@@ -1,7 +1,11 @@
 import { faListAlt } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
-import { listAjustement, ajustementSelect, isAddState } from "../../../atoms/ajustement";
+import {
+  listAjustement,
+  ajustementSelect,
+  isAddState,
+} from "../../../atoms/ajustement";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import { ButtonTable, getData } from "../../../utils/utils";
 
@@ -13,7 +17,7 @@ function Table() {
   const columns = [
     {
       name: "#",
-      selector: (row) => row.id,
+      selector: (row) => list.indexOf(row) + 1,
       sortable: true,
       width: "8%",
     },
@@ -73,8 +77,8 @@ function Table() {
             className="btn btn-sm btn-primary"
             data-toggle="modal"
             data-target="#modalAjustement"
-            onClick={()=>{
-              setIsAdd("1")
+            onClick={() => {
+              setIsAdd("1");
             }}
           >
             <i className="fa fa-plus mr-2"></i> Efféctuer une ajustement

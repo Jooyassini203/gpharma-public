@@ -49,8 +49,7 @@ function Modal() {
     }
   };
 
-  const add = () => { 
-    return
+  const add = () => {  
     if (!nom_societe || !prise_en_charge || checkMax()) {
       return;
     }

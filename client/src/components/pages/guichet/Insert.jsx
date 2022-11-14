@@ -65,10 +65,11 @@ function Insert() {
   const [unites, setUnites] = React.useState([]);
 
   const initialize = () => {
+    window.location.reload()
     setClient(intializeClient);
     setOrdonnance(intializeOrdonnance);
-    setProduit({});
-    setSociete({});
+    setProduit({label: "", value: ""});
+    setSociete({label: "", value: ""});
     setVente(intializeVente);
     setVenteDetails(intializeVenteDetails);
     setVenteDetails([]);
@@ -99,7 +100,7 @@ function Insert() {
           ? produit.unite_stock
           : produit.unite_presentation,
       },
-    ]); 
+    ]);
   };
 
   const verifObSocieteAndOrdonnance = () => {
@@ -125,12 +126,12 @@ function Insert() {
     }
     verifObSocieteAndOrdonnance();
     console.log("ordonnance", ordonnance);
-    console.log("client",client);
-    console.log("socisociete_id",societe_id);
-    console.log("societe_prise_en_charge",societe_prise_en_charge);
-    console.log("file",file);
+    console.log("client", client);
+    console.log("socisociete_id", societe_id);
+    console.log("societe_prise_en_charge", societe_prise_en_charge);
+    console.log("file", file);
     if (withOrdonnance) if (verifObligatory(ordonnance)) return;
-    if (widhtSociete) if ( !societe_id.value || !societe_prise_en_charge) return;
+    if (widhtSociete) if (!societe_id.value || !societe_prise_en_charge) return;
     setVente({
       ...vente,
       montant_total: listVenteDetails.reduce(
@@ -174,12 +175,13 @@ function Insert() {
     if (produit.emplacement) {
       setVenteDetails((prev) => ({
         ...prev,
-        produit_code_lot_produit:{
+        produit_code_lot_produit: {
           label: produit.nom_produit,
           value: produit.code_lot_produit,
         },
         prix_stock: produit.prix_stock,
-        quantite_demande: getEmplacement(produit.emplacement)[0].quantite_produit,
+        quantite_demande: getEmplacement(produit.emplacement)[0]
+          .quantite_produit,
       }));
     }
   }, [produit]);
@@ -192,16 +194,16 @@ function Insert() {
     }
   }, [societe]);
   const calPrisEnCharge = () => {
-    if (!societe_prise_en_charge) return; 
+    if (!societe_prise_en_charge) return;
     setVenteDetails((prev) => ({
       ...prev,
       prix_stock: Math.round(
         produit.prix_stock * (1 - parseFloat(societe_prise_en_charge) / 100)
       ),
-    })); 
+    }));
   };
   const calPrisEnChargeList = () => {
-    if (!societe_prise_en_charge) return; 
+    if (!societe_prise_en_charge) return;
     let list = [...listVenteDetails];
     list.map((item) => {
       item.prix_stock = Math.round(
@@ -214,10 +216,18 @@ function Insert() {
     setListVenteDetails(list);
   };
   React.useEffect(() => {
+    if (parseFloat(societe_prise_en_charge) > 1) {
+      setIsObSociete(true);
+    }
     calPrisEnCharge();
   }, [societe_prise_en_charge, prix_stock, quantite_demande]);
   React.useEffect(() => {
-    setListVenteDetails([])
+    if (file) {
+      setIsObSociete(true);
+    }
+  }, [file]);
+  React.useEffect(() => {
+    setListVenteDetails([]);
   }, [societe_prise_en_charge]);
   React.useEffect(() => {
     getData("produitEtalage", (data) => {
@@ -231,7 +241,7 @@ function Insert() {
     getData("societeActive", (data) => {
       convertToOption(data, setOptionsSociete);
     });
-    getData("guichet", (data) => {
+    getData("guichetActive", (data) => {
       convertToOption(data, setOptionsGuichet);
     });
     getData("unite", setUnites);
@@ -389,20 +399,26 @@ function Insert() {
                   </InputForm>
                 </div>
                 <div className="col">
-                  <InputForm
-                    file
-                    name="file"
-                    val={file_societe}
-                    onChange={(e) => {
-                      verifObSocieteAndOrdonnance();
-                      if (e.target.files.length > 0) {
+                  <b>Ficher Société</b>
+                  <div className="input-group transparent-append mt-1">
+                    <input
+                      type="file"
+                      accept=".jpeg,.png,.jpg,.pdf"
+                      className="custom-file-input"
+                      onChange={(e) => {
                         setFile(e.target.files[0]);
                         console.log("file", file);
-                      }
-                    }}
-                  >
-                    Ficher Société
-                  </InputForm>
+                        verifObSocieteAndOrdonnance();
+                      }}
+                    />
+                    <label className="custom-file-label">
+                      {file
+                        ? file.name.length > 15
+                          ? file.name.slice(0, 25) + "..."
+                          : file.name
+                        : "Choisissez un ficher"}
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -562,11 +578,11 @@ function Insert() {
                         {numberWithCommas(item.montant_vente)}
                       </td>
                       <th className="center">
-                        <ButtonTable
+                        {/* <ButtonTable
                           importance="warning"
                           icon={faEdit}
                           handleClick={() => {
-                            setVenteDetails({...intializeVenteDetails })
+                            setVenteDetails({ ...intializeVenteDetails });
                             getData(
                               "produit",
                               (data) => setProduit(data[0]),
@@ -579,12 +595,15 @@ function Insert() {
                               produit_code_lot_produit: {
                                 label: item.nom_produit,
                                 value: item.produit_code_lot_produit,
-                              }
+                              },
                             });
-                            console.log({...intializeVenteDetails, produit_code_lot_produit:{
-                              label: item.nom_produit,
-                              value: item.produit_code_lot_produit,
-                            }});
+                            console.log({
+                              ...intializeVenteDetails,
+                              produit_code_lot_produit: {
+                                label: item.nom_produit,
+                                value: item.produit_code_lot_produit,
+                              },
+                            });
                             setListVenteDetails([
                               ...listVenteDetails.slice(
                                 0,
@@ -595,7 +614,7 @@ function Insert() {
                               ),
                             ]);
                           }}
-                        />
+                        /> */}
                         <ButtonTable
                           importance="danger"
                           icon={faTrash}

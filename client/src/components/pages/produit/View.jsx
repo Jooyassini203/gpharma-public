@@ -1,14 +1,17 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { produitSelect } from "../../../atoms/produit";
-import { getClassByNumber, getData, getEmplacement, getUrl } from "../../../utils/utils";
+import { initialize, produitSelect } from "../../../atoms/produit";
+import {
+  getClassByNumber,
+  getData,
+  getEmplacement,
+  getUrl,
+} from "../../../utils/utils";
 
 function View({ id }) {
-  const [produit, setProduit] = useRecoilState(produitSelect);
-  useEffect(() => {
-    console.log("produit", produit);
-  }, [produit]);
+  const [produit, setProduit] = useRecoilState(produitSelect); 
   return (
     <>
       <div
@@ -32,7 +35,13 @@ function View({ id }) {
                 data-dismiss="modal"
                 onClick={() => {}}
               >
-                <span>×</span>
+                <span
+                  onClick={() => {
+                    setProduit(initialize);
+                  }}
+                >
+                  ×
+                </span>
               </button>
             </div>
             <div className="modal-body">
@@ -93,15 +102,14 @@ function View({ id }) {
                               <i className="fa fa-star-half-empty" />
                             </li>
                           </ul>
-                          <span className="review-text">(34 vente(s)) / </span>
-                          <a
+                          <span className="review-text">(34 vente(s)){/*  /  */}</span>
+                          {/* <Link
+                            to="caisse"
                             type="button"
                             className="product-review"
-                            data-toggle="modal"
-                            data-target="#reviewModal"
                           >
                             Voir les détails de ses ventes?
-                          </a>
+                          </Link> */}
                         </div>
                         <div className="d-table mb-2">
                           <p className="price float-left d-block">
@@ -120,21 +128,38 @@ function View({ id }) {
                             {produit.date_der_ravitaillement}
                           </span>
                         </p>
-                        <p>
-                          Etaté :
-                        {produit.emplacement? getEmplacement(produit.emplacement)[1].quantite_produit > 0 ? <span className="ml-2 item"> 
-                            <span
-                              className={
-                                "badge badge-" +
-                                getClassByNumber(parseFloat(getEmplacement(produit.emplacement)[1].quantite_produit)) +
-                                " light"
-                              }
-                            >
-                              {getEmplacement(produit.emplacement)[1].quantite_produit}
-                            </span>
-                          </span> : "0" : ""}
-                          
-                        </p>
+                        {produit.emplacement &&
+                        getEmplacement(produit.emplacement)[1] ? (
+                          getEmplacement(produit.emplacement)[1]
+                            .quantite_produit > 0 ? (
+                            <p>
+                              Etaté :
+                              <span className="ml-2 item">
+                                <span
+                                  className={
+                                    "badge badge-" +
+                                    getClassByNumber(
+                                      parseFloat(
+                                        getEmplacement(produit.emplacement)[1]
+                                          .quantite_produit
+                                      )
+                                    ) +
+                                    " light"
+                                  }
+                                >
+                                  {
+                                    getEmplacement(produit.emplacement)[1]
+                                      .quantite_produit
+                                  }
+                                </span>
+                              </span>
+                            </p>
+                          ) : (
+                            "0"
+                          )
+                        ) : (
+                          ""
+                        )}
                         <p>
                           Stock Générale :&nbsp;&nbsp;
                           <span

@@ -71,7 +71,7 @@ const getSpecific = async (req, res) => {
     const response_venteDetails = await Vente_detail.findAll({
       where: { vente_id: req.params.id },
       include: [{ model: Unite }, { model: Produit }],
-    }); 
+    });
     res.json([_vente, response_venteDetails]);
   } catch (error) {
     console.log(error.message);
@@ -253,7 +253,7 @@ const createOne = async (req, res) => {
                 },
                 "",
                 "file_societe",
-                [".pdf"]
+                [".pdf", ".png", ".jpeg", ".jpg"]
               );
             }
             console.log(

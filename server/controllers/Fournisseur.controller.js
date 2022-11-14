@@ -2,6 +2,7 @@ import Fournisseur from "../database/models/Fournisseur.model.js";
 import fs from "fs";
 import { uploadFile } from "../utils/utils.js";
 import Ravitaillement from "../database/models/Ravitaillement.model.js";
+import { Op } from "sequelize";
 const getAll = async (req, res) => {
   try {
     const response = await Fournisseur.findAll();
@@ -95,12 +96,20 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  console.log("\n\n\nDELETE FOURNISSEUR", req.params.id, "\n\n\n");
+  const itemAll = await Fournisseur.findAll({
+    where: {
+      [Op.not]: [{ id: req.params.id }],
+    },
+  });
+  if (itemAll.length <= 0)
+    return res.status(404).json({
+      message:
+        "C'est le seule fournisseur de votre entreprise; le système a besoin d'au moins un fournisseur le ravitaillement des produits.",
+    });
   const item = await Fournisseur.findOne({ where: { id: req.params.id } });
   if (!item)
     return res.status(404).json({ message: "Fournisseur introvable!" });
 
-  console.log("\n\n\nDELETE item.logo", item.logo, "\n\n\n");
   if (item.logo) {
     const filepath = `./public/images/fournisseur/${item.logo}`;
     // Check if file exist

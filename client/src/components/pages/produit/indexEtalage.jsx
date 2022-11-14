@@ -26,7 +26,7 @@ function IndexEtalage() {
                 className="close"
                 data-dismiss="modal"
                 onClick={() => {
-                  setActEtalage({ status: true });
+                  setActEtalage({ status: false });
                 }}
               >
                 <span>×</span>

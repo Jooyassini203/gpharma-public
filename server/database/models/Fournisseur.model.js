@@ -32,7 +32,7 @@ const Fournisseur = db.define(
       allowNull: false,
     },
     delais_reglement: {
-      type: DataTypes.TEXT,
+      type: DataTypes.DOUBLE,
       allowNull: false,
     },
     email: {

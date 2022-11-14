@@ -1,5 +1,6 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { listEtalage, listProduit } from "../../../atoms/produit";
 import {
@@ -29,7 +30,7 @@ function InsertElatage() {
     getAllEtalage();
   }, []);
   const getAllEtalage = () => {
-    getData("Produit", (data) => {
+    getData("produitSelectEtalage", (data) => {
       convertToOption(
         data,
         setOptionsProduit,
@@ -37,13 +38,13 @@ function InsertElatage() {
         "code_lot_produit"
       );
     });
-    getData("produit", setListPrdt); 
-    getData("produitEtalage", setList); 
+    getData("produit", setListPrdt);
+    getData("produitEtalage", setList);
   };
   return (
     <>
       <div className="row">
-        <div className="col-5">
+        <div className="col-4">
           <SelectForm
             val={produit_code_lot_produit}
             value={filterOption(OptionsProduit, produit_code_lot_produit)}
@@ -61,7 +62,10 @@ function InsertElatage() {
         <div className="col-3">
           <InputForm
             number
-            postIcon={{"text": "Quantité"}}
+            postIcon={{ text:
+              produit.emplacement
+                ? "Max : "+getEmplacement(produit.emplacement)[0].quantite_produit
+                :  "Quantité" }}
             min="0"
             name="qte"
             val={qte}
@@ -92,6 +96,18 @@ function InsertElatage() {
             handleClick={() => {
               setIsOb(true);
               if (!produit_code_lot_produit.value || !qte) {
+                return;
+              }
+              const getMaxQte = () => produit.emplacement
+              ? parseFloat(
+                  getEmplacement(produit.emplacement)[0].quantite_produit
+                )
+              : parseFloat(produit.quantite_stock)
+              console.log('produit', getMaxQte(), parseFloat(qte));
+              if (  parseFloat(qte) > getMaxQte()  ) {
+                toast.warning(
+                  "Quantité suppérieur à celle qui set disponible."
+                );
                 return;
               }
               updateData(

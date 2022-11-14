@@ -1,6 +1,11 @@
 import React from "react";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { isAddState, listEtalage, listProduit, produitSelect } from "../../../atoms/produit";
+import {
+  isAddState,
+  listEtalage,
+  listProduit,
+  produitSelect,
+} from "../../../atoms/produit";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   ButtonTable,
@@ -11,7 +16,7 @@ import {
   getEmplacement,
   updateData,
 } from "../../../utils/utils";
-import { useRecoilState } from "recoil"; 
+import { useRecoilState } from "recoil";
 import { actionEtalage } from "../../../atoms/ravitaillement";
 
 function Table() {
@@ -39,8 +44,13 @@ function Table() {
       name: "",
       selector: (row) => (
         <img
-          style={{ height: "15vh", verticalAlign: "middle" }}
-          className="img-fluid "
+          key={row.code_lot_produit + "image"}
+          style={{
+            height: "15vh",
+            verticalAlign: "middle",
+            justifyContent: "center",
+          }}
+          className=" mx-auto d-block"
           styles={{ borderRadius: "5%" }}
           src={
             row.image
@@ -57,7 +67,7 @@ function Table() {
       name: "Produit",
       selector: (row) => {
         return (
-          <div className=" align-items-center  ">
+          <div className=" align-items-center  " key={row.code_lot_produit}>
             <h4 className="text-black">{row.nom_produit}</h4>
             <p className="fs-14 text-primary font-w600">
               #{row.code_lot_produit}
@@ -107,7 +117,10 @@ function Table() {
     {
       name: "Unités",
       selector: (row) => (
-        <div className="d-flex align-items-center mr-auto pr-2">
+        <div
+          className="d-flex align-items-center mr-auto pr-2"
+          key={row.code_lot_produit + "unite"}
+        >
           <div>
             <p className="mb-sm-2 mb-1 text-black">
               Unité d'achat :{" "}
@@ -145,7 +158,7 @@ function Table() {
     {
       name: "Statut",
       selector: (row) => (
-        <div className="text-center">
+        <div className="text-center" key={row.code_lot_produit + "status"}>
           <span
             style={{ cursor: "pointer" }}
             className={
@@ -187,7 +200,7 @@ function Table() {
       width: "200px",
       selector: (row) => {
         return (
-          <>
+          <div key={row.code_lot_produit + "btnOption"}>
             <ButtonTable
               importance="secondary"
               icon={faEye}
@@ -223,28 +236,29 @@ function Table() {
                   <>
                     Voulez-vous vraimment supprimé le produit{" "}
                     <b>{row.nom_produit}</b> ?<br />
-                    Par cette action vous supprimerez le produit en <b>stock principale</b> et à l'<b>étalage</b>.
+                    Par cette action vous supprimerez le produit en{" "}
+                    <b>stock principale</b> et à l'<b>étalage</b>.
                   </>,
                   () => {
                     deleteData("produit", row.code_lot_produit, () => {
                       getData("produit", setList);
-                      
-    getData("produitEtalage", (data) => {
-      setListEtalage(data);
-    });
+
+                      getData("produitEtalage", (data) => {
+                        setListEtalage(data);
+                      });
                     });
                   }
                 );
               }}
             />
-          </>
+          </div>
         );
       },
     },
   ];
   React.useEffect(() => {
     getData("produit", (data) => {
-      setList(data); 
+      setList(data);
     });
   }, []);
   return (
@@ -260,8 +274,9 @@ function Table() {
               className="btn btn-primary btn-sm mr-3"
               data-toggle="modal"
               data-target="#modalProduit"
-              onClick={() => { 
-                setIsAdd({ status: true });
+              onClick={() => {
+                setActEtalage({ status: true });
+                setIsAdd({ status: false });
               }}
             >
               <i className="fa fa-plus mr-3" />
@@ -271,7 +286,7 @@ function Table() {
               className="btn btn-outline-warning btn-sm"
               data-toggle="modal"
               data-target="#modalEtalage"
-              onClick={() => { 
+              onClick={() => {
                 setActEtalage({ status: true });
               }}
             >

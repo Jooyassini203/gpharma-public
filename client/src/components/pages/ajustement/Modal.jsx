@@ -28,7 +28,7 @@ function Modal() {
   const initializeAjtDt = {
     quantite_nouveau_stock: "",
     quantite_nouveau_presentation: "",
-    unite_nouveau_stock:{ value: "", label: "" },
+    unite_nouveau_stock: { value: "", label: "" },
     unite_nouveau_presentation: { value: "", label: "" },
     produit_code_lot_produit: { value: "", label: "" },
   };
@@ -54,7 +54,7 @@ function Modal() {
 
   const addItemInTable = () => {
     setIsObAjtDt(true);
-    console.log("ajustementDetails", {
+    /* console.log("ajustementDetails",{
       ...ajustementDetails,
       produit_code_lot_produit: produit_code_lot_produit.value,
       nom_produit: _produit.nom_produit,
@@ -64,7 +64,7 @@ function Modal() {
       unite_ancien_stock: _produit.unite_stock,
       quantite_ancien_presentation: _produit.presentation_quantite,
       quantite_ancien_stock: _produit.quantite_stock,
-    });
+    }); */
     if (
       !unite_nouveau_presentation.value ||
       !unite_nouveau_stock.value ||
@@ -99,6 +99,7 @@ function Modal() {
     ]);
   };
   const add = () => {
+    setIsObAjt(true);
     const ajuster = () => {
       addData(
         "ajustement",
@@ -111,16 +112,23 @@ function Modal() {
           setAjustement(initializeAjt);
           setAjustementDetails(initializeAjtDt);
           setListAjustementDetails([]);
-          setIsAdd("0")
+          document.getElementById("closeModalAjustement").click()
+          setIsAdd("0");
         }
       );
     };
-    console.log("ajustement", ajustement);
-    console.log("{ dataAjt, dataAjtDetail }", {
-      dataAjt: { ...ajustement, date_saisi: getDateNow() },
-      dataAjtDetail: listAjustementDetails,
-    });
-    if (!date_ajustement || listAjustementDetails.length < 0 || !motif) return;
+    if (!motif) {
+      toast.warning("Entrer la motif de l'ajustement.");
+      return;
+    }
+    if (!date_ajustement) {
+      toast.warning("Entrer la date de l'ajustement.");
+      return;
+    }
+    if (listAjustementDetails.length < 0) {
+      toast.warning("Ajouter au moins un produit.");
+      return;
+    }
     confirmDelete(
       `Cette opération modifiera votre quantité de stock( et sa présentation (avec leur unité)); de ce fait les quantités étalées seront supprimées et la nouvelles informations seront dans le dépôt principal.\n
                   Voulez-vous vraiment continuez?`,
@@ -169,7 +177,8 @@ function Modal() {
               data-dismiss="modal"
               onClick={() => {
                 setIsObAjt(false);
-                setIsAdd("0")
+                setIsObAjtDt(false);
+                setIsAdd("0");
               }}
             >
               <span>×</span>
@@ -386,7 +395,7 @@ function Modal() {
                           </span>
                         </td>
                         <th className="center">
-                          <ButtonTable
+                          {/* <ButtonTable
                             importance="warning"
                             icon={faEdit}
                             handleClick={() => { 
@@ -414,25 +423,25 @@ function Modal() {
                                 ),
                               ]);
                             }}
-                          />
+                          /> */}
                           <ButtonTable
                             importance="danger"
                             icon={faTrash}
                             handleClick={() => {
-                              confirmDelete(
-                                "Retirer cette élément de la liste des commandes ?",
-                                () => {
-                                  setListAjustementDetails([
-                                    ...listAjustementDetails.slice(
-                                      0,
-                                      listAjustementDetails.indexOf(item)
-                                    ),
-                                    ...listAjustementDetails.slice(
-                                      listAjustementDetails.indexOf(item) + 1
-                                    ),
-                                  ]);
-                                }
-                              );
+                              setListAjustementDetails([
+                                ...listAjustementDetails.slice(
+                                  0,
+                                  listAjustementDetails.indexOf(item)
+                                ),
+                                ...listAjustementDetails.slice(
+                                  listAjustementDetails.indexOf(item) + 1
+                                ),
+                              ]);
+                              // confirmDelete(
+                              //   "Retirer cette élément de la liste des commandes ?",
+                              //   () => {
+                              //   }
+                              // );
                             }}
                           />
                         </th>
@@ -449,7 +458,7 @@ function Modal() {
                 data-dismiss="modal"
                 onClick={() => {
                   setIsObAjt(false);
-                  setIsAdd("0")
+                  setIsAdd("0");
                 }}
               >
                 Annuler

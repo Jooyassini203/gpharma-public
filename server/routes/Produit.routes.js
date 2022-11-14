@@ -8,11 +8,13 @@ import {
   deleteOne,
   updateEtalage,
   updateStatus,
+  getSelectEtalage,
 } from "../controllers/Produit.controller.js";
 import Autentification from "../middlewares/Authentification.middleware.js";
 const ProduitRouter = express.Router();
 ProduitRouter.get("/Produit/", Autentification, getAll);
 ProduitRouter.get("/produitEtalage/", Autentification, getAllEtalage);
+ProduitRouter.get("/produitSelectEtalage/", Autentification, getSelectEtalage);
 ProduitRouter.get("/Produit/:code_lot_produit", Autentification, getSpecific);
 ProduitRouter.post("/Produit/", Autentification, createOne);
 ProduitRouter.put("/Produit/:code_lot_produit", Autentification, updateOne);

@@ -127,7 +127,7 @@ const updateOneRavitaillementDetail = async (req, res) => {
       .json({ message: "Cette détails de ravitaillement est introvable!" });
 
   try {
-    const last_total = vente.montant_ht;
+    const last_total = rvt.montant_ht;
     const last_montant_ht = item.montant_ht;
     const new_montant_ht =
       parseFloat(item.prix_unit) * parseFloat(req.body.data.quantite_livraison);
