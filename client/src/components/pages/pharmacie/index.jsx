@@ -15,7 +15,7 @@ function Pharmacie() {
         const response = await axios.get(urlRead('download/pdf/vente', 'VENTE_0001'));
         if (response.status === 200 ) { 
           seturlFileDownload(getUrl('pdf/vente/facture',response.data.url))  
-          console.log('btn', document.getElementById('btnFileDownload_'+'VENTE_0001'));
+          console.log('btn', urlFileDownload);
           document.getElementById('btnFileDownload_'+'VENTE_0001').click()
           closeRef.current.click();
         }
