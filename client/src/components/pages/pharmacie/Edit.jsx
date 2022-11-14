@@ -30,8 +30,10 @@ function Edit() {
     getData(
       "entreprise",
       (data) => {
-        setPharmacie(data);
-        setPreview(data.logo ? getUrl("images/entreprise", data.logo) : "");
+        if(data){ 
+          setPharmacie(data);
+          setPreview(data.logo ? getUrl("images/entreprise", data.logo) : "");
+        }
       },
       "GPHARMA_0001"
     );

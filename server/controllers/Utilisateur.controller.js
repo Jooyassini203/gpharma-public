@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
   try {
     const response = await Utilisateur.findAll({
       where: {
-        [Op.not]: [{ id: "0" }],
+        [Op.not]: [{ id: "1" }],
       },
       order: [["date_der_log", "DESC"]],
     });
@@ -100,6 +100,10 @@ const deleteOne = async (req, res) => {
   if (!user)
     return res.status(404).send({ message: "Utilisateur introvable!" });
   try {
+    if (user.isOnline == "1")
+      return res
+        .status(404)
+        .send({ message: "L'utilisateur est encore en ligne." });
     if (user.image) {
       const filepath = `./public/images/utilisateur/${user.image}`;
       // Check if file exist

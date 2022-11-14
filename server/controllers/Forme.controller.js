@@ -1,7 +1,9 @@
+import { Op } from "sequelize";
 import Forme from "../database/models/Forme.model.js";
+import Produit from "../database/models/Produit.model.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Forme.findAll();
+    const response = await Forme.findAll({ order: [["nom_forme", "ASC"]] });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -38,11 +40,38 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  const user = Forme.findOne({ where: { id: req.params.id } });
-  if (!user) return res.status(404).json({ message: "Forme introvable!" });
+  const itemAll = await Forme.findAll({
+    where: {
+      [Op.not]: [{ id: req.params.id }],
+    },
+  });
+  if (itemAll.length <= 0)
+    return res.status(404).json({
+      message:
+        "C'est la seule forme enregistrée de votre entreprise; le système a besoin d'au moins une forme pour l'information détailé des produits.",
+    });
+  const item = await Forme.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).json({ message: "Forme introvable!" });
+  const itemProduit = await Produit.findAll({
+    where: { forme_id: req.params.id },
+  });
+  if (itemProduit.length > 0) {
+    let message = "";
+    itemProduit.forEach((element) => {
+      message += element.nom_produit + ", ";
+    });
+    return res.status(404).json({
+      message: `La forme **${
+        item.nom_forme
+      }** ne peut pas être supprimée car il est lié au produit [${message.slice(
+        0,
+        -2
+      )}]!`,
+    });
+  }
   try {
     await Forme.destroy({ where: { id: req.params.id } });
-    return res.status(200).json({ message: "Forme supprimé avec succès!" });
+    return res.status(200).json({ message: "Forme supprimée avec succès!" });
   } catch (error) {
     console.log(error);
   }

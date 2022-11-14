@@ -1,7 +1,8 @@
+import { Op } from "sequelize";
 import Guichet from "../database/models/Guichet.model.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Guichet.findAll();
+    const response = await Guichet.findAll({ order: [["nom_guichet", "ASC"]] });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -38,7 +39,17 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  const item = Guichet.findOne({ where: { id: req.params.id } });
+  const itemAll = await Guichet.findAll({
+    where: {
+      [Op.not]: [{ id: req.params.id }],
+    },
+  });
+  if (itemAll.length <= 0)
+    return res.status(404).json({
+      message:
+        "C'est le seul guichet de votre entreprise; le système a besoin d'au moins une guichet pour la vente des produits.",
+    });
+  const item = await Guichet.findOne({ where: { id: req.params.id } });
   if (!item) return res.status(404).json({ message: "Guichet introvable!" });
   try {
     await Guichet.destroy({ where: { id: req.params.id } });

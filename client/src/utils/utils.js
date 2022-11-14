@@ -410,13 +410,24 @@ export const SelectForm = (props) => {
   );
 };
 const colourStyles = {
-  control: (styles, { isFocused, isHovered, is }) => {
+  control: (styles, { isFocused, isHovered, isSelected }) => {
     return {
       ...styles,
-      height: "41px",
+      height: "56px",
+      "@media only screen and (max-width: 1400px)": {
+        ...styles["@media only screen and (max-width: 1400px)"],
+        height: "41px",
+      },
       color: "#B1B1B1",
-      border: isFocused ? "2px solid #CCFFF6 !important" : "1px solid #f0f1f5",
+      border: isFocused
+        ? "2px solid #00facd !important"
+        : "1px solid #f0f1f5 !important",
       borderRadius: "0px !important",
+      boxShadow: isFocused ? " none" : "none",
+      "&:hover": {
+        border: "2px solid #00facd",
+      },
+      zIndex: "0 !important",
     };
   },
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -424,6 +435,7 @@ const colourStyles = {
       ...styles,
       backgroundColor: !isFocused ? "" : "#CCFFF6",
       color: "default",
+      zIndex: "9999999999999999999999999999 !important",
     };
   },
 };

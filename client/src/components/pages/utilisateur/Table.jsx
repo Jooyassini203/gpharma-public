@@ -104,6 +104,7 @@ function Table({ update, del, view, list, isAdd }) {
     <div>
       <MyDataTable
         title="Listes des utilisateurs"
+        filterClass='form-control w-100'
         data={list}
         columns={columns}
         actions={

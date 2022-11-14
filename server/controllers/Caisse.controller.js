@@ -1,8 +1,9 @@
+import { Op } from "sequelize";
 import Caisse from "../database/models/Caisse.model.js";
 
 const getAll = async (req, res) => {
   try {
-    const response = await Caisse.findAll();
+    const response = await Caisse.findAll({ order: [["nom_caisse", "ASC"]] });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -39,8 +40,18 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  const user = Caisse.findOne({ where: { id: req.params.id } });
-  if (!user) return res.status(404).json({ message: "Caisse introvable!" });
+  const itemAll = await Caisse.findAll({
+    where: {
+      [Op.not]: [{ id: req.params.id }],
+    },
+  });
+  if (itemAll.length <= 0)
+    return res.status(404).json({
+      message:
+        "C'est la seule caisse de votre entreprise; le système a besoin d'au moins une caisse pour la vente et le ravitaillement des produits.",
+    });
+  const item = await Caisse.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).json({ message: "Caisse introvable!" });
   try {
     await Caisse.destroy({ where: { id: req.params.id } });
     return res.status(200).json({ message: "Caisse supprimé avec succès!" });

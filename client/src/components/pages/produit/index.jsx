@@ -9,17 +9,17 @@ import Table from "./Table";
 import View from "./View";
 
 function Produit() {
-  const [actEtalage, setActEtalage] = useRecoilState(actionEtalage)
+  const [actEtalage, setActEtalage] = useRecoilState(actionEtalage);
   return (
     <>
       <Nav />
       <div
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
-      > 
-        <Modal/>
-        <Table/>
-         <View/>  
+      >
+        <Modal />
+        <Table />
+        <View />
       </div>
       {actEtalage.status ? <IndexEtalage /> : null}
       <FouterNav />

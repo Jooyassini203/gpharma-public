@@ -1,4 +1,3 @@
-import { faEye, faListAlt } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { listEtalage, produitSelect } from "../../../atoms/produit";

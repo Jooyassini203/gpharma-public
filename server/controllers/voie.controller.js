@@ -1,8 +1,10 @@
+import { Op } from "sequelize";
+import Produit from "../database/models/Produit.model.js";
 import Voie from "../database/models/Voie.model.js";
 
 const getAll = async (req, res) => {
   try {
-    const response = await Voie.findAll();
+    const response = await Voie.findAll({ order: [["nom_voie", "ASC"]] });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -43,19 +45,42 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  const user = Voie.findOne({
+  const itemAll = await Voie.findAll({
     where: {
-      id: req.params.id,
+      [Op.not]: [{ id: req.params.id }],
     },
   });
-  if (!user) return res.status(404).json({ message: "Voie introvable!" });
+  if (itemAll.length <= 0)
+    return res.status(404).json({
+      message:
+        "C'est la seule voie enregistrée de votre entreprise; le système a besoin d'au moins une voie pour l'information détailé des produits.",
+    });
+  const item = await Voie.findOne({ where: { id: req.params.id } });
+  if (!item) return res.status(404).json({ message: "Voie introvable!" });
+  const itemProduit = await Produit.findAll({
+    where: { voie_id: req.params.id },
+  });
+  if (itemProduit.length > 0) {
+    let message = "";
+    itemProduit.forEach((element) => {
+      message += element.nom_produit + ", ";
+    });
+    return res.status(404).json({
+      message: `La voie **${
+        item.nom_voie
+      }** ne peut pas être supprimée car il est lié au produit [${message.slice(
+        0,
+        -2
+      )}]!`,
+    });
+  }
   try {
     await Voie.destroy({
       where: {
         id: req.params.id,
       },
     });
-    return res.status(200).json({ message: "Voie supprimé avec succès!" });
+    return res.status(200).json({ message: "Voie supprimée avec succès!" });
   } catch (error) {
     console.log(error);
   }

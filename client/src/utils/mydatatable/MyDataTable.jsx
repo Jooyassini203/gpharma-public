@@ -48,7 +48,19 @@ export default function MyDataTable({
       title={title}
       columns={columns}
       data={filteredItems}
-      defaultSortField="name"
+      defaultSortField="name" 
+      customStyles={{ 
+        table: {
+          style: { 
+            zIndex: 0,
+          },
+        }, 
+        rows: {
+          style: {
+            zIndex: 0, 
+          },
+        }, 
+      }}
       striped
       pagination
       subHeader

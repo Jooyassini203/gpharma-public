@@ -15,6 +15,7 @@ import {
   initialize,
 } from "../../../atoms/societe";
 import { text } from "@fortawesome/fontawesome-svg-core";
+import { toast } from "react-toastify";
 
 function Modal() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
@@ -33,14 +34,30 @@ function Modal() {
       setList(data);
     });
   };
-  const add = () => {
-    if (!nom_societe || !prise_en_charge) {
+
+  const checkMax = () => {
+    try {
+      if (parseFloat(prise_en_charge) > 100) {
+        toast.warning(
+          "Le taux de prise en charge doit être inférieur ou égale à 100."
+        );
+        return true;
+      }
+      return false;
+    } catch (error) {
+      toast.warning("Erreur de validation sur le taux de prise en charge.");
+    }
+  };
+
+  const add = () => { 
+    return
+    if (!nom_societe || !prise_en_charge || checkMax()) {
       return;
     }
     addData("societe", { data: societe }, getAll);
   };
   const update = () => {
-    if (!nom_societe || !prise_en_charge) {
+    if (!nom_societe || !prise_en_charge || checkMax()) {
       return;
     }
     updateData("societe", societeSelected.id, { data: societe }, getAll);
@@ -55,11 +72,11 @@ function Modal() {
       }
     }
   }, [isAdd]);
-  useEffect(() => { 
+  useEffect(() => {
     ////consol.log(societeSelected);
-      if (societeSelected) {
-        setSociete(societeSelected);
-      }  
+    if (societeSelected) {
+      setSociete(societeSelected);
+    }
   }, [societeSelect]);
   return (
     <div

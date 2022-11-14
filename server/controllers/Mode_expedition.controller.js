@@ -1,7 +1,9 @@
 import Mode_expedition from "../database/models/Mode_expedition.model.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Mode_expedition.findAll();
+    const response = await Mode_expedition.findAll({
+      order: [["nom_mode_expedition", "ASC"]],
+    });
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -41,14 +43,24 @@ const updateOne = async (req, res) => {
   }
 };
 const deleteOne = async (req, res) => {
-  const user = Mode_expedition.findOne({ where: { id: req.params.id } });
-  if (!user)
+  const itemAll = await Mode_expedition.findAll({
+    where: {
+      [Op.not]: [{ id: req.params.id }],
+    },
+  });
+  if (itemAll.length <= 0)
+    return res.status(404).json({
+      message:
+        "C'est la seule mode d'expedition de votre entreprise; le système a besoin d'au moins une mode d'expedition pour le ravitaillement des produits.",
+    });
+  const item = await Mode_expedition.findOne({ where: { id: req.params.id } });
+  if (!item)
     return res.status(404).json({ message: "Mode d'expédition introvable!" });
   try {
     await Mode_expedition.destroy({ where: { id: req.params.id } });
     return res
       .status(200)
-      .json({ message: "Mode d'expédition supprimé avec succès!" });
+      .json({ message: "Mode d'expédition supprimée avec succès!" });
   } catch (error) {
     console.log(error);
   }

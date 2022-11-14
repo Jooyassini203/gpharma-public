@@ -1,6 +1,6 @@
 import React from "react";
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { isAddState, listProduit, produitSelect } from "../../../atoms/produit";
+import { isAddState, listEtalage, listProduit, produitSelect } from "../../../atoms/produit";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   ButtonTable,
@@ -11,13 +11,13 @@ import {
   getEmplacement,
   updateData,
 } from "../../../utils/utils";
-import { useRecoilState } from "recoil";
-import { useState } from "react";
+import { useRecoilState } from "recoil"; 
 import { actionEtalage } from "../../../atoms/ravitaillement";
 
 function Table() {
   const [actEtalage, setActEtalage] = useRecoilState(actionEtalage);
   const [list, setList] = useRecoilState(listProduit);
+  const [listEtale, setListEtalage] = useRecoilState(listEtalage);
   const [produit, setProduit] = useRecoilState(produitSelect);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
 
@@ -222,11 +222,16 @@ function Table() {
                 confirmDelete(
                   <>
                     Voulez-vous vraimment supprimé le produit{" "}
-                    <strong>{row.nom_produit}</strong> ?
+                    <b>{row.nom_produit}</b> ?<br />
+                    Par cette action vous supprimerez le produit en <b>stock principale</b> et à l'<b>étalage</b>.
                   </>,
                   () => {
                     deleteData("produit", row.code_lot_produit, () => {
                       getData("produit", setList);
+                      
+    getData("produitEtalage", (data) => {
+      setListEtalage(data);
+    });
                     });
                   }
                 );
@@ -248,7 +253,7 @@ function Table() {
         title="Liste des produits"
         data={list}
         columns={columns}
-        filterClass="w-100 form-control"
+        filterClass="form-control w-100"
         actions={
           <div className="btn-group float-right">
             <button
@@ -256,7 +261,7 @@ function Table() {
               data-toggle="modal"
               data-target="#modalProduit"
               onClick={() => { 
-                setActEtalage({ status: true });
+                setIsAdd({ status: true });
               }}
             >
               <i className="fa fa-plus mr-3" />

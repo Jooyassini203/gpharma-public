@@ -63,7 +63,7 @@ function Table() {
   const columns = [
     {
       name: "#",
-      selector: (row) => row.rang,
+      selector: (row) => list.indexOf(row) + 1,
       sortable: true,
       width: "10%",
     },
