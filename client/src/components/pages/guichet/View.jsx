@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { guichetSelect, intializeGuichetSelected } from "../../../atoms/guichet";
+import {
+  guichetSelect,
+  intializeGuichetSelected,
+} from "../../../atoms/guichet";
 import { getData, getUrl, numberWithCommas } from "../../../utils/utils";
 
 function View() {
@@ -13,7 +16,7 @@ function View() {
     date_saisi,
     date_vente,
     client,
-    etat_vente, 
+    etat_vente,
     ordonnance,
     societe,
     file_societe,
@@ -22,7 +25,7 @@ function View() {
     guichet,
     caissier,
     guichetier,
-  } = guichetSelected[0]; 
+  } = guichetSelected[0];
   return (
     <>
       <div
@@ -62,7 +65,8 @@ function View() {
               Date de saisie
               <strong>{date_saisi}</strong>
               <span className="float-right">
-                <strong>Etat : </strong>{etat_vente == "0"? "Guichet commandé" : "Vente livrée" }
+                <strong>Etat : </strong>
+                {etat_vente == "0" ? "Guichet commandé" : "Vente livrée"}
               </span>
             </div>
             <div className="card-body">
@@ -72,33 +76,37 @@ function View() {
                     {" "}
                     <strong>Motif : </strong> <span>{motif}</span>
                   </div>
-                  <div>
-                    {" "}
-                    <strong>Date d'vente : </strong>
-                    <br />
-                    <span>{date_vente}</span>
-                  </div>
+                  {date_vente ? (
+                    <div>
+                      {" "}
+                      <strong>Date d'vente : </strong>
+                      <br />
+                      <span>{date_vente}</span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <div>
                     {" "}
                     <strong>Client : </strong>{" "}
                     <span>{client ? client.nom_prenom : ""}</span>
                     <span>(Adresse : {client ? client.adresse : ""} )</span>
                   </div>
-                  
-                {ordonnance ? (
-                  < >
-                    <div>
-                      {" "}
-                      <strong>Docteur : </strong>{" "}
-                      <span>{ordonnance.nom_docteur}</span>
-                    </div>
-                    <div>
-                      {" "}
-                      <strong>Hopital : </strong> 
-                      <span>{ordonnance.hopital}</span>
-                    </div>
-                  </>
-                ) : null}
+
+                  {ordonnance ? (
+                    <>
+                      <div>
+                        {" "}
+                        <strong>Docteur : </strong>{" "}
+                        <span>{ordonnance.nom_docteur}</span>
+                      </div>
+                      <div>
+                        {" "}
+                        <strong>Hopital : </strong>
+                        <span>{ordonnance.hopital}</span>
+                      </div>
+                    </>
+                  ) : null}
                 </div>
                 {societe ? (
                   <div className="col-4 mb-4">
@@ -116,10 +124,11 @@ function View() {
                     {file_societe ? (
                       <div>
                         {" "}
-                        <strong>Ficher vénant du societe : </strong><br />
+                        <strong>Ficher vénant du societe : </strong>
+                        <br />
                         <a
                           href={getUrl("pdf/vente/file_societe", file_societe)}
-                          target="_blank" 
+                          target="_blank"
                           download="file_societe"
                         >
                           <i className="fa fa-download mr-1"></i> Télécharger le
@@ -188,7 +197,7 @@ function View() {
                         <th>Produit</th>
                         <th className="right">Prix Unit</th>
                         <th className="center">Qte</th>
-                        <th className="right">Montant HT</th> 
+                        <th className="right">Montant HT</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -196,25 +205,28 @@ function View() {
                         ? guichetSelected[1].map((item, index) => (
                             <tr
                               key={
-                                item.produit_code_lot_produit + item.produit.nom_produit
+                                item.produit_code_lot_produit +
+                                item.produit.nom_produit
                               }
                             >
                               <td className="center">{++index}</td>
                               <td className="left strong">
                                 {item.produit_code_lot_produit}
                               </td>
-                              <td className="left">{item.produit.nom_produit}</td>
+                              <td className="left">
+                                {item.produit.nom_produit}
+                              </td>
                               <td className="right">
                                 {numberWithCommas(item.prix_stock)}
                               </td>
                               <td className="center">
-                                {`${numberWithCommas(
-                                  item.quantite_demande
-                                )} (${(item.unite.nom_unite)}) `}
+                                {`${numberWithCommas(item.quantite_demande)} (${
+                                  item.unite.nom_unite
+                                }) `}
                               </td>
                               <td className="right">
                                 {numberWithCommas(item.montant_vente)}
-                              </td> 
+                              </td>
                             </tr>
                           ))
                         : null}

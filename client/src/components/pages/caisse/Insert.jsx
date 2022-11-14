@@ -92,6 +92,7 @@ function Insert() {
             date_vente: getDateNow(),
           },
           () => {
+            setIsAdd("0")
             getAll();
             getData("vente/GuichetNonLivrer", (data) => {
               let options = [];
@@ -105,8 +106,8 @@ function Insert() {
               vente_id: "",
               quantite_vendue: "",
             });
-            setGuichet_id({label:"", value:""})
-            setGuichetSelected(intializeVenteSelected)
+            setGuichet_id({ label: "", value: "" });
+            setGuichetSelected(intializeVenteSelected);
           }
         );
       },
@@ -174,118 +175,117 @@ function Insert() {
               </span>
             </div>
             <div className="card-body">
-              <div className="row">
-                <div className="col-4 mb-4">
-                  <div>
-                    {" "}
-                    <strong>Motif : </strong> <span>{motif}</span>
-                  </div>
-                  <div>
-                    {" "}
-                    <strong>Date d'vente : </strong>
-                    <br />
-                    <span>{date_vente}</span>
-                  </div>
-                  <div>
-                    {" "}
-                    <strong>Client : </strong>{" "}
-                    <span>{client ? client.nom_prenom : ""}&nbsp;</span>
-                    <span>(Adresse : {client ? client.adresse : ""} )</span>
-                  </div>
-
-                  {ordonnance ? (
-                    <>
-                      <div>
-                        {" "}
-                        <strong>Docteur : </strong>{" "}
-                        <span>{ordonnance.nom_docteur}</span>
-                      </div>
-                      <div>
-                        {" "}
-                        <strong>Hopital : </strong>
-                        <span>{ordonnance.hopital}</span>
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-                {societe ? (
+              {guichetSelected[0].motif ? (
+                <div className="row">
                   <div className="col-4 mb-4">
                     <div>
                       {" "}
-                      <strong>Nom : </strong> <span>{societe.nom_societe}</span>
+                      <strong>Motif : </strong> <span>{motif}</span>
                     </div>
                     <div>
                       {" "}
-                      <strong>Prise en charge : </strong>
-                      <span>{societe_prise_en_charge}%</span>
+                      <strong>Date d'vente : </strong>
+                      <br />
+                      <span>{date_vente}</span>
+                    </div>
+                    <div>
+                      {" "}
+                      <strong>Client : </strong>{" "}
+                      <span>{client ? client.nom_prenom : ""}&nbsp;</span>
+                      <span>(Adresse : {client ? client.adresse : ""} )</span>
                     </div>
 
-                    {file_societe ? (
+                    {ordonnance ? (
+                      <>
+                        <div>
+                          {" "}
+                          <strong>Docteur : </strong>{" "}
+                          <span>{ordonnance.nom_docteur}</span>
+                        </div>
+                        <div>
+                          {" "}
+                          <strong>Hopital : </strong>
+                          <span>{ordonnance.hopital}</span>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                  {societe ? (
+                    <div className="col-4 mb-4">
                       <div>
                         {" "}
-                        <strong>Ficher vénant du societe : </strong>
-                        <br />
-                        <a
-                          href={getUrl("pdf/vente/file_societe", file_societe)}
-                          target="_blank"
-                          download="file_societe"
-                        >
-                          <i className="fa fa-download mr-1"></i> Télécharger le
-                          fichier
-                        </a>{" "}
+                        <strong>Nom : </strong>{" "}
+                        <span>{societe.nom_societe}</span>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                ) : null}
-                <div className="col-4 mb-4 ">
-                  <div className=" ">
-                    <div className=" row">
-                      {guichetier ? (
-                        <>
-                          <div className="brand-logo mb-3 mr-4">
-                            <img
-                              style={{ height: "10vh" }}
-                              className="img-fluid "
-                              src={
-                                guichetier.image
-                                  ? getUrl(
-                                      "images/utilisateur",
-                                      guichetier.image
-                                    )
-                                  : "images/users/1.jpg"
-                              }
-                              alt="Image"
-                            />
-                          </div>
-                          <div className="">
-                            <div className="row">
-                              Effectuer par :{" "}
-                              <b className="d-block">
-                                {guichetier.nom_utilisateur}(
-                                {guichetier.nom_login})
-                              </b>
-                            </div>
-                            <div className="row">
-                              Contact :{" "}
-                              <strong className="d-block">
-                                {guichetier.contact}
-                              </strong>
-                            </div>{" "}
-                            <div className="row">
-                              Email :{" "}
-                              <strong className="d-block">
-                                {guichetier.email}
-                              </strong>
-                            </div>
-                          </div>
-                        </>
-                      ) : null}
+                      <div>
+                        {" "}
+                        <strong>Prise en charge : </strong>
+                        <span>{societe_prise_en_charge}%</span>
+                      </div>
+
+                      {file_societe ? (
+                        <div>
+                          {" "}
+                          <strong>Ficher vénant du societe : </strong>
+                          <br />
+                          <a
+                            href={getUrl(
+                              "pdf/vente/file_societe",
+                              file_societe
+                            )}
+                            target="_blank"
+                            download="file_societe"
+                          >
+                            <i className="fa fa-download mr-1"></i> Télécharger
+                            le fichier
+                          </a>{" "}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
+                  ) : null}
+                  <div className="col mb-4 ">
+                    {guichetier ? (
+                      <div className="row ">
+                        <div className="col-3 brand-logo mb-3 mr-4">
+                          <img
+                            style={{ height: "10vh" }}
+                            className="img-fluid "
+                            src={
+                              guichetier.image
+                                ? getUrl("images/utilisateur", guichetier.image)
+                                : "images/users/1.jpg"
+                            }
+                            alt="Image"
+                          />
+                        </div>
+                        <div className="col">
+                          <div className="row">
+                            Effectuer par :{" "}
+                            <b className="d-block">
+                              {guichetier.nom_utilisateur}(
+                              {guichetier.nom_login})
+                            </b>
+                          </div>
+                          <div className="row">
+                            Contact :{" "}
+                            <strong className="d-block">
+                              {guichetier.contact}
+                            </strong>
+                          </div>{" "}
+                          <div className="row">
+                            Email :{" "}
+                            <strong className="d-block">
+                              {guichetier.email}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-              </div>
+              ) : null}
               <div className="mt-4">
                 <div className="table-responsive">
                   <table className="table table-striped table-responsive-md">
@@ -432,7 +432,10 @@ function Insert() {
                 <div className="col-2">
                   <button
                     className="btn btn-info btn-lg w-100 light "
-                    onClick={() => {setIsAdd("0"); console.log("isAdd",isAdd);}}
+                    onClick={() => {
+                      setIsAdd("0");
+                      console.log("isAdd", isAdd);
+                    }}
                   >
                     <i className="fa fa-list-alt"></i>
                   </button>

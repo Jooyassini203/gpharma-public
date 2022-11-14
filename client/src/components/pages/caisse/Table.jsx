@@ -4,8 +4,10 @@ import {
   faListAlt,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
 import { venteSelect, isAddState } from "../../../atoms/caisse";
@@ -15,7 +17,9 @@ import {
   confirmDelete,
   deleteData,
   getData,
+  getUrl,
   numberWithCommas,
+  urlRead,
 } from "../../../utils/utils";
 
 function Table() {
@@ -23,6 +27,35 @@ function Table() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [venteSelected, setVenteSelected] = useRecoilState(venteSelect);
   const [list, setList] = useState([]);
+
+  const [downloadFacture, setDownloadFacture] = React.useState({
+    vente_id: "",
+    url: "",
+  });
+  const generatePdf = (id) => {
+    const get = async () => {
+      try {
+        const response = await axios.get(
+          urlRead("download/pdf/vente", id)
+        );
+        if (response.status === 200) { 
+          setDownloadFacture((prev) => ({ ...prev, url: getUrl('pdf/vente/facture',response.data.url) }));
+        }
+      } catch (error) {
+        setDownloadFacture({
+          vente_id: "",
+          url: "",
+        });
+        toast.error("Une erreur est survenue !");
+      }
+    };
+    toast.promise(get, {
+      pending: `Génération de la facture de vente #${"VENTE_0001"} en cours ...`,
+      // success: "Promise  Loaded",
+      error: `Une erreur de chargement est survenue !`,
+    });
+  };
+
   const columns = [
     {
       name: "#",
@@ -48,7 +81,7 @@ function Table() {
     },
     {
       name: "Montant total",
-      selector: (row) =>(<>{ numberWithCommas(row.montant_total) } Ar</>),
+      selector: (row) => <>{numberWithCommas(row.montant_total)} Ar</>,
       sortable: true,
     },
     {
@@ -77,12 +110,51 @@ function Table() {
     },
     {
       name: "Action",
-      width: "80px",
+      width: "150px",
       selector: (row) => {
         return (
-          <>
+          <div className="row m-auto">
+            <div className=" ">
+              {downloadFacture.vente_id == row.id && downloadFacture.url ? (
+                <a
+                  id={"btnFileDownload_" + row.id}
+                  href={downloadFacture.url}
+                  target="_blank"
+                  download="facture"
+                  className="btn btn-secondary btn-sm light"
+                >
+                  <i className="fa fa-download"></i>
+                </a>
+              ) : (
+                <button
+                  className={
+                    !downloadFacture.vente_id
+                      ? "btn btn-warning btn-sm light"
+                      : "btn btn-warning btn-sm light "
+                  } /* disabled */
+                  onClick={() => {
+                    if (!downloadFacture.vente_id && !downloadFacture.url) {
+                      setDownloadFacture({
+                        vente_id: row.id,
+                        url: "",
+                      });
+                      console.log("downloadFacture", downloadFacture, row.id);
+                      generatePdf(row.id);
+                    }
+                  }}
+                >
+                  <i
+                    className={
+                      downloadFacture.vente_id == row.id
+                        ? "fa fa-refresh "
+                        : "fa fa-clipboard-list "
+                    }
+                  ></i>
+                </button>
+              )}
+            </div>
             <ButtonTable
-              importance={"success"}
+              importance={"success btn-sm"}
               icon={faListAlt}
               data-toggle="modal"
               data-target="#modalViewVente"
@@ -114,13 +186,12 @@ function Table() {
                 );
               }}
             /> */}
-          </>
+          </div>
         );
       },
     },
   ];
   React.useEffect(() => {
-    console.log("userConnect", userConnect);
     getData("vente/myCaisse", (data) => setList(data), userConnect.id);
   }, []);
   return (

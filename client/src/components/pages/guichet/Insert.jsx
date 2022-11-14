@@ -65,11 +65,10 @@ function Insert() {
   const [unites, setUnites] = React.useState([]);
 
   const initialize = () => {
-    window.location.reload()
     setClient(intializeClient);
     setOrdonnance(intializeOrdonnance);
-    setProduit({label: "", value: ""});
-    setSociete({label: "", value: ""});
+    setProduit({ label: "", value: "" });
+    setSociete({ label: "", value: "" });
     setVente(intializeVente);
     setVenteDetails(intializeVenteDetails);
     setVenteDetails([]);
@@ -180,7 +179,7 @@ function Insert() {
           value: produit.code_lot_produit,
         },
         prix_stock: produit.prix_stock,
-        quantite_demande: getEmplacement(produit.emplacement)[0]
+        quantite_demande: getEmplacement(produit.emplacement)[1]
           .quantite_produit,
       }));
     }
@@ -251,7 +250,7 @@ function Insert() {
       if (toggleUniteVente)
         setVenteDetails({
           ...venteDetails,
-          quantite_demande: getEmplacement(produit.emplacement)[0]
+          quantite_demande: getEmplacement(produit.emplacement)[1]
             .quantite_produit,
         });
       else
@@ -468,7 +467,7 @@ function Insert() {
             name="prix_stock"
             val={prix_stock}
             onChange={(e) => onChange(e, setVenteDetails)}
-            // obligatory={isObVtDt ? "active" : ""}
+            obligatory={isObVtDt ? "active" : ""}
           >
             Prix Unit.
           </InputForm>
@@ -480,8 +479,8 @@ function Insert() {
             maxi={
               produit.emplacement
                 ? toggleUniteVente
-                  ? getEmplacement(produit.emplacement)[0].quantite_produit
-                  : getEmplacement(produit.emplacement)[0].quantite_produit *
+                  ? getEmplacement(produit.emplacement)[1].quantite_produit
+                  : getEmplacement(produit.emplacement)[1].quantite_produit *
                     produit.presentation_quantite
                 : "0"
             }
@@ -509,7 +508,9 @@ function Insert() {
             style={{ height: "41px", paddingTop: "2.5px" }}
             className="badge badge-xl light badge-warning mt-1 w-100"
           >
-            {numberWithCommas(prix_stock * quantite_demande) + " Ar"}
+            {quantite_demande && prix_stock
+              ? numberWithCommas(prix_stock * quantite_demande)
+              : "0" + " Ar"}
           </span>
         </div>
       </div>
@@ -685,6 +686,7 @@ function Insert() {
               className="btn btn-danger light btn-lg w-100 "
               onClick={() => {
                 initialize();
+                window.location.reload();
               }}
             >
               Annuler
