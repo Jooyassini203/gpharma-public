@@ -133,7 +133,7 @@ function Table() {
                       : "btn btn-warning btn-sm light "
                   } /* disabled */
                   onClick={() => {
-                    if (!downloadFacture.vente_id && !downloadFacture.url) {
+                    if (true) {
                       setDownloadFacture({
                         vente_id: row.id,
                         url: "",
