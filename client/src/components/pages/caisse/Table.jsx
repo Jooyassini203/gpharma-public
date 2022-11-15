@@ -145,8 +145,9 @@ function Table() {
                   } /* disabled */
                   onClick={() => {
                     if (
-                      downloadFacture.url &&
-                      downloadFacture.vente_id != row.id
+                      // downloadFacture.url &&
+                      // downloadFacture.vente_id != row.id 
+                      true
                     ) {
                       setDownloadFacture({
                         vente_id: row.id,

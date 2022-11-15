@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Mode_expedition from "../database/models/Mode_expedition.model.js";
 const getAll = async (req, res) => {
   try {
