@@ -275,8 +275,8 @@ function Table() {
               data-toggle="modal"
               data-target="#modalProduit"
               onClick={() => {
+                setIsAdd({ status: true });
                 setActEtalage({ status: true });
-                setIsAdd({ status: false });
               }}
             >
               <i className="fa fa-plus mr-3" />

@@ -70,6 +70,7 @@ function Modal() {
   };
 
   const closeModal = () => {
+    setIsAdd({status: true})
     setIsOb(false);
     setPreview("");
     setProduit(initialize);
