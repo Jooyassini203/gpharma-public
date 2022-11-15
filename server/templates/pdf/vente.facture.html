@@ -1,803 +1,279 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>FA2210-0010</title>
-    <meta name="author" content="MADA-Digital - Elish Ibrahim SuperAdmin" />
-    <meta name="keywords" content="FA2210-0010 Facture VAHATRA" />
-    <meta name="description" content="Facture" />
-    <style type="text/css">
-      * {
-        margin: 0;
-        padding: 0;
-        text-indent: 0;
-      }
-      .s1 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 8pt;
-      }
-      h1 {
-        color: #00003b;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 13pt;
-      }
-      .s2 {
-        color: #00003b;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 8pt;
-      }
-      h2 {
-        color: #00003b;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 10pt;
-      }
-      p {
-        color: #00003b;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 9pt;
-        margin: 0pt;
-      }
-      .a {
-        color: #00003b;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 9pt;
-      }
-      .s3 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 10pt;
-      }
-      .s4 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 9pt;
-      }
-      .s5 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 9pt;
-      }
-      .s6 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 8pt;
-      }
-      .s7 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 8pt;
-      }
-      .s8 {
-        color: #00003b;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 9pt;
-      }
-      .s9 {
-        color: black;
-        font-family: Arial, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: none;
-        font-size: 7pt;
-      }
-      table,
-      tbody {
-        vertical-align: top;
-        overflow: visible;
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Facture</title>
   </head>
   <body>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <p style="padding-left: 5pt; text-indent: 0pt; text-align: left">
-      <span
-        ><table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td>
-              <img
-                width="112"
-                height="76"
-                src="data:image/png;base64,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"
-              />
-            </td>
-          </tr></table
-      ></span>
-    </p>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <p class="s1" style="padding-left: 8pt; text-indent: 0pt; text-align: left">
-      Émetteur
-    </p>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <p
-      class="s1"
+    <div
       style="
-        padding-top: 6pt;
-        padding-left: 5pt;
-        text-indent: 0pt;
-        text-align: left;
+        /* max-width: 800px; */
+        margin: auto;
+        /* padding: 30px; */
+        /* border: 1px solid #eee;
+        box-shadow: 0 0 0 15 rgba(0, 0, 0, 0.15); */
+        font-size: 12px;
+        font-family: Arial, sans-serif;
       "
     >
-      Adressé à
-    </p>
-    <h1
-      style="
-        padding-top: 3pt;
-        padding-left: 5pt;
-        text-indent: 0pt;
-        text-align: left;
-      "
-    >
-      Facture FA2210-0010
-    </h1>
-    <p
-      class="s2"
-      style="
-        padding-top: 5pt;
-        padding-left: 34pt;
-        text-indent: -2pt;
-        line-height: 92%;
-        text-align: justify;
-      "
-    >
-      Date facturation : 20/10/2022 Date échéance : 21/10/2022 Code client :
-      CU2108-00002
-    </p>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <h2
-      style="
-        padding-top: 9pt;
-        padding-left: 8pt;
-        text-indent: 0pt;
-        text-align: left;
-      "
-    >
-      MADA-Digital
-    </h2>
-    <p
-      style="
-        padding-left: 8pt;
-        text-indent: 0pt;
-        line-height: 109%;
-        text-align: left;
-      "
-    >
-      I134 ML Manongalaza, Antsiranana 201 Stat: 62021712019000230
-    </p>
-    <p
-      style="
-        padding-left: 8pt;
-        text-indent: 0pt;
-        line-height: 10pt;
-        text-align: left;
-      "
-    >
-      Nif: 5003284674
-    </p>
-    <p style="padding-left: 8pt; text-indent: 0pt; text-align: left">
-      201 Diégo-Suarez
-    </p>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <p style="padding-left: 8pt; text-indent: 0pt; text-align: left">
-      Tél.: +261328296868
-    </p>
-    <p
-      style="
-        padding-left: 8pt;
-        text-indent: 0pt;
-        line-height: 109%;
-        text-align: left;
-      "
-    >
-      <a href="mailto:tovonely@gmail.com" class="a" target="_blank">Email: </a
-      >tovonely@gmail.com Web: https://mada-digital.net
-    </p>
-    <p
-      class="s3"
-      style="
-        padding-top: 8pt;
-        padding-left: 8pt;
-        text-indent: 0pt;
-        text-align: left;
-      "
-    >
-      VAHATRA
-    </p>
-    <p class="s4" style="padding-left: 8pt; text-indent: 0pt; text-align: left">
-      09 Rue Colbert 201 Antsirana, Madagascar
-    </p>
-    <p class="s4" style="padding-left: 8pt; text-indent: 0pt; text-align: left">
-      201 Diégo-Suarez
-    </p>
-    <p style="padding-left: 5pt; text-indent: 0pt; text-align: left">
-      <span
-        style="
-          color: black;
-          font-family: Arial, sans-serif;
-          font-style: normal;
-          font-weight: normal;
-          text-decoration: none;
-          font-size: 10pt;
-        "
+      <table
+        cellpadding="0"
+        cellspacing="0"
+        style="width: 100%; line-height: inherit; text-align: left"
       >
-      </span>
-    </p>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <p
-      class="s1"
-      style="
-        padding-top: 4pt;
-        padding-bottom: 1pt;
-        text-indent: 0pt;
-        text-align: right;
-      "
-    >
-      Montants exprimés en Ariary
-    </p>
-    <table
-      style="border-collapse: collapse; margin-left: 5.43646pt"
-      cellspacing="0"
-    >
-      <tr style="height: 14pt">
-        <td
-          style="
-            width: 281pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 2pt;
-              padding-left: 2pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: left;
-            "
-          >
-            Désignation
-          </p>
-        </td>
-        <td
-          style="
-            width: 45pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 2pt;
-              padding-left: 12pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: left;
-            "
-          >
-            TVA
-          </p>
-        </td>
-        <td
-          style="
-            width: 54pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 2pt;
-              padding-left: 9pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: left;
-            "
-          >
-            P.U. HT
-          </p>
-        </td>
-        <td
-          style="
-            width: 48pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 2pt;
-              padding-left: 15pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: left;
-            "
-          >
-            Qté
-          </p>
-        </td>
-        <td
-          style="
-            width: 37pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 2pt;
-              padding-right: 3pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: right;
-            "
-          >
-            Réduc.
-          </p>
-        </td>
-        <td
-          style="
-            width: 74pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 2pt;
-              padding-left: 22pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: left;
-            "
-          >
-            Total HT
-          </p>
-        </td>
-      </tr>
-      <tr style="height: 365pt">
-        <td
-          style="
-            width: 281pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 5pt;
-              padding-left: 2pt;
-              padding-right: 111pt;
-              text-indent: 0pt;
-              line-height: 109%;
-              text-align: left;
-            "
-          >
-            MAINT_INFO - Maintenance informatique Réparation PC venant d’Ambanja
-            Vérification l’état d&#39;un autre PC Diagnostic PC de Eudoxie
-          </p>
-          <p
-            class="s5"
-            style="
-              padding-left: 2pt;
-              padding-right: 2pt;
-              text-indent: 0pt;
-              line-height: 109%;
-              text-align: left;
-            "
-          >
-            Réparation et installation du nouveau système (Windows 7 pro activé)
-            PC de Omega avec les outils
-          </p>
-        </td>
-        <td
-          style="
-            width: 45pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 5pt;
-              padding-left: 29pt;
-              text-indent: 0pt;
-              text-align: left;
-            "
-          >
-            0%
-          </p>
-        </td>
-        <td
-          style="
-            width: 54pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 5pt;
-              padding-left: 11pt;
-              text-indent: 0pt;
-              text-align: left;
-            "
-          >
-            50 000,00
-          </p>
-        </td>
-        <td
-          style="
-            width: 48pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 5pt;
-              padding-right: 1pt;
-              text-indent: 0pt;
-              text-align: right;
-            "
-          >
-            4
-          </p>
-        </td>
-        <td
-          style="
-            width: 37pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 5pt;
-              padding-right: 2pt;
-              text-indent: 0pt;
-              text-align: right;
-            "
-          >
-            15%
-          </p>
-        </td>
-        <td
-          style="
-            width: 74pt;
-            border-top-style: solid;
-            border-top-width: 1pt;
-            border-top-color: #808080;
-            border-left-style: solid;
-            border-left-width: 1pt;
-            border-left-color: #808080;
-            border-bottom-style: solid;
-            border-bottom-width: 1pt;
-            border-bottom-color: #808080;
-            border-right-style: solid;
-            border-right-width: 1pt;
-            border-right-color: #808080;
-          "
-        >
-          <p
-            class="s5"
-            style="
-              padding-top: 5pt;
-              padding-left: 25pt;
-              text-indent: 0pt;
-              text-align: left;
-            "
-          >
-            170 000,00
-          </p>
-        </td>
-      </tr>
-    </table>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <table
-      style="border-collapse: collapse; margin-left: 5.68146pt"
-      cellspacing="0"
-    >
-      <tr style="height: 11pt">
-        <td style="width: 110pt">
-          <p
-            class="s6"
-            style="
-              padding-left: 2pt;
-              text-indent: 0pt;
-              line-height: 9pt;
-              text-align: left;
-            "
-          >
-            Conditions de règlement:
-          </p>
-        </td>
-        <td style="width: 201pt">
-          <p
-            class="s7"
-            style="
-              padding-left: 11pt;
-              text-indent: 0pt;
-              line-height: 9pt;
-              text-align: left;
-            "
-          >
-            A réception
-          </p>
-        </td>
-        <td style="width: 111pt">
-          <p
-            class="s5"
-            style="
-              padding-left: 2pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: left;
-            "
-          >
-            Total HT
-          </p>
-        </td>
-        <td style="width: 116pt">
-          <p
-            class="s5"
-            style="
-              padding-right: 2pt;
-              text-indent: 0pt;
-              line-height: 10pt;
-              text-align: right;
-            "
-          >
-            170 000,00
-          </p>
-        </td>
-      </tr>
-      <tr style="height: 10pt">
-        <td style="width: 110pt">
-          <p style="text-indent: 0pt; text-align: left"><br /></p>
-        </td>
-        <td style="width: 201pt">
-          <p style="text-indent: 0pt; text-align: left"><br /></p>
-        </td>
-        <td style="width: 111pt" bgcolor="#DFDFDF">
-          <p
-            class="s8"
-            style="
-              padding-left: 2pt;
-              text-indent: 0pt;
-              line-height: 9pt;
-              text-align: left;
-            "
-          >
-            Total TTC
-          </p>
-        </td>
-        <td style="width: 116pt" bgcolor="#DFDFDF">
-          <p
-            class="s8"
-            style="
-              padding-right: 2pt;
-              text-indent: 0pt;
-              line-height: 9pt;
-              text-align: right;
-            "
-          >
-            170 000,00
-          </p>
-        </td>
-      </tr>
-      <tr style="height: 9pt">
-        <td style="width: 110pt">
-          <p
-            class="s6"
-            style="
-              padding-left: 2pt;
-              text-indent: 0pt;
-              line-height: 7pt;
-              text-align: left;
-            "
-          >
-            Payment method:
-          </p>
-        </td>
-        <td style="width: 201pt">
-          <p
-            class="s7"
-            style="
-              padding-left: 11pt;
-              text-indent: 0pt;
-              line-height: 7pt;
-              text-align: left;
-            "
-          >
-            Espèce
-          </p>
-        </td>
-        <td style="width: 111pt">
-          <p style="text-indent: 0pt; text-align: left"><br /></p>
-        </td>
-        <td style="width: 116pt">
-          <p style="text-indent: 0pt; text-align: left"><br /></p>
-        </td>
-      </tr>
-    </table>
-    <p style="text-indent: 0pt; text-align: left"><br /></p>
-    <p
-      style="
-        padding-left: 5pt;
-        text-indent: 0pt;
-        line-height: 1pt;
-        text-align: left;
-      "
-    />
-    <p
-      class="s9"
-      style="
-        padding-top: 2pt;
-        padding-left: 120pt;
-        text-indent: 0pt;
-        text-align: left;
-      "
-    >
-      Identifiant professionnel 1: Stat: 62021712019000230 - Identifiant
-      professionnel 2: Nif: 5003284674 1/1
-    </p>
+        <tr>
+          <td style="vertical-align: top; padding: 5px">
+            <table
+              style="
+                width: 100%;
+                line-height: inherit;
+                text-align: left;
+                vertical-align: top;
+                padding: 5px;
+              "
+            >
+              <tr>
+                <td style="vertical-align: top; padding: 5px">
+                  <img
+                    class="img-fluid"
+                    style="height: 80px"
+                    src="http://localhost:5000/images/entreprise/{{pharmacie.logo}}"
+                    alt="image"
+                  />
+                </td>
+                <td
+                  style="text-align: right; vertical-align: top; padding: 5px"
+                >
+                  <h2>Facture {{vente.id}}</h2>
+                  <span>Date facturation : {{vente.date_facture}}</span><br />
+                  <span>Date de vente : {{vente.date_vente}} </span><br />
+                  <span>Code client : {{vente.client.id}}</span><br />
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; padding: 5px">
+            <table
+              style="
+                width: 100%;
+                line-height: inherit;
+                text-align: left;
+                vertical-align: top;
+                padding: 5px;
+              "
+            >
+              <tr style="font-size: 10px">
+                <td style="vertical-align: top; padding: 5px">
+                  <span>Emétteur</span>
+                </td>
+                <td style="vertical-align: top; padding: 5px; height: 100%">
+                  <span>Adressé à</span>
+                </td>
+              </tr>
+
+              <tr style="font-size: 10px">
+                <td
+                  style="
+                    vertical-align: top;
+                    padding: 5px;
+                    padding: 15px;
+                    background-color: #ddd;
+                    margin-left: 20px;
+                  "
+                >
+                  <div>
+                    <b>{{pharmacie.nom_entreprise}}</b><br />
+                    <span>{{pharmacie.adresse}}</span><br />
+                    <span>Stat: {{pharmacie.stat}}</span><br />
+                    <span>Nif: {{pharmacie.nif}}</span><br /><br />
+                    <!-- <span>{{pharmacie.nom_entreprise}}</span><br /> -->
+                    <span>Tél.: {{pharmacie.contact}}</span><br />
+                    <span>Email: {{pharmacie.email}}</span><br />
+                    <span>Web: {{pharmacie.website}}</span>
+                  </div>
+                </td>
+                <td
+                  style="
+                    vertical-align: top;
+                    padding: 5px;
+                    height: 100%;
+                    border: 1px solid #444;
+                    padding: 15px;
+                  "
+                >
+                  <div>
+                    <b
+                      >Client :
+                      {{vente.client.nom_prenom}}(<span>{{vente.client.adresse}}</span>)</b
+                    ><br /> 
+                    <span>Société : {{vente.societe.nom_societe}}</span><br /> 
+                    <span
+                      >Ordonnance : Doc. {{vente.ordonnance.nom_docteur}} / Hop.
+                      {{vente.ordonnance.hopital}}</span
+                    ><br /> 
+                    <span>Guichet : {{vente.guichet.nom_guichet}}</span><br />
+                    <span>Caisse : {{vente.caisse.nom_caisse}}</span><br />
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr style="font-size: 10px">
+          <td>
+            <div style="padding: 15px">
+              <table
+                style="
+                  border-collapse: collapse;
+                  border: 1px solid #444;
+                  width: 100%;
+                "
+              >
+                <thead>
+                  <tr style="border: 1px solid #444">
+                    <th
+                      width="50%"
+                      style="padding: 2.5px; border: 1px solid #444"
+                    >
+                      Désignation
+                    </th>
+                    <!-- <th
+                      width="10%"
+                      style="padding: 2.5px; border: 1px solid #444"
+                    >
+                      TVA
+                    </th> -->
+                    <th
+                      width="16%"
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: center;
+                      "
+                    >
+                      P.U HT
+                    </th>
+                    <th
+                      width="8%"
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: center;
+                      "
+                    >
+                      Qté
+                    </th>
+                    <th
+                      width="10%"
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: center;
+                      "
+                    >
+                      Réduc.
+                    </th>
+                    <th
+                      width="16%"
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: center;
+                      "
+                    >
+                      Total HT
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each vente_detail}}
+                  <tr>
+                    <td style="padding: 2.5px; border: 1px solid #444">
+                      {{this.produit.nom_produit}}
+                    </td>
+                    <!-- <td style="padding: 2.5px; border: 1px solid #444">
+                      {{this.tva}}
+                    </td> -->
+                    <td
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: right;
+                      "
+                    >
+                      {{this.prix_stock}}
+                    </td>
+                    <td
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: right;
+                      "
+                    >
+                      {{this.quantite_vendue}}
+                    </td>
+                    <td
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: right;
+                      "
+                    >
+                      {{this.societe_prise_en_charge_f}}
+                    </td>
+                    <td
+                      style="
+                        padding: 2.5px;
+                        border: 1px solid #444;
+                        text-align: right;
+                      "
+                    >
+                      {{this.montant_vente}}
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr style="font-size: 10px; margin-top: -10px">
+          <td>
+            <div style="padding: 15px">
+              <table style="width: 100%">
+                <tr>
+                  <td>
+                    <div>
+                      <p>
+                        <b>Conditions de réglement : </b
+                        ><span>A récéption</span> <br /><span
+                          ><b>Payement method : </b><span>Espèce</span></span
+                        >
+                      </p>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <!-- <p><b>Total HT : </b> <span>{{vente.montant_total}}</span></p> -->
+                      <p>
+                        <b>Total TTC : </b
+                        ><span>{{vente.montant_total}} Ar</span><br />
+                        <span
+                          ><b>{{vente.montant_total_en_lettre}}</b> Ariary</span
+                        >
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

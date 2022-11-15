@@ -27,6 +27,7 @@ function Table() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [venteSelected, setVenteSelected] = useRecoilState(venteSelect);
   const [list, setList] = useState([]);
+  const [moveIconDown, setMoveIconDown] = useState(true);
 
   const [downloadFacture, setDownloadFacture] = React.useState({
     vente_id: "",
@@ -35,11 +36,12 @@ function Table() {
   const generatePdf = (id) => {
     const get = async () => {
       try {
-        const response = await axios.get(
-          urlRead("download/pdf/vente", id)
-        );
-        if (response.status === 200) { 
-          setDownloadFacture((prev) => ({ ...prev, url: getUrl('pdf/vente/facture',response.data.url) }));
+        const response = await axios.get(urlRead("download/pdf/vente", id));
+        if (response.status === 200) {
+          setDownloadFacture((prev) => ({
+            ...prev,
+            url: getUrl("pdf/vente/facture", response.data.url),
+          }));
         }
       } catch (error) {
         setDownloadFacture({
@@ -50,7 +52,7 @@ function Table() {
       }
     };
     toast.promise(get, {
-      pending: `Génération de la facture de vente #${"VENTE_0001"} en cours ...`,
+      pending: `Génération de la facture de vente #${id} en cours ...`,
       // success: "Promise  Loaded",
       error: `Une erreur de chargement est survenue !`,
     });
@@ -122,22 +124,35 @@ function Table() {
                   target="_blank"
                   download="facture"
                   className="btn btn-secondary btn-sm light"
+                  onClick={() => {
+                    setMoveIconDown(false);
+                  }}
                 >
-                  <i className="fa fa-download"></i>
+                  <i
+                    className={
+                      moveIconDown
+                        ? "fa fa-download fa-bounce"
+                        : "fa fa-download"
+                    }
+                  ></i>
                 </a>
               ) : (
                 <button
                   className={
-                    !downloadFacture.vente_id
+                    downloadFacture.vente_id == row.id
                       ? "btn btn-warning btn-sm light"
-                      : "btn btn-warning btn-sm light "
+                      : "btn btn-warning btn-sm light"
                   } /* disabled */
                   onClick={() => {
-                    if (true) {
+                    if (
+                      downloadFacture.url &&
+                      downloadFacture.vente_id != row.id
+                    ) {
                       setDownloadFacture({
                         vente_id: row.id,
                         url: "",
                       });
+                      setMoveIconDown(true);
                       console.log("downloadFacture", downloadFacture, row.id);
                       generatePdf(row.id);
                     }
@@ -146,7 +161,7 @@ function Table() {
                   <i
                     className={
                       downloadFacture.vente_id == row.id
-                        ? "fa fa-refresh "
+                        ? "fa-solid fa-circle-notch fa-spin "
                         : "fa fa-clipboard-list "
                     }
                   ></i>

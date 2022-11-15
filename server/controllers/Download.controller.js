@@ -12,60 +12,119 @@ import Societe from "../database/models/Societe.model.js";
 import Unite from "../database/models/Unite.model.js";
 import Vente from "../database/models/Vente.model.js";
 import Vente_detail from "../database/models/Vente_detail.model.js";
+import { NumberToLetter } from "../utils/number-to-letter/index.js";
 import options from "../utils/pdf-creator-node/options.js";
-import { getDateTime } from "../utils/utils.js";
+import {
+  capitalizeFirstLetter,
+  getDateNow,
+  getDateTime,
+  numberWithCommas,
+} from "../utils/utils.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const gerneratePdf = async (req, res) => {
   const id_vente = req.params.id;
+  const a = await Vente_detail.findAll({
+    where: { vente_id: id_vente },
+    include: [{ model: Unite }, { model: Produit }],
+  });
+  console.log(a);
   const html = fs.readFileSync(
     path.join(__dirname, "../templates/pdf/vente.facture.html"),
     "utf-8"
   );
   const filename = `FACTURE_${id_vente}_${getDateTime()}.pdf`;
-  const pharmacie = await Entreprise.findOne({ where: { id: "GPHARMA_0001" } });
-  if (!pharmacie)
-    return res.status(404).send({ message: "Une erreur est survénue!" });
-  await Vente.findAll({
-    where: { id: req.params.id },
-    include: [
-      { model: Client },
-      { model: Guichet },
-      { model: Ordonnance },
-      { model: Caisse },
-      { model: Societe },
-    ],
-  })
-    .then(async (_vente) => {
-      await Vente_detail.findAll({
-        where: { vente_id: req.params.id },
-        include: [{ model: Unite }, { model: Produit }],
-      }).then( async (_venteDetails) => {
-        const document = {
-          html,
-          data: {
-            pharmacie: {
-              id: "GPHARMA_0001",
-              nom_entreprise: "Gpharma@2.0.0 // MADA-Digital",
-              logo: "LOGO_2022-10-13_7.32.37_613.png",
-              adresse: "Mon Adresse",
-              contact: "+261 XX XXX XX",
-              nif: "XXXX XXXX XXXX XXXX",
-              stat: "XXXX XXXX XXXX XXXX",
-              website: "www.mada-digital.net",
-              email: "email@gmail.com",
-            },
-            vente: _vente.dataValues,
-            vente_detail: _venteDetails,
-          },
-          path: "./public/pdf/vente/facture/" + filename,
-        };
-        await pdf.create(document, options).then((response) => {
-          console.log("response", response, document.data);
-          return res.status(200).json({ url: filename });
+  await Entreprise.findOne({ where: { id: "GPHARMA_0001" } })
+    .then(async (pharmacie) => {
+      // if (!pharmacie)
+      //   return res.status(404).send({ message: "Une erreur est survénue!" });
+      await Vente.findOne({
+        where: { id: id_vente },
+        include: [
+          { model: Client },
+          { model: Guichet },
+          { model: Ordonnance },
+          { model: Caisse },
+          { model: Societe },
+        ],
+      })
+        .then(async (_vente) => {
+          await Vente_detail.findAll({
+            where: { vente_id: id_vente },
+            include: [{ model: Unite }, { model: Produit }],
+          }).then(async (_venteDetails) => {
+            if (
+              _venteDetails.length > 0 &&
+              pharmacie.dataValues &&
+              _vente.dataValues
+            ) {
+              const document = {
+                html,
+                data: {
+                  pharmacie: pharmacie.dataValues,
+                  vente: {
+                    ..._vente.dataValues,
+                    ["montant_total"]: numberWithCommas(
+                      _vente.dataValues.montant_total
+                    ),
+                    ["client"]: _vente.client?.dataValues,
+                    ["ordonnance"]: _vente.ordonnance?.dataValues,
+                    ["societe"]: _vente.societe?.dataValues,
+                    ["guichet"]: _vente.guichet?.dataValues,
+                    ["caisse"]: _vente.caisse?.dataValues,
+                    ["date_vente"]:
+                      new Date(_vente.dataValues.date_vente).getFullYear() +
+                      "-" +
+                      new Date(_vente.dataValues.date_vente).getMonth() +
+                      "-" +
+                      new Date(_vente.dataValues.date_vente).getDay(),
+                    ["date_facture"]: getDateNow("date"),
+                    ["societe_prise_en_charge_f"]: _vente.dataValues
+                      .societe_prise_en_charge
+                      ? _vente.dataValues.societe_prise_en_charge + " %"
+                      : "",
+                    ["montant_total_en_lettre"]: capitalizeFirstLetter(
+                      NumberToLetter(_vente.dataValues.montant_total)
+                    ),
+                  },
+                  vente_detail: _venteDetails.map(
+                    (element) =>
+                      (element = {
+                        ...element.dataValues,
+                        ["prix_stock"]: numberWithCommas(element.montant_vente),
+                        ["quantite_vendue"]: numberWithCommas(
+                          element.quantite_vendue
+                        ),
+                        ["montant_vente"]: numberWithCommas(
+                          element.montant_vente
+                        ),
+                        ["societe_prise_en_charge_f"]: _vente.dataValues
+                          .societe_prise_en_charge
+                          ? _vente.dataValues.societe_prise_en_charge + " %"
+                          : "",
+                        ["produit"]: element.produit.dataValues,
+                        ["unite"]: element.unite.dataValues,
+                      })
+                  ),
+                },
+                path: "./public/pdf/vente/facture/" + filename,
+              };
+              // return res.json(document);
+              await pdf
+                .create(document, options)
+                .then((response) => {
+                  return res.status(200).json({ url: filename });
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      });
     })
     .catch((error) => {
       console.log(error);

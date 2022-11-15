@@ -10,19 +10,28 @@ export const getDateTime = (name = "") => {
   return name;
 };
 
-export const getDateNow = (name = "") => {
+export const getDateNow = (option = "datetime") => {
   const date = new Date(); //2022-10-22 17:41:30
-  let dateString = `${name}${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-  console.log("dateString : ", dateString);
+  let dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  if (option === "date") {
+    dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  } else if (option === "time") {
+    dateString = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  }
   return dateString;
 };
-
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 export const bcryptData = (data, salt = 10) => {
   let dataCrypted = bcrypt.hashSync(data, salt);
   console.log("\n\n", dataCrypted, "\n\n");
   return dataCrypted;
 };
 
+export const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
+};
 export const uploadFile = (
   req,
   res,
