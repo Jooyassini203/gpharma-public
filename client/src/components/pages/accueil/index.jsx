@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilState } from "recoil";
+import { userConnected } from "../../../atoms/authentication";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import StatisticGeneral from "./StatisticGeneral";

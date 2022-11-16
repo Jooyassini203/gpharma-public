@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut, Line, Pie, PolarArea } from "react-chartjs-2";
 import { Chart, ArcElement, registerables } from "chart.js";
-import { getData, getDaysInMonth, urlRead } from "../../../utils/utils";
+import {
+  getData,
+  getDaysInMonth,
+  InputForm,
+  urlRead,
+} from "../../../utils/utils";
 import axios from "axios";
+import { userConnected } from "../../../atoms/authentication";
+import { useRecoilState } from "recoil";
 
 Chart.register(...registerables);
 Chart.register(ArcElement);
 const date = new Date();
 
 function StatisticGeneral() {
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [StatGeneral, setStatGeneral] = useState({
     count_commande: 0,
     count_livraison: 0,
@@ -34,18 +42,22 @@ function StatisticGeneral() {
     count_vente_total,
   } = StatGeneral;
 
-  const getAll = async () => { 
-    const dataG = await axios.get(urlRead("accueil/StatGeneral"));
+  const getAll = async () => {
+    const dataG = await axios.get(
+      urlRead("accueil/StatGeneral", userConnect.id)
+    );
     if (dataG) {
       console.log(dataG.data[0]);
       setStatGeneral(dataG.data[0]);
     }
-    const dataV = await axios.get(
-      urlRead("accueil/StatVente", date.getFullYear() + "-" + date.getMonth())
-    );
-    if (dataV) setStatVente(dataV.data);
+    if (userConnect.type_utilisateur == "ADMIN") {
+      const dataV = await axios.get(
+        urlRead("accueil/StatVente", date.getFullYear() + "-" + date.getMonth())
+      );
+      if (dataV) setStatVente(dataV.data);
+    }
   };
-
+ 
   useEffect(() => {
     getAll();
   }, []);
@@ -97,52 +109,56 @@ function StatisticGeneral() {
     <>
       <>
         <div className="row m-3">
-          <div className="col-xl-3  col-sm-6">
-            <div className="card shadow-sm">
-              <div className="card-body">
-                <div className="media align-items-center">
-                  <div className="media-body mr-3">
-                    <h2 className="fs-34 text-black font-w600">
-                      {count_commande}
-                    </h2>
-                    <span>Commande (Ravitaillement)</span>
+          {userConnect.type_utilisateur == "ADMIN" ? (
+            <>
+              <div className="col-xl-3  col-sm-6">
+                <div className="card shadow-sm">
+                  <div className="card-body">
+                    <div className="media align-items-center">
+                      <div className="media-body mr-3">
+                        <h2 className="fs-34 text-black font-w600">
+                          {count_commande}
+                        </h2>
+                        <span>Commande (Ravitaillement)</span>
+                      </div>
+                      <i className="fa fa-clipboard-list fa-3x text-primary"></i>
+                    </div>
                   </div>
-                  <i className="fa fa-clipboard-list fa-3x text-primary"></i>
-                </div>
-              </div>
-              <div className="progress  rounded-0" style={{ height: 4 }}>
-                <div
-                  className="progress-bar rounded-0 bg-secondary progress-animated"
-                  style={{ width: count_commande_100 + "%", height: 4 }}
-                  role="progressbar"
-                >
-                  {/* <span className="sr-only">90% Complete</span> */}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-3  col-sm-6">
-            <div className="card shadow-sm">
-              <div className="card-body">
-                <div className="media align-items-center">
-                  <div className="media-body mr-3">
-                    <h2 className="fs-34 font-w600">{count_livraison}</h2>
-                    <span>Livraison (Ravitaillement)</span>
+                  <div className="progress  rounded-0" style={{ height: 4 }}>
+                    <div
+                      className="progress-bar rounded-0 bg-secondary progress-animated"
+                      style={{ width: count_commande_100 + "%", height: 4 }}
+                      role="progressbar"
+                    >
+                      {/* <span className="sr-only">90% Complete</span> */}
+                    </div>
                   </div>
-                  <i className="fa  fa-shipping-fast fa-3x text-primary"></i>
                 </div>
               </div>
-              <div className="progress  rounded-0" style={{ height: 4 }}>
-                <div
-                  className="progress-bar rounded-0 bg-secondary progress-animated"
-                  style={{ width: count_livraison_100 + "%", height: 4 }}
-                  role="progressbar"
-                >
-                  {/* <span className="sr-only">90% Complete</span> */}
+              <div className="col-xl-3  col-sm-6">
+                <div className="card shadow-sm">
+                  <div className="card-body">
+                    <div className="media align-items-center">
+                      <div className="media-body mr-3">
+                        <h2 className="fs-34 font-w600">{count_livraison}</h2>
+                        <span>Livraison (Ravitaillement)</span>
+                      </div>
+                      <i className="fa  fa-shipping-fast fa-3x text-primary"></i>
+                    </div>
+                  </div>
+                  <div className="progress  rounded-0" style={{ height: 4 }}>
+                    <div
+                      className="progress-bar rounded-0 bg-secondary progress-animated"
+                      style={{ width: count_livraison_100 + "%", height: 4 }}
+                      role="progressbar"
+                    >
+                      {/* <span className="sr-only">90% Complete</span> */}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          ) : null}
           <div className="col-xl-3 col-sm-6">
             <div className="card shadow-sm">
               <div className="card-body">
@@ -203,67 +219,73 @@ function StatisticGeneral() {
           <div className="card-body">
             <div className="row align-items-center">
               <div className="col  ml-4 mb-lg-0 mb-3">
-                <div className="d-flex mb-3 align-items-center">
-                  <span className="fs-12 col-6 p-0 text-black">
-                    <svg
-                      className="mr-2"
-                      width={19}
-                      height={19}
-                      viewBox="0 0 19 19"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect width={19} height={19} fill="#5F74BF" />
-                    </svg>
-                    Commande (Ravitaillement)
-                  </span>
-                  <div className="progress rounded-0 col-6 p-0">
-                    <div
-                      className="progress-bar rounded-0 progress-animated"
-                      style={{
-                        width: (count_commande / count_vente_total) * 100 + "%",
-                        height: 6,
-                        background: "#5F74BF",
-                      }}
-                      role="progressbar"
-                    >
-                      <span className="sr-only">
-                        {(count_commande / count_rvt_total) * 100}% Complète
+                {userConnect.type_utilisateur == "ADMIN" ? (
+                  <>
+                    <div className="d-flex mb-3 align-items-center">
+                      <span className="fs-12 col-6 p-0 text-black">
+                        <svg
+                          className="mr-2"
+                          width={19}
+                          height={19}
+                          viewBox="0 0 19 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect width={19} height={19} fill="#5F74BF" />
+                        </svg>
+                        Commande (Ravitaillement)
                       </span>
+                      <div className="progress rounded-0 col-6 p-0">
+                        <div
+                          className="progress-bar rounded-0 progress-animated"
+                          style={{
+                            width:
+                              (count_commande / count_vente_total) * 100 + "%",
+                            height: 6,
+                            background: "#5F74BF",
+                          }}
+                          role="progressbar"
+                        >
+                          <span className="sr-only">
+                            {(count_commande / count_rvt_total) * 100}% Complète
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="d-flex mb-3 align-items-center">
-                  <span className="fs-12 col-6 p-0 text-black">
-                    <svg
-                      className="mr-2"
-                      width={19}
-                      height={19}
-                      viewBox="0 0 19 19"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect width={19} height={19} fill="#FFD439" />
-                    </svg>
-                    Livraison (Ravitaillement)
-                  </span>
-                  <div className="progress rounded-0 col-6 p-0">
-                    <div
-                      className="progress-bar rounded-0 progress-animated"
-                      style={{
-                        width:
-                          (count_livraison / count_vente_total) * 100 + "%",
-                        height: 6,
-                        background: "#FFD439",
-                      }}
-                      role="progressbar"
-                    >
-                      <span className="sr-only">
-                        {(count_livraison / count_rvt_total) * 100}% Complète
+                    <div className="d-flex mb-3 align-items-center">
+                      <span className="fs-12 col-6 p-0 text-black">
+                        <svg
+                          className="mr-2"
+                          width={19}
+                          height={19}
+                          viewBox="0 0 19 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect width={19} height={19} fill="#FFD439" />
+                        </svg>
+                        Livraison (Ravitaillement)
                       </span>
+                      <div className="progress rounded-0 col-6 p-0">
+                        <div
+                          className="progress-bar rounded-0 progress-animated"
+                          style={{
+                            width:
+                              (count_livraison / count_vente_total) * 100 + "%",
+                            height: 6,
+                            background: "#FFD439",
+                          }}
+                          role="progressbar"
+                        >
+                          <span className="sr-only">
+                            {(count_livraison / count_rvt_total) * 100}%
+                            Complète
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                ) : null}
                 <div className="d-flex mb-3 align-items-center">
                   <span className="fs-12 col-6 p-0 text-black">
                     <svg
@@ -338,19 +360,23 @@ function StatisticGeneral() {
                 </div>
               </div>
             </div>
-            <span className="fs-12">Hebdomadaire</span>
-            <div className="row m-3">
-              <div className="card-body">
-                <Line
-                  style={{
-                    position: "relative",
-                    height: "10vh",
-                    width: "40vw",
-                  }}
-                  data={dataLine}
-                />
-              </div>
-            </div>
+            {userConnect.type_utilisateur == "ADMIN" ? (
+              <>
+                <span className="fs-12">Hebdomadaire</span>
+                <div className="row m-3">
+                  <div className="card-body">
+                    <Line
+                      style={{
+                        position: "relative",
+                        height: "10vh",
+                        width: "40vw",
+                      }}
+                      data={dataLine}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       </>

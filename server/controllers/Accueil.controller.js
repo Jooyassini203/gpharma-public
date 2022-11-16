@@ -1,19 +1,35 @@
 import { Op, QueryTypes } from "sequelize";
 import db from "../config/Database.js";
+import Utilisateur from "../database/models/utilisateur.model.js";
 import Vente from "../database/models/Vente.model.js";
 import { getDateNow } from "../utils/utils.js";
 
 const getStatGeneral = async (req, res) => {
+  const user = await Utilisateur.findOne({ id: req.params.utilisateur_id });
+  if (!user)
+    return res.status(404).send({ message: "Utilisateur introvable!" });
   try {
-    const count = await db.query(
-      `SELECT  (    SELECT COUNT(*)  FROM ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement = "COMMANDE")  AS count_commande
+    let query = `SELECT  (    SELECT COUNT(*)  FROM ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement = "COMMANDE")  AS count_commande
       ,(    SELECT COUNT(*)  FROM   ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement != "COMMANDE") AS count_livraison
       ,(    SELECT COUNT(*)  FROM   vente WHERE deletedAt IS NULL AND etat_vente = "0") AS count_guichet
       ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL AND etat_vente != "0") AS count_caisse 
       ,(    SELECT COUNT(*)  FROM   ravitaillement  WHERE deletedAt IS NULL) AS count_rvt_total
-      ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL) AS count_vente_total`,
-      { type: QueryTypes.SELECT }
-    );
+      ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL) AS count_vente_total`;
+    if (user.type_utilisateur == "CAISSIER")
+      query = `SELECT  (    SELECT COUNT(*)  FROM ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement = "COMMANDE")  AS count_commande
+      ,(    SELECT COUNT(*)  FROM   ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement != "COMMANDE") AS count_livraison
+      ,(    SELECT COUNT(*)  FROM   vente WHERE deletedAt IS NULL AND etat_vente = "0" AND caissier_id == '${user.type_utilisateur}') AS count_guichet
+      ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL AND etat_vente != "0" AND caissier_id == '${user.type_utilisateur}') AS count_caisse 
+      ,(    SELECT COUNT(*)  FROM   ravitaillement  WHERE deletedAt IS NULL) AS count_rvt_total
+      ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL AND caissier_id == '${user.type_utilisateur}') AS count_vente_total`;
+    if (user.type_utilisateur == "GUICHETIER")
+      query = `SELECT  (    SELECT COUNT(*)  FROM ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement = "COMMANDE")  AS count_commande
+      ,(    SELECT COUNT(*)  FROM   ravitaillement WHERE deletedAt IS NULL AND etat_ravitaillement != "COMMANDE") AS count_livraison
+      ,(    SELECT COUNT(*)  FROM   vente WHERE deletedAt IS NULL AND etat_vente = "0" AND guichetier_id == '${user.type_utilisateur}') AS count_guichet
+      ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL AND etat_vente != "0" AND guichetier_id == '${user.type_utilisateur}') AS count_caisse 
+      ,(    SELECT COUNT(*)  FROM   ravitaillement  WHERE deletedAt IS NULL) AS count_rvt_total
+      ,(    SELECT COUNT(*)  FROM   vente  WHERE deletedAt IS NULL AND guichetier_id == '${user.type_utilisateur}') AS count_vente_total`;
+    const count = await db.query(query, { type: QueryTypes.SELECT });
     res.status(200).send(count);
   } catch (error) {
     console.log(error.message);

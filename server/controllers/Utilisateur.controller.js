@@ -9,6 +9,7 @@ const getAll = async (req, res) => {
     const response = await Utilisateur.findAll({
       where: {
         [Op.not]: [{ id: "1" }],
+        [Op.not]: [{ id: req.params.id }],
       },
       order: [["date_der_log", "DESC"]],
     });

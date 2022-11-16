@@ -11,11 +11,13 @@ import {
   userSelectState,
 } from "../../../atoms/utilisateur";
 import { confirmDelete, deleteData, getData } from "../../../utils/utils";
+import { userConnected } from "../../../atoms/authentication";
 
 function Utilisateur() {
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [userSelect, setUserSelect] = useRecoilState(userSelectState);
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
 
   const showModalUpdateUser = (id) => {
     getData(
@@ -30,7 +32,7 @@ function Utilisateur() {
     confirmDelete("Voulez-vous vraimment supprimé cet utilisateur?", () => {
       deleteData("utilisateur", id, () => {
         console.log("delete ", id, "lancement du mise à jours de la liste");
-        getData("utilisateurs", setListUser);
+        getData("utilisateurs", setListUser, userConnect.id);
       });
     });
   };
