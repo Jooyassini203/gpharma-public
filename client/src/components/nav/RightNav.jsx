@@ -5,8 +5,7 @@ import { showRightNav } from "../../atoms/nav";
 import { getRule, getUrl, InputForm, updateData, urlRead } from "../../utils/utils";
 import { userConnected } from "../../atoms/authentication";
 import "./RightNav.css";
-import { toast } from "react-toastify";
-import cryptoJs from "crypto-js";
+import { toast } from "react-toastify"; 
 import axios from "axios";
 
 function RightNav() {

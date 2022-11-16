@@ -1,10 +1,10 @@
-import React from "react";
-import { Navigate  } from "react-router-dom"; 
+import { Navigate } from "react-router-dom";
 
-const authentification = (Page) => { 
-  if (!localStorage.getItem("gpharma@2.0.0")) {
-    return  <Navigate to="/connexion"/>  ;
-  } 
+const authentification = (Page) => {
+  let userConnect = {};
+
+  if (!window.localStorage.getItem("gpharma@2.0.0"))
+    return <Navigate to="/connexion" />; 
   return <Page />;
 };
 export default authentification;
