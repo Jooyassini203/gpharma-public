@@ -28,7 +28,7 @@ function NotFound() {
                   ) : (
                     <Link to="/connexion">
                       <a className="btn btn-primary" type="button">
-                        {window.localStorage.getItem('gpharma@2.0.0')?'Aller à l\'accuiel':'Se connecter'}
+                        Se connecter
                       </a>
                     </Link>
                   )}

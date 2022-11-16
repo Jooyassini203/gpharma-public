@@ -31,8 +31,6 @@ function Ajustement() {
         </div>
       </div>
       <FooterNav />
-      
-      
     </div>
   );
 }
