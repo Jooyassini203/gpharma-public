@@ -25,7 +25,7 @@ function InsertElatage() {
   });
   const [produit, setProduit] = React.useState({});
   const [isOb, setIsOb] = React.useState(false);
-  const { produit_code_lot_produit, qte } = etalage;
+  const { produit_code_lot_produit, qte } = etalage; 
   React.useEffect(() => {
     getAllEtalage();
   }, []);
