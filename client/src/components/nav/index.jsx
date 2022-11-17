@@ -21,7 +21,7 @@ function Nav() {
     <>
       <HeadNav />
       <RightNav />
-      <LeftNav>
+      <LeftNav >
         <NavElement to="/" icon="fas fa-television" title="Accueil" />
         <NavElement icon="fas fa-shopping-cart" title="Vente">
           {userConnect.type_utilisateur == "CAISSIER" ||

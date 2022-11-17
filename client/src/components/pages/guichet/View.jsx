@@ -217,7 +217,7 @@ function View() {
                                 {item.produit.nom_produit}
                               </td>
                               <td className="right">
-                                {numberWithCommas(item.prix_stock)}
+                                {numberWithCommas(item.prix_vente)}
                               </td>
                               <td className="center">
                                 {`${numberWithCommas(item.quantite_demande)} (${

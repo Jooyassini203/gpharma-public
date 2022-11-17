@@ -11,7 +11,7 @@ const Vente_detail = db.define(
     },
     quantite_demande: { type: DataTypes.DOUBLE, allowNull: false },
     quantite_vendue: { type: DataTypes.DOUBLE, allowNull: true },
-    prix_stock: { type: DataTypes.DOUBLE, allowNull: false },
+    prix_vente: { type: DataTypes.DOUBLE, allowNull: false },
     montant_vente: { type: DataTypes.DOUBLE, allowNull: false },
     status: { type: DataTypes.BOOLEAN, defaultValue: "1" },
   },

@@ -156,7 +156,7 @@ const createOne = async (req, res) => {
         {
           quantite_demande: element.quantite_demande,
           quantite_vendue: element.quantite_demande,
-          prix_stock: element.prix_stock,
+          prix_vente: element.prix_vente,
           montant_vente: element.montant_vente,
           produit_code_lot_produit: element.produit_code_lot_produit,
           unite_vente: element.unite_vente,
@@ -412,7 +412,7 @@ const updateOneVenteDetail = async (req, res) => {
     const last_total = vente.montant_total;
     const last_montant_vente = item.montant_vente;
     const new_montant_vente =
-      parseFloat(item.prix_stock) * parseFloat(req.body.data.quantite_vendue);
+      parseFloat(item.prix_vente) * parseFloat(req.body.data.quantite_vendue);
     const new_montant_total =
       parseFloat(last_total) -
       parseFloat(last_montant_vente) +

@@ -77,7 +77,7 @@ export const intializeVente = {
 };
 export const intializeVenteDetails = {
   quantite_demande: "",
-  prix_stock: "000.00",
+  prix_vente: "000.00",
   unite_vente: "",
   montant_vente: "000.00",
   produit_code_lot_produit: {

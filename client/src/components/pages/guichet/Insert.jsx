@@ -41,7 +41,7 @@ function Insert() {
   } = vente;
   const {
     quantite_demande,
-    prix_stock,
+    prix_vente,
     montant_vente,
     unite_vente,
     produit_code_lot_produit,
@@ -95,7 +95,7 @@ function Insert() {
         ...venteDetails,
         ["produit_code_lot_produit"]: produit_code_lot_produit.value,
         ["nom_produit"]: produit.nom_produit,
-        ["montant_vente"]: "" + prix_stock * quantite_demande,
+        ["montant_vente"]: "" + prix_vente * quantite_demande,
         ["unite_vente"]: toggleUniteVente
           ? produit.unite_stock
           : produit.unite_presentation,
@@ -179,7 +179,9 @@ function Insert() {
           label: produit.nom_produit,
           value: produit.code_lot_produit,
         },
-        prix_stock: produit.prix_stock,
+        prix_vente: Math.round(
+          parseFloat(produit.prix_stock) * parseFloat(marge_beneficiaire)
+        ),
         quantite_demande: getEmplacement(produit.emplacement)[1]
           .quantite_produit,
       }));
@@ -197,8 +199,10 @@ function Insert() {
     if (!societe_prise_en_charge) return;
     setVenteDetails((prev) => ({
       ...prev,
-      prix_stock: Math.round(
-        produit.prix_stock * (1 - parseFloat(societe_prise_en_charge) / 100)
+      prix_vente: Math.round(
+        parseFloat(produit.prix_stock) *
+          parseFloat(marge_beneficiaire) *
+          (1 - parseFloat(societe_prise_en_charge) / 100)
       ),
     }));
   };
@@ -206,11 +210,15 @@ function Insert() {
     if (!societe_prise_en_charge) return;
     let list = [...listVenteDetails];
     list.map((item) => {
-      item.prix_stock = Math.round(
-        item.prix_stock * (1 - parseFloat(societe_prise_en_charge) / 100)
+      item.prix_vente = Math.round(
+        item.prix_vente *
+          (1 - parseFloat(societe_prise_en_charge) / 100) *
+          parseFloat(marge_beneficiaire)
       );
       item.montant_vente = Math.round(
-        parseFloat(item.prix_stock) * parseFloat(item.quantite_demande)
+        parseFloat(item.prix_vente) *
+          parseFloat(item.quantite_demande) *
+          parseFloat(marge_beneficiaire)
       );
     });
     setListVenteDetails(list);
@@ -220,7 +228,7 @@ function Insert() {
       setIsObSociete(true);
     }
     calPrisEnCharge();
-  }, [societe_prise_en_charge, prix_stock, quantite_demande]);
+  }, [societe_prise_en_charge, prix_vente, quantite_demande]);
   React.useEffect(() => {
     if (file) {
       setIsObSociete(true);
@@ -260,7 +268,9 @@ function Insert() {
       convertToOption(data, setOptionsGuichet);
     });
     getData("unite", setUnites);
-    getData("marge_beneficiaire/active", (data)=>{setMarge_beneficiaire(data.marge_beneficiaire)});
+    getData("marge_beneficiaire/active", (data) => {
+      setMarge_beneficiaire(data.marge_beneficiaire);
+    });
   }, []);
   return (
     <>
@@ -447,8 +457,11 @@ function Insert() {
           <span className="font-w600 mb-1 w-100">Vendre par</span>
           <br />
           <span
-            style={{ height: "41px", paddingTop: "2.5px", cursor: "pointer" }}
-            className="badge badge-xl light badge-dark mt-1 w-100"
+            style={{ 
+              paddingTop: "2.5px",
+              cursor: "pointer",
+            }}
+            className="badge badge-yass badge-xl light badge-dark mt-1 w-100"
             onClick={() => {
               if (produit) setToggleUniteVente(!toggleUniteVente);
             }}
@@ -466,8 +479,8 @@ function Insert() {
           <InputForm
             postIcon={{ text: "Ar" }}
             number
-            name="prix_stock"
-            val={prix_stock}
+            name="prix_vente"
+            val={prix_vente}
             onChange={(e) => onChange(e, setVenteDetails)}
             obligatory={isObVtDt ? "active" : ""}
           >
@@ -510,8 +523,8 @@ function Insert() {
             style={{ height: "41px", paddingTop: "2.5px" }}
             className="badge badge-xl light badge-warning mt-1 w-100"
           >
-            {quantite_demande && prix_stock
-              ? numberWithCommas(prix_stock * quantite_demande)
+            {quantite_demande && prix_vente
+              ? numberWithCommas(prix_vente * quantite_demande)
               : "0" + " Ar"}
           </span>
         </div>
@@ -570,7 +583,7 @@ function Insert() {
                       </td>
                       <td className="left">{item.nom_produit}</td>
                       <td className="right">
-                        {numberWithCommas(item.prix_stock)}
+                        {numberWithCommas(item.prix_vente)}
                       </td>
                       <td className="center">
                         {`${numberWithCommas(
@@ -592,7 +605,7 @@ function Insert() {
                               item.produit_code_lot_produit
                             );
                             setVenteDetails({
-                              prix_stock: item.prix_stock,
+                              prix_vente: item.prix_vente,
                               quantite_demande: item.quantite_demande,
                               montant_vente: item.montant_vente,
                               produit_code_lot_produit: {

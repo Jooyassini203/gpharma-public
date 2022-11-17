@@ -92,7 +92,7 @@ const gerneratePdf = async (req, res) => {
                     (element) =>
                       (element = {
                         ...element.dataValues,
-                        ["prix_stock"]: numberWithCommas(element.montant_vente),
+                        ["prix_vente"]: numberWithCommas(element.montant_vente),
                         ["quantite_vendue"]: numberWithCommas(
                           element.quantite_vendue
                         ),

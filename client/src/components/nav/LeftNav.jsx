@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 function LeftNav({children}) {
   return (
     <>
-      <div className="deznav"  style={{ /* overflowY: "scroll", height: "101vh"  */}}>
+      <div className="deznav"  style={{  overflowY: "auto" }}>
         <div className="deznav-scroll">
           <ul className="metismenu" id="menu">
             {children} 
