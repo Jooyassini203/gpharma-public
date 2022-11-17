@@ -15,9 +15,9 @@ import Caisse from "../pages/caisse";
 import Guichet from "../pages/guichet";
 import Pharmacie from "../pages/pharmacie";
 import { useRecoilState } from "recoil";
-import { userConnected } from "../../atoms/authentication";
+import { userConnected } from "../../atoms/authentication"; 
 import cryptojs from "crypto-js";
-import Marge_beneficiaire from "../pages/marge_beneficiaire";
+import Marge_beneficiaire from "../pages/marge_beneficiaire"; 
 
 function MyRoute() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -26,17 +26,16 @@ function MyRoute() {
       return <Navigate to="/" />;
     }
     return <Login />;
-  };
+  }; 
   React.useEffect(()=>{
-    if(localStorage.getItem("gpharma@2.0.0")){
-
+    if(localStorage.getItem("gpharma@2.0.0")){ 
       const userJson = cryptojs.AES.decrypt(
         localStorage.getItem("gpharma@2.0.0"),
       process.env.REACT_APP_KEY_SESSION
       ).toString(cryptojs.enc.Utf8);
       setUserConnect(JSON.parse(userJson));
     }
-  },[])
+  },[]) 
   return (
     <>
       <Routes>

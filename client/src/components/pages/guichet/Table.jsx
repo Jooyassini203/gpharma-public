@@ -1,12 +1,13 @@
-import { faEdit, faEye, faListAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faEye,
+  faListAlt,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
-import {
-  guichetSelect,
-  isAddState, 
-  listGuichet, 
-} from "../../../atoms/guichet";
+import { guichetSelect, isAddState, listGuichet } from "../../../atoms/guichet";
 import MyDataTable from "../../../utils/mydatatable/MyDataTable";
 import {
   ButtonTable,
@@ -19,7 +20,7 @@ function Table() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   const [guichetSelected, setGuichetSelected] = useRecoilState(guichetSelect);
-  const [list, setList] = useRecoilState(listGuichet); 
+  const [list, setList] = useRecoilState(listGuichet);
   const columns = [
     {
       name: "#",
@@ -31,23 +32,25 @@ function Table() {
       name: "Motif",
       selector: (row) => row.motif,
       sortable: true,
-      // width: "30%",
+      width: "30%",
     },
     {
       name: "Client",
-      selector: (row) => (row.client.nom_prenom),
+      selector: (row) => row.client.nom_prenom,
       sortable: true,
-    }, 
+      width: "15%",
+    },
     {
       name: "Date de saisie",
       selector: (row) => row.date_saisi,
       sortable: true,
-    }, 
-    {
-      name: "Date de vente",
-      selector: (row) => row.date_vente,
-      sortable: true,
-    }, 
+    },
+    // {
+    //   name: "Date de vente",
+    //   selector: (row) => row.date_vente,
+    //   sortable: true,
+    //   width: "10%",
+    // },
     {
       name: "Etat",
       selector: (row) => (
@@ -71,6 +74,7 @@ function Table() {
         </div>
       ),
       sortable: true,
+      width: "15%",
     },
     {
       name: "Action",
@@ -79,12 +83,19 @@ function Table() {
         return (
           <>
             <ButtonTable
-              importance={ "success" }
-              icon={ faListAlt}
+              importance={"success"}
+              icon={faListAlt}
               data-toggle="modal"
               data-target="#modalViewGuichet"
-              handleClick={() => {  
-    getData("vente/details", (data)=>{setGuichetSelected(data); console.log(guichetSelected);}, row.id);
+              handleClick={() => {
+                getData(
+                  "vente/details",
+                  (data) => {
+                    setGuichetSelected(data);
+                    console.log(guichetSelected);
+                  },
+                  row.id
+                );
               }}
             />
             {/* <ButtonTable
@@ -113,7 +124,7 @@ function Table() {
     getData("vente/myGuichet", (data) => setList(data), userConnect.id);
   }, []);
   return (
-    <> 
+    <>
       <MyDataTable
         columns={columns}
         data={list}
