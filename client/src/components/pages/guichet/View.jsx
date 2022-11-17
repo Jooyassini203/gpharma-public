@@ -79,7 +79,7 @@ function View() {
                   {date_vente ? (
                     <div>
                       {" "}
-                      <strong>Date d'vente : </strong>
+                      <strong>Date de vente : </strong>
                       <br />
                       <span>{date_vente}</span>
                     </div>

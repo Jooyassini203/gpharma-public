@@ -76,28 +76,35 @@ const gerneratePdf = async (req, res) => {
                     ["date_vente"]:
                       new Date(_vente.dataValues.date_vente).getFullYear() +
                       "-" +
-                      new Date(_vente.dataValues.date_vente).getMonth() +
+                      (parseInt(
+                        new Date(_vente.dataValues.date_vente).getMonth()
+                      ) +
+                        1) +
                       "-" +
-                      new Date(_vente.dataValues.date_vente).getDay(),
+                      new Date(_vente.dataValues.date_vente).getDate(),
                     ["date_facture"]: getDateNow("date"),
                     ["societe_prise_en_charge_f"]: _vente.dataValues
                       .societe_prise_en_charge
                       ? _vente.dataValues.societe_prise_en_charge + " %"
                       : "",
                     ["montant_total_en_lettre"]: capitalizeFirstLetter(
-                      NumberToLetter(_vente.dataValues.montant_total)
+                      NumberToLetter(
+                        Math.round(_vente.dataValues.montant_total)
+                      )
                     ),
                   },
                   vente_detail: _venteDetails.map(
                     (element) =>
                       (element = {
                         ...element.dataValues,
-                        ["prix_vente"]: numberWithCommas(element.montant_vente),
+                        ["prix_vente"]: numberWithCommas(
+                          Math.round(element.montant_vente)
+                        ),
                         ["quantite_vendue"]: numberWithCommas(
                           element.quantite_vendue
                         ),
                         ["montant_vente"]: numberWithCommas(
-                          element.montant_vente
+                          Math.round(element.montant_vente)
                         ),
                         ["societe_prise_en_charge_f"]: _vente.dataValues
                           .societe_prise_en_charge

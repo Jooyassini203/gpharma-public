@@ -8,10 +8,11 @@ import Ravitaillement from "../database/models/Ravitaillement.model.js";
 import Ravitaillement_detail from "../database/models/Ravitaillement_detail.model.js";
 import Unite from "../database/models/Unite.model.js";
 import Utilisateur from "../database/models/Utilisateur.model.js";
+import { convertEngDayMonth } from "../utils/nizwami-ibrahim/ConvertEngDayMonth.js";
 import { getDateNow } from "../utils/utils.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Ravitaillement.findAll({
+    let response = await Ravitaillement.findAll({
       attributes: {
         include: [
           [
@@ -43,6 +44,18 @@ const getAll = async (req, res) => {
         { model: Utilisateur },
       ],
     });
+    if (response.length > 0)
+      response.map(
+        (element) =>
+          (element = {
+            ...element,
+            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+            ["date_prev_livraison"]: convertEngDayMonth(
+              element.date_prev_livraison
+            ),
+            ["date_livraison"]: convertEngDayMonth(element.date_livraison),
+          })
+      );
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -79,6 +92,15 @@ const getSpecific = async (req, res) => {
         { model: Utilisateur },
       ],
     });
+    if (response)
+      response = {
+        ...response,
+        ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+        ["date_prev_livraison"]: convertEngDayMonth(
+          element.date_prev_livraison
+        ),
+        ["date_livraison"]: convertEngDayMonth(element.date_livraison),
+      };
     const dataRvtDetail = await Ravitaillement_detail.findAll({
       where: { ravitaillement_id: req.params.id },
       include: [{ model: Produit }, { model: Unite }],

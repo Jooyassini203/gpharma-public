@@ -1,12 +1,12 @@
 // JavaScript Document
 /****************************************************************************
  *________________________________________________________________________	*
- *	About 		:	Convertit jusqu'�  999 999 999 999 999 (billion)		*
+ *	About 		:	Convertit jusqu'é  999 999 999 999 999 (billion)		*
  *					avec respect des accords								*
  *_________________________________________________________________________	*
  *	Auteur  	:	GALA OUSSE Brice, Engineer programmer of management		*
  *	Mail    	:	bricegala@yahoo.fr, bricegala@gmail.com					*
- *	T�l	    	:	+237 99 37 95 83 / +237 79 99 82 80						*
+ *	Tél	    	:	+237 99 37 95 83 / +237 79 99 82 80						*
  *	Copyright 	:	avril  2007												*
  *_________________________________________________________________________	*
  *****************************************************************************
@@ -116,11 +116,11 @@ export function NumberToLetter(nombre) {
   //__________________________________
 
   if (nombre.toString().replace(/ /gi, "").length > 15)
-    return "d�passement de capacit�";
+    return "dépassement de capacité";
   if (isNaN(nombre.toString().replace(/ /gi, ""))) return "Nombre non valide";
 
   nb = parseFloat(nombre.toString().replace(/ /gi, ""));
-  if (Math.ceil(nb) != nb) return "Nombre avec virgule non g�r�.";
+  if (Math.ceil(nb) != nb) return "Nombre avec virgule non géré.";
 
   n = nb.toString().length;
   switch (n) {

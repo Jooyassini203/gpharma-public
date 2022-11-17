@@ -6,9 +6,10 @@ import Produit from "../database/models/Produit.model.js";
 import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
 import Unite from "../database/models/Unite.model.js";
 import Utilisateur from "../database/models/Utilisateur.model.js";
+import { convertEngDayMonth } from "../utils/nizwami-ibrahim/ConvertEngDayMonth.js";
 const getAll = async (req, res) => {
   try {
-    const response = await Ajustement.findAll({
+    let response = await Ajustement.findAll({
       attributes: {
         include: [
           [
@@ -27,6 +28,15 @@ const getAll = async (req, res) => {
         { model: Utilisateur },
       ],
     });
+    if (response.length > 0)
+      response.map(
+        (element) =>
+          (element = {
+            ...element,
+            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+            ["date_ajustement"]: convertEngDayMonth(element.date_ajustement),
+          })
+      );
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -34,7 +44,7 @@ const getAll = async (req, res) => {
 };
 const getAjustementDetails = async (req, res) => {
   try {
-    const response = await Ajustement_detail.findAll({
+    let response = await Ajustement_detail.findAll({
       where: { ajustement_id: req.params.ajustement_id },
       include: [{ model: Ajustement }, { model: Produit }],
     });
@@ -45,9 +55,13 @@ const getAjustementDetails = async (req, res) => {
 };
 const getSpecific = async (req, res) => {
   try {
-    const response = await Ajustement.findOne({
+    let response = await Ajustement.findOne({
       attributes: {
         include: [
+          [
+            db.fn("DATE_FORMAT", db.col("date_saisi"), " %W %d %M %Y "),
+            "date_saisi",
+          ],
           [
             db.fn("DATE_FORMAT", db.col("date_ajustement"), " %W %d %M %Y "),
             "date_ajustement",
@@ -57,6 +71,12 @@ const getSpecific = async (req, res) => {
       where: { id: req.params.id },
       include: [{ model: Utilisateur }, { model: Emplacement }],
     });
+    if (response)
+      response = {
+        ...response,
+        ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+        ["date_livraison"]: convertEngDayMonth(element.date_livraison),
+      };
     res.json(response);
   } catch (error) {
     console.log(error.message);
