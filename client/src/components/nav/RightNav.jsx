@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import cryptojs from "crypto-js";
 import { useRecoilState } from "recoil";
 import { showRightNav } from "../../atoms/nav";
-import { getRule, getUrl, InputForm, updateData, urlRead } from "../../utils/utils";
+import {
+  getRule,
+  getUrl,
+  InputForm,
+  updateData,
+  urlRead,
+} from "../../utils/utils";
 import { userConnected } from "../../atoms/authentication";
 import "./RightNav.css";
 import { toast } from "react-toastify";
@@ -24,8 +30,7 @@ function RightNav() {
   const [preview, setPreview] = useState("");
   const [imageProfile, setImageProfile] = useState(null);
   const loadImage = (event) => {
-    const img = event.target.files[0];
-    console.log(img, "url", URL.createObjectURL(img));
+    const img = event.target.files[0]; 
     setPreview(URL.createObjectURL(img));
   };
   const handleClickInput = () => {
@@ -49,8 +54,8 @@ function RightNav() {
       userConnect.id,
       { last_mot_de_passe, mot_de_passe },
       () => {
-        reloadDataUser(setUserConnect)
-        document.getElementById("closePwd").click(); 
+        reloadDataUser(setUserConnect);
+        document.getElementById("closePwd").click();
       }
     );
   };
@@ -67,7 +72,7 @@ function RightNav() {
       userConnect.id,
       formData,
       () => {
-        reloadDataUser(setUserConnect)
+        reloadDataUser(setUserConnect);
         document.getElementById("close").click();
       },
       true
@@ -75,23 +80,24 @@ function RightNav() {
   };
 
   const reloadDataUser = (setUserConnect) => {
-    axios.get(urlRead('reloadDataUser', userConnect.id)).then((response)=>{
-      localStorage.setItem(
-        "gpharma@2.0.0",
-        response.data.dataUser
-      );
-      console.log(window.localStorage.getItem("gpharma@2.0.0")); 
-      const userJson = cryptojs.AES.decrypt(
-        localStorage.getItem("gpharma@2.0.0"),
-        process.env.REACT_APP_KEY_SESSION
-      ).toString(cryptojs.enc.Utf8);
-      setUserConnect(JSON.parse(userJson));
-    }).catch(()=>{
-      toast.warning('Une erreur est survenue lors du mise à jours des données!')
-    })
-  }
+    axios
+      .get(urlRead("reloadDataUser", userConnect.id))
+      .then((response) => {
+        localStorage.setItem("gpharma@2.0.0", response.data.dataUser); 
+        const userJson = cryptojs.AES.decrypt(
+          localStorage.getItem("gpharma@2.0.0"),
+          process.env.REACT_APP_KEY_SESSION
+        ).toString(cryptojs.enc.Utf8);
+        setUserConnect(JSON.parse(userJson));
+      })
+      .catch(() => {
+        toast.warning(
+          "Une erreur est survenue lors du mise à jours des données!"
+        );
+      });
+  };
 
-  const changeImage = () => { 
+  const changeImage = () => {
     let formData = new FormData();
     formData.append("file", imageProfile);
     updateData(
@@ -99,15 +105,12 @@ function RightNav() {
       userConnect.id,
       formData,
       () => {
-        reloadDataUser(setUserConnect)
-        setPreview(""); 
+        reloadDataUser(setUserConnect);
+        setPreview("");
       },
       true
     );
-  };
-  useEffect(() => {  
-      console.log("UserConnect", userConnect); 
-  },[] )
+  }; 
   return (
     <>
       <div className={show ? "chatbox active " : "chatbox"}>
@@ -147,12 +150,19 @@ function RightNav() {
                     accept=".jpg,.png,.jpeg"
                     className="d-none"
                     ref={inputRef}
-                    onChange={(e) => {  
-                      setImageProfile(e.target.files[0]); 
-                      setPreview(URL.createObjectURL(e.target.files[0])); 
+                    onChange={(e) => {
+                      setImageProfile(e.target.files[0]);
+                      setPreview(URL.createObjectURL(e.target.files[0]));
                     }}
                   />
-                  <button className={preview?"btn btn-warning btn-sm light":"d-none"} onClick={changeImage}>Valider le changement</button>
+                  <button
+                    className={
+                      preview ? "btn btn-warning btn-sm light" : "d-none"
+                    }
+                    onClick={changeImage}
+                  >
+                    Valider le changement
+                  </button>
                 </div>
                 <div className="profile-statistics mb-3">
                   <div className="text-center">
@@ -168,7 +178,7 @@ function RightNav() {
                         className="btn btn-primary btn-sm mb-1 mr-1"
                         data-toggle="modal"
                         data-target="#profilModal"
-                        onClick={()=>{
+                        onClick={() => {
                           setNom_login(userConnect.nom_login);
                           setNom_utilisateur(userConnect.nom_utilisateur);
                         }}
@@ -196,9 +206,9 @@ function RightNav() {
               </a>
             </h4>
             <p className="mt-2 ">
-              Cette privillège vous obtroit la contrôlle totale sur la gestion
-              de votre pharmacie dans GPharma versoin 2.0.0 . Vous pouvez voir
-              le manuel pour en savoir un plus de ce qui est la manipulation du
+              Ce privilège vous octroie le contrôle totale sur la gestion de
+              votre pharmacie dans GPharma version 2.0.0 . Vous pouvez voir le
+              manuel pour en savoir un plus sur ce qui est la manipulation du
               logiciel.
             </p>
           </div>
@@ -207,25 +217,26 @@ function RightNav() {
             style={{ top: "0vh !important" }}
           >
             <p className="text-center">
-              Copyright © Developed by{" "}
+              Copyright © Développé par{" "}
               <a
                 href="https://www.mada-digital.net/"
                 className="text-primary"
                 target="_blank"
               >
                 MADA-Digital
-              </a>
-              {"  "}
-              2022
+              </a> 
             </p>
           </div>
         </div>
       </div>
 
-      <div className="modal fade" id="profilModal"
-      data-backdrop="static"
-      data-keyboard="true"
-      aria-modal="true">
+      <div
+        className="modal fade"
+        id="profilModal"
+        data-backdrop="static"
+        data-keyboard="true"
+        aria-modal="true"
+      >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -286,10 +297,13 @@ function RightNav() {
           </div>
         </div>
       </div>
-      <div className="modal fade" id="profilModalPwd"
-      data-backdrop="static"
-      data-keyboard="true"
-      aria-modal="true">
+      <div
+        className="modal fade"
+        id="profilModalPwd"
+        data-backdrop="static"
+        data-keyboard="true"
+        aria-modal="true"
+      >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">

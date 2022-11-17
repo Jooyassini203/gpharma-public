@@ -25,6 +25,7 @@ const login = async (req, res) => {
         type_utilisateur: user.type_utilisateur,
         nom_login: user.nom_login,
         nom_utilisateur: user.nom_utilisateur,
+        image: user.image,
         url: user.url,
         mot_de_passe: user.mot_de_passe,
       };

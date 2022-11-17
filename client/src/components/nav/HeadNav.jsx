@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../../atoms/authentication";
 import { showRightNav } from "../../atoms/nav";
-import { getData, getRule, getUrl } from "../../utils/utils";
+import { getData, getRule, getUrl, urlRead } from "../../utils/utils";
+import cryptojs from "crypto-js";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
 
+  const reloadDataSession = () => {
+    const userJson = cryptojs.AES.decrypt(
+      localStorage.getItem("gpharma@2.0.0"),
+      process.env.REACT_APP_KEY_SESSION
+    ).toString(cryptojs.enc.Utf8);
+    setUserConnect(JSON.parse(userJson));
+  };
+  useEffect(() => {
+    reloadDataSession(); 
+  }, []);
   const logOut = () => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -25,7 +38,6 @@ function HeadNav() {
                     <button
                       className="btn btn-danger mr-2"
                       onClick={() => {
-                        console.log("userConnect.id", userConnect.id);
                         getData(
                           "logout",
                           (data) => {
@@ -228,7 +240,7 @@ function HeadNav() {
                       src={
                         userConnect.image
                           ? getUrl("images/utilisateur", userConnect.image)
-                          : "images/profile/17.jpg"
+                          : "images/users/1.jpg"
                       }
                       width={20}
                       alt="Image"

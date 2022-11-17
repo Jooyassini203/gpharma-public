@@ -100,7 +100,7 @@ function Modal() {
               onChange={(e) => setMarge_beneficiaire(e.target.value)}
               obligatory={isOb ? "active" : ""}
             >
-              Marge bénéficiaire (ex : 1.5 / 50% bénéfice)
+              Marge bénéficiaire (ex : 1.5 / 50% de bénéfice)
             </InputForm>
           </div>
           <div className="modal-footer">

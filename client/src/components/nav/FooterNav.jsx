@@ -6,7 +6,7 @@ function FooterNav({...props}) {
       <div className="footer"{...props}>
         <div className="copyright">
           <p>
-            Copyright © Developed by{" "}
+            Copyright © Développé par{" "}
             <a href="https://www.mada-digital.net/" target="_blank">
               MADA-Digital
             </a>

@@ -28,7 +28,7 @@ function Nav() {
           userConnect.type_utilisateur == "ADMIN" ? (
             <NavElementChildren
               to="/caisse"
-              icon="far fa-money-bill-alt"
+              icon="fas fa-money-bill-alt"
               title="Caisse"
             />
           ) : null}
@@ -36,7 +36,7 @@ function Nav() {
           userConnect.type_utilisateur == "ADMIN" ? (
             <NavElementChildren
               to="/guichet"
-              icon="far fa-list-alt"
+              icon="fas fa-list-alt"
               title="Guichet"
             />
           ) : null}
