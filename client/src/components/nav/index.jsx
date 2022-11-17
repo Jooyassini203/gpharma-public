@@ -72,6 +72,11 @@ function Nav() {
                 title="Paramètre"
               />
               <NavElementChildren
+                to="/marge_beneficiaire"
+                icon="fas fa-line-chart "
+                title="Marge bénéficiaire"
+              />
+              <NavElementChildren
                 to="/societe"
                 icon="fas fa-hospital-alt"
                 title="Société"

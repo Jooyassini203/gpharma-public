@@ -45,6 +45,8 @@ import emplacementListe from "../seeders/Emplacement.seeder.js";
 import utilisateurData from "../seeders/Utilisateur.seeder.js";
 import guichetListe from "../seeders/Guichet.seeder.js";
 import entrepriveData from "../seeders/Entreprise.seeder.js";
+import Marge_beneficiaireListe from "../seeders/Marge_beneficiaire.seeder.js";
+import Marge_beneficiaire from "../models/Marge_beneficiaire.model.js";
 
 // Association
 Ajustement.hasMany(Ajustement_detail, {
@@ -596,13 +598,16 @@ const Migration = async () => {
             )
           );
         await Entreprise.bulkCreate(entrepriveData)
+          .then(() => console.log(" ------> Table << Entreprise >> migrée!"))
+          .catch(() =>
+            console.log(" ------> Table << Entreprise >> NON migrée!!!")
+          );
+        await Marge_beneficiaire.bulkCreate(Marge_beneficiaireListe)
           .then(() =>
-            console.log(" ------> Table << Entreprise >> migrée!")
+            console.log(" ------> Table << Marge_beneficiaire >> migrée!")
           )
           .catch(() =>
-            console.log(
-              " ------> Table << Entreprise >> NON migrée!!!"
-            )
+            console.log(" ------> Table << Marge_beneficiaire >> NON migrée!!!")
           );
       }
     })

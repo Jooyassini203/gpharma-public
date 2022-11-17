@@ -15,9 +15,9 @@ import Caisse from "../pages/caisse";
 import Guichet from "../pages/guichet";
 import Pharmacie from "../pages/pharmacie";
 import { useRecoilState } from "recoil";
-import cryptojs from "crypto-js";
 import { userConnected } from "../../atoms/authentication";
-import { useEffect } from "react";
+import cryptojs from "crypto-js";
+import Marge_beneficiaire from "../pages/marge_beneficiaire";
 
 function MyRoute() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -27,15 +27,15 @@ function MyRoute() {
     }
     return <Login />;
   };
-  const getUser = () => {
-    const userJson = cryptojs.AES.decrypt(
-      localStorage.getItem("gpharma@2.0.0"),
+  React.useEffect(()=>{
+    if(localStorage.getItem("gpharma@2.0.0")){
+
+      const userJson = cryptojs.AES.decrypt(
+        localStorage.getItem("gpharma@2.0.0"),
       process.env.REACT_APP_KEY_SESSION
-    ).toString(cryptojs.enc.Utf8);
-    setUserConnect(JSON.parse(userJson));
-  };
-  useEffect(()=>{
-    getUser()
+      ).toString(cryptojs.enc.Utf8);
+      setUserConnect(JSON.parse(userJson));
+    }
   },[])
   return (
     <>
@@ -48,12 +48,11 @@ function MyRoute() {
           <Route exact path="/caisse" element={Middleware(Caisse)} />
         ) : null}
 
-        {userConnect.type_utilisateur == "CAISSIER" ||
+        {userConnect.type_utilisateur == "GUICHETIER" ||
         userConnect.type_utilisateur == "ADMIN" ? (
           <Route exact path="/guichet" element={Middleware(Guichet)} />
         ) : null}
-        {userConnect.type_utilisateur == "GUICHETIER" ||
-        userConnect.type_utilisateur == "ADMIN" ? (
+        {  userConnect.type_utilisateur == "ADMIN" ? (
           <>
             <Route exact path="/ajustement" element={Middleware(Ajustement)} />
             <Route
@@ -68,6 +67,7 @@ function MyRoute() {
             />
             <Route exact path="/produit" element={Middleware(Produit)} />
             <Route exact path="/parametre" element={Middleware(Parametre)} />
+            <Route exact path="/marge_beneficiaire" element={Middleware(Marge_beneficiaire)} />
             <Route exact path="/societe" element={Middleware(Societe)} />
             <Route
               exact

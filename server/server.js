@@ -28,6 +28,7 @@ import EntrepriseRouter from "./routes/Entreprise.routes.js";
 import DownloadRouter from "./routes/Download.routes.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import Marge_beneficiaireRouter from "./routes/Marge_beneficiaire.routes.js";
 
 console.log("\n\n\tMODE ", process.env.NODE_ENV, "\n\n");
 
@@ -69,6 +70,7 @@ app.use(GuichetRouter);
 app.use(VenteRouter);
 app.use(EntrepriseRouter);
 app.use(DownloadRouter);
+app.use(Marge_beneficiaireRouter);
 
 Migration();
 

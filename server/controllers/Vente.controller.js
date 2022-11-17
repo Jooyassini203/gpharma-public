@@ -325,12 +325,11 @@ const validateVenteCaisse = async (req, res) => {
         item_produit_emplacement.produit.presentation_quantite
       );
       const quantite_vendue = parseFloat(item_venteDetail.quantite_vendue);
-      let new_quantite_produit = 0;
       if (
         item_produit_emplacement.produit.unite_stock ==
         item_venteDetail.unite_vente
       ) {
-        if (quantite_vendue > last_quantite_produit) {
+        if (last_quantite_produit < quantite_vendue) {
           await transaction.rollback();
           return res.status(404).json({
             message: `Quantité du ${
@@ -342,12 +341,11 @@ const validateVenteCaisse = async (req, res) => {
             )})!`,
           });
         }
-        new_quantite_produit = last_quantite_produit - quantite_vendue;
       } else if (
         item_produit_emplacement.produit.unite_presentation ==
         item_venteDetail.unite_vente
       ) {
-        if (quantite_vendue > last_quantite_produit * presentation_quantite) {
+        if (last_quantite_produit * presentation_quantite < quantite_vendue) {
           await transaction.rollback();
           return res.status(404).json({
             message: `Quantité du ${
@@ -361,9 +359,8 @@ const validateVenteCaisse = async (req, res) => {
             )})!`,
           });
         }
-        new_quantite_produit =
-          last_quantite_produit * presentation_quantite - quantite_vendue;
       }
+      let new_quantite_produit = last_quantite_produit - quantite_vendue;
       item_produit_emplacement.set({ quantite_produit: new_quantite_produit });
       await item_produit_emplacement.save({ transaction });
 

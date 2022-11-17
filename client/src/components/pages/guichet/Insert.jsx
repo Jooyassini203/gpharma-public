@@ -59,6 +59,7 @@ function Insert() {
   const [OptionsGuichet, setOptionsGuichet] = React.useState([]);
   const [file, setFile] = React.useState("");
   const [listVenteDetails, setListVenteDetails] = React.useState([]);
+  const [marge_beneficiaire, setMarge_beneficiaire] = React.useState("");
 
   const [showAccordion, setShowAccordion] = React.useState(false);
   const [toggleUniteVente, setToggleUniteVente] = React.useState(true);
@@ -229,6 +230,21 @@ function Insert() {
     setListVenteDetails([]);
   }, [societe_prise_en_charge]);
   React.useEffect(() => {
+    if (produit.emplacement) {
+      if (toggleUniteVente)
+        setVenteDetails({
+          ...venteDetails,
+          quantite_demande: getEmplacement(produit.emplacement)[1]
+            .quantite_produit,
+        });
+      else
+        setVenteDetails({
+          ...venteDetails,
+          quantite_demande: quantite_demande * produit.presentation_quantite,
+        });
+    }
+  }, [toggleUniteVente]);
+  React.useEffect(() => {
     getData("produitEtalage", (data) => {
       convertToOption(
         data,
@@ -244,22 +260,8 @@ function Insert() {
       convertToOption(data, setOptionsGuichet);
     });
     getData("unite", setUnites);
+    getData("marge_beneficiaire/active", (data)=>{setMarge_beneficiaire(data.marge_beneficiaire)});
   }, []);
-  React.useEffect(() => {
-    if (produit.emplacement) {
-      if (toggleUniteVente)
-        setVenteDetails({
-          ...venteDetails,
-          quantite_demande: getEmplacement(produit.emplacement)[1]
-            .quantite_produit,
-        });
-      else
-        setVenteDetails({
-          ...venteDetails,
-          quantite_demande: quantite_demande * produit.presentation_quantite,
-        });
-    }
-  }, [toggleUniteVente]);
   return (
     <>
       <div
