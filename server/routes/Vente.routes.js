@@ -1,16 +1,18 @@
-import express from "express";
-import {
-  getAllGuichet,
-  getAllCaisse,
-  getSpecific,
-  createOne,
-  updateOne,
-  deleteOne,
-  getGuichetNonLivrer,
-  updateOneVenteDetail,
-  validateVenteCaisse,
-} from "../controllers/Vente.controller.js";
-import Autentification from "../middlewares/Authentification.middleware.js";
+const getAllGuichet =
+  require("../controllers/Vente.controller.js").getAllGuichet;
+const getAllCaisse = require("../controllers/Vente.controller.js").getAllCaisse;
+const getSpecific = require("../controllers/Vente.controller.js").getSpecific;
+const createOne = require("../controllers/Vente.controller.js").createOne;
+const updateOne = require("../controllers/Vente.controller.js").updateOne;
+const deleteOne = require("../controllers/Vente.controller.js").deleteOne;
+const getGuichetNonLivrer =
+  require("../controllers/Vente.controller.js").getGuichetNonLivrer;
+const updateOneVenteDetail =
+  require("../controllers/Vente.controller.js").updateOneVenteDetail;
+const validateVenteCaisse =
+  require("../controllers/Vente.controller.js").validateVenteCaisse;
+const express = require("express");
+const Autentification = require("../middlewares/Authentification.middleware.js");
 const VenteRouter = express.Router();
 VenteRouter.get(
   "/vente/myGuichet/:utilisateur_id",
@@ -33,4 +35,4 @@ VenteRouter.put("/vente/Guichet/:id", Autentification, updateOne);
 VenteRouter.put("/vente/caisse/:id", Autentification, validateVenteCaisse);
 VenteRouter.put("/vente/details/:id", Autentification, updateOneVenteDetail);
 VenteRouter.delete("/vente/Guichet/:id", Autentification, deleteOne);
-export default VenteRouter;
+module.exports = VenteRouter;

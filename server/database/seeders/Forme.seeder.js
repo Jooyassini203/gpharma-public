@@ -71,7 +71,7 @@ let arrayValue = [
   "TISSU PERFORE",
   "TRANSFUSEUR",
   "TULLE",
-  "TUYAU"
+  "TUYAU",
 ];
 let formeListe = [];
 for (let index = 0; index < arrayValue.length; index++) {
@@ -80,4 +80,4 @@ for (let index = 0; index < arrayValue.length; index++) {
   });
 }
 
-export default formeListe;
+module.exports = formeListe;

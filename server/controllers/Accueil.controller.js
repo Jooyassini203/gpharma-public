@@ -1,9 +1,9 @@
-import { Op, QueryTypes } from "sequelize";
-import db from "../config/Database.js";
-import Utilisateur from "../database/models/utilisateur.model.js";
-import Vente from "../database/models/Vente.model.js";
-import { getDateNow } from "../utils/utils.js";
-
+const Op = require("sequelize").Op;
+const QueryTypes = require("sequelize").QueryTypes;
+const db = require("../config/Database.js");
+const Utilisateur = require("../database/models/utilisateur.model.js");
+const Vente = require("../database/models/Vente.model.js");
+const getDateNow = require("../utils/utils.js").getDateNow;
 const getStatGeneral = async (req, res) => {
   const user = await Utilisateur.findOne({ id: req.params.utilisateur_id });
   if (!user)
@@ -86,4 +86,4 @@ const getStatVente = async (req, res) => {
     console.log(error.message);
   }
 };
-export { getStatGeneral, getStatVente };
+module.exports = { getStatGeneral, getStatVente };

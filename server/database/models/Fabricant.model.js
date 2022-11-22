@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Fabricant = db.define(
   "fabricant",
@@ -17,4 +17,4 @@ const Fabricant = db.define(
   { paranoid: true, freezeTableName: true }
 );
 
-export default Fabricant;
+module.exports = Fabricant;

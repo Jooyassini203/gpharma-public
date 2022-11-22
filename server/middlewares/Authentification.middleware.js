@@ -1,10 +1,10 @@
-const Autentification = (req, res, next) =>{
-    // if(sessionStorage.getItem('user_gpharma@2.0.0')){
-    //     next()
-    // }else{
-    //     return res.status(500).json({message:'Authentifié vous d\'abord s\'il vous plaît.'})
-    // }
-    next()
-}
+const Autentification = (req, res, next) => {
+  // if(sessionStorage.getItem('user_gpharma@2.0.0')){
+  //     next()
+  // }else{
+  //     return res.status(500).json({message:'Authentifié vous d\'abord s\'il vous plaît.'})
+  // }
+  next();
+};
 
-export default Autentification
+module.exports = Autentification;

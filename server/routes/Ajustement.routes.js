@@ -1,11 +1,11 @@
-import express from "express";
-import {
-  getAll,
-  getAjustementDetails,
-  getSpecific,
-  createOne,
-} from "../controllers/Ajustement.controller.js";
-import Autentification from "../middlewares/Authentification.middleware.js";
+const getAll = require("../controllers/Ajustement.controller.js").getAll;
+const getAjustementDetails =
+  require("../controllers/Ajustement.controller.js").getAjustementDetails;
+const getSpecific =
+  require("../controllers/Ajustement.controller.js").getSpecific;
+const createOne = require("../controllers/Ajustement.controller.js").createOne;
+const express = require("express");
+const Autentification = require("../middlewares/Authentification.middleware.js");
 const AjustementRouter = express.Router();
 AjustementRouter.get("/Ajustement/", Autentification, getAll);
 AjustementRouter.get(
@@ -15,4 +15,4 @@ AjustementRouter.get(
 );
 AjustementRouter.get("/Ajustement/:id", Autentification, getSpecific);
 AjustementRouter.post("/Ajustement/", Autentification, createOne);
-export default AjustementRouter;
+module.exports = AjustementRouter;

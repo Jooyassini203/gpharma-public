@@ -1,14 +1,18 @@
-import express from "express";
-import {
-  getAll,
-  getSpecific,
-  createOne,
-  updateOne,
-  updateOneRavitaillementDetail,
-  validateRavitaillement,
-  deleteOne,
-} from "../controllers/Ravitaillement.controller.js";
-import Autentification from "../middlewares/Authentification.middleware.js";
+const getAll = require("../controllers/Ravitaillement.controller.js").getAll;
+const getSpecific =
+  require("../controllers/Ravitaillement.controller.js").getSpecific;
+const createOne =
+  require("../controllers/Ravitaillement.controller.js").createOne;
+const updateOne =
+  require("../controllers/Ravitaillement.controller.js").updateOne;
+const updateOneRavitaillementDetail =
+  require("../controllers/Ravitaillement.controller.js").updateOneRavitaillementDetail;
+const validateRavitaillement =
+  require("../controllers/Ravitaillement.controller.js").validateRavitaillement;
+const deleteOne =
+  require("../controllers/Ravitaillement.controller.js").deleteOne;
+const express = require("express");
+const Autentification = require("../middlewares/Authentification.middleware.js");
 const RavitaillementRouter = express.Router();
 RavitaillementRouter.get("/Ravitaillement/", Autentification, getAll);
 RavitaillementRouter.get("/Ravitaillement/:id", Autentification, getSpecific);
@@ -25,4 +29,4 @@ RavitaillementRouter.put(
   validateRavitaillement
 );
 RavitaillementRouter.delete("/Ravitaillement/:id", Autentification, deleteOne);
-export default RavitaillementRouter;
+module.exports = RavitaillementRouter;

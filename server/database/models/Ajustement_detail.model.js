@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Ajustement_detail = db.define(
   "ajustement_detail",
@@ -22,4 +22,4 @@ const Ajustement_detail = db.define(
   },
   { paranoid: true, timestamps: false, freezeTableName: true }
 );
-export default Ajustement_detail;
+module.exports = Ajustement_detail;

@@ -1,4 +1,4 @@
-import { bcryptData } from "../../utils/utils.js";
+const bcryptData = require("../../utils/utils.js").bcryptData;
 let utilisateurData = [];
 utilisateurData.push({
   id: 0,
@@ -11,4 +11,4 @@ utilisateurData.push({
   mot_de_passe: bcryptData(" "),
 });
 
-export default utilisateurData;
+module.exports = utilisateurData;

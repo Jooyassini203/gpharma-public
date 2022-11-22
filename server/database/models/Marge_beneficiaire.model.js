@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 const Marge_beneficiaire = db.define(
   "marge_beneficiaire",
   {
@@ -13,4 +13,4 @@ const Marge_beneficiaire = db.define(
   },
   { paranoid: true, freezeTableName: true }
 );
-export default Marge_beneficiaire;
+module.exports = Marge_beneficiaire;

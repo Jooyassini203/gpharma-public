@@ -1,15 +1,16 @@
-import db from "../config/Database.js";
-import Caisse from "../database/models/Caisse.model.js";
-import Fournisseur from "../database/models/Fournisseur.model.js";
-import Mode_expedition from "../database/models/Mode_expedition.model.js";
-import Produit from "../database/models/Produit.model.js";
-import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
-import Ravitaillement from "../database/models/Ravitaillement.model.js";
-import Ravitaillement_detail from "../database/models/Ravitaillement_detail.model.js";
-import Unite from "../database/models/Unite.model.js";
-import Utilisateur from "../database/models/Utilisateur.model.js";
-import { convertEngDayMonth } from "../utils/nizwami-ibrahim/ConvertEngDayMonth.js";
-import { getDateNow } from "../utils/utils.js";
+const db = require("../config/Database.js");
+const Caisse = require("../database/models/Caisse.model.js");
+const Fournisseur = require("../database/models/Fournisseur.model.js");
+const Mode_expedition = require("../database/models/Mode_expedition.model.js");
+const Produit = require("../database/models/Produit.model.js");
+const Produit_emplacement = require("../database/models/Produit_emplacement.model.js");
+const Ravitaillement = require("../database/models/Ravitaillement.model.js");
+const Ravitaillement_detail = require("../database/models/Ravitaillement_detail.model.js");
+const Unite = require("../database/models/Unite.model.js");
+const Utilisateur = require("../database/models/Utilisateur.model.js");
+const convertEngDayMonth =
+  require("../utils/nizwami-ibrahim/ConvertEngDayMonth.js").convertEngDayMonth;
+const getDateNow = require("../utils/utils.js").getDateNow;
 const getAll = async (req, res) => {
   try {
     let response = await Ravitaillement.findAll({
@@ -44,19 +45,20 @@ const getAll = async (req, res) => {
         { model: Utilisateur },
       ],
     });
+    let resp = [];
     if (response.length > 0)
-      response.map(
-        (element) =>
-          (element = {
-            ...element,
-            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-            ["date_prev_livraison"]: convertEngDayMonth(
-              element.date_prev_livraison
-            ),
-            ["date_livraison"]: convertEngDayMonth(element.date_livraison),
-          })
-      );
-    res.json(response);
+      response.map((element) => {
+        element = {
+          ...element.dataValues,
+          ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+          ["date_prev_livraison"]: convertEngDayMonth(
+            element.date_prev_livraison
+          ),
+          ["date_livraison"]: convertEngDayMonth(element.date_livraison),
+        };
+        resp.push(element);
+      });
+    res.json(resp);
   } catch (error) {
     console.log(error.message);
   }
@@ -92,20 +94,21 @@ const getSpecific = async (req, res) => {
         { model: Utilisateur },
       ],
     });
-    if (response)
+    let response = {};
+    if (dataRvt)
       response = {
-        ...response,
-        ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+        ...dataRvt.dataValues,
+        ["date_saisi"]: convertEngDayMonth(dataRvt.date_saisi),
         ["date_prev_livraison"]: convertEngDayMonth(
-          element.date_prev_livraison
+          dataRvt.date_prev_livraison
         ),
-        ["date_livraison"]: convertEngDayMonth(element.date_livraison),
+        ["date_livraison"]: convertEngDayMonth(dataRvt.date_livraison),
       };
     const dataRvtDetail = await Ravitaillement_detail.findAll({
       where: { ravitaillement_id: req.params.id },
       include: [{ model: Produit }, { model: Unite }],
     });
-    if (dataRvt || dataRvtDetail) res.json([dataRvt, dataRvtDetail]);
+    if (dataRvt || dataRvtDetail) res.json([response, dataRvtDetail]);
   } catch (error) {
     console.log(error.message);
   }
@@ -252,7 +255,7 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export {
+module.exports = {
   getAll,
   getSpecific,
   createOne,

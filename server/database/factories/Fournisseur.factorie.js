@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+const faker = require("@faker-js/faker").faker;
 let fournisseurListe = [];
 const getNumberRadom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -19,4 +19,4 @@ for (let index = 0; index < 6; index++) {
   });
 }
 
-export default fournisseurListe;
+module.exports = fournisseurListe;

@@ -1,4 +1,4 @@
-import Emplacement from "../database/models/Emplacement.model.js";
+const Emplacement = require("../database/models/Emplacement.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Emplacement.findAll();
@@ -52,4 +52,4 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+module.exports = { getAll, getSpecific, createOne, updateOne, deleteOne };

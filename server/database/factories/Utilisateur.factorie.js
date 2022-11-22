@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
-import { bcryptData } from "../../utils/utils.js";
+const faker = require("@faker-js/faker").faker;
+const bcryptData = require("../../utils/utils.js").bcryptData;
 let utilisateurListe = [];
 for (let index = 0; index < 6; index++) {
   utilisateurListe.push({
@@ -14,4 +14,4 @@ for (let index = 0; index < 6; index++) {
   });
 }
 
-export default utilisateurListe;
+module.exports = utilisateurListe;

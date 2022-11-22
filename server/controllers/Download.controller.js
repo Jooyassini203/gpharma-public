@@ -1,27 +1,26 @@
-import fs from "fs";
-import path, { dirname } from "path";
-import pdf from "pdf-creator-node";
-import { fileURLToPath } from "url";
-import Caisse from "../database/models/Caisse.model.js";
-import Client from "../database/models/Client.model.js";
-import Entreprise from "../database/models/Entreprise.model.js";
-import Guichet from "../database/models/Guichet.model.js";
-import Ordonnance from "../database/models/Ordonnance.model.js";
-import Produit from "../database/models/Produit.model.js";
-import Societe from "../database/models/Societe.model.js";
-import Unite from "../database/models/Unite.model.js";
-import Vente from "../database/models/Vente.model.js";
-import Vente_detail from "../database/models/Vente_detail.model.js";
-import { NumberToLetter } from "../utils/number-to-letter/index.js";
-import options from "../utils/pdf-creator-node/options.js";
-import {
-  capitalizeFirstLetter,
-  getDateNow,
-  getDateTime,
-  numberWithCommas,
-} from "../utils/utils.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const capitalizeFirstLetter =
+  require("../utils/utils.js").capitalizeFirstLetter;
+const getDateNow = require("../utils/utils.js").getDateNow;
+const getDateTime = require("../utils/utils.js").getDateTime;
+const numberWithCommas = require("../utils/utils.js").numberWithCommas;
+const fs = require("fs");
+const path = require("path");
+const dirname = require("path").dirname;
+const pdf = require("pdf-creator-node");
+const fileURLToPath = require("url").fileURLToPath;
+const Caisse = require("../database/models/Caisse.model.js");
+const Client = require("../database/models/Client.model.js");
+const Entreprise = require("../database/models/Entreprise.model.js");
+const Guichet = require("../database/models/Guichet.model.js");
+const Ordonnance = require("../database/models/Ordonnance.model.js");
+const Produit = require("../database/models/Produit.model.js");
+const Societe = require("../database/models/Societe.model.js");
+const Unite = require("../database/models/Unite.model.js");
+const Vente = require("../database/models/Vente.model.js");
+const Vente_detail = require("../database/models/Vente_detail.model.js");
+const NumberToLetter =
+  require("../utils/number-to-letter/index.js").NumberToLetter;
+const options = require("../utils/pdf-creator-node/options.js");
 
 const gerneratePdf = async (req, res) => {
   const id_vente = req.params.id;
@@ -138,4 +137,4 @@ const gerneratePdf = async (req, res) => {
     });
 };
 
-export { gerneratePdf };
+module.exports = { gerneratePdf };

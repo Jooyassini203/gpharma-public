@@ -1,8 +1,9 @@
-import Utilisateur from "../database/models/utilisateur.model.js";
-import fs from "fs";
-import bcrypt from "bcrypt";
-import { bcryptData, uploadFile } from "../utils/utils.js";
-import { Op } from "sequelize";
+const Utilisateur = require("../database/models/utilisateur.model.js");
+const fs = require("fs");
+const bcrypt = require("bcrypt");
+const bcryptData = require("../utils/utils.js").bcryptData;
+const uploadFile = require("../utils/utils.js").uploadFile;
+const Op = require("sequelize").Op;
 
 const getAll = async (req, res) => {
   try {
@@ -153,7 +154,7 @@ const changePwd = async (req, res) => {
     console.log(error.message);
   }
 };
-export {
+module.exports = {
   getAll,
   getSpecific,
   createOne,

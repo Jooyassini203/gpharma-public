@@ -1,16 +1,16 @@
-import fs from "fs";
-import path from "path";
-import bcrypt from "bcrypt";
+const fs = require("fs");
+const path = require("path");
+const bcrypt = require("bcrypt");
 
-export const MIGRATE = false; // true
+const MIGRATE = false; // true
 
-export const getDateTime = (name = "") => {
+const getDateTime = (name = "") => {
   const date = new Date();
   name += `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}_${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}_${date.getMilliseconds()}`;
   return name;
 };
 
-export const getDateNow = (option = "datetime") => {
+const getDateNow = (option = "datetime") => {
   const date = new Date(); //2022-10-22 17:41:30
   let dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   if (option === "date") {
@@ -20,19 +20,19 @@ export const getDateNow = (option = "datetime") => {
   }
   return dateString;
 };
-export function capitalizeFirstLetter(string) {
+const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-export const bcryptData = (data, salt = 10) => {
+};
+const bcryptData = (data, salt = 10) => {
   let dataCrypted = bcrypt.hashSync(data, salt);
   console.log("\n\n", dataCrypted, "\n\n");
   return dataCrypted;
 };
 
-export const numberWithCommas = (x) => {
+const numberWithCommas = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
 };
-export const uploadFile = (
+const uploadFile = (
   req,
   res,
   sigle,
@@ -103,7 +103,7 @@ const formatZero = (number, length = 4) => {
     ? number
     : zero(length - number.toString().length) + number.toString();
 };
-export const getId = async (Model, sigle = "") => {
+const getId = async (Model, sigle = "") => {
   try {
     const response = await Model.findOne({
       order: [["createdAt", "DESC"]],
@@ -127,7 +127,7 @@ export const getId = async (Model, sigle = "") => {
   }
 };
 
-export const getEmplacement = (strEmplacement) => {
+const getEmplacement = (strEmplacement) => {
   let arr = strEmplacement.slice(0, -6).split("--//--,");
   let finalArr = [];
   for (let i = 0; i < arr.length; i++) {
@@ -135,4 +135,17 @@ export const getEmplacement = (strEmplacement) => {
     finalArr.push(json);
   }
   return finalArr;
+};
+
+module.exports = {
+  MIGRATE,
+  getDateTime,
+  getDateNow,
+  capitalizeFirstLetter,
+  bcryptData,
+  numberWithCommas,
+  uploadFile,
+  formatZero,
+  getId,
+  getEmplacement,
 };

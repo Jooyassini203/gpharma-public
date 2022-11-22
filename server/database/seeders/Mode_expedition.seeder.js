@@ -6,4 +6,4 @@ for (let index = 0; index < arrayValue.length; index++) {
   });
 }
 
-export default mode_expeditionListe;
+module.exports = mode_expeditionListe;

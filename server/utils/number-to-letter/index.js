@@ -11,7 +11,7 @@
  *_________________________________________________________________________	*
  *****************************************************************************
  */
-export function Unite(nombre) {
+const Unite = (nombre) => {
   var unite;
   switch (nombre) {
     case 0:
@@ -46,9 +46,9 @@ export function Unite(nombre) {
       break;
   } //fin switch
   return unite;
-} //-----------------------------------------------------------------------
+}; //-----------------------------------------------------------------------
 
-export function Dizaine(nombre) {
+const Dizaine = (nombre) => {
   let dizaine = "";
   switch (nombre) {
     case 10:
@@ -107,9 +107,9 @@ export function Dizaine(nombre) {
       break;
   } //fin switch
   return dizaine;
-} //-----------------------------------------------------------------------
+}; //-----------------------------------------------------------------------
 
-export function NumberToLetter(nombre) {
+const NumberToLetter = (nombre) => {
   var i, j, n, quotient, reste, nb;
   var ch;
   var numberToLetter = "";
@@ -308,4 +308,6 @@ export function NumberToLetter(nombre) {
     numberToLetter = numberToLetter + "s";
 
   return numberToLetter;
-} //-----------------------------------------------------------------------
+}; //-----------------------------------------------------------------------
+
+module.exports = { Unite, Dizaine, NumberToLetter };

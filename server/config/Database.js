@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+const Sequelize = require("sequelize").Sequelize;
 const db = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USERNAME,
@@ -15,4 +15,4 @@ db.authenticate()
   .catch(() => {
     console.log("Connexion échoué!");
   });
-export default db;
+module.exports = db;

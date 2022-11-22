@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Ravitaillement_detail = db.define(
   "ravitaillement_detail",
@@ -28,4 +28,4 @@ const Ravitaillement_detail = db.define(
     freezeTableName: true,
   }
 );
-export default Ravitaillement_detail;
+module.exports = Ravitaillement_detail;

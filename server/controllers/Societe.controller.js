@@ -1,4 +1,4 @@
-import Societe from "../database/models/Societe.model.js";
+const Societe = require("../database/models/Societe.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Societe.findAll();
@@ -77,7 +77,7 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export {
+module.exports = {
   getAll,
   getSpecific,
   createOne,

@@ -1,5 +1,5 @@
-import { Op } from "sequelize";
-import Mode_expedition from "../database/models/Mode_expedition.model.js";
+const Op = require("sequelize").Op;
+const Mode_expedition = require("../database/models/Mode_expedition.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Mode_expedition.findAll({
@@ -66,4 +66,4 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+module.exports = { getAll, getSpecific, createOne, updateOne, deleteOne };

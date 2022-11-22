@@ -1,15 +1,21 @@
-import express from "express";
-import {
-  getAll,
-  getSpecific,
-  createOne,
-  updateOne,
-  updateActive,
-  updateStatus,
-  deleteOne,
-  getActive,
-} from "../controllers/Marge_beneficiaire.controller.js";
-import Autentification from "../middlewares/Authentification.middleware.js";
+const getAll =
+  require("../controllers/Marge_beneficiaire.controller.js").getAll;
+const getSpecific =
+  require("../controllers/Marge_beneficiaire.controller.js").getSpecific;
+const createOne =
+  require("../controllers/Marge_beneficiaire.controller.js").createOne;
+const updateOne =
+  require("../controllers/Marge_beneficiaire.controller.js").updateOne;
+const updateActive =
+  require("../controllers/Marge_beneficiaire.controller.js").updateActive;
+const updateStatus =
+  require("../controllers/Marge_beneficiaire.controller.js").updateStatus;
+const deleteOne =
+  require("../controllers/Marge_beneficiaire.controller.js").deleteOne;
+const getActive =
+  require("../controllers/Marge_beneficiaire.controller.js").getActive;
+const express = require("express");
+const Autentification = require("../middlewares/Authentification.middleware.js");
 const Marge_beneficiaireRouter = express.Router();
 Marge_beneficiaireRouter.get("/Marge_beneficiaire/", Autentification, getAll);
 Marge_beneficiaireRouter.get(
@@ -47,4 +53,4 @@ Marge_beneficiaireRouter.delete(
   Autentification,
   deleteOne
 );
-export default Marge_beneficiaireRouter;
+module.exports = Marge_beneficiaireRouter;

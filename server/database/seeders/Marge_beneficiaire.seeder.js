@@ -7,4 +7,4 @@ for (let index = 0; index < arrayValue.length; index++) {
   });
 }
 
-export default Marge_beneficiaireListe;
+module.exports = Marge_beneficiaireListe;

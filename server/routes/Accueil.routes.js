@@ -1,9 +1,9 @@
-import express from "express";
-import {
-  getStatGeneral,
-  getStatVente,
-} from "../controllers/Accueil.controller.js";
-import Autentification from "../middlewares/Authentification.middleware.js";
+const getStatGeneral =
+  require("../controllers/Accueil.controller.js").getStatGeneral;
+const getStatVente =
+  require("../controllers/Accueil.controller.js").getStatVente;
+const express = require("express");
+const Autentification = require("../middlewares/Authentification.middleware.js");
 const AccueilRouter = express.Router();
 AccueilRouter.get(
   "/Accueil/StatGeneral/:utilisateur_id",
@@ -15,4 +15,4 @@ AccueilRouter.get(
   Autentification,
   getStatVente
 );
-export default AccueilRouter;
+module.exports = AccueilRouter;

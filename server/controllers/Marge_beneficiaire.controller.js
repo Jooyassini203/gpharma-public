@@ -1,5 +1,5 @@
-import { Op } from "sequelize";
-import Marge_beneficiaire from "../database/models/Marge_beneficiaire.model.js";
+const Op = require("sequelize").Op;
+const Marge_beneficiaire = require("../database/models/Marge_beneficiaire.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Marge_beneficiaire.findAll({
@@ -133,7 +133,7 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export {
+module.exports = {
   getAll,
   getSpecific,
   createOne,

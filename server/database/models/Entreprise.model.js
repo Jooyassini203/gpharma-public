@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 const Entreprise = db.define(
   "entreprise",
   {
@@ -14,14 +14,14 @@ const Entreprise = db.define(
       allowNull: false,
       unique: true,
     },
-    logo: { type: DataTypes.CHAR(255), allowNull: false }, 
-    adresse: { type: DataTypes.CHAR(255), allowNull: false }, 
-    contact: { type: DataTypes.CHAR(100), allowNull: false }, 
-    nif: { type: DataTypes.CHAR(255), allowNull: false }, 
-    stat: { type: DataTypes.CHAR(255), allowNull: false }, 
-    website: { type: DataTypes.CHAR(255), allowNull: true }, 
-    email: { type: DataTypes.CHAR(255), allowNull: true }, 
+    logo: { type: DataTypes.CHAR(255), allowNull: false },
+    adresse: { type: DataTypes.CHAR(255), allowNull: false },
+    contact: { type: DataTypes.CHAR(100), allowNull: false },
+    nif: { type: DataTypes.CHAR(255), allowNull: false },
+    stat: { type: DataTypes.CHAR(255), allowNull: false },
+    website: { type: DataTypes.CHAR(255), allowNull: true },
+    email: { type: DataTypes.CHAR(255), allowNull: true },
   },
   { paranoid: true, freezeTableName: true }
 );
-export default Entreprise;
+module.exports = Entreprise;

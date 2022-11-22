@@ -1,6 +1,6 @@
-import { Op } from "sequelize";
-import Famille from "../database/models/Famille.model.js";
-import Produit from "../database/models/Produit.model.js";
+const Op = require("sequelize").Op;
+const Famille = require("../database/models/Famille.model.js");
+const Produit = require("../database/models/Produit.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Famille.findAll({ order: [["nom_famille", "ASC"]] });
@@ -76,4 +76,4 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+module.exports = { getAll, getSpecific, createOne, updateOne, deleteOne };

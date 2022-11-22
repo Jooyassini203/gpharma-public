@@ -1,19 +1,21 @@
-import db from "../config/Database.js";
-import Client from "../database/models/Client.model.js";
-import Vente from "../database/models/Vente.model.js";
-import Ordonnance from "../database/models/Ordonnance.model.js";
-import Produit from "../database/models/Produit.model.js";
-import Vente_detail from "../database/models/Vente_detail.model.js";
-import { getEmplacement, getId, uploadFile } from "../utils/utils.js";
-import { QueryTypes } from "sequelize";
-import Utilisateur from "../database/models/Utilisateur.model.js";
-import Unite from "../database/models/Unite.model.js";
-import Guichet from "../database/models/Guichet.model.js";
-import Caisse from "../database/models/Caisse.model.js";
-import Societe from "../database/models/Societe.model.js";
-import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
-import { convertEngDayMonth } from "../utils/nizwami-ibrahim/ConvertEngDayMonth.js";
-
+const db = require("../config/Database.js");
+const Client = require("../database/models/Client.model.js");
+const Vente = require("../database/models/Vente.model.js");
+const Ordonnance = require("../database/models/Ordonnance.model.js");
+const Produit = require("../database/models/Produit.model.js");
+const Vente_detail = require("../database/models/Vente_detail.model.js");
+const getEmplacement = require("../utils/utils.js").getEmplacement;
+const getId = require("../utils/utils.js").getId;
+const uploadFile = require("../utils/utils.js").uploadFile;
+const QueryTypes = require("sequelize").QueryTypes;
+const Utilisateur = require("../database/models/Utilisateur.model.js");
+const Unite = require("../database/models/Unite.model.js");
+const Guichet = require("../database/models/Guichet.model.js");
+const Caisse = require("../database/models/Caisse.model.js");
+const Societe = require("../database/models/Societe.model.js");
+const Produit_emplacement = require("../database/models/Produit_emplacement.model.js");
+const convertEngDayMonth =
+  require("../utils/nizwami-ibrahim/ConvertEngDayMonth.js").convertEngDayMonth;
 const queryGet =
   'SELECT `produit`.`code_lot_produit`,  `produit`.`nom_produit`,  GROUP_CONCAT(\'{ "emplacement_id" : "\',PE.emplacement_id,\'", "nom_emplacement" : "\',E.nom_emplacement, \'" , "quantite_produit" : "\', PE.quantite_produit, \'" }--//--\') AS emplacement, `produit`.`prix_stock`, `produit`.`quantite_stock`,  `produit`.`classification_produit`,  `produit`.`description`,  `produit`.`image`,  `produit`.`presentation_quantite`,  `produit`.`stock_min`,  `produit`.`stock_max`,  `produit`.`date_der_ravitaillement`,  `produit`.`status`,  `produit`.`createdAt`,  `produit`.`updatedAt`,  `produit`.`deletedAt`,  `produit`.`fabricant_id`,  `produit`.`forme_id`,  `produit`.`famille_id`,  `produit`.`unite_presentation`,  `produit`.`unite_achat`,  `produit`.`unite_vente`,  `produit`.`unite_stock`,  `produit`.`voie_id`, `fabricant`.`nom_fabricant` AS `nom_fabricant`, `famille`.`nom_famille` AS `nom_famille`,  `forme`.`nom_forme` AS `nom_forme`, P.`nom_unite` AS `nom_presentation`, A.`nom_unite` AS `nom_achat`,   S.`nom_unite` AS `nom_stock`,  V.`nom_unite` AS `nom_vente`, `voie`.`nom_voie` AS `nom_voie` FROM `produit` LEFT JOIN `famille` ON `produit`.`famille_id` = `famille`.`id` LEFT JOIN `fabricant` ON `produit`.`fabricant_id` = `fabricant`.`id` LEFT JOIN `forme` ON `produit`.`forme_id` = `forme`.`id` LEFT JOIN `unite` P ON `produit`.`unite_presentation` = P.`id` LEFT JOIN `unite` A ON `produit`.`unite_achat` = A.`id` LEFT JOIN `unite` V ON `produit`.`unite_vente` = V.`id` LEFT JOIN `unite` S ON `produit`.`unite_stock` = S.`id` LEFT JOIN `voie` ON `produit`.`voie_id` = `voie`.`id` LEFT JOIN `Produit_emplacement` PE ON `produit`.`code_lot_produit` = PE.`produit_code_lot_produit` LEFT JOIN `emplacement` E ON PE.`emplacement_id` = E.`id` WHERE  `produit`.`deletedAt` IS NULL AND `famille`.`deletedAt` IS NULL AND `fabricant`.`deletedAt` IS NULL AND `forme`.`deletedAt` IS NULL AND P.`deletedAt` IS NULL AND A.`deletedAt` IS NULL AND V.`deletedAt` IS NULL AND S.`deletedAt` IS NULL ';
 const queryGroupBy = " GROUP BY `produit`.`code_lot_produit` ";
@@ -68,16 +70,20 @@ const getAllCaisse = async (req, res) => {
       where: { caissier_id: req.params.utilisateur_id },
       include: [{ model: Client }, { model: Utilisateur }],
     });
-    if (response.length > 0)
-      response.map(
-        (element) =>
-          (element = {
-            ...element,
-            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-            ["date_vente"]: convertEngDayMonth(element.date_vente),
-          })
-      );
-    res.json(response);
+    let resp = [];
+    if (response.length > 0) {
+      response.map((element) => {
+        element = {
+          ...element.dataValues,
+          ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+          ["date_vente"]: convertEngDayMonth(element.date_vente),
+          ["_previousDataValues"]: null,
+        };
+        resp.push(element);
+        console.log("\n\n\n", element);
+      });
+    }
+    res.json(resp);
   } catch (error) {
     console.log(error.message);
   }
@@ -99,15 +105,15 @@ const getGuichetNonLivrer = async (req, res) => {
       },
       where: { etat_vente: "0" },
     });
-    if (response.length > 0)
-      response.map(
-        (element) =>
-          (element = {
-            ...element,
-            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-            ["date_vente"]: convertEngDayMonth(element.date_vente),
-          })
-      );
+    // if (response.length > 0)
+    //   response.map(
+    //     (element) =>
+    //       (element = {
+    //         ...element,
+    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+    //         ["date_vente"]: convertEngDayMonth(element.date_vente),
+    //       })
+    //   );
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -115,7 +121,7 @@ const getGuichetNonLivrer = async (req, res) => {
 };
 const getSpecific = async (req, res) => {
   try {
-    let response_vente = await Vente.findAll({
+    let response_vente = await Vente.findOne({
       attributes: {
         include: [
           [
@@ -137,28 +143,18 @@ const getSpecific = async (req, res) => {
         { model: Societe },
       ],
     });
-    let a = [];
-    if (response_vente.length > 0) {
-      console.log(
-        "\n\nconvertEngDayMonth(element.date_saisi)",
-        convertEngDayMonth(response_vente[0].date_saisi)
-      );
-      response_vente.map(
-        (element) =>
-          (element = {
-            ...element.dataValues,
-            ["date_saisi"]: convertEngDayMonth(element.dataValues.date_saisi),
-            ["date_vente"]: convertEngDayMonth(element.dataValues.date_vente),
-          })
-      );
-    }
+    let resp_v = {
+      ...response_vente.dataValues,
+      ["date_saisi"]: convertEngDayMonth(response_vente.date_saisi),
+      ["date_vente"]: convertEngDayMonth(response_vente.date_vente),
+    };
     const guichetier = await Utilisateur.findOne({
-      where: { id: response_vente[0].guichetier_id },
+      where: { id: response_vente.guichetier_id },
     });
     const caissier = await Utilisateur.findOne({
-      where: { id: response_vente[0].caissier_id },
+      where: { id: response_vente.caissier_id },
     });
-    const _vente = { ...response_vente[0].dataValues, caissier, guichetier };
+    const _vente = { ...resp_v, caissier, guichetier };
     let response_venteDetails = await Vente_detail.findAll({
       where: { vente_id: req.params.id },
       include: [{ model: Unite }, { model: Produit }],
@@ -171,16 +167,13 @@ const getSpecific = async (req, res) => {
 const getAllVenteDetails = async (req, res) => {
   try {
     let response = await Vente.findOne({ where: { id: req.params.id } });
-    if (response.length > 0)
-      response.map(
-        (element) =>
-          (element = {
-            ...element,
-            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-            ["date_vente"]: convertEngDayMonth(element.date_vente),
-          })
-      );
-    res.json(response);
+    const resp = {};
+    resp = {
+      ...response,
+      ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+      ["date_vente"]: convertEngDayMonth(element.date_vente),
+    };
+    res.json(resp);
   } catch (error) {
     console.log(error.message);
   }
@@ -550,7 +543,7 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export {
+module.exports = {
   getAllGuichet,
   getAllCaisse,
   getSpecific,

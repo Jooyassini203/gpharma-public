@@ -1,12 +1,12 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Ajustement = db.define(
   "ajustement",
   {
     motif: {
       type: DataTypes.TEXT,
-      allowNull: false, 
+      allowNull: false,
     },
     date_saisi: {
       type: DataTypes.DATE,
@@ -15,7 +15,7 @@ const Ajustement = db.define(
     },
     date_ajustement: {
       type: DataTypes.DATE,
-      allowNull: false, 
+      allowNull: false,
     },
     status: {
       type: DataTypes.BOOLEAN,
@@ -25,4 +25,4 @@ const Ajustement = db.define(
   { paranoid: true, freezeTableName: true }
 );
 
-export default Ajustement;
+module.exports = Ajustement;

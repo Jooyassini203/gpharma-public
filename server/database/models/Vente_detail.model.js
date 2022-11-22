@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 const Vente_detail = db.define(
   "vente_detail",
   {
@@ -18,4 +18,4 @@ const Vente_detail = db.define(
   { paranoid: true, freezeTableName: true }
 );
 //   unite_vente: { type: DataTypes.INTEGER(10), allowNull: false },
-export default Vente_detail;
+module.exports = Vente_detail;
