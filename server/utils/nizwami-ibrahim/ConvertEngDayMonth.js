@@ -90,11 +90,11 @@ const convertEngDayMonth = (_textToConvert) => {
       fr: "Decembre",
     },
   ];
-  let a = _textToConvert;
+  let a = _textToConvert + "";
   for (let i = 0; i < date.length; i++) {
     a = a.replace(date[i].ang, date[i].fr);
   }
   return a;
 };
 
-export { capitalize, convertEngDayMonth };
+module.exports = { capitalize, convertEngDayMonth };

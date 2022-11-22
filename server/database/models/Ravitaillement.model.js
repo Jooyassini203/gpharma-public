@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Ravitaillement = db.define(
   "ravitaillement",
@@ -47,4 +47,4 @@ const Ravitaillement = db.define(
   }
 );
 
-export default Ravitaillement;
+module.exports = Ravitaillement;

@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Unite = db.define(
   "unite",
@@ -17,4 +17,4 @@ const Unite = db.define(
   { paranoid: true, freezeTableName: true }
 );
 
-export default Unite;
+module.exports = Unite;

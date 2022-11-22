@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Famille = db.define(
   "famille",
@@ -9,4 +9,4 @@ const Famille = db.define(
   },
   { paranoid: true, freezeTableName: true }
 );
-export default Famille;
+module.exports = Famille;

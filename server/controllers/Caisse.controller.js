@@ -1,5 +1,5 @@
-import { Op } from "sequelize";
-import Caisse from "../database/models/Caisse.model.js";
+const Op = require("sequelize").Op;
+const Caisse = require("../database/models/Caisse.model.js");
 
 const getAll = async (req, res) => {
   try {
@@ -59,4 +59,4 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+module.exports = { getAll, getSpecific, createOne, updateOne, deleteOne };

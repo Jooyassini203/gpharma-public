@@ -1,10 +1,7 @@
-import Utilisateur from "../database/models/Utilisateur.model.js";
-import bcrypt from "bcrypt";
-import cryptojs from "crypto-js";
-import { getDateNow } from "../utils/utils.js";
-// import { LocalStorage } from "node-localstorage";
-
-// global.localStorage = new LocalStorage("./scratch");
+const Utilisateur = require("../database/models/Utilisateur.model.js");
+const bcrypt = require("bcrypt");
+const cryptojs = require("crypto-js");
+const getDateNow = require("../utils/utils.js").getDateNow;
 
 const login = async (req, res) => {
   const nom_login = req.body.nom_login;
@@ -85,4 +82,4 @@ const logout = async (req, res) => {
     return res.status(404).json({ message: error.message });
   }
 };
-export { login, logout, reloadDataUser };
+module.exports = { login, logout, reloadDataUser };

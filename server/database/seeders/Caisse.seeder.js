@@ -1,7 +1,4 @@
-let arrayValue = [
-  "Caisse principale",  
-  "Caisse sécondaire"
-];
+let arrayValue = ["Caisse principale", "Caisse sécondaire"];
 let caisseListe = [];
 for (let index = 0; index < arrayValue.length; index++) {
   caisseListe.push({
@@ -9,4 +6,4 @@ for (let index = 0; index < arrayValue.length; index++) {
   });
 }
 
-export default caisseListe;
+module.exports = caisseListe;

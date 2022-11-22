@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Produit_emplacement = db.define(
   "produit_emplacement",
@@ -21,4 +21,4 @@ const Produit_emplacement = db.define(
   { paranoid: true, timestamps: false, freezeTableName: true }
 );
 
-export default Produit_emplacement;
+module.exports = Produit_emplacement;

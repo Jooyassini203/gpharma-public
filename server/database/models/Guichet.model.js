@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 const Guichet = db.define(
   "guichet",
   {
@@ -8,4 +8,4 @@ const Guichet = db.define(
   },
   { paranoid: true, freezeTableName: true }
 );
-export default Guichet;
+module.exports = Guichet;

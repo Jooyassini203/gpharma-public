@@ -1,12 +1,13 @@
-import db from "../config/Database.js";
-import Ajustement from "../database/models/Ajustement.model.js";
-import Ajustement_detail from "../database/models/Ajustement_detail.model.js";
-import Emplacement from "../database/models/Emplacement.model.js";
-import Produit from "../database/models/Produit.model.js";
-import Produit_emplacement from "../database/models/Produit_emplacement.model.js";
-import Unite from "../database/models/Unite.model.js";
-import Utilisateur from "../database/models/Utilisateur.model.js";
-import { convertEngDayMonth } from "../utils/nizwami-ibrahim/ConvertEngDayMonth.js";
+const db = require("../config/Database.js");
+const Ajustement = require("../database/models/Ajustement.model.js");
+const Ajustement_detail = require("../database/models/Ajustement_detail.model.js");
+const Emplacement = require("../database/models/Emplacement.model.js");
+const Produit = require("../database/models/Produit.model.js");
+const Produit_emplacement = require("../database/models/Produit_emplacement.model.js");
+const Unite = require("../database/models/Unite.model.js");
+const Utilisateur = require("../database/models/Utilisateur.model.js");
+const convertEngDayMonth =
+  require("../utils/nizwami-ibrahim/ConvertEngDayMonth.js").convertEngDayMonth;
 const getAll = async (req, res) => {
   try {
     let response = await Ajustement.findAll({
@@ -28,15 +29,15 @@ const getAll = async (req, res) => {
         { model: Utilisateur },
       ],
     });
-    if (response.length > 0)
-      response.map(
-        (element) =>
-          (element = {
-            ...element,
-            ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-            ["date_ajustement"]: convertEngDayMonth(element.date_ajustement),
-          })
-      );
+    // if (response.length > 0)
+    //   response.map(
+    //     (element) =>
+    //       (element = {
+    //         ...element,
+    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+    //         ["date_ajustement"]: convertEngDayMonth(element.date_ajustement),
+    //       })
+    //   );
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -71,12 +72,16 @@ const getSpecific = async (req, res) => {
       where: { id: req.params.id },
       include: [{ model: Utilisateur }, { model: Emplacement }],
     });
-    if (response)
-      response = {
-        ...response,
-        ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-        ["date_livraison"]: convertEngDayMonth(element.date_livraison),
-      };
+    // if (response)
+    //   response = {
+    //     ...response,
+    //     ["date_saisi"]: convertEngDayMonth(
+    //       response.dataValues.date_saisi.toString()
+    //     ),
+    //     ["date_livraison"]: convertEngDayMonth(
+    //       response.dataValues.date_livraison.toString()
+    //     ),
+    //   };
     res.json(response);
   } catch (error) {
     console.log(error.message);
@@ -177,4 +182,4 @@ const createOne = async (req, res) => {
     return res.status(404).json({ message: error.message });
   }
 };
-export { getAll, getAjustementDetails, getSpecific, createOne };
+module.exports = { getAll, getAjustementDetails, getSpecific, createOne };

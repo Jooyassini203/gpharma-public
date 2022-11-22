@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Client = db.define(
   "client",
@@ -10,4 +10,4 @@ const Client = db.define(
   },
   { paranoid: true, freezeTableName: true }
 );
-export default Client;
+module.exports = Client;

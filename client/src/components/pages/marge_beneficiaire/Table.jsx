@@ -147,7 +147,7 @@ function Table() {
       <MyDataTable
         columns={columns}
         data={list}
-        title="Liste des sociétés"
+        title="Liste des marges bénéficiaires"
         filterClass="form-control w-100"
         actions={
           <>

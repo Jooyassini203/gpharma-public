@@ -1,5 +1,5 @@
-import Entreprise from "../database/models/Entreprise.model.js";
-import { uploadFile } from "../utils/utils.js";
+const Entreprise = require("../database/models/Entreprise.model.js");
+const uploadFile = require("../utils/utils.js").uploadFile;
 const getSpecific = async (req, res) => {
   console.log(req.params);
   try {
@@ -37,4 +37,4 @@ const updateOne = async (req, res) => {
     return res.status(200).send({ message: error.message });
   }
 };
-export { getSpecific, createOne, updateOne };
+module.exports = { getSpecific, createOne, updateOne };

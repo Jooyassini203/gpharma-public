@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../../config/Database.js";
+const DataTypes = require("sequelize").DataTypes;
+const db = require("../../config/Database.js");
 
 const Forme = db.define(
   "forme",
@@ -17,4 +17,4 @@ const Forme = db.define(
   { paranoid: true, freezeTableName: true }
 );
 
-export default Forme;
+module.exports = Forme;

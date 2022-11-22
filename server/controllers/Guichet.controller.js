@@ -1,5 +1,5 @@
-import { Op } from "sequelize";
-import Guichet from "../database/models/Guichet.model.js";
+const Op = require("sequelize").Op;
+const Guichet = require("../database/models/Guichet.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Guichet.findAll({ order: [["nom_guichet", "ASC"]] });
@@ -69,7 +69,7 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export {
+module.exports = {
   getAll,
   getSpecific,
   createOne,

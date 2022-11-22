@@ -1,52 +1,48 @@
-import Entreprise from "../models/Entreprise.model.js";
-import db from "../../config/Database.js";
-import { MIGRATE } from "../../utils/utils.js";
-import { Association, DataTypes } from "sequelize";
-
-import Caisse from "../models/Caisse.model.js";
-import Fabricant from "../models/Fabricant.model.js";
-import Forme from "../models/Forme.model.js";
-import Unite from "../models/Unite.model.js";
-import Voie from "../models/Voie.model.js";
-import Utilisateur from "../models/Utilisateur.model.js";
-
-import Produit_emplacement from "../models/Produit_emplacement.model.js";
-import Ravitaillement_detail from "../models/Ravitaillement_detail.model.js";
-import Vente_detail from "../models/Vente_detail.model.js";
-import Ajustement_detail from "../models/Ajustement_detail.model.js";
-import Ajustement from "../models/Ajustement.model.js";
-import Ordonnance from "../models/Ordonnance.model.js";
-import Guichet from "../models/Guichet.model.js";
-import Societe from "../models/Societe.model.js";
-import Client from "../models/Client.model.js";
-import Fournisseur from "../models/Fournisseur.model.js";
-import Mode_expedition from "../models/Mode_expedition.model.js";
-import Emplacement from "../models/Emplacement.model.js";
-import Vente from "../models/Vente.model.js";
-import Famille from "../models/Famille.model.js";
-import Produit from "../models/Produit.model.js";
-import Ravitaillement from "../models/Ravitaillement.model.js";
-
-import caisseListe from "../seeders/Caisse.seeder.js";
-import fabricantListe from "../seeders/Fabricant.seeder.js";
-import familleListe from "../seeders/Famille.seeder.js";
-import formeListe from "../seeders/Forme.seeder.js";
-import uniteListe from "../seeders/Unite.seeder.js";
-import mode_expeditionListe from "../seeders/Mode_expedition.seeder.js";
-import voieListe from "../seeders/Voie.seeder.js";
-
-import utilisateurListe from "../factories/Utilisateur.factorie.js";
-import fournisseurListe from "../factories/Fournisseur.factorie.js";
-import {
-  produitListe,
-  produitEmplacementListe,
-} from "../factories/Produit.factorie.js";
-import emplacementListe from "../seeders/Emplacement.seeder.js";
-import utilisateurData from "../seeders/Utilisateur.seeder.js";
-import guichetListe from "../seeders/Guichet.seeder.js";
-import entrepriveData from "../seeders/Entreprise.seeder.js";
-import Marge_beneficiaireListe from "../seeders/Marge_beneficiaire.seeder.js";
-import Marge_beneficiaire from "../models/Marge_beneficiaire.model.js";
+const produitListe = require("../factories/Produit.factorie.js").produitListe;
+const produitEmplacementListe =
+  require("../factories/Produit.factorie.js").produitEmplacementListe;
+const Entreprise = require("../models/Entreprise.model.js");
+const db = require("../../config/Database.js");
+const MIGRATE = require("../../utils/utils.js").MIGRATE;
+const Association = require("sequelize").Association;
+const DataTypes = require("sequelize").DataTypes;
+const Caisse = require("../models/Caisse.model.js");
+const Fabricant = require("../models/Fabricant.model.js");
+const Forme = require("../models/Forme.model.js");
+const Unite = require("../models/Unite.model.js");
+const Voie = require("../models/Voie.model.js");
+const Utilisateur = require("../models/Utilisateur.model.js");
+const Produit_emplacement = require("../models/Produit_emplacement.model.js");
+const Ravitaillement_detail = require("../models/Ravitaillement_detail.model.js");
+const Vente_detail = require("../models/Vente_detail.model.js");
+const Ajustement_detail = require("../models/Ajustement_detail.model.js");
+const Ajustement = require("../models/Ajustement.model.js");
+const Ordonnance = require("../models/Ordonnance.model.js");
+const Guichet = require("../models/Guichet.model.js");
+const Societe = require("../models/Societe.model.js");
+const Client = require("../models/Client.model.js");
+const Fournisseur = require("../models/Fournisseur.model.js");
+const Mode_expedition = require("../models/Mode_expedition.model.js");
+const Emplacement = require("../models/Emplacement.model.js");
+const Vente = require("../models/Vente.model.js");
+const Famille = require("../models/Famille.model.js");
+const Produit = require("../models/Produit.model.js");
+const Ravitaillement = require("../models/Ravitaillement.model.js");
+const caisseListe = require("../seeders/Caisse.seeder.js");
+const fabricantListe = require("../seeders/Fabricant.seeder.js");
+const familleListe = require("../seeders/Famille.seeder.js");
+const formeListe = require("../seeders/Forme.seeder.js");
+const uniteListe = require("../seeders/Unite.seeder.js");
+const mode_expeditionListe = require("../seeders/Mode_expedition.seeder.js");
+const voieListe = require("../seeders/Voie.seeder.js");
+const utilisateurListe = require("../factories/Utilisateur.factorie.js");
+const fournisseurListe = require("../factories/Fournisseur.factorie.js");
+const emplacementListe = require("../seeders/Emplacement.seeder.js");
+const utilisateurData = require("../seeders/Utilisateur.seeder.js");
+const guichetListe = require("../seeders/Guichet.seeder.js");
+const entrepriveData = require("../seeders/Entreprise.seeder.js");
+const Marge_beneficiaireListe = require("../seeders/Marge_beneficiaire.seeder.js");
+const Marge_beneficiaire = require("../models/Marge_beneficiaire.model.js");
 
 // Association
 Ajustement.hasMany(Ajustement_detail, {
@@ -583,20 +579,20 @@ const Migration = async () => {
           .catch(() =>
             console.log(" ------> Table << Emplacement >> NON migrée!!!")
           );
-        await Produit.bulkCreate(produitListe)
-          .then(() => console.log(" ------> Table << Produit >> migrée!"))
-          .catch(() =>
-            console.log(" ------> Table << Produit >> NON migrée!!!")
-          );
-        await Produit_emplacement.bulkCreate(produitEmplacementListe)
-          .then(() =>
-            console.log(" ------> Table << Produit_emplacement >> migrée!")
-          )
-          .catch(() =>
-            console.log(
-              " ------> Table << Produit_emplacement >> NON migrée!!!"
-            )
-          );
+        // await Produit.bulkCreate(produitListe)
+        //   .then(() => console.log(" ------> Table << Produit >> migrée!"))
+        //   .catch(() =>
+        //     console.log(" ------> Table << Produit >> NON migrée!!!")
+        //   );
+        // await Produit_emplacement.bulkCreate(produitEmplacementListe)
+        //   .then(() =>
+        //     console.log(" ------> Table << Produit_emplacement >> migrée!")
+        //   )
+        //   .catch(() =>
+        //     console.log(
+        //       " ------> Table << Produit_emplacement >> NON migrée!!!"
+        //     )
+        //   );
         await Entreprise.bulkCreate(entrepriveData)
           .then(() => console.log(" ------> Table << Entreprise >> migrée!"))
           .catch(() =>
@@ -614,4 +610,4 @@ const Migration = async () => {
     .catch(() => console.log(" \n\n\n\n ERROR \n\n\n "));
 };
 
-export default Migration;
+module.exports = Migration;

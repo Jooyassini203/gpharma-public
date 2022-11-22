@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+const faker = require("@faker-js/faker").faker;
 let produitListe = [];
 let produitEmplacementListe = [];
 const getNumberRadom = (min, max) => {
@@ -42,4 +42,4 @@ for (let index = 0; index < 6; index++) {
     });
   }
 }
-export { produitListe, produitEmplacementListe };
+module.exports = { produitListe, produitEmplacementListe };

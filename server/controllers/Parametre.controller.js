@@ -1,5 +1,5 @@
-import { QueryTypes } from "sequelize";
-import db from "../config/Database.js";
+const QueryTypes = require("sequelize").QueryTypes;
+const db = require("../config/Database.js");
 
 const getCount = async (req, res) => {
   try {
@@ -24,4 +24,4 @@ const getCount = async (req, res) => {
 };
 const updateOne = async (req, res) => {};
 
-export { getCount };
+module.exports = { getCount };

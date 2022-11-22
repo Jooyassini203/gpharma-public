@@ -30,7 +30,7 @@ let arrayValue = [
   "ASTRA ZENECA",
   "NCPC",
   "DESKA",
-  "V-MEDICAL"
+  "V-MEDICAL",
 ];
 let fabricantListe = [];
 for (let index = 0; index < arrayValue.length; index++) {
@@ -39,4 +39,4 @@ for (let index = 0; index < arrayValue.length; index++) {
   });
 }
 
-export default fabricantListe;
+module.exports = fabricantListe;

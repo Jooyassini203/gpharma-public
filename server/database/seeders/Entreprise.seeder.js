@@ -1,4 +1,3 @@
-import { bcryptData } from "../../utils/utils.js";
 let entrepriveData = [];
 entrepriveData.push({
   id: "GPHARMA_0001",
@@ -11,4 +10,4 @@ entrepriveData.push({
   website: "www.gpharma@200.mg",
 });
 
-export default entrepriveData;
+module.exports = entrepriveData;

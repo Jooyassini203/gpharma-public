@@ -1,9 +1,9 @@
-let arrayValue = [ 
+let arrayValue = [
   "Orale",
   "Rectale",
   "Vaginale",
   "Sous cutanée",
-  "Ophtalmique"
+  "Ophtalmique",
 ];
 let voieListe = [];
 for (let index = 0; index < arrayValue.length; index++) {
@@ -12,4 +12,4 @@ for (let index = 0; index < arrayValue.length; index++) {
   });
 }
 
-export default voieListe;
+module.exports = voieListe;

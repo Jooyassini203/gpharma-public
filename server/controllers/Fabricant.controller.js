@@ -1,6 +1,6 @@
-import { Op } from "sequelize";
-import Fabricant from "../database/models/Fabricant.model.js";
-import Produit from "../database/models/Produit.model.js";
+const Op = require("sequelize").Op;
+const Fabricant = require("../database/models/Fabricant.model.js");
+const Produit = require("../database/models/Produit.model.js");
 const getAll = async (req, res) => {
   try {
     const response = await Fabricant.findAll({
@@ -78,4 +78,4 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export { getAll, getSpecific, createOne, updateOne, deleteOne };
+module.exports = { getAll, getSpecific, createOne, updateOne, deleteOne };

@@ -1,8 +1,8 @@
-import Fournisseur from "../database/models/Fournisseur.model.js";
-import fs from "fs";
-import { uploadFile } from "../utils/utils.js";
-import Ravitaillement from "../database/models/Ravitaillement.model.js";
-import { Op } from "sequelize";
+const Fournisseur = require("../database/models/Fournisseur.model.js");
+const fs = require("fs");
+const uploadFile = require("../utils/utils.js").uploadFile;
+const Ravitaillement = require("../database/models/Ravitaillement.model.js");
+const Op = require("sequelize").Op;
 const getAll = async (req, res) => {
   try {
     const response = await Fournisseur.findAll();
@@ -135,7 +135,7 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-export {
+module.exports = {
   getAll,
   getActivityFournisseur,
   getSpecific,
