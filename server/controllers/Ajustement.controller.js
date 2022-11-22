@@ -29,6 +29,7 @@ const getAll = async (req, res) => {
         { model: Utilisateur },
       ],
     });
+<<<<<<< HEAD
     let resp = [];
     if (response.length > 0)
       response.map((element) => {
@@ -40,6 +41,18 @@ const getAll = async (req, res) => {
         resp.push(element);
       });
     res.json(resp);
+=======
+    // if (response.length > 0)
+    //   response.map(
+    //     (element) =>
+    //       (element = {
+    //         ...element,
+    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+    //         ["date_ajustement"]: convertEngDayMonth(element.date_ajustement),
+    //       })
+    //   );
+    res.json(response);
+>>>>>>> 9ebf6078fd7e6e1258d4583daf747c8fdef66d0d
   } catch (error) {
     console.log(error.message);
   }
@@ -73,6 +86,7 @@ const getSpecific = async (req, res) => {
       where: { id: req.params.id },
       include: [{ model: Utilisateur }, { model: Emplacement }],
     });
+<<<<<<< HEAD
     let resp = {};
     if (response)
       resp = {
@@ -80,6 +94,18 @@ const getSpecific = async (req, res) => {
         ["date_saisi"]: convertEngDayMonth(response.date_saisi),
         ["date_livraison"]: convertEngDayMonth(response.date_livraison),
       };
+=======
+    // if (response)
+    //   response = {
+    //     ...response,
+    //     ["date_saisi"]: convertEngDayMonth(
+    //       response.dataValues.date_saisi.toString()
+    //     ),
+    //     ["date_livraison"]: convertEngDayMonth(
+    //       response.dataValues.date_livraison.toString()
+    //     ),
+    //   };
+>>>>>>> 9ebf6078fd7e6e1258d4583daf747c8fdef66d0d
     res.json(response);
   } catch (error) {
     console.log(error.message);
