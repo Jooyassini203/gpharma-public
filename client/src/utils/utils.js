@@ -8,6 +8,8 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 let userConnect = null;
+const address = `http://192.168.1.139:`;
+
 if (localStorage.getItem("gpharma@2.0.0")) {
   const userJson = cryptojs.AES.decrypt(
     localStorage.getItem("gpharma@2.0.0"),
@@ -16,21 +18,20 @@ if (localStorage.getItem("gpharma@2.0.0")) {
   userConnect = JSON.parse(userJson);
 }
 export const urlInsert = (tableName) => {
-  return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
+  return `${address + process.env.REACT_APP_PORT}/${tableName}`;
 };
 export const urlRead = (tableName, id = "") => {
-  if (!id) return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}`;
-  else
-    return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}/${id}`;
+  if (!id) return `${address + process.env.REACT_APP_PORT}/${tableName}`;
+  else return `${address + process.env.REACT_APP_PORT}/${tableName}/${id}`;
 };
 export const urlUpdate = (tableName, id) => {
-  return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}/${id}`;
+  return `${address + process.env.REACT_APP_PORT}/${tableName}/${id}`;
 };
 export const urlDelete = (tableName, id) => {
-  return `http://localhost:${process.env.REACT_APP_PORT}/${tableName}/${id}`;
+  return `${address + process.env.REACT_APP_PORT}/${tableName}/${id}`;
 };
 export const getUrl = (dir, name) => {
-  return `http://localhost:${process.env.REACT_APP_PORT}/${dir}/${name}`;
+  return `${address + process.env.REACT_APP_PORT}/${dir}/${name}`;
 };
 
 export const getDateNow = (name = "") => {

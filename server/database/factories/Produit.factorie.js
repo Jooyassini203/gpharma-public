@@ -20,6 +20,7 @@ for (let index = 0; index < 6; index++) {
     stock_max: getNumberRadom(200, 500),
     quantite_stock,
     date_der_ravitaillement: faker.date.recent(),
+    date_peremption: faker.date.future(),
     fabricant_id: getNumberRadom(1, 32),
     famille_id: getNumberRadom(1, 5),
     forme_id: getNumberRadom(1, 73),

@@ -47,6 +47,7 @@ function Modal() {
     prix_stock,
     stock_min,
     stock_max,
+    date_peremption,
     quantite_stock,
     // date_der_ravitaillement ,
     fabricant_id,
@@ -70,7 +71,7 @@ function Modal() {
   };
 
   const closeModal = () => {
-    setIsAdd({status: true})
+    setIsAdd({ status: true });
     setIsOb(false);
     setPreview("");
     setProduit(initialize);
@@ -387,7 +388,7 @@ function Modal() {
               </div>
               <div className="row">
                 {isAdd.status ? (
-                  <div className="col-4">
+                  <div className="col-3">
                     <InputForm
                       preIcon={{ text: "#" }}
                       name="code_lot_produit"
@@ -399,6 +400,17 @@ function Modal() {
                     </InputForm>
                   </div>
                 ) : null}
+                <div className="col-3">
+                  <InputForm
+                    date 
+                    name="date_peremption"
+                    val={date_peremption}
+                    onChange={(e) => onChange(e, setProduit)}
+                    obligatory={isOb ? "active" : ""}
+                  >
+                    Date de péremption
+                  </InputForm>
+                </div>
 
                 <div className="col ">
                   <InputForm
@@ -407,7 +419,7 @@ function Modal() {
                     onChange={(e) => onChange(e, setProduit)}
                     obligatory={isOb ? "active" : ""}
                   >
-                    Nom produit
+                    Désignation
                   </InputForm>
                 </div>
                 {!isAdd.status ? (

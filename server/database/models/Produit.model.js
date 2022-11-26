@@ -12,7 +12,6 @@ const Produit = db.define(
     nom_produit: {
       type: DataTypes.CHAR(255),
       allowNull: false,
-      unique: true,
     },
     classification_produit: {
       type: DataTypes.TEXT,
@@ -46,6 +45,10 @@ const Produit = db.define(
     date_der_ravitaillement: {
       type: DataTypes.DATE,
       // allowNull: false,
+    },
+    date_peremption: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     status: {
       type: DataTypes.BOOLEAN,

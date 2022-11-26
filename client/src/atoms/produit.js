@@ -28,6 +28,7 @@ export const initialize = {
   image: null,
   presentation_quantite: "",
   prix_stock: "",
+  date_peremption: "",
   stock_min: "",
   stock_max: "",
   quantite_stock: "",

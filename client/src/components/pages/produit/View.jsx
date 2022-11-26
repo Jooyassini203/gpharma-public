@@ -11,7 +11,7 @@ import {
 } from "../../../utils/utils";
 
 function View({ id }) {
-  const [produit, setProduit] = useRecoilState(produitSelect); 
+  const [produit, setProduit] = useRecoilState(produitSelect);
   return (
     <>
       <div
@@ -84,7 +84,7 @@ function View({ id }) {
                         <h4>
                           {produit.nom_produit} (Voie <b>{produit.nom_voie}</b>)
                         </h4>
-                        <div className="comment-review star-rating">
+                        {/* <div className="comment-review star-rating">
                           <ul>
                             <li>
                               <i className="fa fa-star" />
@@ -102,15 +102,15 @@ function View({ id }) {
                               <i className="fa fa-star-half-empty" />
                             </li>
                           </ul>
-                          <span className="review-text">(34 vente(s)){/*  /  */}</span>
-                          {/* <Link
+                          <span className="review-text">(34 vente(s)){/*  /   </span>
+                          <Link
                             to="caisse"
                             type="button"
                             className="product-review"
                           >
                             Voir les détails de ses ventes?
-                          </Link> */}
-                        </div>
+                          </Link>  
+                        </div> */}
                         <div className="d-table mb-2">
                           <p className="price float-left d-block">
                             {produit.prix_stock} Ar
@@ -120,6 +120,12 @@ function View({ id }) {
                           Code lot produit:
                           <span className=" ml-2 text-success font-w600">
                             {produit.code_lot_produit}
+                          </span>
+                        </p>
+                        <p>
+                          Date de péremption:
+                          <span className="ml-2 text-black font-w400">
+                            {produit.date_peremption}
                           </span>
                         </p>
                         <p>

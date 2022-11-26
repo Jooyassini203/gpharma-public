@@ -237,7 +237,7 @@ const createOne = async (req, res) => {
         queryGet +
           '  AND PE.quantite_produit != "0"  AND PE.emplacement_id = "2" AND `produit`.code_lot_produit = "' +
           element.produit_code_lot_produit +
-          '" ',
+          '" AND  DATE(NOW()) >= DATE(produit.date_peremption) ',
         queryGroupBy,
         { type: QueryTypes.SELECT }
       );
