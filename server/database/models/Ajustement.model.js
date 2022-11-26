@@ -10,7 +10,6 @@ const Ajustement = db.define(
     },
     date_saisi: {
       type: DataTypes.DATE,
-      //   defaultValue: ''
       allowNull: false,
     },
     date_ajustement: {

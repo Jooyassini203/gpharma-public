@@ -45,7 +45,7 @@ function NavElement({ to, icon, title, children }) {
   return (
     <>
       { true ? (
-        <li className="">
+        <li className="fs-12">
           {!children ? (
             <Link
               to={to}
@@ -79,7 +79,7 @@ function NavElement({ to, icon, title, children }) {
 export function NavElementChildren({ to, icon, title }) {
   
   return (
-    <li className="">
+    <li className="fs-12">
       <Link to={to} id={"idLink" + title}>
         <i className={icon} />
         {title}

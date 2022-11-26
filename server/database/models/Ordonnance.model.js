@@ -13,10 +13,6 @@ const Ordonnance = db.define(
       type: DataTypes.CHAR(255),
       allowNull: false,
     },
-    status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: "1",
-    },
   },
   { paranoid: true, freezeTableName: true }
 );

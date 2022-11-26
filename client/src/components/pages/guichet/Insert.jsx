@@ -293,7 +293,9 @@ function Insert() {
             <span className="accordion__header--text">
               Faire une vente détailée.
             </span>
-            <span className="accordion__header--indicator"></span>
+            <span className="float-right">
+              <i className={showAccordion ? "fa fa-minus" : "fa fa-plus"}></i>
+            </span>
           </div>
           <div
             id="no-gutter_collapseOne"
@@ -457,7 +459,7 @@ function Insert() {
           <span className="font-w600 mb-1 w-100">Vendre par</span>
           <br />
           <span
-            style={{ 
+            style={{
               paddingTop: "2.5px",
               cursor: "pointer",
             }}

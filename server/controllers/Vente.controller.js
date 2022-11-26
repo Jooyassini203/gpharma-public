@@ -38,16 +38,17 @@ const getAllGuichet = async (req, res) => {
       where: { guichetier_id: req.params.utilisateur_id },
       include: [{ model: Client }, { model: Utilisateur }],
     });
-    // if (response.length > 0)
-    //   response.map(
-    //     (element) =>
-    //       (element = {
-    //         ...element,
-    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-    //         ["date_vente"]: convertEngDayMonth(element.date_vente),
-    //       })
-    //   );
-    res.json(response);
+    let resp = [];
+    if (response.length > 0)
+      response.map((element) => {
+        element = {
+          ...element.dataValues,
+          ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+          ["date_vente"]: convertEngDayMonth(element.date_vente),
+        };
+        resp.push(element);
+      });
+    res.json(resp);
   } catch (error) {
     console.log(error.message);
   }
@@ -70,7 +71,6 @@ const getAllCaisse = async (req, res) => {
       where: { caissier_id: req.params.utilisateur_id },
       include: [{ model: Client }, { model: Utilisateur }],
     });
-<<<<<<< HEAD
     let resp = [];
     if (response.length > 0) {
       response.map((element) => {
@@ -81,22 +81,9 @@ const getAllCaisse = async (req, res) => {
           ["_previousDataValues"]: null,
         };
         resp.push(element);
-        console.log("\n\n\n", element);
       });
     }
     res.json(resp);
-=======
-    // if (response.length > 0)
-    //   response.map(
-    //     (element) =>
-    //       (element = {
-    //         ...element,
-    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-    //         ["date_vente"]: convertEngDayMonth(element.date_vente),
-    //       })
-    //   );
-    res.json(response);
->>>>>>> 9ebf6078fd7e6e1258d4583daf747c8fdef66d0d
   } catch (error) {
     console.log(error.message);
   }
@@ -118,16 +105,19 @@ const getGuichetNonLivrer = async (req, res) => {
       },
       where: { etat_vente: "0" },
     });
-    // if (response.length > 0)
-    //   response.map(
-    //     (element) =>
-    //       (element = {
-    //         ...element,
-    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-    //         ["date_vente"]: convertEngDayMonth(element.date_vente),
-    //       })
-    //   );
-    res.json(response);
+    let resp = [];
+    if (response.length > 0) {
+      response.map((element) => {
+        element = {
+          ...element.dataValues,
+          ["date_saisi"]: convertEngDayMonth(element.date_saisi),
+          ["date_vente"]: convertEngDayMonth(element.date_vente),
+          ["_previousDataValues"]: null,
+        };
+        resp.push(element);
+      });
+    }
+    res.json(resp);
   } catch (error) {
     console.log(error.message);
   }
@@ -156,29 +146,11 @@ const getSpecific = async (req, res) => {
         { model: Societe },
       ],
     });
-<<<<<<< HEAD
     let resp_v = {
       ...response_vente.dataValues,
       ["date_saisi"]: convertEngDayMonth(response_vente.date_saisi),
       ["date_vente"]: convertEngDayMonth(response_vente.date_vente),
     };
-=======
-    let a = [];
-    // if (response_vente.length > 0) {
-    //   console.log(
-    //     "\n\nconvertEngDayMonth(element.date_saisi)",
-    //     convertEngDayMonth(response_vente[0].date_saisi)
-    //   );
-    //   response_vente.map(
-    //     (element) =>
-    //       (element = {
-    //         ...element.dataValues,
-    //         ["date_saisi"]: convertEngDayMonth(element.dataValues.date_saisi),
-    //         ["date_vente"]: convertEngDayMonth(element.dataValues.date_vente),
-    //       })
-    //   );
-    // }
->>>>>>> 9ebf6078fd7e6e1258d4583daf747c8fdef66d0d
     const guichetier = await Utilisateur.findOne({
       where: { id: response_vente.guichetier_id },
     });

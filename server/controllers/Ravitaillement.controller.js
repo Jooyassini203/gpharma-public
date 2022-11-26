@@ -45,7 +45,6 @@ const getAll = async (req, res) => {
         { model: Utilisateur },
       ],
     });
-<<<<<<< HEAD
     let resp = [];
     if (response.length > 0)
       response.map((element) => {
@@ -60,21 +59,6 @@ const getAll = async (req, res) => {
         resp.push(element);
       });
     res.json(resp);
-=======
-    // if (response.length > 0)
-    //   response.map(
-    //     (element) =>
-    //       (element = {
-    //         ...element,
-    //         ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-    //         ["date_prev_livraison"]: convertEngDayMonth(
-    //           element.date_prev_livraison
-    //         ),
-    //         ["date_livraison"]: convertEngDayMonth(element.date_livraison),
-    //       })
-    //   );
-    res.json(response);
->>>>>>> 9ebf6078fd7e6e1258d4583daf747c8fdef66d0d
   } catch (error) {
     console.log(error.message);
   }
@@ -110,7 +94,6 @@ const getSpecific = async (req, res) => {
         { model: Utilisateur },
       ],
     });
-<<<<<<< HEAD
     let response = {};
     if (dataRvt)
       response = {
@@ -121,17 +104,6 @@ const getSpecific = async (req, res) => {
         ),
         ["date_livraison"]: convertEngDayMonth(dataRvt.date_livraison),
       };
-=======
-    // if (response)
-    //   response = {
-    //     ...response,
-    //     ["date_saisi"]: convertEngDayMonth(element.date_saisi),
-    //     ["date_prev_livraison"]: convertEngDayMonth(
-    //       element.date_prev_livraison
-    //     ),
-    //     ["date_livraison"]: convertEngDayMonth(element.date_livraison),
-    //   };
->>>>>>> 9ebf6078fd7e6e1258d4583daf747c8fdef66d0d
     const dataRvtDetail = await Ravitaillement_detail.findAll({
       where: { ravitaillement_id: req.params.id },
       include: [{ model: Produit }, { model: Unite }],

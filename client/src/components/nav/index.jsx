@@ -22,13 +22,13 @@ function Nav() {
       <HeadNav />
       <RightNav />
       <LeftNav >
-        <NavElement to="/" icon="fas fa-television" title="Accueil" />
-        <NavElement icon="fas fa-shopping-cart" title="Vente">
+        <NavElement to="/" icon="fa fa-television fa-lg" title="Accueil" />
+        <NavElement icon="fa fa-shopping-cart fa-lg" title="Vente">
           {userConnect.type_utilisateur == "CAISSIER" ||
           userConnect.type_utilisateur == "ADMIN" ? (
             <NavElementChildren
               to="/caisse"
-              icon="fas fa-money-bill-alt"
+              icon="fa fa-money-bill-alt"
               title="Caisse"
             />
           ) : null}
@@ -36,7 +36,7 @@ function Nav() {
           userConnect.type_utilisateur == "ADMIN" ? (
             <NavElementChildren
               to="/guichet"
-              icon="fas fa-list-alt"
+              icon="fa fa-list-alt"
               title="Guichet"
             />
           ) : null}
@@ -44,50 +44,50 @@ function Nav() {
 
         {userConnect.type_utilisateur == "ADMIN" ? (
           <>
-            <NavElement icon="fas fa-cogs" title="Administation">
+            <NavElement icon="fa fa-cogs" title="Administation">
               <NavElementChildren
                 to="/ajustement"
-                icon="fas fa-balance-scale"
+                icon="fa fa-balance-scale"
                 title="Ajustement"
               />
-              {/* <NavElementChildren to="/depot" icon="fas fa-warehouse" title="Dépôt" />  */}
+              {/* <NavElementChildren to="/depot" icon="fa fa-warehouse" title="Dépôt" />  */}
               <NavElementChildren
                 to="/fournisseur"
-                icon="fas fa-industry"
+                icon="fa fa-industry"
                 title="Fournisseur"
               />
               <NavElementChildren
                 to="/ravitaillement"
-                icon="fas fa-shipping-fast"
+                icon="fa fa-shipping-fast"
                 title="Ravitaillement"
               />
               <NavElementChildren
                 to="/produit"
-                icon="fas fa-dolly-flatbed"
+                icon="fa fa-dolly-flatbed"
                 title="Produit"
               />
               <NavElementChildren
                 to="/parametre"
-                icon="fas fa-cog"
+                icon="fa fa-cog"
                 title="Paramètre"
               />
               <NavElementChildren
                 to="/marge_beneficiaire"
-                icon="fas fa-line-chart "
+                icon="fa fa-line-chart "
                 title="Marge bénéficiaire"
               />
               <NavElementChildren
                 to="/societe"
-                icon="fas fa-hospital-alt"
+                icon="fa fa-hospital-alt"
                 title="Société"
               />
             </NavElement>
         <NavElement
           to="/utilisateur"
-          icon="fas fa-user-cog"
+          icon="fa fa-user-cog"
           title="Utilisateur"
         />
-        <NavElement to="/pharmacie" icon="fas fa-cog" title="Pharmacie" />
+        <NavElement to="/pharmacie" icon="fa fa-cog" title="Pharmacie" />
           </>
         ) : null}
 

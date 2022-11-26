@@ -28,10 +28,7 @@ const Ravitaillement = db.define(
     date_livraison: {
       type: DataTypes.DATE,
       unique: true,
-    },
-    date_ravitaillement: {
-      type: DataTypes.DATE,
-    },
+    }, 
     tva: {
       type: DataTypes.DOUBLE,
       allowNull: false,

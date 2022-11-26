@@ -36,10 +36,6 @@ const Utilisateur = db.define(
     image: DataTypes.STRING,
     url: DataTypes.STRING,
     date_der_log: DataTypes.DATE,
-    est_en_ligne: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: "0",
-    },
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: "1",

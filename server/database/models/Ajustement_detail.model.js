@@ -18,7 +18,6 @@ const Ajustement_detail = db.define(
     unite_nouveau_presentation: { type: DataTypes.INTEGER, allowNull: false },
     unite_ancien_stock: { type: DataTypes.INTEGER, allowNull: false },
     unite_ancien_presentation: { type: DataTypes.INTEGER, allowNull: false },
-    status: { type: DataTypes.INTEGER, defaultValue: "1" },
   },
   { paranoid: true, timestamps: false, freezeTableName: true }
 );

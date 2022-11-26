@@ -327,7 +327,7 @@ export const InputForm = ({
         ) : null}
         {postIcon ? (
           <div className="input-group-append show-pass">
-            <span className="input-group-text">
+            <span className="input-group-text fs-12">
               {postIcon.icon ? <i className={postIcon.icon} /> : postIcon.text}
             </span>
           </div>
@@ -413,10 +413,10 @@ const colourStyles = {
   control: (styles, { isFocused, isHovered, isSelected }) => {
     return {
       ...styles,
-      height: "56px",
+      height: "41px",
       "@media only screen and (max-width: 1400px)": {
         ...styles["@media only screen and (max-width: 1400px)"],
-        height: "41px",
+        height: "38px",
       },
       color: "#B1B1B1",
       border: isFocused
