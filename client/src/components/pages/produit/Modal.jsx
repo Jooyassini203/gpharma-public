@@ -17,6 +17,7 @@ import {
   convertToOption,
   verifObligatory,
   JsonToFormData,
+  getDateNow,
 } from "../../../utils/utils";
 
 function Modal() {
@@ -403,6 +404,7 @@ function Modal() {
                 <div className="col-3">
                   <InputForm
                     date 
+                    min={getDateNow("date")} 
                     name="date_peremption"
                     val={date_peremption}
                     onChange={(e) => onChange(e, setProduit)}
