@@ -21,15 +21,15 @@ function NotFound() {
                 <div>
                   {false ? (
                     <Link to="/">
-                      <a className="btn btn-primary" type="button">
+                      <button className="btn btn-primary" type="button">
                         Retourner à l'accueil
-                      </a>
+                      </button>
                     </Link>
                   ) : (
                     <Link to="/connexion">
-                      <a className="btn btn-primary" type="button">
+                      <button className="btn btn-primary" type="button">
                         Se connecter
-                      </a>
+                      </button>
                     </Link>
                   )}
                 </div>

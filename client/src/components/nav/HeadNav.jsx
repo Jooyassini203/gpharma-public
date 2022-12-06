@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../../atoms/authentication";
-import { showRightNav } from "../../atoms/nav";
+import { ClassShowMenuState, showRightNav } from "../../atoms/nav";
 import { getData, getRule, getUrl, urlRead } from "../../utils/utils";
 import cryptojs from "crypto-js";
 import { Link } from "react-router-dom";
@@ -15,14 +15,14 @@ function HeadNav() {
   const [show, setShow] = useRecoilState(showRightNav);
 
   const reloadDataSession = () => {
-    const userJson = cryptojs.AES.decrypt(
-      localStorage.getItem("gpharma@2.0.0"),
-      process.env.REACT_APP_KEY_SESSION
-    ).toString(cryptojs.enc.Utf8);
-    setUserConnect(JSON.parse(userJson));
+    // const userJson = cryptojs.AES.decrypt(
+    //   localStorage.getItem("gpharma@2.0.0"),
+    //   "x85p2qPE2I$7IJ8*EZQQ049bAxhwnr"
+    // ).toString(cryptojs.enc.Utf8);
+    setUserConnect(JSON.parse(localStorage.getItem("gpharma@2.0.0")));
   };
   useEffect(() => {
-    reloadDataSession(); 
+    reloadDataSession();
   }, []);
   const logOut = () => {
     confirmAlert({
@@ -68,6 +68,11 @@ function HeadNav() {
       },
     });
   };
+  const [ClassShowMenu, setClassShowMenu] = useRecoilState(ClassShowMenuState);
+  const handleClick = () => {
+    const status = !ClassShowMenu.status
+    setClassShowMenu({ status });
+  };
   return (
     <>
       <div className="nav-header">
@@ -76,8 +81,12 @@ function HeadNav() {
           {/* <img className="logo-compact" src="./images/logo-text.png" alt = "Image" />
           <img className="brand-title" src="./images/logo-text.png" alt = "Image" /> */}
         </Link>
-        <div className="nav-control">
-          <div className="hamburger">
+        <div className="nav-control" onClick={handleClick}>
+          <div
+            className={
+              ClassShowMenu.status ? "hamburger is-active" : "hamburger"
+            }
+          >
             <span className="line" />
             <span className="line" />
             <span className="line" />

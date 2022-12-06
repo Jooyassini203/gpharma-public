@@ -1,17 +1,16 @@
 import React from "react";
-import { useRecoilState } from "recoil";
-import Nav from "../../nav";
-import FooterNav from "../../nav/FooterNav";
+import { useRecoilState } from "recoil"; 
 import { isAddState } from "../../../atoms/caisse";
 import Insert from "./Insert";
 import Table from "./Table";
 import View from "./View";
+import Body from "../../body";
 
 function Caisse() { 
   const [isAdd, setIsAdd] = useRecoilState(isAddState)
   return (
-    <div id="main-wrapper" className="show">
-      <Nav />
+    <Body>
+      
       <div
         className="content-body"
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
@@ -20,8 +19,7 @@ function Caisse() {
           {isAdd === "1" ? <Insert /> :<> <Table /> <View/></>}
         </div>
       </div>
-      <FooterNav />
-    </div>
+    </Body>
   );
 }
 

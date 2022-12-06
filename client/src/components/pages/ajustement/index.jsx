@@ -1,8 +1,7 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { isAddState } from "../../../atoms/ajustement";
-import Nav from "../../nav";
-import FooterNav from "../../nav/FooterNav";
+import Body from "../../body"; 
 import Modal from "./Modal";
 import Table from "./Table";
 import View from "./View";
@@ -10,8 +9,8 @@ import View from "./View";
 function Ajustement() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
   return (
-    <div id="main-wrapper" className="show">
-      <Nav />
+    <Body>
+      
       <div
         className="content-body"
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
@@ -30,8 +29,7 @@ function Ajustement() {
           </div>
         </div>
       </div>
-      <FooterNav />
-    </div>
+    </Body>
   );
 }
 

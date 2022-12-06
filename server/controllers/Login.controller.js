@@ -32,10 +32,18 @@ const login = async (req, res) => {
         dataSessionCrypted,
         process.env.KEY_SESSION
       ).toString();
+      console.log("\n\n\n dataSession ", dataSession);
+      console.log(
+        "\n\n\nJSON.stringify(dataSession)",
+        JSON.stringify(dataSession)
+      );
       console.log("dataSessionCrypted", dataSessionCrypted);
       return res
         .status(200)
-        .send({ message: "Vous êtes connecté", dataUser: dataSessionCrypted });
+        .send({
+          message: "Vous êtes connecté",
+          dataUser: JSON.stringify(dataSession),
+        });
     } else
       return res
         .status(404)

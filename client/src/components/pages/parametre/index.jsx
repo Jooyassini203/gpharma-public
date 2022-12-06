@@ -20,6 +20,7 @@ import {
   faUsers,
   faWarehouse,
 } from "@fortawesome/free-solid-svg-icons";
+import Body from "../../body";
 
 const ItemParametre = ({ array, table, icon, children }) => {
   const [tb_name, setTb_name] = useRecoilState(table_name);
@@ -66,8 +67,8 @@ function Parametre() {
   }, []);
 
   return (
-    <>
-      <Nav />
+    <Body> 
+      
       <div
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
@@ -133,8 +134,7 @@ function Parametre() {
           </div>
         </div>
       </div>
-      <FooterNav />
-    </>
+    </Body>
   );
 }
 

@@ -12,6 +12,7 @@ import {
 } from "../../../atoms/utilisateur";
 import { confirmDelete, deleteData, getData } from "../../../utils/utils";
 import { userConnected } from "../../../atoms/authentication";
+import Body from "../../body";
 
 function Utilisateur() {
   const [listUser, setListUser] = useRecoilState(listUtilisateurState);
@@ -41,8 +42,7 @@ function Utilisateur() {
     getData(`utilisateur`, setUserSelect, id);
   };
   return (
-    <div id="main-wrapper" className="show">
-      <Nav />
+    <Body> 
       <div
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-12vh" }}
@@ -62,9 +62,8 @@ function Utilisateur() {
         </div>
       </div>
       <Modal />
-      <Viewer data={userSelect} />
-      <FooterNav />
-    </div>
+      <Viewer data={userSelect} /> 
+    </Body>
   );
 }
 

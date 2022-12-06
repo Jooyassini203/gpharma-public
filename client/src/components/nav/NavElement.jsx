@@ -31,11 +31,11 @@ function NavElement({ to, icon, title, children }) {
   };
   useEffect(() => {
     //  console.log(page.includes(to), page, to)
-    const userJson = cryptojs.AES.decrypt(
-      localStorage.getItem("gpharma@2.0.0"),
-      process.env.REACT_APP_KEY_SESSION
-    ).toString(cryptojs.enc.Utf8);
-    setUserConnect(JSON.parse(userJson));
+    // const userJson = cryptojs.AES.decrypt(
+    //   localStorage.getItem("gpharma@2.0.0"),
+    //   "x85p2qPE2I$7IJ8*EZQQ049bAxhwnr"
+    // ).toString(cryptojs.enc.Utf8);
+    setUserConnect(JSON.parse(localStorage.getItem("gpharma@2.0.0")));
   }, []);
   useEffect(() => { 
     if(userConnect.type_utilisateur){

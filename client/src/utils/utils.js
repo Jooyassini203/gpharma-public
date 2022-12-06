@@ -8,30 +8,30 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 let userConnect = null;
-const address = `http://192.168.1.139:`;
+const address = `http://node.gpharma.mada-digital.net`; //+http://192.168.1.139: process.env.REACT_APP_PORT;
 
 if (localStorage.getItem("gpharma@2.0.0")) {
-  const userJson = cryptojs.AES.decrypt(
-    localStorage.getItem("gpharma@2.0.0"),
-    process.env.REACT_APP_KEY_SESSION
-  ).toString(cryptojs.enc.Utf8);
-  userConnect = JSON.parse(userJson);
+  //   const userJson = cryptojs.AES.decrypt(
+  //     localStorage.getItem("gpharma@2.0.0"),
+  //     process.env.REACT_APP_KEY_SESSION
+  //   ).toString(cryptojs.enc.Utf8);
+  userConnect = JSON.parse(localStorage.getItem("gpharma@2.0.0"));
 }
 export const urlInsert = (tableName) => {
-  return `${address + process.env.REACT_APP_PORT}/${tableName}`;
+  return `${address}/${tableName}`;
 };
 export const urlRead = (tableName, id = "") => {
-  if (!id) return `${address + process.env.REACT_APP_PORT}/${tableName}`;
-  else return `${address + process.env.REACT_APP_PORT}/${tableName}/${id}`;
+  if (!id) return `${address}/${tableName}`;
+  else return `${address}/${tableName}/${id}`;
 };
 export const urlUpdate = (tableName, id) => {
-  return `${address + process.env.REACT_APP_PORT}/${tableName}/${id}`;
+  return `${address}/${tableName}/${id}`;
 };
 export const urlDelete = (tableName, id) => {
-  return `${address + process.env.REACT_APP_PORT}/${tableName}/${id}`;
+  return `${address}/${tableName}/${id}`;
 };
 export const getUrl = (dir, name) => {
-  return `${address + process.env.REACT_APP_PORT}/${dir}/${name}`;
+  return `${address}/${dir}/${name}`;
 };
 
 export const getDateNow = (name = "") => {
@@ -75,6 +75,7 @@ export const addData = (
         "content-type": "multipart/form-data",
       },
     };
+    console.log("userConnect", userConnect);
     if (!isFormData) {
       headers = {};
       data["utilisateur_id"] = userConnect.id;
@@ -82,7 +83,7 @@ export const addData = (
       data.append("utilisateur_id", userConnect.id);
     }
     try {
-      //console.log("post : ", urlInsert(tableName), data, headers);
+      console.log("post : ", urlInsert(tableName), data, headers);
       const responseAdd = await axios.post(urlInsert(tableName), data, headers);
       if (responseAdd) {
         toast.success(responseAdd.data.message);
@@ -132,7 +133,7 @@ export const updateData = (
       data.append("utilisateur_id", userConnect.id);
     }
     try {
-      //console.log("up : ", urlUpdate(tableName, id), data, headers);
+      console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
         urlUpdate(tableName, id),
         data,

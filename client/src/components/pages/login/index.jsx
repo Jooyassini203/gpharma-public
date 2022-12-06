@@ -25,6 +25,8 @@ function Login() {
           const response = await axios.post(urlInsert("login"), {
             nom_login,
             mot_de_passe,
+          },  {
+            headers: {"content-type": "application/json",}
           });
           if (response.status == 200) {
             toast.success(response.data.message);

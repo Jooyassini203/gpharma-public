@@ -1,14 +1,14 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
+import Body from "../../body";
 import Nav from "../../nav";
 import FooterNav from "../../nav/FooterNav";
 import StatisticGeneral from "./StatisticGeneral";
 
-function Accueil() { 
+function Accueil() {
   return (
-    <div id="main-wrapper" className="show">
-      <Nav />
+    <Body>
       <div
         className="content-body"
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
@@ -22,12 +22,12 @@ function Accueil() {
                   style={{ marginBottom: " 0vh" }}
                 >
                   <p className="text-justify">
-                    Bienvenue sur <b>Gpharma</b>. Chez vous, en déplacement, depuis
-                    votre tablette, smartphone ou ordinateur personnel, votre
-                    officine reste toujours accessible et connectée. Vérifiez
-                    l’état de vos stocks, suivez l’évolution de vos ventes,
-                    communiquez avec vos collaborateurs, surveillez que tout se
-                    passe bien.
+                    Bienvenue sur <b>Gpharma</b>. Chez vous, en déplacement,
+                    depuis votre tablette, smartphone ou ordinateur personnel,
+                    votre officine reste toujours accessible et connectée.
+                    Vérifiez l’état de vos stocks, suivez l’évolution de vos
+                    ventes, communiquez avec vos collaborateurs, surveillez que
+                    tout se passe bien.
                   </p>
                 </div>
                 <div className="col-3">
@@ -52,8 +52,7 @@ function Accueil() {
         </div>
         <StatisticGeneral />
       </div>
-      <FooterNav />
-    </div>
+    </Body>
   );
 }
 

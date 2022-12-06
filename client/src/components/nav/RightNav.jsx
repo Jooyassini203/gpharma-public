@@ -83,12 +83,12 @@ function RightNav() {
     axios
       .get(urlRead("reloadDataUser", userConnect.id))
       .then((response) => {
-        localStorage.setItem("gpharma@2.0.0", response.data.dataUser); 
-        const userJson = cryptojs.AES.decrypt(
-          localStorage.getItem("gpharma@2.0.0"),
-          process.env.REACT_APP_KEY_SESSION
-        ).toString(cryptojs.enc.Utf8);
-        setUserConnect(JSON.parse(userJson));
+        // localStorage.setItem("gpharma@2.0.0", response.data.dataUser); 
+        // const userJson = cryptojs.AES.decrypt(
+        //   localStorage.getItem("gpharma@2.0.0"),
+        //   "x85p2qPE2I$7IJ8*EZQQ049bAxhwnr"
+        // ).toString(cryptojs.enc.Utf8);
+        setUserConnect(JSON.parse(localStorage.getItem("gpharma@2.0.0")));
       })
       .catch(() => {
         toast.warning(
@@ -100,6 +100,7 @@ function RightNav() {
   const changeImage = () => {
     let formData = new FormData();
     formData.append("file", imageProfile);
+    console.log("formData", formData);
     updateData(
       "utilisateur",
       userConnect.id,

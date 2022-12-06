@@ -5,22 +5,21 @@ import Table from "./Table";
 import Modal from "./Modal";
 import View from "./View";
 import Activity from "./Activity";
+import Body from "../../body";
 
-function Founrisseur() { 
+function Founrisseur() {
   return (
-    <>
-      <Nav />
+    <Body>
       <div
         className="content-body"
         style={{ minHeight: "90vh", marginTop: "-8vh" }}
       >
         <Table />
-        <Modal/>
-        <View/>
-        <Activity/>
+        <Modal />
+        <View />
+        <Activity />
       </div>
-      <FouterNav />
-    </>
+    </Body>
   );
 }
 
