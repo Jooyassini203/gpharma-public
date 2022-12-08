@@ -1,4 +1,3 @@
-import cryptojs from "crypto-js";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
@@ -8,7 +7,7 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 let userConnect = null;
-const address = `http://node.gpharma.mada-digital.net`; //+http://192.168.1.139: process.env.REACT_APP_PORT;
+const address = `http://localhost:5000`; //+http://192.168.1.139: process.env.REACT_APP_PORT;http://node.gpharma.mada-digital.net
 
 if (localStorage.getItem("gpharma@2.0.0")) {
   //   const userJson = cryptojs.AES.decrypt(

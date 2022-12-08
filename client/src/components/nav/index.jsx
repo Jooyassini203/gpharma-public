@@ -8,6 +8,7 @@ import RightNav from "./RightNav";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../atoms/authentication";
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 
 function Nav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -21,6 +22,7 @@ function Nav() {
     {
       title: "Vente",
       icon: "fa fa-shopping-cart fa-lg",
+      auth: ["ADMIN", "GUICHETIER", "CAISSIER"],
       child: [
         {
           title: "Caisse",
@@ -39,6 +41,7 @@ function Nav() {
     {
       title: "Administration",
       icon: "fa fa-cogs fa-lg",
+      auth: ["ADMIN"],
       child: [
         {
           title: "Ajustement",
@@ -105,6 +108,9 @@ function Nav() {
     // ).toString(cryptojs.enc.Utf8);
     setUserConnect(JSON.parse(localStorage.getItem("gpharma@2.0.0")));
   }, []);
+  useMemo(()=>{
+    return classeMenuActive
+  }, [classeMenuActive])
   return (
     <>
       <HeadNav />
@@ -113,7 +119,7 @@ function Nav() {
         {ListMenu.map((item, index) => {
           // console.log("item: " , item.auth.includes(userConnect.type_utilisateur)); item.auth.includes(userConnect.type_utilisateur?userConnect.type_utilisateur:"")
           //element.auth.includes(userConnect.type_utilisateur)
-          const a = true ? (
+          const a = item.auth.includes(userConnect.type_utilisateur) ? (
             item.child ? (
               <li
                 key={item.title + index}
@@ -144,7 +150,7 @@ function Nav() {
                   }
                 >
                   {item.child.map((element, index) => {
-                    const b = true ? (
+                    const b = element.auth.includes(userConnect.type_utilisateur) ? (
                       <li key={element.title + index}>
                         <Link to={element.link} >
                           <i className={element.icon} />
@@ -162,6 +168,10 @@ function Nav() {
               <li
                 key={item.title + index}
                 className={item.title == classeMenuActive ? "mm-active" : ""}
+                onClick={() => {
+                  if (!classeMenuActive) setClasseMenuActive(item.title);
+                  if (classeMenuActive) setClasseMenuActive("");
+                }}
               >
                 <Link to={item.link} className="ai-icon">
                   <i className={item.icon} />

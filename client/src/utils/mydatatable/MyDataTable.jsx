@@ -48,6 +48,7 @@ export default function MyDataTable({
       title={title}
       columns={columns}
       data={filteredItems}
+      noDataComponent="Aucunes données trouvées" 
       defaultSortField="name" 
       customStyles={{ 
         table: {
