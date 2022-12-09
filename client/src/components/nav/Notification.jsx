@@ -3,20 +3,26 @@ import React from "react";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../atoms/authentication";
+import { showNotifNav, showRightNav } from "../../atoms/nav";
 import { getDateNow } from "../../utils/utils";
 
 function Notification() {
   const [notifs, setNotifs] = React.useState([]);
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
+  const [show, setShow] = useRecoilState(showRightNav);
+  const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
+
   const a = async () => {
     console.log(getDateNow());
     await axios
-      .get("http://localhost:5000/getAllNotification/"+userConnect.id, { timeout: 500000 })
+      .get("http://localhost:5000/getAllNotification/" + userConnect.id, {
+        timeout: 500000,
+      })
       .then((res) => {
         setNotifs(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.clear()
       })
       .finally(() => {
         a();
@@ -26,13 +32,13 @@ function Notification() {
     var faLabel;
     switch (importance) {
       case "info":
-        faLabel = "info";
+        faLabel = "info-circle";
         break;
       case "success":
         faLabel = "check";
         break;
       case "warning":
-        faLabel = "check";
+        faLabel = "exclamation-triangle";
         break;
       case "danger":
         faLabel = "times";
@@ -43,9 +49,9 @@ function Notification() {
     } //fin switch
     return faLabel;
   };
-  const hideNofit = (id) =>{
+  const hideNofit = (id) => {
     console.log(id);
-  }
+  };
   useEffect(() => {
     a();
   }, []);
@@ -90,12 +96,14 @@ function Notification() {
           <div id="DZ_W_Notification1" className="card">
             <ul className="timeline mt-4">
               {notifs.map((notif) => (
-                <li key={notif.id} onClick={()=>hideNofit(notif.id)}>
+                <li key={notif.id} onClick={() => hideNofit(notif.id)}>
                   <div className="row m-auto">
                     <div className="col-3">
                       <div
                         className={
-                          "btn btn-lg btn-" + notif.importance + " light"
+                          "btn btn-lg btn-" + notif.icon
+                            ? notif.icon
+                            : notif.importance + " light"
                         }
                       >
                         <i
@@ -113,13 +121,14 @@ function Notification() {
                   </div>
                 </li>
               ))}
+            {notifs.length > 0 ? (
+              <li>Voir tout dans le gestionnaire de notification</li>
+            ) : null}
             </ul>
           </div>
-          {notifs.length > 0 ? (
-            <a className="all-notification" type="button">
-              Voir tout <i className="ti-arrow-right" />
-            </a>
-          ) : null}
+          <a className="all-notification" type="button" onClick={()=>{setShowNotif("1");setShow(!show)}}>
+            Voir tout <i className="ti-arrow-right" />
+          </a>
         </div>
       </li>
     </div>

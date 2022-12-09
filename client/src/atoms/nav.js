@@ -5,6 +5,11 @@ export const showRightNav = atom({
   default: 0,
 });
 
+export const showNotifNav = atom({
+  key: "showNotifNav-nav",
+  default: 0,
+});
+
 export const ClassShowMenuState = atom({
   key: "ClassShowMenu-nav",
   default: { status: false },

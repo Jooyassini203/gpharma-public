@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { userConnected } from "../../atoms/authentication";
-import { ClassShowMenuState, showRightNav } from "../../atoms/nav";
+import { ClassShowMenuState, showNotifNav, showRightNav } from "../../atoms/nav";
 import { getData, getRule, getUrl, urlRead } from "../../utils/utils";
 import cryptojs from "crypto-js";
 import { Link } from "react-router-dom";
@@ -14,6 +14,7 @@ import Notification from "./Notification";
 function HeadNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
+  const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
 
   const reloadDataSession = () => {
     // const userJson = cryptojs.AES.decrypt(
@@ -71,7 +72,7 @@ function HeadNav() {
   };
   const [ClassShowMenu, setClassShowMenu] = useRecoilState(ClassShowMenuState);
   const handleClick = () => {
-    const status = !ClassShowMenu.status
+    const status = !ClassShowMenu.status;
     setClassShowMenu({ status });
   };
   return (
@@ -102,7 +103,7 @@ function HeadNav() {
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left"></div>
               <ul className="navbar-nav header-right">
-                <Notification/>
+                <Notification />
                 <li className="nav-item dropdown header-profile">
                   <a
                     className="nav-link"
@@ -133,7 +134,10 @@ function HeadNav() {
                     <button
                       type="button"
                       className="dropdown-item ai-icon"
-                      onClick={() => setShow(!show)}
+                      onClick={() => {
+                        setShowNotif("0");
+                        setShow(!show);
+                      }}
                     >
                       <svg
                         id="icon-user1"

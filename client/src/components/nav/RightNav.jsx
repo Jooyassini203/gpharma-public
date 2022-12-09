@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import cryptojs from "crypto-js";
 import { useRecoilState } from "recoil";
-import { showRightNav } from "../../atoms/nav";
+import { showNotifNav, showRightNav } from "../../atoms/nav";
 import {
   getRule,
   getUrl,
@@ -14,10 +14,12 @@ import "./RightNav.css";
 import { toast } from "react-toastify";
 import cryptoJs from "crypto-js";
 import axios from "axios";
+import GestionNotification from "./GestionNotification";
 
 function RightNav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
+  const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
   const [last_mot_de_passe, setLast_mot_de_passe] = useState("");
   const [mot_de_passe, setMot_de_passe] = useState("");
   const [confirme_mot_de_passe, setConfirme_Mot_de_passe] = useState("");
@@ -30,7 +32,7 @@ function RightNav() {
   const [preview, setPreview] = useState("");
   const [imageProfile, setImageProfile] = useState(null);
   const loadImage = (event) => {
-    const img = event.target.files[0]; 
+    const img = event.target.files[0];
     setPreview(URL.createObjectURL(img));
   };
   const handleClickInput = () => {
@@ -83,7 +85,7 @@ function RightNav() {
     axios
       .get(urlRead("reloadDataUser", userConnect.id))
       .then((response) => {
-        // localStorage.setItem("gpharma@2.0.0", response.data.dataUser); 
+        // localStorage.setItem("gpharma@2.0.0", response.data.dataUser);
         // const userJson = cryptojs.AES.decrypt(
         //   localStorage.getItem("gpharma@2.0.0"),
         //   "x85p2qPE2I$7IJ8*EZQQ049bAxhwnr"
@@ -111,111 +113,145 @@ function RightNav() {
       },
       true
     );
-  }; 
+  };
   return (
     <>
       <div className={show ? "chatbox active " : "chatbox"}>
         <div className="chatbox-close" onClick={() => setShow(false)} />
-        <div className="bg-primary pt-3 pb-0 ">
-          <p style={{ fontSize: "16px" }} className="text-white text-center ">
-            PROFILE
-          </p>
+        {/* <div className="custom-tab-1">
+          <ul className="nav nav-tabs">
+            <li className="nav-item">
+              
+            </li>
+          </ul>
+        </div> */}
+        <div className="bg-primary pt-3 pb-0">
+          <div className="d-flex justify-content-between mx-5">
+            <p
+              style={{ fontSize: "16px", cursor: "pointer" }}
+              className={
+                showNotif == "0"
+                  ? "text-white text-center    font-w900"
+                  : "text-white text-center   text-dark text-light"
+              }
+              onClick={() => {
+                setShowNotif("0");
+              }}
+            >
+              PROFILE
+            </p>
+            <p
+              style={{ fontSize: "16px", cursor: "pointer" }}
+              className={
+                showNotif == "1"
+                  ? "text-white text-center font-w900"
+                  : "text-white text-center  text-dark text-light"
+              }
+              onClick={() => {
+                setShowNotif("1");
+              }}
+            >
+              NOTIFICATIONS
+            </p>
+          </div>
         </div>
         <div
           className="yass-scroll"
           style={{ overflowY: "scroll", height: "90vh" }}
         >
-          <div className="custom-tab-1 bg-light">
-            <div className="card-body">
-              <div className="">
-                <div className="profile-blog mb-3">
-                  {/* <h5 className="text-primary d-inline">Information</h5> */}
-                  <img
-                    src={
-                      preview
-                        ? preview
-                        : userConnect.image
-                        ? getUrl("images/utilisateur", userConnect.image)
-                        : "images/profile/1.jpg"
-                    }
-                    width={"40vh"}
-                    alt="Image"
-                    accept=".jpg,.png,.jpeg"
-                    className="img-fluid mt-2 mb-4 w-100"
-                    onClick={handleClickInput}
-                  />
+          {showNotif == "0" ? (
+            <>
+              <div className="custom-tab-1 bg-light">
+                <div className="card-body">
+                  <div className="">
+                    <div className="profile-blog mb-3">
+                      {/* <h5 className="text-primary d-inline">Information</h5> */}
+                      <img
+                        src={
+                          preview
+                            ? preview
+                            : userConnect.image
+                            ? getUrl("images/utilisateur", userConnect.image)
+                            : "images/profile/1.jpg"
+                        }
+                        width={"40vh"}
+                        alt="Image"
+                        accept=".jpg,.png,.jpeg"
+                        className="img-fluid mt-2 mb-4 w-100"
+                        onClick={handleClickInput}
+                      />
 
-                  <input
-                    name="image"
-                    type="file"
-                    accept=".jpg,.png,.jpeg"
-                    className="d-none"
-                    ref={inputRef}
-                    onChange={(e) => {
-                      setImageProfile(e.target.files[0]);
-                      setPreview(URL.createObjectURL(e.target.files[0]));
-                    }}
-                  />
-                  <button
-                    className={
-                      preview ? "btn btn-warning btn-sm light" : "d-none"
-                    }
-                    onClick={changeImage}
-                  >
-                    Valider le changement
-                  </button>
-                </div>
-                <div className="profile-statistics mb-3">
-                  <div className="text-center">
-                    <div className="row">
-                      <div className="col">
-                        <h3 className="m-b-0">{`${userConnect.nom_utilisateur} (${userConnect.nom_login})`}</h3>
-                        <span>{getRule(userConnect.type_utilisateur)}</span>
-                      </div>
-                    </div>
-                    <div className="mt-4">
-                      <a
-                        type="button"
-                        className="btn btn-primary btn-sm mb-1 mr-1"
-                        data-toggle="modal"
-                        data-target="#profilModal"
-                        onClick={() => {
-                          setNom_login(userConnect.nom_login);
-                          setNom_utilisateur(userConnect.nom_utilisateur);
+                      <input
+                        name="image"
+                        type="file"
+                        accept=".jpg,.png,.jpeg"
+                        className="d-none"
+                        ref={inputRef}
+                        onChange={(e) => {
+                          setImageProfile(e.target.files[0]);
+                          setPreview(URL.createObjectURL(e.target.files[0]));
                         }}
+                      />
+                      <button
+                        className={
+                          preview ? "btn btn-warning btn-sm light" : "d-none"
+                        }
+                        onClick={changeImage}
                       >
-                        <i className="fa fa-edit"></i>
-                      </a>
-                      <a
-                        type="button"
-                        className="btn btn-primary btn-sm mb-1"
-                        data-toggle="modal"
-                        data-target="#profilModalPwd"
-                      >
-                        Changer le mot de passe
-                      </a>
+                        Valider le changement
+                      </button>
+                    </div>
+                    <div className="profile-statistics mb-3">
+                      <div className="text-center">
+                        <div className="row">
+                          <div className="col">
+                            <h3 className="m-b-0">{`${userConnect.nom_utilisateur} (${userConnect.nom_login})`}</h3>
+                            <span>{getRule(userConnect.type_utilisateur)}</span>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <a
+                            type="button"
+                            className="btn btn-primary btn-sm mb-1 mr-1"
+                            data-toggle="modal"
+                            data-target="#profilModal"
+                            onClick={() => {
+                              setNom_login(userConnect.nom_login);
+                              setNom_utilisateur(userConnect.nom_utilisateur);
+                            }}
+                          >
+                            <i className="fa fa-edit"></i>
+                          </a>
+                          <a
+                            type="button"
+                            className="btn btn-primary btn-sm mb-1"
+                            data-toggle="modal"
+                            data-target="#profilModalPwd"
+                          >
+                            Changer le mot de passe
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="m-4 mt-3" style={{ minHeight: "26vh" }}>
-            <h4>
-              <a href="post-details.html" className="text-black">
-                Administrateur de GPharma
-              </a>
-            </h4>
-            <p className="mt-2 ">
-              Ce privilège vous octroie le contrôle totale sur la gestion de
-              votre pharmacie dans GPharma version 2.0.0 . Vous pouvez voir le
-              manuel pour en savoir un plus sur ce qui est la manipulation du
-              logiciel.
-            </p>
-          </div>
+              <div className="m-4 mt-3" style={{ minHeight: "26vh" }}>
+                <h4>
+                  <a href="post-details.html" className="text-black">
+                    Administrateur de GPharma
+                  </a>
+                </h4>
+                <p className="mt-2 ">
+                  Ce privilège vous octroie le contrôle totale sur la gestion de
+                  votre pharmacie dans GPharma version 2.0.0 . Vous pouvez voir
+                  le manuel pour en savoir un plus sur ce qui est la
+                  manipulation du logiciel.
+                </p>
+              </div>
           <div
             className="bg-light pt-2 w-100 "
-            style={{ top: "0vh !important" }}
+            style={{ top: "0vh !important", position:'absolute' }}
           >
             <p className="text-center">
               Copyright © Développé par{" "}
@@ -225,9 +261,31 @@ function RightNav() {
                 target="_blank"
               >
                 MADA-Digital
-              </a> 
+              </a>
             </p>
           </div>
+            </>
+          ) : (
+            <>
+              <GestionNotification />
+          <div
+            className="bg-light pt-2 w-100 "
+            style={{ marginTop: "5vh", position:'absolute' }}
+          >
+            <p className="text-center">
+              Copyright © Développé par{" "}
+              <a
+                href="https://www.mada-digital.net/"
+                className="text-primary"
+                target="_blank"
+              >
+                MADA-Digital
+              </a>
+            </p>
+          </div>
+            </>
+          )}
+
         </div>
       </div>
 

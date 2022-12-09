@@ -164,31 +164,41 @@ function Table() {
             className={
               row.status == "1"
                 ? "badge light badge-success"
+                : row.status == "0"
+                ? "badge light badge-warning"
                 : "badge light badge-danger"
             }
             onClick={() => {
-              const getStatus = (status) => {
-                if (status == "1") return "0";
-                else if (status == "0") return "1";
-              };
-              updateData(
-                "produit/status",
-                row.code_lot_produit,
-                { status: getStatus(row.status) },
-                () => {
-                  getData("produit", setList);
-                }
-              );
+              if (row.status != "2") {
+                const getStatus = (status) => {
+                  if (status == "1") return "0";
+                  else if (status == "0") return "1";
+                };
+                updateData(
+                  "produit/status",
+                  row.code_lot_produit,
+                  { status: getStatus(row.status) },
+                  () => {
+                    getData("produit", setList);
+                  }
+                );
+              }
             }}
           >
             <i
               className={
                 row.status == "1"
                   ? "fa fa-circle text-success mr-1"
+                  : row.status == "0"
+                  ? "fa fa-circle text-warning mr-1"
                   : "fa fa-circle text-danger mr-1"
               }
             />
-            {row.status == "1" ? "Activé" : "Désactivé"}
+            {row.status == "1"
+              ? "Activé"
+              : row.status == "0"
+              ? "Désactivé"
+              : "Périmé"}
           </span>
         </div>
       ),
