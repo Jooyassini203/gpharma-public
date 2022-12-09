@@ -4,29 +4,60 @@ import { useEffect } from "react";
 import { getDateNow } from "../../utils/utils";
 
 function Notification() {
-  const [notif, setNotif] = React.useState({ nbr: 1 });
+  const [notifs, setNotifs] = React.useState([]);
+  const a = async () => {
+    console.log(getDateNow());
+    await axios
+      .get("http://localhost:5000/getAllNotification", { timeout: 500000 })
+      .then((res) => {
+        setNotifs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        a();
+      });
+  };
+  const getIconNotif = (importance) => {
+    var faLabel;
+    switch (importance) {
+      case "info":
+        faLabel = "info";
+        break;
+      case "success":
+        faLabel = "check";
+        break;
+      case "warning":
+        faLabel = "check";
+        break;
+      case "danger":
+        faLabel = "times";
+        break;
+      case "secondary":
+        faLabel = "eye";
+        break;
+    } //fin switch
+    return faLabel;
+  };
+  const hideNofit = (id) =>{
+    console.log(id);
+  }
   useEffect(() => {
-    const a = async ()=>{ 
-        console.log(getDateNow());
-        await axios.get("http://localhost:5000/getAllNotification", { timeout: 5000 }).then(() => {
-            console.log("teste 5000ms");
-        }).catch((err) => {
-            a()
-            console.log(err);
-        }); 
-    } 
+    a();
   }, []);
-  //   useEffect(() => {
-  //     const a = setInterval(() => {
-  //         axios.get('teste', {timeout: 5000}).then(()=>{
-  //             console.log('teste 5000ms');
-  //         })
-  //         setNotif(notif => ({...notif, ['nbr']: notif.nbr + 1}))
-  //     }, 1000);
-  //     return () => {
-  //       clearInterval(a);
-  //     };
-  //   }, []);
+  /*
+    useEffect(() => { 
+      const a = setInterval(() => {
+          axios.get('teste', {timeout: 5000}).then(()=>{
+              console.log('teste 5000ms');
+          })
+          setNotif(notif => ({...notif, ['nbr']: notif.nbr + 1}))
+      }, 1000);
+      return () => {
+        clearInterval(a);
+      };
+    }, []); */
   return (
     <div>
       <li className="nav-item dropdown notification_dropdown">
@@ -48,81 +79,44 @@ function Notification() {
               fill="#007A64"
             />
           </svg>
-          <span className="badge light text-white bg-primary">{notif.nbr}</span>
+          <span className="badge light text-white bg-primary">
+            {notifs.length}
+          </span>
         </a>
         <div className="dropdown-menu dropdown-menu-right">
-          <div
-            id="DZ_W_Notification1"
-            className="widget-media dz-scroll p-3 height380"
-          >
-            <ul className="timeline">
-              <li>
-                <div className="timeline-panel">
-                  <div className="media mr-2">
-                    <img alt="image" width={50} src="images/avatar/1.jpg" />
+          <div id="DZ_W_Notification1" className="card">
+            <ul className="timeline mt-4">
+              {notifs.map((notif) => (
+                <li key={notif.id} onClick={()=>hideNofit(notif.id)}>
+                  <div className="row m-auto">
+                    <div className="col-3">
+                      <div
+                        className={
+                          "btn btn-lg btn-" + notif.importance + " light"
+                        }
+                      >
+                        <i
+                          className={
+                            "fa fa-lg fa-" + getIconNotif(notif.importance)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <h6 className="mb-1">{notif.label}</h6>
+                      <small className="d-block">{notif.details}</small>
+                      <small className="d-block">{notif.createdAt}</small>
+                    </div>
                   </div>
-                  <div className="media-body">
-                    <h6 className="mb-1">Dr sultads Send you Photo</h6>
-                    <small className="d-block">29 July 2020 - 02:26 PM</small>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-panel">
-                  <div className="media mr-2 media-info">KG</div>
-                  <div className="media-body">
-                    <h6 className="mb-1">Resport created successfully</h6>
-                    <small className="d-block">29 July 2020 - 02:26 PM</small>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-panel">
-                  <div className="media mr-2 media-success">
-                    <i className="fa fa-home" />
-                  </div>
-                  <div className="media-body">
-                    <h6 className="mb-1">Reminder : Treatment Time!</h6>
-                    <small className="d-block">29 July 2020 - 02:26 PM</small>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-panel">
-                  <div className="media mr-2">
-                    <img alt="image" width={50} src="images/avatar/1.jpg" />
-                  </div>
-                  <div className="media-body">
-                    <h6 className="mb-1">Dr sultads Send you Photo</h6>
-                    <small className="d-block">29 July 2020 - 02:26 PM</small>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-panel">
-                  <div className="media mr-2 media-danger">KG</div>
-                  <div className="media-body">
-                    <h6 className="mb-1">Resport created successfully</h6>
-                    <small className="d-block">29 July 2020 - 02:26 PM</small>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="timeline-panel">
-                  <div className="media mr-2 media-primary">
-                    <i className="fa fa-home" />
-                  </div>
-                  <div className="media-body">
-                    <h6 className="mb-1">Reminder : Treatment Time!</h6>
-                    <small className="d-block">29 July 2020 - 02:26 PM</small>
-                  </div>
-                </div>
-              </li>
+                </li>
+              ))}
             </ul>
           </div>
-          <a className="all-notification" type="button">
-            Voir tout <i className="ti-arrow-right" />
-          </a>
+          {notifs.length > 0 ? (
+            <a className="all-notification" type="button">
+              Voir tout <i className="ti-arrow-right" />
+            </a>
+          ) : null}
         </div>
       </li>
     </div>
