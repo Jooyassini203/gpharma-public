@@ -6,8 +6,8 @@ const {
 } = require("../utils/nizwami-ibrahim/ConvertEngDayMonth.js");
 const getAllNotification = async (req, res) => {
   try {
-    const job = cron.schedule("*/500 * * * * *", async () => {
-      console.log(getDateNow());
+    const job = cron.schedule("*/5 * * * * *", async () => {
+      console.log(getDateNow()); //utilisateur_id
       const response = await Notification.findAll({
         // attributes: {
         //   include: [
@@ -61,4 +61,10 @@ const deleteOne = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { getAllNotification, getSpecific, createOne, updateOne, deleteOne };
+module.exports = {
+  getAllNotification,
+  getSpecific,
+  createOne,
+  updateOne,
+  deleteOne,
+};

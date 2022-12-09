@@ -1,14 +1,17 @@
 import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { userConnected } from "../../atoms/authentication";
 import { getDateNow } from "../../utils/utils";
 
 function Notification() {
   const [notifs, setNotifs] = React.useState([]);
+  const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const a = async () => {
     console.log(getDateNow());
     await axios
-      .get("http://localhost:5000/getAllNotification", { timeout: 500000 })
+      .get("http://localhost:5000/getAllNotification/"+userConnect.id, { timeout: 500000 })
       .then((res) => {
         setNotifs(res.data);
       })
