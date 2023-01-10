@@ -16,10 +16,11 @@ function Notification() {
     console.log(getDateNow());
     await axios
       .get("http://localhost:5000/getAllNotification/" + userConnect.id, {
-        timeout: 500000,
+        timeout: 500000, 
       })
       .then((res) => {
         setNotifs(res.data);
+        console.log("res.data",res.data);
       })
       .catch((err) => {
         console.clear()

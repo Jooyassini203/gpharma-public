@@ -5,38 +5,19 @@ const {
   convertEngDayMonth,
 } = require("../utils/nizwami-ibrahim/ConvertEngDayMonth.js");
 const Notification_utilisateur = require("../database/models/Notification_utilisateur.model.js");
-const { Op } = require("sequelize");
+const { Op, QueryTypes } = require("sequelize");
 const db = require("../config/Database.js");
 const getAllNotification = async (req, res) => {
   try {
     const job = cron.schedule("*/5000 * * * * *", async () => {
       console.log(getDateNow()); //utilisateur_id
-      const response = await Notification.findAll({
-        attributes: {
-          include: [
-            [
-              db.fn("DATE_FORMAT", db.col("createdAt"), " %W %d %M %Y "),
-              "createdAt",
-            ],
-          ],
-        },
-        include: [
-          {
-            model: Notification_utilisateur,
-            where: {
-              [Op.and]: [
-                { [Op.not]: [{ utilisateur_id: req.params.utilisateur_id }] },
-                // {
-                //   [Op.and]: [
-                //     { utilisateur_id: req.params.utilisateur_id },
-                //     { etat: "NOUVELLE" },
-                //   ],
-                // },
-              ],
-            },
-          },
-        ],
-      });
+      const response = await db.query(
+        `
+      SELECT A.label, A.details, A.importance, A.icon, DATE_FORMAT(createdAt, ' %W %d %M %Y ') AS createdAt FROM notification A INNER JOIN notification_utilisateur B ON (A.id = B.notification_id AND B.etat = "NOUVELLE" ) WHERE A.deletedAt IS NULL; 
+      `,
+        { type: QueryTypes.SELECT }
+      );
+      console.log(response);
       if (response.length > 0) {
         let resp = [];
         response.map((element) => {
