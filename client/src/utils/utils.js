@@ -647,3 +647,47 @@ export const getDaysInMonth = (month, year) => {
   }
   return days;
 };
+
+export const getNotifsByMilliseconds = async (
+  setNotifs,
+  table = "getAllNewNotification",
+  timeout = 500000
+) => {
+  // console.log(getDateNow());
+  await axios
+    .get("http://localhost:5000/" + table + "/" + userConnect.id, {
+      timeout,
+    })
+    .then((res) => {
+      setNotifs(res.data);
+      // console.log("res.data",res.data);
+    })
+    .catch((err) => {
+      console.clear();
+    })
+    .finally(() => {
+      getNotifsByMilliseconds(setNotifs);
+    });
+};
+
+export const getIconNotif = (importance) => {
+  var faLabel;
+  switch (importance) {
+    case "info":
+      faLabel = "info-circle";
+      break;
+    case "success":
+      faLabel = "check";
+      break;
+    case "warning":
+      faLabel = "exclamation-triangle";
+      break;
+    case "danger":
+      faLabel = "times";
+      break;
+    case "secondary":
+      faLabel = "eye";
+      break;
+  } //fin switch
+  return faLabel;
+};

@@ -1,60 +1,24 @@
 import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
+import { redirect } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../atoms/authentication";
 import { showNotifNav, showRightNav } from "../../atoms/nav";
-import { getDateNow } from "../../utils/utils";
+import { listNotifs } from "../../atoms/notification";
+import { getIconNotif, getNotifsByMilliseconds } from "../../utils/utils";
 
 function Notification() {
-  const [notifs, setNotifs] = React.useState([]);
+  const [notifs, setNotifs] = useRecoilState(listNotifs);
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
   const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
 
-  const a = async () => {
-    console.log(getDateNow());
-    await axios
-      .get("http://localhost:5000/getAllNotification/" + userConnect.id, {
-        timeout: 500000, 
-      })
-      .then((res) => {
-        setNotifs(res.data);
-        console.log("res.data",res.data);
-      })
-      .catch((err) => {
-        console.clear()
-      })
-      .finally(() => {
-        a();
-      });
-  };
-  const getIconNotif = (importance) => {
-    var faLabel;
-    switch (importance) {
-      case "info":
-        faLabel = "info-circle";
-        break;
-      case "success":
-        faLabel = "check";
-        break;
-      case "warning":
-        faLabel = "exclamation-triangle";
-        break;
-      case "danger":
-        faLabel = "times";
-        break;
-      case "secondary":
-        faLabel = "eye";
-        break;
-    } //fin switch
-    return faLabel;
-  };
   const hideNofit = (id) => {
-    console.log(id);
+    // redirect('/caisse');
   };
   useEffect(() => {
-    a();
+    getNotifsByMilliseconds(setNotifs);
   }, []);
   /*
     useEffect(() => { 
@@ -96,39 +60,51 @@ function Notification() {
         <div className="dropdown-menu dropdown-menu-right">
           <div id="DZ_W_Notification1" className="card">
             <ul className="timeline mt-4">
-              {notifs.map((notif) => (
-                <li key={notif.id} onClick={() => hideNofit(notif.id)}>
-                  <div className="row m-auto">
-                    <div className="col-3">
-                      <div
-                        className={
-                          "btn btn-lg btn-" + notif.icon
-                            ? notif.icon
-                            : notif.importance + " light"
-                        }
-                      >
-                        <i
-                          className={
-                            "fa fa-lg fa-" + getIconNotif(notif.importance)
-                          }
-                        />
+              {notifs.map((notif, index) =>
+                index < 5 ? (
+                  <li
+                    key={notif.id}
+                    className="mb-1"
+                    style={{cursor: "pointer"}} 
+                    onClick={() => hideNofit(notif.id)}
+                  >
+                    <div className="row m-auto bg-light py-2">
+                      <div className="col-3">
+                        <div 
+                          className={ "badge py-3 "}
+                        >
+                          <i
+                          style={{width : '3.5vw'}}
+                            className={
+                              "fa fa-xl fa-" + getIconNotif(notif.importance) +" text-" + notif.importance 
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="col">
+                        <h6 className="mb-1">{notif.label}</h6>
+                        <small className="d-block">  { notif.details.substring(0, 30) + " ..." }
+                        </small>
+                        <small className="d-block">{notif.createdAt}</small>
                       </div>
                     </div>
-                    <div className="col">
-                      <h6 className="mb-1">{notif.label}</h6>
-                      <small className="d-block">{notif.details}</small>
-                      <small className="d-block">{notif.createdAt}</small>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            {notifs.length > 0 ? (
-              <li>Voir tout dans le gestionnaire de notification</li>
-            ) : null}
+                  </li>
+                ) : null
+              )}
+              {notifs.length < 0 ? (
+                <li className="text-center">Voir tout dans le gestionnaire de notification</li>
+              ) : null}
             </ul>
           </div>
-          <a className="all-notification" type="button" onClick={()=>{setShowNotif("1");setShow(!show)}}>
-            Voir tout <i className="ti-arrow-right" />
+          <a
+            className="all-notification"
+            type="button"
+            onClick={() => {
+              setShowNotif("1");
+              setShow(!show);
+            }}
+          >
+            Voir tout <i className="fas fa-arrow-right" />
           </a>
         </div>
       </li>
