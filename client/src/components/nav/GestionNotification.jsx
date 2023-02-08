@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { listNotifs } from "../../atoms/notification";
 import {
   deleteData,
   getIconNotif,
@@ -6,7 +8,7 @@ import {
 } from "../../utils/utils";
 
 function GestionNotification({socket}) {
-  const [list, setList] = useState([]);
+  const [list, setList] =  useRecoilState(listNotifs);
   const [search, setSearch] = useState("");
 
   const handleSearch = (event) => {
@@ -24,14 +26,7 @@ function GestionNotification({socket}) {
     }, "getAllNotification");
   }
 
-  useEffect(() => {
-    //Ecoute l'evenement * newNotification * venant du serveur
-    socket.on("newNotification", (data) => {
-      // const myData = data.filter((_notif) => _notif.etat == "NOUVELLE");
-      setList(data);
-    });
-
-    // getMyNotif()
+  useEffect(() => { 
   }, []);
   /*  <>
   <ul className="timeline mt-4">

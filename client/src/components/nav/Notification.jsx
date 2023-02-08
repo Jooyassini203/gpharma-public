@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { Navigate, redirect } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -10,6 +10,7 @@ import { getIconNotif, getNotifsByMilliseconds } from "../../utils/utils";
 
 function Notification({ socket }) {
   const [notifs, setNotifs] = useRecoilState(listNotifs);
+  const [list, setList] = useState([]);
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
   const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
@@ -22,9 +23,11 @@ function Notification({ socket }) {
     //Ecoute l'evenement * newNotification * venant du serveur
     socket.emit("getNotification", { getNotification: "getNotification" });
     socket.on("newNotification", (data) => {
-      const myData = data.filter((_notif) => _notif.etat == "NOUVELLE");
-      setNotifs(myData);
-    });
+      setNotifs(data.data.filter((_notif) => _notif.utilisateur_id == userConnect.id));
+      const myData = data.data.filter((_notif) => _notif.etat == "NOUVELLE" && _notif.utilisateur_id == userConnect.id);
+      setList(myData)
+    }); 
+
     // getNotifsByMilliseconds(setNotifs);
   }, []);
   /*
@@ -61,13 +64,13 @@ function Notification({ socket }) {
             />
           </svg>
           <span className="badge light text-white bg-primary">
-            {notifs.length}
+            {list.length}
           </span>
         </a>
         <div className="dropdown-menu dropdown-menu-right">
           <div id="DZ_W_Notification1" className="card">
             <ul className="timeline mt-4">
-              {notifs.map((notif, index) =>
+              {list.map((notif, index) =>
                 index < 5 ? (
                   <li
                     key={notif.id}

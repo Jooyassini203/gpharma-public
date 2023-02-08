@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut, Line, Pie, PolarArea } from "react-chartjs-2";
 import { Chart, ArcElement, registerables } from "chart.js";
-import {
-  getData,
-  getDaysInMonth,
-  InputForm,
+import { 
   urlRead,
 } from "../../../utils/utils";
 import axios from "axios";
@@ -54,7 +51,7 @@ function StatisticGeneral() {
       const dataV = await axios.get(
         urlRead("accueil/StatVente", date.getFullYear() + "-" + date.getMonth())
       );
-      if (dataV) setStatVente(dataV.data);
+      if (!dataV.message && dataV.message !== 'Aucune vente!') setStatVente(dataV.data);
     }
   };
  

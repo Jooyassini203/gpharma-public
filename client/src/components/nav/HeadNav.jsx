@@ -43,7 +43,7 @@ function HeadNav({socket}) {
                         getData(
                           "logout",
                           (data) => {
-                            document.getElementById("btn-logout").click();
+                            document.getElementsByClassName("btn-logout")[0].click();
                             localStorage.removeItem("gpharma@2.0.0");
                           },
                           userConnect.id
@@ -96,7 +96,7 @@ function HeadNav({socket}) {
         </div>
       </div>
 
-      <a href="/connexion" className="d-none" id="btn-logout"></a>
+      <a href="/connexion" className="d-none btn-logout" id=""></a>
       <div className="header">
         <div className="header-content">
           <nav className="navbar navbar-expand">

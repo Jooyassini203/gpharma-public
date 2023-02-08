@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
+import { Link } from "react-router-dom";
 import { InputForm, urlInsert } from "../../../utils/utils"; 
 
 function Login() {
@@ -33,9 +34,9 @@ function Login() {
             window.localStorage.setItem(
               "gpharma@2.0.0",
               response.data.dataUser
-            );
-            console.log(window.localStorage.getItem("gpharma@2.0.0")); 
-            document.getElementById("btn-login").click();
+            ); 
+            setUserConnect(JSON.parse(window.localStorage.getItem("gpharma@2.0.0")))
+            document.getElementsByClassName("btn-login")[0].click();
           }
         } catch (error) {
           toast.error(JSON.parse(error.response.request.response).message);
@@ -53,7 +54,7 @@ function Login() {
       className="authincation h-100 align-middle"
       style={{ marginTop: "8vh" }}
     >
-      <a href="/" className="d-none" id="btn-login"></a>
+      <Link to="/" className="d-none btn-login"></Link>
       <div className="container h-100">
         <div className="row justify-content-center h-100 align-items-center">
           <div className="col-md-6">
