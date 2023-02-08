@@ -16,7 +16,7 @@ import cryptoJs from "crypto-js";
 import axios from "axios";
 import GestionNotification from "./GestionNotification";
 
-function RightNav() {
+function RightNav({socket}) {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
   const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
@@ -267,7 +267,7 @@ function RightNav() {
             </>
           ) : (
             <>
-              <GestionNotification />
+              <GestionNotification socket={socket} />
           <div
             className="bg-light pt-2 w-100 "
             style={{ marginTop: "5vh", position:'absolute' }}

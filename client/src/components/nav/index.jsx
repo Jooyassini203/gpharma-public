@@ -9,6 +9,9 @@ import { useRecoilState } from "recoil";
 import { userConnected } from "../../atoms/authentication";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import socketIO from "socket.io-client"
+ 
+const socket = socketIO.connect("http://localhost:5000")
 
 function Nav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -113,8 +116,8 @@ function Nav() {
   }, [classeMenuActive])
   return (
     <>
-      <HeadNav />
-      <RightNav />
+      <HeadNav socket={socket}/>
+      <RightNav socket={socket}/>
       <LeftNav>
         {ListMenu.map((item, index) => {
           // console.log("item: " , item.auth.includes(userConnect.type_utilisateur)); item.auth.includes(userConnect.type_utilisateur?userConnect.type_utilisateur:"")

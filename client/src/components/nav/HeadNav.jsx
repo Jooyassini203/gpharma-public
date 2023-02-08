@@ -11,7 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Notification from "./Notification";
 
-function HeadNav() {
+function HeadNav({socket}) {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
   const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
@@ -103,7 +103,7 @@ function HeadNav() {
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left"></div>
               <ul className="navbar-nav header-right">
-                <Notification />
+                <Notification  socket={socket} />
                 <li className="nav-item dropdown header-profile">
                   <a
                     className="nav-link"

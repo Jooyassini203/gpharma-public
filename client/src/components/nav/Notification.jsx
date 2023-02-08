@@ -1,24 +1,31 @@
 import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
-import { redirect } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../atoms/authentication";
 import { showNotifNav, showRightNav } from "../../atoms/nav";
 import { listNotifs } from "../../atoms/notification";
 import { getIconNotif, getNotifsByMilliseconds } from "../../utils/utils";
 
-function Notification() {
+function Notification({ socket }) {
   const [notifs, setNotifs] = useRecoilState(listNotifs);
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
   const [show, setShow] = useRecoilState(showRightNav);
   const [showNotif, setShowNotif] = useRecoilState(showNotifNav);
 
   const hideNofit = (id) => {
-    // redirect('/caisse');
+    Navigate("/caisse");
   };
+
   useEffect(() => {
-    getNotifsByMilliseconds(setNotifs);
+    //Ecoute l'evenement * newNotification * venant du serveur
+    socket.emit("getNotification", { getNotification: "getNotification" });
+    socket.on("newNotification", (data) => {
+      const myData = data.filter((_notif) => _notif.etat == "NOUVELLE");
+      setNotifs(myData);
+    });
+    // getNotifsByMilliseconds(setNotifs);
   }, []);
   /*
     useEffect(() => { 
@@ -65,25 +72,28 @@ function Notification() {
                   <li
                     key={notif.id}
                     className="mb-1"
-                    style={{cursor: "pointer"}} 
+                    style={{ cursor: "pointer" }}
                     onClick={() => hideNofit(notif.id)}
                   >
                     <div className="row m-auto bg-light py-2">
                       <div className="col-3">
-                        <div 
-                          className={ "badge py-3 "}
-                        >
+                        <div className={"badge py-3 "}>
                           <i
-                          style={{width : '3.5vw'}}
+                            style={{ width: "3.5vw" }}
                             className={
-                              "fa fa-xl fa-" + getIconNotif(notif.importance) +" text-" + notif.importance 
+                              "fa fa-xl fa-" +
+                              getIconNotif(notif.importance) +
+                              " text-" +
+                              notif.importance
                             }
                           />
                         </div>
                       </div>
                       <div className="col">
                         <h6 className="mb-1">{notif.label}</h6>
-                        <small className="d-block">  { notif.details.substring(0, 30) + " ..." }
+                        <small className="d-block">
+                          {" "}
+                          {notif.details.substring(0, 30) + " ..."}
                         </small>
                         <small className="d-block">{notif.createdAt}</small>
                       </div>
@@ -92,7 +102,9 @@ function Notification() {
                 ) : null
               )}
               {notifs.length < 0 ? (
-                <li className="text-center">Voir tout dans le gestionnaire de notification</li>
+                <li className="text-center">
+                  Voir tout dans le gestionnaire de notification
+                </li>
               ) : null}
             </ul>
           </div>

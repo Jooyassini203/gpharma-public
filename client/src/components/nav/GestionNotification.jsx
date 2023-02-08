@@ -5,7 +5,7 @@ import {
   getNotifsByMilliseconds,
 } from "../../utils/utils";
 
-function GestionNotification() {
+function GestionNotification({socket}) {
   const [list, setList] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -25,7 +25,13 @@ function GestionNotification() {
   }
 
   useEffect(() => {
-    getMyNotif()
+    //Ecoute l'evenement * newNotification * venant du serveur
+    socket.on("newNotification", (data) => {
+      // const myData = data.filter((_notif) => _notif.etat == "NOUVELLE");
+      setList(data);
+    });
+
+    // getMyNotif()
   }, []);
   /*  <>
   <ul className="timeline mt-4">
