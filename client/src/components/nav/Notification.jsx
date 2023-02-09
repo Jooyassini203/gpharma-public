@@ -1,12 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useEffect } from "react";
 import { Navigate, redirect } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../atoms/authentication";
 import { showNotifNav, showRightNav } from "../../atoms/nav";
 import { listNotifs } from "../../atoms/notification";
-import { getIconNotif, getNotifsByMilliseconds } from "../../utils/utils";
+import { getIconNotif, updateNotif } from "../../utils/utils";
 
 function Notification({ socket }) {
   const [notifs, setNotifs] = useRecoilState(listNotifs);
@@ -20,16 +20,30 @@ function Notification({ socket }) {
   };
 
   useEffect(() => {
+    // setUserConnect(JSON.parse(window.localStorage.getItem('gpharma@2.0.0')))
     //Ecoute l'evenement * newNotification * venant du serveur
-    socket.emit("getNotification", { getNotification: "getNotification" });
+    if (list.length <= 0)
+      socket.emit("getNotification", { getNotification: "getNotification" });
     socket.on("newNotification", (data) => {
-      setNotifs(data.data.filter((_notif) => _notif.utilisateur_id == userConnect.id));
-      const myData = data.data.filter((_notif) => _notif.etat == "NOUVELLE" && _notif.utilisateur_id == userConnect.id);
-      setList(myData)
-    }); 
-
+      setNotifs(
+        data.filter(
+          (_notif) =>
+            _notif.utilisateur_id ==
+            JSON.parse(window.localStorage.getItem("gpharma@2.0.0")).id
+        )
+      );
+      setList(
+        data.filter(
+          (_notif) =>
+            _notif.etat == "NOUVELLE" &&
+            _notif.utilisateur_id ==
+              JSON.parse(window.localStorage.getItem("gpharma@2.0.0")).id
+        )
+      );
+    });
     // getNotifsByMilliseconds(setNotifs);
   }, []);
+
   /*
     useEffect(() => { 
       const a = setInterval(() => {
@@ -75,19 +89,28 @@ function Notification({ socket }) {
                   <li
                     key={notif.id}
                     className="mb-1"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => hideNofit(notif.id)}
+                    style={{cursor: notif.etat == "NOUVELLE"?"pointer" : "default"}}
+                    onClick={() =>
+                      updateNotif(notif ,socket)
+                    }
                   >
                     <div className="row m-auto bg-light py-2">
                       <div className="col-3">
-                        <div className={"badge py-3 "}>
+                        <div
+                          className={"badge py-3 "}
+                        >
                           <i
                             style={{ width: "3.5vw" }}
                             className={
-                              "fa fa-xl fa-" +
-                              getIconNotif(notif.importance) +
-                              " text-" +
-                              notif.importance
+                              notif.icon
+                                ? "fa fa-xl fa-" +
+                                  notif.icon +
+                                  " text-" +
+                                  notif.importance
+                                : "fa fa-xl fa-" +
+                                  getIconNotif(notif.importance) +
+                                  " text-" +
+                                  notif.importance
                             }
                           />
                         </div>

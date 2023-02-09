@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { listNotifs } from "../../atoms/notification";
 import {
   deleteData,
   getIconNotif,
-  getNotifsByMilliseconds,
+  updateNotif,
 } from "../../utils/utils";
 
-function GestionNotification({socket}) {
-  const [list, setList] =  useRecoilState(listNotifs);
+function GestionNotification({ socket }) {
+  const [list, setList] = useRecoilState(listNotifs);
   const [search, setSearch] = useState("");
 
   const handleSearch = (event) => {
@@ -20,51 +21,7 @@ function GestionNotification({socket}) {
     return text.toLowerCase().includes(search.toLowerCase());
   });
 
-  const getMyNotif =  () =>{
-    getNotifsByMilliseconds((data) => {
-      setList(data);
-    }, "getAllNotification");
-  }
-
-  useEffect(() => { 
-  }, []);
-  /*  <>
-  <ul className="timeline mt-4">
-    {list.map((notif, index) => (
-      <li key={notif.id} className="mb-1">
-        <div className="row m-auto bg-light py-2">
-          <div className="col">
-            <div className={"badge py-3 "}>
-              <i
-                className={
-                  "fa fa-xl fa-" +
-                  getIconNotif(notif.importance) +
-                  " text-" +
-                  notif.importance
-                }
-              />
-            </div>
-          </div>
-          <div className="col-8">
-            <h6 className="mb-1">{notif.label}</h6>
-            <small className="d-block">{notif.details}</small>
-            <small className="d-block">{notif.createdAt}</small>
-          </div>
-          <div className="col ">
-            <button className="btn btn-sm btn-danger light">
-              <i className="fa fa-trash" />
-            </button>
-          </div>
-        </div>
-      </li>
-    ))}
-    {list.length < 0 ? (
-      <li className="text-center">
-        Voir tout dans le gestionnaire de notification
-      </li>
-    ) : null}
-  </ul>
-</> */
+  useEffect(() => {}, []); 
   return (
     <>
       <div style={{ margin: "10px" }}>
@@ -85,26 +42,42 @@ function GestionNotification({socket}) {
             {filteredData.map((notif, index) => (
               <tr
                 key={notif.id}
-                className={notif.etat == "NOUVELLE" ? "bg-light" : ""}
+                className={notif.etat == "NOUVELLE" ? "bg-light mb-1" : "mb-1"}
                 style={{
                   padding: "5px 0px 5px 0px",
                   margin: "0px 0px 10px 0px",
+                  cursor: notif.etat == "NOUVELLE" ? "pointer" : "default",
                 }}
               >
                 <td style={{ padding: "0 0px" }}>
-                  <div className={"badge py-3 "}>
+                  <div
+                    className={"badge py-3 "}
+                    onClick={() =>
+                      updateNotif(notif ,socket)
+                    }
+                  >
                     <i
                       style={{ width: "2vw" }}
                       className={
-                        "fa fa-xl fa-" +
-                        getIconNotif(notif.importance) +
-                        " text-" +
-                        notif.importance
+                        notif.icon
+                          ? "fa fa-xl fa-" +
+                            notif.icon +
+                            " text-" +
+                            notif.importance
+                          : "fa fa-xl fa-" +
+                            getIconNotif(notif.importance) +
+                            " text-" +
+                            notif.importance
                       }
                     />
                   </div>
                 </td>
-                <td style={{ padding: "10px 10px 10px 10px" }}>
+                <td
+                  style={{ padding: "10px 10px 10px 10px" }}
+                  onClick={() =>
+                    updateNotif(notif ,socket)
+                  }
+                >
                   <h6 className="mb-1">{notif.label}</h6>
                   <small className="d-block">{notif.details}</small>
                   <small className="d-block">{notif.createdAt}</small>
@@ -113,7 +86,15 @@ function GestionNotification({socket}) {
                   <button
                     className="btn btn-sm btn-light"
                     onClick={() => {
-                      deleteData("Notification", notif.id, getMyNotif);
+                      deleteData(
+                        "Notification",
+                        notif.notification_utilisateur_id,
+                        ()=>{
+                          socket.emit("getNotification", {
+                            getNotification: "getNotification",
+                          });
+                        }
+                      );
                     }}
                   >
                     <i className="fa fa-trash" style={{ color: "gray" }} />

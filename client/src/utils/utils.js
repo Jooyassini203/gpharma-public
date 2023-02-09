@@ -132,7 +132,7 @@ export const updateData = (
       data.append("utilisateur_id", userConnect.id);
     }
     try {
-      console.log("up : ", urlUpdate(tableName, id), data, headers);
+      // console.log("up : ", urlUpdate(tableName, id), data, headers);
       const responseUp = await axios.put(
         urlUpdate(tableName, id),
         data,
@@ -690,4 +690,29 @@ export const getIconNotif = (importance) => {
       break;
   } //fin switch
   return faLabel;
+};
+
+export const updateNotif = (notif, socket) => {
+  if (notif.etat == "NOUVELLE") {
+    const put = async () => {
+      try {
+        const responseUp = await axios.put(
+          urlUpdate("Notification", notif.notification_utilisateur_id)
+        );
+        if (responseUp) {
+          toast.success(responseUp.data.message);
+          socket.emit("getNotification", {
+            getNotification: "getNotification",
+          });
+        }
+      } catch (error) {
+        toast.error(JSON.parse(error.response.request.response).message);
+      }
+    };
+    toast.promise(put, {
+      pending: `Masquage du notification est en cours ...`,
+      // success: "Promise  Loaded",
+      error: `Une erreur est survenue lors du tentative de modification!`,
+    });
+  }
 };
