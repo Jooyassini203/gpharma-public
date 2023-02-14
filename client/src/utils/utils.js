@@ -35,9 +35,13 @@ export const getUrl = (dir, name) => {
 
 export const getDateNow = (name = "") => {
   const date = new Date(); //2022-10-22 17:41:30
-  let dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  let dateString = `${date.getFullYear()}-${
+    date.getMonth() + 1
+  }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   if (name == "date")
-    dateString = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    dateString = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}`;
   //console.log("dateString : ", dateString);
   return dateString;
 };
@@ -160,6 +164,7 @@ export const updateData = (
 
 export const deleteData = (tableName, id, callBack) => {
   const del = async () => {
+    console.log("id", id);
     try {
       const response = await axios.delete(urlDelete(tableName, id), {
         utilisateur_id: userConnect.id,

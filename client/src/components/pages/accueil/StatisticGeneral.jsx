@@ -10,7 +10,6 @@ import { useRecoilState } from "recoil";
 
 Chart.register(...registerables);
 Chart.register(ArcElement);
-const date = new Date();
 
 function StatisticGeneral() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -22,14 +21,6 @@ function StatisticGeneral() {
     count_rvt_total: 0,
     count_vente_total: 0,
   });
-  const [dataVente, setDataVente] = useState([]);
-  const [StatVente, setStatVente] = useState([
-    [],
-    [
-      15, 2, 15, 15, 45, 9, 15, 145, 15, 15, 5, 15, 15, 53, 15, 15, 54, 15, 15,
-      15, 15, 15, 15, 15, 15, 15, 15, 15, 96, 15,
-    ],
-  ]);
   const {
     count_commande,
     count_livraison,
@@ -47,12 +38,6 @@ function StatisticGeneral() {
       console.log(dataG.data[0]);
       setStatGeneral(dataG.data[0]);
     }
-    if (userConnect.type_utilisateur == "ADMIN") {
-      const dataV = await axios.get(
-        urlRead("accueil/StatVente", date.getFullYear() + "-" + date.getMonth())
-      );
-      if (!dataV.message && dataV.message !== 'Aucune vente!') setStatVente(dataV.data);
-    }
   };
  
   useEffect(() => {
@@ -60,32 +45,27 @@ function StatisticGeneral() {
   }, []);
 
   let dataDoughnut = {
-    labels: [
+    labels: userConnect.type_utilisateur == "ADMIN" ?[
       "Commande (Ravitaillement)",
       "Livraison (Ravitaillement)",
+      "Guichet (Vente)",
+      "Caisse (Vente)",
+    ]:[ 
       "Guichet (Vente)",
       "Caisse (Vente)",
     ],
     datasets: [
       {
-        data: [count_commande, count_livraison, count_guichet, count_caisse], //[count_commande, count_livraison, count_guichet, count_caisse]
-        backgroundColor: [
-          "rgb(255, 99, 132)",
+        data: userConnect.type_utilisateur == "ADMIN" ?[count_commande, count_livraison, count_guichet, count_caisse]:[count_guichet, count_caisse], //[count_commande, count_livraison, count_guichet, count_caisse]
+        backgroundColor: userConnect.type_utilisateur == "ADMIN" ?[
           "rgb(95, 116, 191)",
           "rgb(255, 205, 86)",
+          "rgb(255, 99, 132)",
+          "rgb(95, 191, 145)",
+        ]:[ 
+          "rgb(255, 99, 132)",
           "rgb(95, 191, 145)",
         ],
-        hoverOffset: 4,
-      },
-    ],
-  };
-  let dataLine = {
-    labels: StatVente[0],
-    datasets: [
-      {
-        label: "Les ventes du premier du mois jusqu'à aujourd'hui",
-        data: StatVente[1],
-        backgroundColor: ["rgb(255, 99, 132)"],
         hoverOffset: 4,
       },
     ],
@@ -105,7 +85,7 @@ function StatisticGeneral() {
   return (
     <>
       <>
-        <div className="row m-3">
+        <div className="row mx-3 ">
           {userConnect.type_utilisateur == "ADMIN" ? (
             <>
               <div className="col-xl-3  col-sm-6">
@@ -206,16 +186,10 @@ function StatisticGeneral() {
           </div>
         </div>
 
-        <div className="card m-4">
-          <div className="card-header border-0 pb-0">
-            <div>
-              <h4 className="fs-20 text-black mb-1">Statistique</h4>
-              <span className="fs-12">Générale</span>
-            </div>
-          </div>
+        <div className="card mx-4 mb-3  p-sm-6"> 
           <div className="card-body">
             <div className="row align-items-center">
-              <div className="col  ml-4 mb-lg-0 mb-3">
+              <div className="col-xl-6  col-sm-12 ">
                 {userConnect.type_utilisateur == "ADMIN" ? (
                   <>
                     <div className="d-flex mb-3 align-items-center">
@@ -345,10 +319,9 @@ function StatisticGeneral() {
                 </div>
               </div>
 
-              <div className="col-lg-7">
+              <div className="col-xl-6  col-sm-12">
                 <div
-                  className="d-flex align-items-center justify-content-center w-50"
-                  style={{ marginLeft: "11vw" }}
+                  className="col-xl-6  col-sm-12 mx-auto p-4" 
                 >
                   <Doughnut
                     data={dataDoughnut}
@@ -356,24 +329,7 @@ function StatisticGeneral() {
                   />
                 </div>
               </div>
-            </div>
-            {userConnect.type_utilisateur == "ADMIN" ? (
-              <>
-                <span className="fs-12">Hebdomadaire</span>
-                <div className="row m-3">
-                  <div className="card-body">
-                    <Line
-                      style={{
-                        position: "relative",
-                        height: "10vh",
-                        width: "40vw",
-                      }}
-                      data={dataLine}
-                    />
-                  </div>
-                </div>
-              </>
-            ) : null}
+            </div> 
           </div>
         </div>
       </>

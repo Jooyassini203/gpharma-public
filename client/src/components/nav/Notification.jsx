@@ -100,14 +100,14 @@ function Notification({ socket }) {
                           className={"badge py-3 "}
                         >
                           <i
-                            style={{ width: "3.5vw" }}
+                            style={{ width: "2.8vw" }}
                             className={
                               notif.icon
-                                ? "fa fa-xl fa-" +
+                                ? "fa fa-2xl fa-" +
                                   notif.icon +
                                   " text-" +
                                   notif.importance
-                                : "fa fa-xl fa-" +
+                                : "fa fa-2xl fa-" +
                                   getIconNotif(notif.importance) +
                                   " text-" +
                                   notif.importance

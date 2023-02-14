@@ -36,7 +36,7 @@ function MyRoute() {
       // ).toString(cryptojs.enc.Utf8);
       setUserConnect(JSON.parse(localStorage.getItem("gpharma@2.0.0")));
     }
-  }, []);
+  }, []); 
   return (
     <>
       <Routes>

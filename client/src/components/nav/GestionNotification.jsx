@@ -21,7 +21,9 @@ function GestionNotification({ socket }) {
     return text.toLowerCase().includes(search.toLowerCase());
   });
 
-  useEffect(() => {}, []); 
+  useEffect(() => { 
+    console.log('list', list)
+  }, [list]); 
   return (
     <>
       <div style={{ margin: "10px" }}>
@@ -56,20 +58,20 @@ function GestionNotification({ socket }) {
                       updateNotif(notif ,socket)
                     }
                   >
-                    <i
-                      style={{ width: "2vw" }}
-                      className={
-                        notif.icon
-                          ? "fa fa-xl fa-" +
-                            notif.icon +
-                            " text-" +
-                            notif.importance
-                          : "fa fa-xl fa-" +
-                            getIconNotif(notif.importance) +
-                            " text-" +
-                            notif.importance
-                      }
-                    />
+                  <i
+                    style={{ width: "2.8vw" }}
+                    className={
+                      notif.icon
+                        ? "fa fa-2xl fa-" +
+                          notif.icon +
+                          " text-" +
+                          notif.importance
+                        : "fa fa-2xl fa-" +
+                          getIconNotif(notif.importance) +
+                          " text-" +
+                          notif.importance
+                    }
+                  />
                   </div>
                 </td>
                 <td
@@ -86,6 +88,7 @@ function GestionNotification({ socket }) {
                   <button
                     className="btn btn-sm btn-light"
                     onClick={() => {
+                      console.log( notif.notification_utilisateur_id);
                       deleteData(
                         "Notification",
                         notif.notification_utilisateur_id,

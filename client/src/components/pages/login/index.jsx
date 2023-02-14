@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios"; 
+import axios from "axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { userConnected } from "../../../atoms/authentication";
 import { Link } from "react-router-dom";
-import { InputForm, urlInsert } from "../../../utils/utils"; 
+import { InputForm, urlInsert } from "../../../utils/utils";
 
 function Login() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);
@@ -13,7 +13,7 @@ function Login() {
   const [isObligatory, setIsObligatory] = useState(false);
   const [isLoged, setIsLoged] = useState(false);
   const [nom_login, setNom_login] = useState("");
-  const [mot_de_passe, setMot_de_passe] = useState("");
+  const [mot_de_passe, setMot_de_passe] = useState(""); 
 
   const login = () => {
     setIsObligatory(true);
@@ -23,19 +23,25 @@ function Login() {
     toast.promise(
       async () => {
         try {
-          const response = await axios.post(urlInsert("login"), {
-            nom_login,
-            mot_de_passe,
-          },  {
-            headers: {"content-type": "application/json",}
-          });
+          const response = await axios.post(
+            urlInsert("login"),
+            {
+              nom_login,
+              mot_de_passe,
+            },
+            {
+              headers: { "content-type": "application/json" },
+            }
+          );
           if (response.status == 200) {
             toast.success(response.data.message);
             window.localStorage.setItem(
               "gpharma@2.0.0",
               response.data.dataUser
-            ); 
-            setUserConnect(JSON.parse(window.localStorage.getItem("gpharma@2.0.0")))
+            );
+            setUserConnect(
+              JSON.parse(window.localStorage.getItem("gpharma@2.0.0"))
+            );
             document.getElementsByClassName("btn-login")[0].click();
           }
         } catch (error) {
@@ -48,13 +54,22 @@ function Login() {
       }
     );
   };
- 
+
   return (
     <div
       className="authincation h-100 align-middle"
       style={{ marginTop: "8vh" }}
     >
-      <Link to="/" className="d-none btn-login"></Link>
+      <Link
+        to={
+          JSON.parse(window.localStorage.getItem("gpharma@2.0.0"))?.type_utilisateur == "GUICHETIER"
+            ? "guichet"
+            : JSON.parse(window.localStorage.getItem("gpharma@2.0.0"))?.type_utilisateur == "CAISSIER"
+            ? "caisse"
+            : "/"
+        }
+        className="d-none btn-login"
+      ></Link>
       <div className="container h-100">
         <div className="row justify-content-center h-100 align-items-center">
           <div className="col-md-6">
@@ -85,8 +100,7 @@ function Login() {
                         onChange={(e) => setNom_login(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
                         onKeyPress={(e) => {
-                          if (e.key === "Enter")
-                            login()
+                          if (e.key === "Enter") login();
                         }}
                       >
                         Identifiant
@@ -100,8 +114,7 @@ function Login() {
                         onChange={(e) => setMot_de_passe(e.target.value)}
                         obligatory={isObligatory ? "active" : ""}
                         onKeyPress={(e) => {
-                          if (e.key === "Enter")
-                          login()
+                          if (e.key === "Enter") login();
                         }}
                       >
                         Mot de passe
@@ -123,7 +136,7 @@ function Login() {
                         </button>
                       </div>
                       <div className="text-center">
-                        <button  
+                        <button
                           type="button"
                           className="btn bg-white text-primary btn-block"
                           onClick={login}

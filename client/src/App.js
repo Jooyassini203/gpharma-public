@@ -5,7 +5,6 @@ function App() {
   return (
     <>
       <MyRoute />
-      {/* <ScriptTag type="text/javascript" src="../public/js/custom.min.js" /> */}
     </>
   );
 }

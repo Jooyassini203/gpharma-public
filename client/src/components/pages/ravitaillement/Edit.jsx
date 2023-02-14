@@ -77,9 +77,7 @@ function Edit() {
   const getAll = () => {
     getData(
       "ravitaillement",
-      (data) => {
-        // console.clear()/
-        // console.log(data);
+      (data) => { 
         setRavitaillement(data[0]);
         setListRavitaillementDetails(data[1]);
       },
