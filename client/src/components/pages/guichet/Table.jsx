@@ -91,8 +91,7 @@ function Table() {
                 getData(
                   "vente/details",
                   (data) => {
-                    setGuichetSelected(data);
-                    console.log(guichetSelected);
+                    setGuichetSelected(data); 
                   },
                   row.id
                 );

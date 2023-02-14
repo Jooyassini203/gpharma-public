@@ -50,15 +50,7 @@ function StatisticVente({ choose_option, date_selected }) {
     },
   ];
   const getStatVente = async () => {
-    if (userConnect.type_utilisateur == "ADMIN") {
-      console.log(
-        urlRead(
-          "accueil/StatVente/" +
-            (choose_option?.value ?? 0) +
-            "/" +
-            date_selected
-        )
-      );
+    if (userConnect.type_utilisateur == "ADMIN") { 
       let dataV = await axios.get(
         urlRead(
           "accueil/StatVente/" +
@@ -67,8 +59,7 @@ function StatisticVente({ choose_option, date_selected }) {
             date_selected
         )
       );
-      dataV = dataV.data; 
-      console.log(dataV);
+      dataV = dataV.data;  
       let labelCountVente1 = [];
       let dataCountVente1 = [];
       for (const key in dataV[0]) {

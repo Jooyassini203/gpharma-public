@@ -71,8 +71,7 @@ function StatisticPersonnel({ choose_option, date_selected }) {
   const getOptionsUsers = async () => {
     const data = await axios.get(
       urlRead("utilisateurs/"+ utilisateur.value || userConnect.id || 1)
-    );  
-    console.log("data", data.data);
+    );   
     console.log("utilisateur userConnect", utilisateur, userConnect);
     convertToOption(data.data, setOptions); 
   };

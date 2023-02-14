@@ -112,8 +112,7 @@ function Accueil() {
                           type="date"
                           style={{ height: "41px" }}
                           value={date_selected}
-                          onChange={(e) => {
-                            console.log(e.target.value);
+                          onChange={(e) => { 
                             setDate_selected(e.target.value);
                           }}
                           className="form-control"

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import React, { useState } from "react"; 
 import { useRecoilState } from "recoil";
 import { listNotifs } from "../../atoms/notification";
 import {
@@ -20,10 +19,7 @@ function GestionNotification({ socket }) {
     const text = item.label + item.details + item.createdAt;
     return text.toLowerCase().includes(search.toLowerCase());
   });
-
-  useEffect(() => { 
-    console.log('list', list)
-  }, [list]); 
+ 
   return (
     <>
       <div style={{ margin: "10px" }}>

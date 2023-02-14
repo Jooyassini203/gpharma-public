@@ -124,12 +124,7 @@ function Insert() {
       toast.warning("Ajouter au moins une commande!");
       return;
     }
-    verifObSocieteAndOrdonnance();
-    console.log("ordonnance", ordonnance);
-    console.log("client", client);
-    console.log("socisociete_id", societe_id);
-    console.log("societe_prise_en_charge", societe_prise_en_charge);
-    console.log("file", file);
+    verifObSocieteAndOrdonnance(); 
     if (withOrdonnance) if (verifObligatory(ordonnance)) return;
     if (widhtSociete) if (!societe_id.value || !societe_prise_en_charge) return;
     setVente({
