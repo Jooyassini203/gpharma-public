@@ -124,7 +124,7 @@ function Insert() {
       toast.warning("Ajouter au moins une commande!");
       return;
     }
-    verifObSocieteAndOrdonnance(); 
+    verifObSocieteAndOrdonnance();
     if (withOrdonnance) if (verifObligatory(ordonnance)) return;
     if (widhtSociete) if (!societe_id.value || !societe_prise_en_charge) return;
     setVente({
@@ -201,23 +201,23 @@ function Insert() {
       ),
     }));
   };
-  const calPrisEnChargeList = () => {
-    if (!societe_prise_en_charge) return;
-    let list = [...listVenteDetails];
-    list.map((item) => {
-      item.prix_vente = Math.round(
-        item.prix_vente *
-          (1 - parseFloat(societe_prise_en_charge) / 100) *
-          parseFloat(marge_beneficiaire)
-      );
-      item.montant_vente = Math.round(
-        parseFloat(item.prix_vente) *
-          parseFloat(item.quantite_demande) *
-          parseFloat(marge_beneficiaire)
-      );
-    });
-    setListVenteDetails(list);
-  };
+  // const calPrisEnChargeList = () => {
+  //   if (!societe_prise_en_charge) return;
+  //   let list = [...listVenteDetails];
+  //   list.map((item) => {
+  //     item.prix_vente = Math.round(
+  //       item.prix_vente *
+  //         (1 - parseFloat(societe_prise_en_charge) / 100) *
+  //         parseFloat(marge_beneficiaire)
+  //     );
+  //     item.montant_vente = Math.round(
+  //       parseFloat(item.prix_vente) *
+  //         parseFloat(item.quantite_demande) *
+  //         parseFloat(marge_beneficiaire)
+  //     );
+  //   });
+  //   setListVenteDetails(list);
+  // };
   React.useEffect(() => {
     if (parseFloat(societe_prise_en_charge) > 1) {
       setIsObSociete(true);
@@ -316,37 +316,38 @@ function Insert() {
                 val={motif}
                 onChange={(e) => onChange(e, setVente)}
                 obligatory={false ? "active" : ""}
+                style={{ height: "41px" }}
               >
                 Motif de vente
               </InputForm>
               {/* <div className="row">Client</div> */}
               <div className="row">
-                <div className="col-7">
+                <div className="col-xl-3 col-sm-6">
                   <InputForm
                     name="nom_prenom"
                     val={nom_prenom}
                     onChange={(e) => {
                       onChange(e, setClient);
                     }}
+                    style={{ height: "41px" }}
                     obligatory={false ? "active" : ""}
                   >
                     Nom et prénom du Client
                   </InputForm>
                 </div>
-                <div className="col">
+                <div className="col-xl-3 col-sm-6">
                   <InputForm
                     name="adresse"
                     val={adresse}
                     onChange={(e) => onChange(e, setClient)}
                     obligatory={false ? "active" : ""}
+                    style={{ height: "41px" }}
                   >
                     Adresse du client
                   </InputForm>
                 </div>
-              </div>
-              {/* <div className="row">Ordonnance</div> */}
-              <div className="row">
-                <div className="col-7">
+              {/* <div className="row">Ordonnance</div> */} 
+                <div className="col-xl-3 col-sm-6">
                   <InputForm
                     name="nom_docteur"
                     val={nom_docteur}
@@ -354,12 +355,13 @@ function Insert() {
                       onChange(e, setOrdonnance);
                       verifObSocieteAndOrdonnance();
                     }}
+                    style={{ height: "41px" }}
                     obligatory={isObOrdonnance ? "active" : ""}
                   >
                     Nom du Docteur
                   </InputForm>
                 </div>
-                <div className="col">
+                <div className="col-xl-3 col-sm-6">
                   <InputForm
                     name="hopital"
                     val={hopital}
@@ -367,15 +369,16 @@ function Insert() {
                       verifObSocieteAndOrdonnance();
                       onChange(e, setOrdonnance);
                     }}
+                    style={{ height: "41px" }}
                     obligatory={isObOrdonnance ? "active" : ""}
                   >
                     Hopital
                   </InputForm>
-                </div>
+                </div> 
               </div>
               {/* <div className="row">Société</div> */}
               <div className="row">
-                <div className="col-4">
+                <div className="col-xl-4 col-sm-6">
                   <SelectForm
                     val={societe_id}
                     value={filterOption(OptionsSociete, societe_id)}
@@ -391,7 +394,7 @@ function Insert() {
                     Société
                   </SelectForm>
                 </div>
-                <div className="col">
+                <div className="col-xl-4 col-sm-6">
                   <InputForm
                     double
                     postIcon={{ text: "%" }}
@@ -401,12 +404,13 @@ function Insert() {
                       onChange(e, setVente);
                       verifObSocieteAndOrdonnance();
                     }}
+                    style={{ height: "41px" }}
                     obligatory={isObSociete ? "active" : ""}
                   >
                     Taux prise en charge
                   </InputForm>
                 </div>
-                <div className="col">
+                <div className="col-xl-4 col-sm-6">
                   <b>Ficher Société</b>
                   <div className="input-group transparent-append mt-1">
                     <input
@@ -433,9 +437,18 @@ function Insert() {
           </div>
         </div>
       </div>
-      <hr className="my-4" />
+      <hr
+        className="my-4"
+        style={{
+          height: 2,
+          borderWidth: 0,
+          color: "gray",
+          backgroundColor: "gray",
+        }}
+      />
+      <h4 className="mb-4">Ajouter un produit</h4>
       <div className="row">
-        <div className="col-3">
+        <div className="col-xl-2 col-sm-4">
           <SelectForm
             val={produit_code_lot_produit}
             value={filterOption(OptionsProduit, produit_code_lot_produit)}
@@ -450,14 +463,33 @@ function Insert() {
             Produit
           </SelectForm>
         </div>
-        <div className="col-2">
-          <span className="font-w600 mb-1 w-100">Vendre par</span>
-          <br />
-          <span
-            style={{
-              paddingTop: "2.5px",
-              cursor: "pointer",
+        <div className="col-xl-2 col-sm-4">
+          
+        <SelectForm
+            val={toggleUniteVente}
+            value={filterOption([{
+              label: "Unité de stock",
+              value: "Unité de stock",
+            },{
+              label: "Unité de Présentation",
+              value: "Unité de Présentation",
+            }], toggleUniteVente)}
+            options={[{
+              label: "Unité de stock",
+              value: "Unité de stock",
+            },{
+              label: "Unité de Présentation",
+              value: "Unité de Présentation",
+            }]}
+            onChange={(e) => {
+              if (produit) setToggleUniteVente(!toggleUniteVente);
             }}
+            obligatory={isObVtDt ? "active" : ""}
+          >
+            Vendre par
+          </SelectForm> 
+          <br />
+          {/* <span 
             className="badge badge-yass badge-xl light badge-dark mt-1 w-100"
             onClick={() => {
               if (produit) setToggleUniteVente(!toggleUniteVente);
@@ -470,21 +502,22 @@ function Insert() {
               : produit.unite_presentation
               ? getNameUniteById(produit.unite_presentation)
               : "Présentation"}
-          </span>
+          </span> */}
         </div>
-        <div className="col">
+        <div className="col-xl-2 col-sm-4">
           <InputForm
-            postIcon={{ text: "Ar" }}
+            // postIcon={{ text: "Ar" }}
             number
             name="prix_vente"
             val={prix_vente}
             onChange={(e) => onChange(e, setVenteDetails)}
             obligatory={isObVtDt ? "active" : ""}
+            style={{ height: "41px" }}
           >
-            Prix Unit.
+            Prix Unitaire
           </InputForm>
         </div>
-        <div className="col">
+        <div className="col-xl-2 col-sm-4">
           <InputForm
             double
             mini={0}
@@ -496,24 +529,25 @@ function Insert() {
                     produit.presentation_quantite
                 : "0"
             }
-            postIcon={{
-              text: toggleUniteVente
-                ? produit.unite_stock
-                  ? getNameUniteById(produit.unite_stock)
-                  : "Stock"
-                : produit.unite_presentation
-                ? getNameUniteById(produit.unite_presentation)
-                : "Présentation",
-            }}
+            // postIcon={{
+            //   text: toggleUniteVente
+            //     ? produit.unite_stock
+            //       ? getNameUniteById(produit.unite_stock)
+            //       : "Stock"
+            //     : produit.unite_presentation
+            //     ? getNameUniteById(produit.unite_presentation)
+            //     : "Présentation",
+            // }}
             name="quantite_demande"
             val={quantite_demande}
             onChange={(e) => onChange(e, setVenteDetails)}
             obligatory={isObVtDt ? "active" : ""}
+            style={{ height: "41px" }}
           >
             Quantité
           </InputForm>
         </div>
-        <div className="col-2">
+        <div className="col-xl-2 col-sm-4">
           <span className="font-w600 mb-1 w-100">Montant</span>
           <br />
           <span
@@ -525,36 +559,47 @@ function Insert() {
               : "0" + " Ar"}
           </span>
         </div>
-      </div>
-      <div className="row mt-1">
-        <div className="col mt-1">
-          <SelectForm
-            val={guichet_id}
-            defaultValue={
-              OptionsGuichet[0]
-                ? OptionsGuichet[0]
-                : { label: "Choisissez un guichet", value: "0" }
-            }
-            value={filterOption(OptionsGuichet, guichet_id)}
-            options={OptionsGuichet}
-            onChange={(e) => {
-              onChange(e, setVente, "guichet_id");
-            }}
-            obligatory={isObGuichet ? "active" : ""}
-          />
-        </div>
-        <div className="col-8 align-items-center">
+        <div className="col-xl-2 col-sm-4 align-items-center">
           <ButtonTable
-            style={{ height: "41px", paddingTop: "6px" }}
-            importance="success mt-1 w-100"
+            style={{ height: "41px", marginTop: "2.25vh" }}
+            importance="success  w-100"
             handleClick={addItemInList}
           >
-            Valider
+            Ajouter
           </ButtonTable>
         </div>
       </div>
-      <hr className="my-4" />
+      <hr
+        className="mb-4"
+        style={{
+          height: 2,
+          borderWidth: 0,
+          color: "gray",
+          backgroundColor: "gray",
+        }}
+      />
       <div className="mt-4">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h4 className="mb-3">Liste des produits ajoutés</h4>
+          <div className="row align-items-center ">
+            <span className="mr-4 font-w600">Choisissez votre poste : </span>
+            <SelectForm
+              val={guichet_id}
+              defaultValue={
+                OptionsGuichet[0]
+                  ? OptionsGuichet[0]
+                  : { label: "Choisissez un guichet", value: "0" }
+              }
+              value={filterOption(OptionsGuichet, guichet_id)}
+              options={OptionsGuichet}
+              onChange={(e) => {
+                onChange(e, setVente, "guichet_id");
+              }}
+              obligatory={isObGuichet ? "active" : ""}
+              style={{ widht: "30%" }}
+            />
+          </div>
+        </div>
         <div className="table-responsive">
           <table className="table table-striped table-responsive-md">
             <thead>
@@ -683,9 +728,12 @@ function Insert() {
       </div>
       <div className="">
         <div className="row">
-          <div className="col">
+          <div className="col-xl-2 col-sm-4">
             <button
               className="btn btn-info light btn-lg w-100 "
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Listes des commandes vente"
               onClick={() => {
                 setIsAdd("0");
               }}
@@ -693,7 +741,7 @@ function Insert() {
               <i className="fa fa-list-alt"></i>
             </button>
           </div>
-          <div className="col-3">
+          <div className="col-xl-3 col-sm-4">
             <button
               className="btn btn-danger light btn-lg w-100 "
               onClick={() => {
@@ -704,7 +752,7 @@ function Insert() {
               Annuler
             </button>
           </div>
-          <div className="col-7">
+          <div className="col-xl-7 col-sm-4">
             <button
               className="btn btn-success light btn-lg w-100 "
               onClick={add}

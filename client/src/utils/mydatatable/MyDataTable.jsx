@@ -51,6 +51,12 @@ export default function MyDataTable({
       noDataComponent="Aucunes données trouvées" 
       defaultSortField="name" 
       customStyles={{ 
+        header:{
+          style:{
+            color: "#007A64",
+            textDecoration: 'underline'
+          }
+        },
         table: {
           style: { 
             zIndex: 0,
@@ -60,7 +66,7 @@ export default function MyDataTable({
           style: {
             zIndex: 0, 
           },
-        }, 
+        },  
       }}
       striped
       pagination

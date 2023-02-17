@@ -255,7 +255,7 @@ function View({ id }) {
                             <h5 className="tex-dark mb-3">Unités</h5>
                             <div className="d-flex align-items-center mr-auto pr-2">
                               <div>
-                                <p className="mb-sm-2 mb-1 text-dark">
+                                {/* <p className="mb-sm-2 mb-1 text-dark">
                                   Achat :{" "}
                                   <span className="fs-14 text-primary font-w600">
                                     {produit.nom_achat}
@@ -268,7 +268,7 @@ function View({ id }) {
                                     {produit.nom_vente}
                                   </span>
                                   ,
-                                </p>
+                                </p> */}
                                 <p className="mb-sm-2 mb-1 text-dark">
                                   Stock :{" "}
                                   <span className="fs-14 text-warning font-w600">

@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import socketIO from "socket.io-client"
  
-const socket = socketIO.connect("http://localhost:5000")
+const socket = socketIO.connect("https://node.gpharma.mada-digital.net")
 
 function Nav() {
   const [userConnect, setUserConnect] = useRecoilState(userConnected);

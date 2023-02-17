@@ -122,7 +122,7 @@ function Table() {
           key={row.code_lot_produit + "unite"}
         >
           <div>
-            <p className="mb-sm-2 mb-1 text-black">
+            {/* <p className="mb-sm-2 mb-1 text-black">
               Unité d'achat :{" "}
               <span className="fs-14 text-primary font-w600">
                 {row.nom_achat}
@@ -135,13 +135,13 @@ function Table() {
                 {row.nom_vente}
               </span>
               ,
-            </p>
+            </p> */}
             <p className="mb-sm-2 mb-1 text-black">
               Unité de stock :{" "}
               <span className="fs-14 text-warning font-w600">
                 {row.nom_stock}
               </span>
-              .
+              ,
             </p>
             <p className="mb-sm-2 mb-1 text-black">
               Presentation :{" "}
@@ -149,6 +149,20 @@ function Table() {
                 {row.nom_presentation}
               </span>
               ,
+            </p> 
+            <p className="mb-sm-2 mb-1 text-black">
+              Famille{" "}
+              <span className="fs-14 text-secondary font-w600">
+                {row.nom_famille}
+              </span>
+              ,
+            </p>
+            <p className="mb-sm-2 mb-1 text-black">
+              Forme{" "}
+              <span className="fs-14 text-warning font-w600">
+                {row.nom_forme}
+              </span>
+              .
             </p>
           </div>
         </div>

@@ -5,9 +5,16 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import {
+  faEdit,
+  faEye,
+  faList,
+  faListAlt,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 let userConnect = null;
-const address = `http://localhost:5000`; //+http://192.168.1.139: process.env.REACT_APP_PORT;http://node.gpharma.mada-digital.net
+const address = `https://node.gpharma.mada-digital.net`; //+http://192.168.1.139: process.env.REACT_APP_PORT;http://node.gpharma.mada-digital.net
 
 if (localStorage.getItem("gpharma@2.0.0")) {
   //   const userJson = cryptojs.AES.decrypt(
@@ -37,7 +44,9 @@ export const getDateNow = (name = "") => {
   const date = new Date(); //2022-10-22 17:41:30
   let dateString = `${date.getFullYear()}-${
     date.getMonth() + 1
-  }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  }-${date.getDate()} ${
+    date.getHours() + 1
+  }:${date.getMinutes()}:${date.getSeconds()}`;
   if (name == "date")
     dateString = `${date.getFullYear()}-${
       date.getMonth() + 1
@@ -199,6 +208,19 @@ export const ButtonTable = ({
           ? "btn btn-sm btn-default light"
           : "btn btn-sm btn-" + importance + " light"
       }
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title={
+        icon == faEdit
+          ? "Modifier"
+          : icon == faTrash
+          ? "Supprimer"
+          : icon == faEye
+          ? "Détails"
+          : icon == faList || icon == faListAlt
+          ? "Listes"
+          : ""
+      }
       onClick={handleClick}
       {...props}
     >
@@ -326,6 +348,7 @@ export const InputForm = ({
           value={val}
           className={file ? "custom-file-input" : getClass(val, obligatory)}
           onChange={onChange}
+          style={{ height: "41px" }}
           {...props}
         />
         {file ? (

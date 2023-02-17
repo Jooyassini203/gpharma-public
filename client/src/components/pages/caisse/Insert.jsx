@@ -19,6 +19,7 @@ import { intializeVenteSelected, isAddState } from "../../../atoms/caisse";
 import { faCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
+import { element } from "prop-types";
 
 function Insert() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState);
@@ -28,8 +29,9 @@ function Insert() {
     quantite_vendue: "",
   });
   const [guichet_id, setGuichet_id] = useState([]);
-  const [caisse_id, setCaisse_id] = useState([]);
+  const [caisse_id, setCaisse_id] = useState({value:1, label: "Caisse principal"});
   const [OptionsGuichetNonLivre, setOptionsGuichetNonLivre] = useState([]);
+  const [ListeGuichetNonLivre, setListeGuichetNonLivre] = useState([]);
   const [OptionsCaisse, setOptionsCaisse] = useState([]);
 
   const [guichetSelected, setGuichetSelected] = useState(
@@ -92,7 +94,7 @@ function Insert() {
             date_vente: getDateNow(),
           },
           () => {
-            setIsAdd("0")
+            setIsAdd("0");
             getAll();
             getData("vente/GuichetNonLivrer", (data) => {
               let options = [];
@@ -119,13 +121,15 @@ function Insert() {
 
   React.useEffect(() => {
     getData("vente/GuichetNonLivrer", (data) => {
+      setListeGuichetNonLivre(data);
+      console.log(data);
       let options = [];
       data.forEach((element) => {
         options.push({ label: element.id, value: element.id });
       });
       setOptionsGuichetNonLivre(options);
     });
-    getData("caisse", (data) => convertToOption(data, setOptionsCaisse));
+    // getData("caisse", (data) => convertToOption(data, setOptionsCaisse));
   }, []);
   React.useEffect(() => {
     if (guichet_id.value)
@@ -136,8 +140,40 @@ function Insert() {
       <div className="row">
         <div className="col-lg-12">
           <div className="card">
-            <div className="card-header">
-              <div className="row align-items-center">
+            <div className="px-4 mt-4"> 
+                <h4 className="mb-3">Liste des ventes à validées</h4> 
+                <div className="w-100">
+                <div className="basic-list-group" style={{overflowY: "auto", height: "35vh"}}> 
+                <ul className="list-group">
+                  {ListeGuichetNonLivre.length > 0
+                    ? ListeGuichetNonLivre.map((element) => (
+                        <li key={element.id} className="list-group-item d-flex justify-content-between align-items-center"> 
+                            <p className="mb-2">
+                              {element.id +
+                                " / " +
+                                "Guichet_000"+element.guichet_id +
+                                " / " +
+                                element.date_saisi}
+                            </p>
+                            <a
+                            href="#__list"
+                              className="badge light badge-success" 
+                              onClick={()=> { 
+                                setGuichet_id({label: element.id, value: element.id})
+                              }}
+                            >
+                              <i className="fa fa-circle mr-3"></i>
+                              Traiter
+                            </a> 
+                        </li>
+                      ))
+                      : <li key={element.id} className="list-group-item d-flex justify-content-center align-items-center"> 
+                     Aucune vente disponnible
+                  </li>}
+                </ul>
+                      </div>
+              </div>
+              {/* <div className="row align-items-center">
                 <SelectForm
                   defaultValue={
                     OptionsCaisse[0]
@@ -172,12 +208,15 @@ function Insert() {
               </div>
               <span className="float-right">
                 Date de saisie :<strong> {date_saisi}</strong>
-              </span>
+              </span> */}
+              <hr style={{height: 2, borderWidth: 0, color: 'gray', backgroundColor: 'gray'}} />
+
             </div>
             <div className="card-body">
               {guichetSelected[0].motif ? (
+                <> 
                 <div className="row">
-                  <div className="col-4 mb-4">
+                  <div className="col-4">
                     <div>
                       {" "}
                       <strong>Motif : </strong> <span>{motif}</span>
@@ -211,7 +250,7 @@ function Insert() {
                     ) : null}
                   </div>
                   {societe ? (
-                    <div className="col-4 mb-4">
+                    <div className="col-4">
                       <div>
                         {" "}
                         <strong>Nom : </strong>{" "}
@@ -285,9 +324,13 @@ function Insert() {
                     ) : null}
                   </div>
                 </div>
+                <hr style={{height: 2, borderWidth: 0, color: 'gray', backgroundColor: 'gray'}} />
+    
+                </>
               ) : null}
-              <div className="mt-4">
+              <div id="__list">
                 <div className="table-responsive">
+                  <h4 className="mb-6">Listes des produits commandés</h4>
                   <table className="table table-striped table-responsive-md">
                     <thead>
                       <tr>
@@ -333,14 +376,12 @@ function Insert() {
                                     maxi={parseFloat(item.quantite_demande)}
                                     val={edit_item.quantite_vendue}
                                     onChange={(e) => {
-                                      console.log("item", edit_item);
                                       setEdit_item({
                                         code_lot_produit:
                                           edit_item.code_lot_produit,
                                         vente_id: item.vente_id,
                                         quantite_vendue: e.target.value,
                                       });
-                                      console.log("edit_item", edit_item);
                                     }}
                                     onKeyPress={(e) => {
                                       if (!/[0-9]/.test(e.key)) {
@@ -400,6 +441,7 @@ function Insert() {
                     </tbody>
                   </table>
                 </div>
+                 
                 {guichetSelected[1].length > 0 ? (
                   <div className="row">
                     <div className="col-lg-4 col-sm-5"> </div>
@@ -432,9 +474,9 @@ function Insert() {
                 <div className="col-2">
                   <button
                     className="btn btn-info btn-lg w-100 light "
+                    data-toggle="tooltip" data-placement="top" title="Listes des ventes validées"
                     onClick={() => {
                       setIsAdd("0");
-                      console.log("isAdd", isAdd);
                     }}
                   >
                     <i className="fa fa-list-alt"></i>

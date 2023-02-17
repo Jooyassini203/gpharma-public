@@ -10,12 +10,12 @@ function Caisse() {
   const [isAdd, setIsAdd] = useRecoilState(isAddState)
   return (
     <Body>
-      
       <div
         className="content-body"
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
-      >
+        >
         <div className="container-fluid">
+        <h2 className="my-4">Vente / Caisse</h2>
           {isAdd === "1" ? <Insert /> :<> <Table /> <View/></>}
         </div>
       </div>

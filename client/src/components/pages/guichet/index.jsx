@@ -17,6 +17,7 @@ function Guichet() {
         style={{ minHeight: "80vh", marginTop: "-10vh" }}
       >
         <div className="container-fluid">
+        <h2 className="my-4">Vente / Guichet</h2>
           <div className="card">
             <div className="card-body">
               {isAdd == "1" ? (

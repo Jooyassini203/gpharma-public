@@ -57,18 +57,18 @@ function TableEtalage() {
         <div className="d-flex align-items-center mr-auto pr-2">
           <div>
             <p className="mb-sm-2 mb-1 text-black">
-              Unité de vente :{" "}
-              <span className="fs-14 text-secondary font-w600">
-                {row.nom_vente}
-              </span>
-              ,
-            </p>
-            <p className="mb-sm-2 mb-1 text-black">
               Unité de stock :{" "}
               <span className="fs-14 text-warning font-w600">
                 {row.nom_stock}
               </span>
               .
+            </p>
+            <p className="mb-sm-2 mb-1 text-black">
+              Unité de présentation :{" "}
+              <span className="fs-14 text-secondary font-w600">
+                {row.nom_presentation}
+              </span>
+              ,
             </p>
           </div>
         </div>
